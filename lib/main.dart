@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/TopicList.dart';
 
 void main() => runApp(new MyApp());
 
@@ -7,26 +8,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      theme: new ThemeData(primarySwatch: Colors.green),
+      theme: new ThemeData(primarySwatch: Colors.green, fontFamily: 'Ubuntu'),
       home: new DefaultTabController(
-          length: 13,
+          length: 2,
           child: new Scaffold(
             appBar: new AppBar(
                 title: new Text("Explore"),
                 elevation:
                     defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
                 bottom: new TabBar(
-                  isScrollable: true,
-                  tabs: choices.map((Choice choice) {
+                  isScrollable: false,
+                  tabs: choices.map((TabData choice) {
                     return new Tab(
                       text: choice.title,
                     );
                   }).toList(),
                 )),
             body: new TabBarView(
-              children: choices.map((Choice choice) {
-                print("init" + choice.title);
-                return new Text(choice.title);
+              children: choices.map((TabData choice) {
+                // Todo 添加每个节点的列表数据
+                return new TopicListView(tabKey: choice.key);
               }).toList(),
             ),
             drawer: new Drawer(
@@ -73,24 +74,24 @@ class MyApp extends StatelessWidget {
 }
 
 /// A material design [TabBar] tab.
-class Choice {
-  const Choice({this.title});
-
+class TabData {
+  const TabData({this.title, this.key});
   final String title;
+  final String key;
 }
 
-const List<Choice> choices = const <Choice>[
-  const Choice(title: '技术'),
-  const Choice(title: '创意'),
-  const Choice(title: '好玩'),
-  const Choice(title: 'APPLE'),
-  const Choice(title: '酷工作'),
-  const Choice(title: '交易'),
-  const Choice(title: '城市'),
-  const Choice(title: '问与答'),
-  const Choice(title: '最热'),
-  const Choice(title: '全部'),
-  const Choice(title: 'R2'),
-  const Choice(title: '最近'),
-  const Choice(title: '关注'),
+const List<TabData> choices = const <TabData>[
+//  const TabData(title: '全部', key: 'all'),
+  const TabData(title: '最热', key: 'hot'),
+//  const TabData(title: '技术', key: 'tech'),
+//  const TabData(title: '创意', key: 'creative'),
+//  const TabData(title: '好玩', key: 'play'),
+//  const TabData(title: 'APPLE',key: 'apple'),
+//  const TabData(title: '酷工作',key: 'jobs'),
+//  const TabData(title: '交易',key: 'deals'),
+//  const TabData(title: '城市',key: 'city'),
+//  const TabData(title: '问与答',key: 'qna'),
+//  const TabData(title: 'R2',key: 'r2'),
+//  const TabData(title: '关注',key: 'members'),
+  const TabData(title: '最近', key: 'recent'),
 ];
