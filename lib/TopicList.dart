@@ -59,11 +59,13 @@ abstract class BaseTopicListViewState<View extends StatefulWidget>
       builder: (context, result) {
         if (result.hasData) {
           return new RefreshIndicator(
-              child: new ListView(
-                children: result.data.list.map((Topic topic) {
-                  return new TopicItemView(topic);
-                }).toList(),
-              ),
+              child: new Container(
+                  color: const Color(0xFFD8D2D1),
+                  child: new ListView(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      children: result.data.list.map((Topic topic) {
+                        return new TopicItemView(topic);
+                      }).toList())),
               onRefresh: _onRefresh);
         } else if (result.hasError) {
           return new Center(
@@ -96,6 +98,7 @@ class TopicItemView extends StatelessWidget {
         );
       },
       child: new Card(
+        margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
         color: Colors.white,
         child: new Container(
           padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
@@ -107,61 +110,76 @@ class TopicItemView extends StatelessWidget {
               children: <Widget>[
                 new Row(
                   children: <Widget>[
-                    new Container(
-                      width: 20.0,
-                      height: 20.0,
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: new NetworkImage(
-                              'https:' + topic.member.avatar_large),
+                    new Expanded(
+                        child: new Row(
+                      children: <Widget>[
+                        new Container(
+                          width: 24.0,
+                          height: 24.0,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  'https:' + topic.member.avatar_large),
+                            ),
+                          ),
                         ),
-                      ),
+                        new Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: new Text(
+                            topic.member.username +
+                                ' · ' +
+                                topic.node.title +
+                                ' · ' +
+                                new TimeBase(topic.last_modified).getShowTime(),
+                            textAlign: TextAlign.left,
+                            maxLines: 1,
+                            style: new TextStyle(
+                              fontSize: 11.0,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                    new Icon(
+                      Icons.comment,
+                      size: 18.0,
+                      color: Colors.grey,
                     ),
                     new Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
+                      padding: const EdgeInsets.only(left: 4.0),
                       child: new Text(
-                        topic.member.username +
-                            ' · ' +
-                            new TimeBase(topic.last_modified).getShowTime(),
-                        textAlign: TextAlign.left,
-                        maxLines: 1,
+                        topic.replies.toString(),
                         style: new TextStyle(
-                          fontSize: 11.0,
-                          color: Colors.grey[700],
-                        ),
+                            fontSize: 11.0, color: Colors.grey[700]),
                       ),
-                    ),
+                    )
                   ],
                 ),
+
+                /// title
                 new Container(
-                  width: 400.0,
+                  alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                   child: new Text(
                     topic.title,
-                    maxLines: 1,
-                    textAlign: TextAlign.left,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: new TextStyle(fontSize: 14.0, color: Colors.black),
                   ),
                 ),
+
+                /// content
                 new Container(
-                  width: 400.0,
                   child: new Text(
                     topic.content,
+                    softWrap: true,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style:
                         new TextStyle(fontSize: 12.0, color: Colors.grey[800]),
-                  ),
-                ),
-                new Container(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  width: 400.0,
-                  child: new Text(
-                    topic.replies.toString() + ' 评论',
-                    style:
-                        new TextStyle(fontSize: 11.0, color: Colors.grey[700]),
                   ),
                 ),
               ],

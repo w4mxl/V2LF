@@ -8,7 +8,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      theme: new ThemeData(primarySwatch: Colors.green, fontFamily: 'Ubuntu'),
+      theme:
+          new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Ubuntu'),
       home: new DefaultTabController(
           length: 2,
           child: new Scaffold(
