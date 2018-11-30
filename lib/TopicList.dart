@@ -153,7 +153,7 @@ class TopicItemView extends StatelessWidget {
                       child: new Text(
                         topic.replies.toString(),
                         style: new TextStyle(
-                            fontSize: 11.0, color: Colors.grey[700]),
+                            fontSize: 12.0, color: Colors.grey[700]),
                       ),
                     )
                   ],
@@ -173,6 +173,7 @@ class TopicItemView extends StatelessWidget {
 
                 /// content
                 new Container(
+                  alignment: Alignment.centerLeft,
                   child: new Text(
                     topic.content,
                     softWrap: true,

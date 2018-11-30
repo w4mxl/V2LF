@@ -16,7 +16,7 @@ class TopicDetails extends StatelessWidget {
     return new MaterialApp(
       title: 'Topic detils',
       theme: new ThemeData(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blueGrey,
       ),
       home: new Scaffold(
         appBar: new AppBar(
@@ -31,7 +31,10 @@ class TopicDetails extends StatelessWidget {
         ),
         body: new ListView(
           children: <Widget>[
+            /// topic content
             new TopicContentView(topic),
+
+            /// topic replies
             new RepliesView(topic.id),
           ],
         ),
@@ -150,6 +153,91 @@ class TopicContentView extends StatelessWidget {
     return new Column(
       children: <Widget>[
         new Container(
+          padding: const EdgeInsets.all(10.0),
+          child: new Row(
+            children: <Widget>[
+              new Container(
+                margin: const EdgeInsets.only(right: 10.0),
+                width: 40.0,
+                height: 40.0,
+                decoration: new BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: new DecorationImage(
+                    fit: BoxFit.fill,
+                    image:
+                        new NetworkImage('https:' + topic.member.avatar_large),
+                  ),
+                ),
+              ),
+              new Expanded(
+                  child: new Column(
+                children: <Widget>[
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: new Row(
+                      children: <Widget>[
+                        new Text(
+                          topic.member.username,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          style: new TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        new Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.green,
+                          size: 16.0,
+                        ),
+                        new Text(
+                          topic.node.title,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          style: new TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      new Icon(
+                        Icons.edit,
+                        size: 16.0,
+                        color: Colors.grey[500],
+                      ),
+                      new Text(
+                        new TimeBase(topic.last_modified).getShowTime(),
+                        style: new TextStyle(
+                            fontSize: 12.0, color: Colors.grey[500]),
+                      )
+                    ],
+                  )
+                ],
+              )),
+              new Icon(
+                Icons.comment,
+                size: 18.0,
+                color: Colors.grey,
+              ),
+              new Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: new Text(
+                  topic.replies.toString(),
+                  style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                ),
+              )
+            ],
+          ),
+        ),
+        /*new Container(
+          color: Colors.black,
+          height: 0.2,
+        ),*/
+        new Container(
           padding: const EdgeInsets.only(
               left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
           width: 500.0,
@@ -170,43 +258,6 @@ class TopicContentView extends StatelessWidget {
             topic.content,
             softWrap: true,
             style: new TextStyle(color: Colors.black87, fontSize: 14.0),
-          ),
-        ),
-        new Container(
-          color: Colors.black,
-          height: 0.2,
-        ),
-        new Container(
-          padding: const EdgeInsets.all(10.0),
-          child: new Row(
-            children: <Widget>[
-              new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                    fit: BoxFit.fill,
-                    image:
-                        new NetworkImage('https:' + topic.member.avatar_large),
-                  ),
-                ),
-              ),
-              new Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: new Text(
-                  topic.member.username +
-                      ' · ' +
-                      new TimeBase(topic.last_modified).getShowTime(),
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  style: new TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey[900],
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
         new Container(
