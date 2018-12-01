@@ -95,37 +95,59 @@ class TopicItemView extends StatelessWidget {
               children: <Widget>[
                 new Row(
                   children: <Widget>[
+                    new Container(
+                      margin: const EdgeInsets.only(right: 10.0),
+                      width: 32.0,
+                      height: 32.0,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: new NetworkImage(topic.avatar),
+                        ),
+                      ),
+                    ),
                     new Expanded(
-                        child: new Row(
+                        child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         new Container(
-                          width: 24.0,
-                          height: 24.0,
-                          decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: new NetworkImage(topic.avatar),
-                            ),
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: new Row(
+                            children: <Widget>[
+                              new Text(
+                                topic.memberId,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              new Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.green,
+                                size: 16.0,
+                              ),
+                              new Text(
+                                topic.nodeName,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        new Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
-                          child: new Text(
-                            topic.memberId +
-                                ' · ' +
-                                topic.nodeName +
-                                ' · ' +
-                                topic.lastReplyTime,
-                            //new TimeBase(topic.last_modified).getShowTime(),
-                            textAlign: TextAlign.left,
-                            maxLines: 1,
-                            style: new TextStyle(
-                              fontSize: 11.0,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ),
+                        new Text(
+                          topic.lastReplyTime == ''
+                              ? '暂无评论'
+                              : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          style:
+                              new TextStyle(color: Colors.grey, fontSize: 12.0),
+                        )
                       ],
                     )),
                     new Icon(
@@ -147,25 +169,12 @@ class TopicItemView extends StatelessWidget {
                 /// title
                 new Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  padding: const EdgeInsets.only(top: 5.0),
                   child: new Text(
                     topic.topicContent,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
-                  ),
-                ),
-
-                /// content
-                new Container(
-                  alignment: Alignment.centerLeft,
-                  child: new Text(
-                    topic.content,
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        new TextStyle(fontSize: 12.0, color: Colors.grey[800]),
+                    /*maxLines: 2,
+                    overflow: TextOverflow.ellipsis,*/
+                    style: new TextStyle(fontSize: 15.0, color: Colors.black),
                   ),
                 ),
               ],

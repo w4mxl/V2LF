@@ -5,7 +5,6 @@ import 'dart:io';
 
 import 'package:flutter_app/model/web/Node.dart';
 import 'package:flutter_app/model/web/TabTopicItem.dart';
-import 'package:flutter_app/network/NetworkApi.dart';
 
 V2exApi v2exApi = new V2exApi();
 
@@ -68,9 +67,9 @@ class V2exApi {
         item.lastReplyTime = match4LastReply.group(1);
         item.lastReplyMId = match4LastReply.group(2);
       }
-      item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
+      /*item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
           .list[0]
-          .content;
+          .content;*/
       topics.add(item);
     }
     return topics;

@@ -8,5 +8,5 @@ class TabTopicItem {
   String nodeName = '';
   String lastReplyMId = '';
   String lastReplyTime = '';
-  String content = '';
+  /*String content = '';*/
 }
