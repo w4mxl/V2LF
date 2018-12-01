@@ -12,20 +12,6 @@ class NetworkApi {
     return http.read(url);
   }
 
-//  response =
-//  '''
-//  {
-//
-//    "status": "error",
-//    "message": "Object Not Found",
-//    "rate_limit": {
-//      "used": 5,
-//      "hourly_quota": 120,
-//      "hourly_remaining": 115
-//    }
-//  }
-//  ''';
-
   static dynamic _get(String url) async {
     String response = await _read(url);
     print('$url =>\n $response');

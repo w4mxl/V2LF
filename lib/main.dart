@@ -7,28 +7,44 @@ void main() => runApp(new MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const List<TabData> tabs = const <TabData>[
+      const TabData(title: '技术', key: 'tech'),
+      const TabData(title: '创意', key: 'creative'),
+      const TabData(title: '好玩', key: 'play'),
+      const TabData(title: 'APPLE', key: 'apple'),
+      const TabData(title: '酷工作', key: 'jobs'),
+      const TabData(title: '交易', key: 'deals'),
+      const TabData(title: '城市', key: 'city'),
+      const TabData(title: '问与答', key: 'qna'),
+      const TabData(title: '最热', key: 'hot'),
+      const TabData(title: '全部', key: 'all'),
+      const TabData(title: 'R2', key: 'r2'),
+      /*const TabData(title: '关注', key: 'members'),
+  const TabData(title: '最近', key: 'recent'),*/
+    ];
+
     return new MaterialApp(
       theme:
           new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Ubuntu'),
       home: new DefaultTabController(
-          length: 2,
+          length: tabs.length,
           child: new Scaffold(
             appBar: new AppBar(
                 title: new Text("Explore"),
                 elevation:
                     defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
                 bottom: new TabBar(
-                  isScrollable: false,
-                  tabs: choices.map((TabData choice) {
+                  isScrollable: true,
+                  tabs: tabs.map((TabData choice) {
                     return new Tab(
                       text: choice.title,
                     );
                   }).toList(),
                 )),
             body: new TabBarView(
-              children: choices.map((TabData choice) {
+              children: tabs.map((TabData choice) {
                 // Todo 添加每个节点的列表数据
-                return new TopicListView(tabKey: choice.key);
+                return new TopicListView(choice.key);
               }).toList(),
             ),
             drawer: new Drawer(
@@ -74,25 +90,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// A material design [TabBar] tab.
 class TabData {
   const TabData({this.title, this.key});
   final String title;
   final String key;
 }
-
-const List<TabData> choices = const <TabData>[
-//  const TabData(title: '全部', key: 'all'),
-  const TabData(title: '最热', key: 'hot'),
-//  const TabData(title: '技术', key: 'tech'),
-//  const TabData(title: '创意', key: 'creative'),
-//  const TabData(title: '好玩', key: 'play'),
-//  const TabData(title: 'APPLE',key: 'apple'),
-//  const TabData(title: '酷工作',key: 'jobs'),
-//  const TabData(title: '交易',key: 'deals'),
-//  const TabData(title: '城市',key: 'city'),
-//  const TabData(title: '问与答',key: 'qna'),
-//  const TabData(title: 'R2',key: 'r2'),
-//  const TabData(title: '关注',key: 'members'),
-  const TabData(title: '最近', key: 'recent'),
-];

@@ -1,90 +1,75 @@
 // 话题列表页
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/TopicDetails.dart';
-import 'package:flutter_app/model/TopicsResp.dart';
-import 'package:flutter_app/network/NetworkApi.dart';
-import 'package:flutter_app/utils/TimeBase.dart';
+import 'package:flutter_app/model/web/TabTopicItem.dart';
+import 'package:flutter_app/network/WebApi.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
 
-  const TopicListView({Key key, this.tabKey}) : super(key: key);
+  TopicListView(this.tabKey);
 
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends BaseTopicListViewState<TopicListView> {
-  @override
-  Future<TopicsResp> onRefresh() {
-    switch (widget.tabKey) {
-      case 'hot':
-        return NetworkApi.getHotTopics();
-      case 'recent':
-        return NetworkApi.getLatestTopics();
-      default:
-        return null;
-    }
-  }
-}
-
-abstract class BaseTopicListViewState<View extends StatefulWidget>
-    extends State<View> with AutomaticKeepAliveClientMixin {
-  Future<TopicsResp> data;
-
-  @override
-  bool get wantKeepAlive => true;
-
-  Future<Null> _onRefresh() {
-    return new Future(() {
-      setState(() {
-        data = onRefresh();
-      });
-    });
-  }
-
-  Future<TopicsResp> onRefresh();
+class TopicListViewState extends State<TopicListView>
+    with AutomaticKeepAliveClientMixin {
+  Future<List<TabTopicItem>> topicListFuture;
 
   @override
   void initState() {
     super.initState();
-    data = onRefresh();
+    // 获取数据
+    topicListFuture = getTopics();
+  }
+
+  Future<List<TabTopicItem>> getTopics() async {
+    return await v2exApi.getTopicsByTabKey(widget.tabKey);
   }
 
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder<TopicsResp>(
-      future: data,
-      builder: (context, result) {
-        if (result.hasData) {
-          return new RefreshIndicator(
-              child: new Container(
-                  color: const Color(0xFFD8D2D1),
-                  child: new ListView(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      children: result.data.list.map((Topic topic) {
-                        return new TopicItemView(topic);
-                      }).toList())),
-              onRefresh: _onRefresh);
-        } else if (result.hasError) {
-          return new Center(
-            child: new Text("${result.error}"),
-          );
-        }
+    return new FutureBuilder<List<TabTopicItem>>(
+        future: topicListFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return new RefreshIndicator(
+                child: new Container(
+                    color: const Color(0xFFD8D2D1),
+                    child: new ListView(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        children: snapshot.data.map((TabTopicItem topic) {
+                          return new TopicItemView(topic);
+                        }).toList())),
+                onRefresh: _onRefresh);
+          } else if (snapshot.hasError) {
+            return new Center(
+              child: new Text("${snapshot.error}"),
+            );
+          }
 
-        // By default, show a loading spinner
-        return new Center(
-          child: new CircularProgressIndicator(),
-        );
-      },
-    );
+          // By default, show a loading spinner
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        });
   }
+
+  //刷新数据,重新设置future就行了
+  Future _onRefresh() async {
+    setState(() {
+      topicListFuture = getTopics();
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 /// topic item view
 class TopicItemView extends StatelessWidget {
-  final Topic topic;
+  final TabTopicItem topic;
 
   TopicItemView(this.topic);
 
@@ -92,10 +77,10 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: () {
-        Navigator.push(
+        /* Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(topic)),
-        );
+        );*/
       },
       child: new Card(
         margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
@@ -120,19 +105,19 @@ class TopicItemView extends StatelessWidget {
                             shape: BoxShape.circle,
                             image: new DecorationImage(
                               fit: BoxFit.fill,
-                              image: new NetworkImage(
-                                  'https:' + topic.member.avatar_large),
+                              image: new NetworkImage(topic.avatar),
                             ),
                           ),
                         ),
                         new Padding(
                           padding: const EdgeInsets.only(left: 5.0),
                           child: new Text(
-                            topic.member.username +
+                            topic.memberId +
                                 ' · ' +
-                                topic.node.title +
+                                topic.nodeName +
                                 ' · ' +
-                                new TimeBase(topic.last_modified).getShowTime(),
+                                topic.lastReplyTime,
+                            //new TimeBase(topic.last_modified).getShowTime(),
                             textAlign: TextAlign.left,
                             maxLines: 1,
                             style: new TextStyle(
@@ -151,7 +136,7 @@ class TopicItemView extends StatelessWidget {
                     new Padding(
                       padding: const EdgeInsets.only(left: 4.0),
                       child: new Text(
-                        topic.replies.toString(),
+                        topic.replyCount,
                         style: new TextStyle(
                             fontSize: 12.0, color: Colors.grey[700]),
                       ),
@@ -164,7 +149,7 @@ class TopicItemView extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                   child: new Text(
-                    topic.title,
+                    topic.topicContent,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: new TextStyle(fontSize: 14.0, color: Colors.black),
