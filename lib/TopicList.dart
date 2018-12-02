@@ -1,6 +1,7 @@
 // 话题列表页
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/TopicDetails.dart';
 import 'package:flutter_app/model/web/TabTopicItem.dart';
 import 'package:flutter_app/network/WebApi.dart';
 
@@ -77,10 +78,11 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: () {
-        /* Navigator.push(
+        // todo 跳转详情页面
+        Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(topic)),
-        );*/
+        );
       },
       child: new Card(
         margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
