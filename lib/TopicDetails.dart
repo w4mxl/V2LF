@@ -3,11 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/RepliesResp.dart';
 import 'package:flutter_app/model/TopicsResp.dart';
+import 'package:flutter_app/model/web/TabTopicItem.dart';
 import 'package:flutter_app/network/NetworkApi.dart';
 import 'package:flutter_app/utils/TimeBase.dart';
 
 class TopicDetails extends StatelessWidget {
-  final Topic topic;
+  final TabTopicItem topic;
 
   TopicDetails(this.topic);
 
@@ -20,7 +21,7 @@ class TopicDetails extends StatelessWidget {
       ),
       home: new Scaffold(
         appBar: new AppBar(
-          title: new Text(topic.title),
+          // title: new Text(topic.title),
           leading: new GestureDetector(
             onTap: () {
               print('back');
@@ -32,10 +33,10 @@ class TopicDetails extends StatelessWidget {
         body: new ListView(
           children: <Widget>[
             /// topic content
-            new TopicContentView(topic),
+            new TopicContentView(int.parse(topic.topicId)),
 
             /// topic replies
-            new RepliesView(topic.id),
+            new RepliesView(int.parse(topic.topicId)),
           ],
         ),
       ),
@@ -144,127 +145,142 @@ class RepliesView extends StatelessWidget {
 }
 
 class TopicContentView extends StatelessWidget {
-  final Topic topic;
+  final int topicId;
 
-  TopicContentView(this.topic);
+  TopicContentView(this.topicId);
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      children: <Widget>[
-        new Container(
-          padding: const EdgeInsets.all(10.0),
-          child: new Row(
-            children: <Widget>[
-              new Container(
-                margin: const EdgeInsets.only(right: 10.0),
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                    fit: BoxFit.fill,
-                    image:
-                        new NetworkImage('https:' + topic.member.avatar_large),
-                  ),
-                ),
-              ),
-              new Expanded(
-                  child: new Column(
+    return new Container(
+      child: new FutureBuilder<TopicsResp>(
+          future: NetworkApi.getTopicDetails(topicId),
+          builder: (context, result) {
+            if (result.hasData) {
+              return new Column(
                 children: <Widget>[
                   new Container(
-                    padding: const EdgeInsets.only(bottom: 4.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: new Row(
                       children: <Widget>[
-                        new Text(
-                          topic.member.username,
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          style: new TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black87,
+                        new Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          width: 40.0,
+                          height: 40.0,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage('https:' +
+                                  result.data.list[0].member.avatar_large),
+                            ),
                           ),
                         ),
+                        new Expanded(
+                            child: new Column(
+                          children: <Widget>[
+                            new Container(
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    result.data.list[0].member.username,
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    style: new TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  new Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: Colors.green,
+                                    size: 16.0,
+                                  ),
+                                  new Text(
+                                    result.data.list[0].node.title,
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    style: new TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                new Icon(
+                                  Icons.keyboard,
+                                  size: 16.0,
+                                  color: Colors.grey[500],
+                                ),
+                                new Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: new Text(
+                                      new TimeBase(
+                                              result.data.list[0].last_modified)
+                                          .getShowTime(),
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          color: Colors.grey[500]),
+                                    ))
+                              ],
+                            )
+                          ],
+                        )),
                         new Icon(
-                          Icons.keyboard_arrow_right,
-                          color: Colors.green,
-                          size: 16.0,
+                          Icons.comment,
+                          size: 18.0,
+                          color: Colors.grey,
                         ),
-                        new Text(
-                          topic.node.title,
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          style: new TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.green,
+                        new Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: new Text(
+                            result.data.list[0].replies.toString(),
+                            style: new TextStyle(
+                                fontSize: 12.0, color: Colors.grey[700]),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      new Icon(
-                        Icons.edit,
-                        size: 16.0,
-                        color: Colors.grey[500],
-                      ),
-                      new Text(
-                        new TimeBase(topic.last_modified).getShowTime(),
-                        style: new TextStyle(
-                            fontSize: 12.0, color: Colors.grey[500]),
-                      )
-                    ],
-                  )
-                ],
-              )),
-              new Icon(
-                Icons.comment,
-                size: 18.0,
-                color: Colors.grey,
-              ),
-              new Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: new Text(
-                  topic.replies.toString(),
-                  style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
-                ),
-              )
-            ],
-          ),
-        ),
-        /*new Container(
+                  /*new Container(
           color: Colors.black,
           height: 0.2,
         ),*/
-        new Container(
-          padding: const EdgeInsets.only(
-              left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-          width: 500.0,
-          child: new Text(
-            topic.title,
-            softWrap: true,
-            style: new TextStyle(
-              color: Colors.black87,
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        new Container(
-          padding: const EdgeInsets.only(
-              left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-          child: new Text(
-            topic.content,
-            softWrap: true,
-            style: new TextStyle(color: Colors.black87, fontSize: 14.0),
-          ),
-        ),
-        new Container(
-          color: Colors.black,
-          height: 0.2,
-        ),
-      ],
+                  new Container(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+                    width: 500.0,
+                    child: new Text(
+                      result.data.list[0].title,
+                      softWrap: true,
+                      style: new TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+                    child: new Text(
+                      result.data.list[0].content,
+                      softWrap: true,
+                      style:
+                          new TextStyle(color: Colors.black87, fontSize: 14.0),
+                    ),
+                  ),
+                  new Container(
+                    color: Colors.black,
+                    height: 0.2,
+                  ),
+                ],
+              );
+            }
+          }),
     );
   }
 }
