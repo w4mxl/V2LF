@@ -24,7 +24,6 @@ class TopicDetails extends StatelessWidget {
             // title: new Text(topic.title),
             leading: new GestureDetector(
               onTap: () {
-                print('back');
                 Navigator.pop(context);
               },
               child: new Icon(Icons.arrow_back),

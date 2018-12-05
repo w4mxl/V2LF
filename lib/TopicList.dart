@@ -85,12 +85,11 @@ class TopicItemView extends StatelessWidget {
         );
       },
       child: new Card(
-        margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+        margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
         color: Colors.white,
         child: new Container(
-          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
           child: new Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(12.0),
             child: new Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
