@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/TopicList.dart';
+import 'package:flutter_app/model/drawer_left.dart';
 
 void main() => runApp(new MyApp());
 
@@ -29,69 +30,32 @@ class MyApp extends StatelessWidget {
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(
-            appBar: new AppBar(
-                title: new Text("Explore"),
-                elevation:
-                    defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
-                bottom: new TabBar(
-                  isScrollable: true,
-                  tabs: tabs.map((TabData choice) {
-                    return new Tab(
-                      text: choice.title,
-                    );
-                  }).toList(),
-                )),
-            body: new TabBarView(
-              children: tabs.map((TabData choice) {
-                // Todo 添加每个节点的列表数据
-                return new TopicListView(choice.key);
-              }).toList(),
-            ),
-            drawer: new Drawer(
-              child: new Column(
-                children: <Widget>[
-                  new UserAccountsDrawerHeader(
-                    accountName: new Text("w4mxl"),
-                    accountEmail: new Text("mxl1989@gmail.com"),
-                    currentAccountPicture: new CircleAvatar(
-                      backgroundImage: new NetworkImage(
-                          "https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro"),
-                    ),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.explore),
-                    title: new Text("Explore"),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.apps),
-                    title: new Text("Nodes"),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.notifications),
-                    title: new Text("Notifications"),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.favorite),
-                    title: new Text("Favorites"),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.settings),
-                    title: new Text("Settings"),
-                  ),
-                  new ListTile(
-                    leading: new Icon(Icons.feedback),
-                    title: new Text("Feedback"),
-                  )
-                ],
+              appBar: new AppBar(
+                  title: new Text("Explore"),
+                  elevation: defaultTargetPlatform == TargetPlatform.android
+                      ? 5.0
+                      : 0.0,
+                  bottom: new TabBar(
+                    isScrollable: true,
+                    tabs: tabs.map((TabData choice) {
+                      return new Tab(
+                        text: choice.title,
+                      );
+                    }).toList(),
+                  )),
+              body: new TabBarView(
+                children: tabs.map((TabData choice) {
+                  return new TopicListView(choice.key);
+                }).toList(),
               ),
-            ),
-          )),
+              drawer: new DrawerLeft())),
     );
   }
 }
 
 class TabData {
   const TabData({this.title, this.key});
+
   final String title;
   final String key;
 }
