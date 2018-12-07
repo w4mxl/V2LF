@@ -1,3 +1,4 @@
+// 主页tab下的item
 class TabTopicItem {
   String memberId = '';
   String topicId = '';
