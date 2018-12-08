@@ -1,7 +1,7 @@
 // 话题列表页
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/TopicDetails.dart';
+import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/model/web/TabTopicItem.dart';
 import 'package:flutter_app/network/WebApi.dart';
 
