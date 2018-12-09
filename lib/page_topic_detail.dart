@@ -1,11 +1,11 @@
 // 话题详情页+评论列表
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/RepliesResp.dart';
-import 'package:flutter_app/model/TopicsResp.dart';
-import 'package:flutter_app/model/web/TabTopicItem.dart';
-import 'package:flutter_app/network/NetworkApi.dart';
-import 'package:flutter_app/utils/TimeBase.dart';
+import 'package:flutter_app/model/resp_replies.dart';
+import 'package:flutter_app/model/resp_topics.dart';
+import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/network/api_network.dart';
+import 'package:flutter_app/utils/time_base.dart';
 
 class TopicDetails extends StatelessWidget {
   final TabTopicItem topic;
@@ -75,8 +75,7 @@ class TopicContentView extends StatelessWidget {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
-                                image: new NetworkImage('https:' +
-                                    result.data.list[0].member.avatar_large),
+                                image: new NetworkImage('https:' + result.data.list[0].member.avatar_large),
                               ),
                             ),
                           ),
@@ -123,13 +122,9 @@ class TopicContentView extends StatelessWidget {
                                   new Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
                                       child: new Text(
-                                        new TimeBase(result
-                                                    .data.list[0].last_modified)
-                                                .getShowTime() +
+                                        new TimeBase(result.data.list[0].last_modified).getShowTime() +
                                             "，100次点击", // todo
-                                        style: new TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.grey[500]),
+                                        style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
                                       ))
                                 ],
                               )
@@ -144,8 +139,7 @@ class TopicContentView extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 4.0),
                             child: new Text(
                               result.data.list[0].replies.toString(),
-                              style: new TextStyle(
-                                  fontSize: 12.0, color: Colors.grey[700]),
+                              style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
                             ),
                           )
                         ],
@@ -153,8 +147,7 @@ class TopicContentView extends StatelessWidget {
                     ),
                     // topic title
                     new Container(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+                      padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
                       width: 500.0,
                       child: new Text(
                         result.data.list[0].title,
@@ -168,13 +161,11 @@ class TopicContentView extends StatelessWidget {
                     ),
                     // topic content
                     new Container(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+                      padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                       child: new Text(
                         result.data.list[0].content,
                         softWrap: true,
-                        style: new TextStyle(
-                            color: Colors.black87, fontSize: 14.0),
+                        style: new TextStyle(color: Colors.black87, fontSize: 14.0),
                       ),
                     ),
                   ],
@@ -203,20 +194,16 @@ class RepliesView extends StatelessWidget {
               // 返回数据为空
               if (result.data.list.length == 0) {
                 return new Center(
-                  child: new Text("目前尚无回复",
-                      style: new TextStyle(
-                          color: const Color.fromRGBO(0, 0, 0, 0.25))),
+                  child: new Text("目前尚无回复", style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
                 );
               }
               return new Card(
-                margin:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                 color: Colors.white,
                 child: new Column(
                   children: result.data.list.map((Reply reply) {
                     return new Container(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 10.0),
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                       child: new Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -245,15 +232,12 @@ class RepliesView extends StatelessWidget {
                                     new Text(
                                       reply.member.username,
                                       style: new TextStyle(
-                                          fontSize: 14.0,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold),
+                                          fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                     ),
                                     new Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: new Text(
-                                        new TimeBase(reply.last_modified)
-                                            .getShowTime(),
+                                        new TimeBase(reply.last_modified).getShowTime(),
                                         style: new TextStyle(
                                           color: const Color(0xFFcccccc),
                                           fontSize: 12.0,
@@ -263,14 +247,12 @@ class RepliesView extends StatelessWidget {
                                   ],
                                 ),
                                 new Container(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 10.0, top: 5.0),
+                                  padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                                   child: new Text(
                                     reply.content.toString(),
                                     softWrap: true,
                                     overflow: TextOverflow.clip,
-                                    style: new TextStyle(
-                                        fontSize: 14.0, color: Colors.black),
+                                    style: new TextStyle(fontSize: 14.0, color: Colors.black),
                                   ),
                                 ),
                                 new Container(

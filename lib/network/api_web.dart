@@ -3,9 +3,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_app/model/web/Node.dart';
-import 'package:flutter_app/model/web/TabTopicItem.dart';
-import 'package:flutter_app/model/web/node_topic_item.dart';
+import 'package:flutter_app/model/web/item_node_topic.dart';
+import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/model/web/node.dart';
 
 V2exApi v2exApi = new V2exApi();
 

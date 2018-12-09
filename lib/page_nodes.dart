@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/web/Node.dart';
-import 'package:flutter_app/network/WebApi.dart';
+import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
 
 // 节点导航页面
@@ -86,9 +86,7 @@ class NodeGroupWidget extends StatelessWidget {
     );
 
     return new Card(
-        child: _container,
-        margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-        color: Colors.white);
+        child: _container, margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0), color: Colors.white);
   }
 
   Widget renderNode(NodeItem node) {
@@ -97,14 +95,11 @@ class NodeGroupWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
         child: new Text(
           node.nodeName,
-          style: new TextStyle(
-              color: Theme.of(context).primaryColor, fontSize: 13.0),
+          style: new TextStyle(color: Theme.of(context).primaryColor, fontSize: 13.0),
         ),
-        decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.circular(5.0), color: Colors.white),
+        decoration: new BoxDecoration(borderRadius: new BorderRadius.circular(5.0), color: Colors.white),
       ),
-      onTap: () => Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
+      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
     );
   }
 }

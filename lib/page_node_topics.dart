@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/node_topic_listview.dart';
-import 'package:flutter_app/model/web/Node.dart';
+import 'package:flutter_app/model/web/node.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;

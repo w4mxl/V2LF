@@ -25,16 +25,13 @@ class MyApp extends StatelessWidget {
     ];
 
     return new MaterialApp(
-      theme:
-          new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Ubuntu'),
+      theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Ubuntu'),
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(
               appBar: new AppBar(
                   title: new Text("Explore"),
-                  elevation: defaultTargetPlatform == TargetPlatform.android
-                      ? 5.0
-                      : 0.0,
+                  elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
                   bottom: new TabBar(
                     isScrollable: true,
                     tabs: tabs.map((TabData choice) {

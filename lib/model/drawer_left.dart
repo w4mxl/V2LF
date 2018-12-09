@@ -13,15 +13,13 @@ class DrawerLeft extends StatelessWidget {
             currentAccountPicture: new GestureDetector(
               onTap: () => print("显示个人主页web"), // todo
               child: new CircleAvatar(
-                backgroundImage: new NetworkImage(
-                    "https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro"),
+                backgroundImage:
+                    new NetworkImage("https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro"),
               ),
             ),
             decoration: new BoxDecoration(
                 image: new DecorationImage(
-                    fit: BoxFit.cover,
-                    image: new NetworkImage(
-                        "https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),
+                    fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),
           ),
           new ListTile(
             leading: new Icon(Icons.explore),
@@ -32,8 +30,7 @@ class DrawerLeft extends StatelessWidget {
             title: new Text("节点"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new NodesPage()));
+              Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
             },
           ),
           new ListTile(

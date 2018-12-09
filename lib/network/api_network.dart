@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_app/model/RepliesResp.dart';
-import 'package:flutter_app/model/SiteInfoResp.dart';
-import 'package:flutter_app/model/TopicsResp.dart';
-import 'package:flutter_app/network/Constants.dart' as httpConstants;
+import 'package:flutter_app/model/resp_replies.dart';
+import 'package:flutter_app/model/resp_site_info.dart';
+import 'package:flutter_app/model/resp_topics.dart';
+import 'package:flutter_app/network/constants.dart' as httpConstants;
 import 'package:http/http.dart' as http;
 
 class NetworkApi {

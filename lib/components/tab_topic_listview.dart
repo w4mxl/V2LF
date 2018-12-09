@@ -1,9 +1,9 @@
 // 话题列表页
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/model/web/TabTopicItem.dart';
-import 'package:flutter_app/network/WebApi.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -14,8 +14,7 @@ class TopicListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<TopicListView>
-    with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveClientMixin {
   Future<List<TabTopicItem>> topicListFuture;
 
   @override
@@ -143,11 +142,8 @@ class TopicItemView extends StatelessWidget {
                           ),
                         ),
                         new Text(
-                          topic.lastReplyTime == ''
-                              ? '暂无评论'
-                              : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
-                          style:
-                              new TextStyle(color: Colors.grey, fontSize: 12.0),
+                          topic.lastReplyTime == '' ? '暂无评论' : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],
                     )),
@@ -160,8 +156,7 @@ class TopicItemView extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 4.0),
                       child: new Text(
                         topic.replyCount,
-                        style: new TextStyle(
-                            fontSize: 12.0, color: Colors.grey[700]),
+                        style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
                       ),
                     )
                   ],

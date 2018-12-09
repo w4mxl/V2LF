@@ -1,7 +1,7 @@
 // node listview
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/web/node_topic_item.dart';
-import 'package:flutter_app/network/WebApi.dart';
+import 'package:flutter_app/model/web/item_node_topic.dart';
+import 'package:flutter_app/network/api_web.dart';
 
 class NodeTopicListView extends StatefulWidget {
   final String tabKey;
@@ -12,8 +12,7 @@ class NodeTopicListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<NodeTopicListView>
-    with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliveClientMixin {
   Future<List<NodeTopicItem>> topicListFuture;
 
   @override
@@ -142,8 +141,7 @@ class TopicItemView extends StatelessWidget {
                         ),
                         new Text(
                           "占位",
-                          style:
-                              new TextStyle(color: Colors.grey, fontSize: 12.0),
+                          style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],
                     )),
@@ -156,8 +154,7 @@ class TopicItemView extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 4.0),
                       child: new Text(
                         topic.replyCount,
-                        style: new TextStyle(
-                            fontSize: 12.0, color: Colors.grey[700]),
+                        style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
                       ),
                     )
                   ],
