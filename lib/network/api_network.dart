@@ -27,13 +27,11 @@ class NetworkApi {
   }
 
   static Future<TopicsResp> getTopicDetails(int id) async {
-    return TopicsResp.fromJson(
-        await _get(httpConstants.API_TOPIC_DETAILS + '?id=' + id.toString()));
+    return TopicsResp.fromJson(await _get(httpConstants.API_TOPIC_DETAILS + '?id=' + id.toString()));
   }
 
   static Future<RepliesResp> getReplies(int topicId) async {
-    return RepliesResp.fromJson(await _get(
-        httpConstants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
+    return RepliesResp.fromJson(await _get(httpConstants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
   }
 
   static Future<SiteInfoResp> getSiteInfo() async {

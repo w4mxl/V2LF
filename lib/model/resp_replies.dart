@@ -5,9 +5,8 @@ import 'package:flutter_app/model/resp_member.dart';
 class RepliesResp {
   List<Reply> list;
 
-  factory RepliesResp(jsonStr) => jsonStr is String
-      ? RepliesResp.fromJson(json.decode(jsonStr))
-      : RepliesResp.fromJson(jsonStr);
+  factory RepliesResp(jsonStr) =>
+      jsonStr is String ? RepliesResp.fromJson(json.decode(jsonStr)) : RepliesResp.fromJson(jsonStr);
 
   RepliesResp.fromJson(jsonRes) {
     list = [];
