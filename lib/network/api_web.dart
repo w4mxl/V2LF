@@ -130,10 +130,7 @@ class V2exApi {
 
     final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
 
-    final String reg4NodeIdName = "<a class=\"node\" href=\"/go/(.*?)\">(.*?)</a>";
-
-    final String reg4LastReply =
-        "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
+    final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
     // todo 这里要 https 才能使下面的user-agent有效
     var uri = new Uri.https('www.v2ex.com', '/go/' + tabKey);
@@ -160,15 +157,11 @@ class V2exApi {
       item.topicId = match4TRC.group(1);
       item.replyCount = match4TRC.group(2);
       item.title = match4TRC.group(3);
-      /*
-      Match match4NodeIdName = new RegExp(reg4NodeIdName).firstMatch(regString);
-      item.nodeId = match4NodeIdName.group(1);
-      item.nodeName = match4NodeIdName.group(2);
-      if (regString.contains("最后回复来自")) {
-        Match match4LastReply = new RegExp(reg4LastReply).firstMatch(regString);
-        item.lastReplyTime = match4LastReply.group(1);
-        item.lastReplyMId = match4LastReply.group(2);
-      }*/
+      if (regString.contains("个字符")) {
+        Match match4CharactersClickTimes = new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+        item.characters = match4CharactersClickTimes.group(1);
+        item.clickTimes = match4CharactersClickTimes.group(2);
+      }
       /*item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
           .list[0]
           .content;*/
