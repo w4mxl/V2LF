@@ -132,6 +132,9 @@ class V2exApi {
 
     final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
+    final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
+    final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
+
     // todo 这里要 https 才能使下面的user-agent有效
     var uri = new Uri.https('www.v2ex.com', '/go/' + tabKey);
     var request = await httpClient.getUrl(uri); // Uri.parse("https://www.v2ex.com/go/share")
@@ -144,6 +147,11 @@ class V2exApi {
     print(responseBody);
 
     content = responseBody.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+
+    RegExp expInner = new RegExp(reg4inner);
+    Iterable<Match> matchesInner = expInner.allMatches(content);
+    Match match = matchesInner.first;
+    print("当前页/总页数： " + new RegExp(reg4pages).firstMatch(match.group(0)).group(1));
 
     RegExp exp = new RegExp(reg4tag);
     Iterable<Match> matches = exp.allMatches(content);
