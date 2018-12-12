@@ -13,55 +13,98 @@ class NodeTopicListView extends StatefulWidget {
 }
 
 class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliveClientMixin {
-  Future<List<NodeTopicItem>> topicListFuture;
+  int p = 1;
+  bool isUpLoading = false;
+  List<NodeTopicItem> items = new List();
+
+  ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
     super.initState();
     // 获取数据
-    topicListFuture = getTopics();
+    getTopics();
+    // 监听是否滑到了页面底部
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        print("加载更多...");
+        getTopics();
+      }
+    });
   }
 
-  Future<List<NodeTopicItem>> getTopics() async {
-    return await v2exApi.getNodeTopicsByTabKey(widget.tabKey);
+  Future getTopics() async {
+    if (!isUpLoading) {
+      setState(() {
+        isUpLoading = true;
+      });
+    }
+    List<NodeTopicItem> newEntries = await v2exApi.getNodeTopicsByTabKey(widget.tabKey, p++);
+    print(p);
+    setState(() {
+      items.addAll(newEntries);
+      isUpLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new FutureBuilder<List<NodeTopicItem>>(
-        future: topicListFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new RefreshIndicator(
-                child: new Container(
-                    child: new ListView(
-                        padding: const EdgeInsets.only(bottom: 15.0),
-                        children: snapshot.data.map((NodeTopicItem topic) {
-                          return new TopicItemView(topic);
-                        }).toList())),
-                onRefresh: _onRefresh);
-          } else if (snapshot.hasError) {
-            return new Center(
-              child: new Text("${snapshot.error}"),
-            );
-          }
+    if (items.length > 0) {
+      return new RefreshIndicator(
+          /*child: new ListView(
+              controller: _scrollController,
+              padding: const EdgeInsets.only(bottom: 15.0),
+              children: items.map((NodeTopicItem topic) {
+                return new TopicItemView(topic);
+              }).toList()),*/
+          child: ListView.builder(
+              controller: _scrollController,
+              itemCount: items.length + 1,
+              itemBuilder: (context, index) {
+                if (index == items.length) {
+                  // 滑到了最后一个item
+                  return _buildLoadText();
+                } else {
+                  return new TopicItemView(items[index]);
+                }
+              }),
+          onRefresh: _onRefresh);
+    }
+    // By default, show a loading spinner
+    return new Center(
+      child: new CircularProgressIndicator(),
+    );
+  }
 
-          // By default, show a loading spinner
-          return new Center(
-            child: new CircularProgressIndicator(),
-          );
-        });
+  Widget _buildLoadText() {
+    return Container(
+      padding: const EdgeInsets.all(18.0),
+      child: Center(
+        child: Text("正在加载第" + p.toString() + "页..."),
+      ),
+    );
   }
 
   //刷新数据,重新设置future就行了
   Future _onRefresh() async {
+    print("刷新数据...");
+    p = 1;
+    List<NodeTopicItem> newEntries = await v2exApi.getNodeTopicsByTabKey(widget.tabKey, p);
     setState(() {
-      topicListFuture = getTopics();
+      items.clear();
+      items.addAll(newEntries);
     });
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _scrollController.dispose();
+  }
 }
 
 /// topic item view

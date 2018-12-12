@@ -117,7 +117,7 @@ class V2exApi {
   }
 
   // 导航页获取特定节点下的topics
-  Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey) async {
+  Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
     List<NodeTopicItem> topics = new List<NodeTopicItem>();
@@ -136,7 +136,8 @@ class V2exApi {
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
 
     // todo 这里要 https 才能使下面的user-agent有效
-    var uri = new Uri.https('www.v2ex.com', '/go/' + tabKey);
+    var uri = new Uri.https('www.v2ex.com', '/go/' + tabKey, {'p': p.toString()});
+    print(uri);
     var request = await httpClient.getUrl(uri); // Uri.parse("https://www.v2ex.com/go/share")
     //使用iPhone的UA
     request.headers.add("user-agent",
