@@ -17,14 +17,19 @@ class DrawerLeft extends StatelessWidget {
                     new NetworkImage("https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro"),
               ),
             ),
-            decoration: new BoxDecoration(
+            // todo 这里可以根据一天的不同时间显示不同的background，增加美观
+            /*decoration: new BoxDecoration(
                 image: new DecorationImage(
-                    fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),
+                    fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),*/
           ),
-          new ListTile(
+          // todo 目前没必要，这里后面考虑要不要有
+          /*new ListTile(
             leading: new Icon(Icons.explore),
             title: new Text("浏览"),
-          ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),*/
           new ListTile(
             leading: new Icon(Icons.apps),
             title: new Text("节点"),

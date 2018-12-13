@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/tab_topic_listview.dart';
-import 'package:flutter_app/model/drawer_left.dart';
 
 void main() => runApp(new MyApp());
 
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           length: tabs.length,
           child: new Scaffold(
               appBar: new AppBar(
-                  title: new Text("Explore"),
+                  title: new Text("♥️ Flutter"),
                   elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
                   bottom: new TabBar(
                     isScrollable: true,

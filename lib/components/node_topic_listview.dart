@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
+import 'package:flutter_app/page_topic_detail.dart';
 
 class NodeTopicListView extends StatefulWidget {
   final String tabKey;
@@ -118,19 +119,19 @@ class TopicItemView extends StatelessWidget {
     return new GestureDetector(
       onTap: () {
         // todo 跳转详情页面
-        /*Navigator.push(
+        Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(topic)),
-        );*/
+          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(topic.topicId))),
+        );
       },
       child: new Container(
         child: new Column(
           children: <Widget>[
             new Container(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(10.0),
               child: new Row(
                 children: <Widget>[
-                  // 头像
+                  /*// 头像
                   new Container(
                     margin: const EdgeInsets.only(right: 10.0),
                     width: 24.0,
@@ -144,7 +145,7 @@ class TopicItemView extends StatelessWidget {
                         image: new NetworkImage(topic.avatar),
                       ),
                     ),
-                  ),
+                  ),*/
                   new Expanded(
                     child: new Container(
                         margin: const EdgeInsets.only(right: 10.0),

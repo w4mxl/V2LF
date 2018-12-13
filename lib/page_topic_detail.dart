@@ -3,14 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
-import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/utils/time_base.dart';
+import "package:flutter_markdown/flutter_markdown.dart";
 
 class TopicDetails extends StatelessWidget {
-  final TabTopicItem topic;
+  //final TabTopicItem topic;
+  final int topicId;
 
-  TopicDetails(this.topic);
+  TopicDetails(this.topicId);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +35,10 @@ class TopicDetails extends StatelessWidget {
             child: new ListView(
               children: <Widget>[
                 /// topic content
-                new TopicContentView(int.parse(topic.topicId)),
+                new TopicContentView(topicId),
 
                 /// topic replies
-                new RepliesView(int.parse(topic.topicId)),
+                new RepliesView(topicId),
               ],
             ),
           )),
@@ -122,8 +123,8 @@ class TopicContentView extends StatelessWidget {
                                   new Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
                                       child: new Text(
-                                        new TimeBase(result.data.list[0].last_modified).getShowTime() +
-                                            "，100次点击", // todo
+                                        new TimeBase(result.data.list[0].last_modified)
+                                            .getShowTime(), // todo:   + "，100次点击"
                                         style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
                                       ))
                                 ],
@@ -162,11 +163,12 @@ class TopicContentView extends StatelessWidget {
                     // topic content
                     new Container(
                       padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-                      child: new Text(
+                      child: MarkdownBody(data: result.data.list[0].content),
+                      /*child: new Text(
                         result.data.list[0].content,
                         softWrap: true,
                         style: new TextStyle(color: Colors.black87, fontSize: 14.0),
-                      ),
+                      ),*/
                     ),
                   ],
                 ),
