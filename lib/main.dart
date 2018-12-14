@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           length: tabs.length,
           child: new Scaffold(
               appBar: new AppBar(
-                  title: new Text("♥️ Flutter"),
+                  title: new Text("explore"),
                   elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
                   bottom: new TabBar(
                     isScrollable: true,
