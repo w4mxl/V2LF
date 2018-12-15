@@ -54,6 +54,22 @@ class DrawerLeft extends StatelessWidget {
           new ListTile(
             leading: new Icon(Icons.feedback),
             title: new Text("反馈"),
+          ),
+          new AboutListTile(
+            icon: new Icon(Icons.info),
+            child: new Text("关于"),
+            applicationName: "V2lf",
+            applicationVersion: "0.0.1",
+            applicationIcon: new Image.asset(
+              "images/ic_launcher.png",
+              width: 64.0,
+              height: 64.0,
+            ),
+            aboutBoxChildren: <Widget>[
+              new Text("Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love flutter'."),
+              new Text(""),
+              new Text(" ；）")
+            ],
           )
         ],
       ),
