@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page_nodes.dart';
 
-class DrawerLeft extends StatelessWidget {
+class DrawerLeft extends StatefulWidget {
+  @override
+  _DrawerLeftState createState() => _DrawerLeftState();
+}
+
+class _DrawerLeftState extends State<DrawerLeft> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return new Drawer(
@@ -23,16 +30,18 @@ class DrawerLeft extends StatelessWidget {
                     fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),*/
           ),
           // todo 目前没必要，这里后面考虑要不要有
-          /*new ListTile(
+          new ListTile(
             leading: new Icon(Icons.explore),
             title: new Text("浏览"),
+            selected: 0 == _selectedIndex,
             onTap: () {
               Navigator.pop(context);
             },
-          ),*/
+          ),
           new ListTile(
             leading: new Icon(Icons.apps),
             title: new Text("节点"),
+            selected: 1 == _selectedIndex,
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
@@ -51,15 +60,15 @@ class DrawerLeft extends StatelessWidget {
             leading: new Icon(Icons.settings),
             title: new Text("设置"),
           ),
-          new ListTile(
+          /*new ListTile(
             leading: new Icon(Icons.feedback),
             title: new Text("反馈"),
-          ),
+          ),*/
           new AboutListTile(
             icon: new Icon(Icons.info),
             child: new Text("关于"),
             applicationName: "V2lf",
-            applicationVersion: "0.0.1",
+            applicationVersion: "v0.0.1",
             applicationIcon: new Image.asset(
               "images/ic_launcher.png",
               width: 64.0,

@@ -26,12 +26,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_launcher_icons: "^0.7.0"
-
-flutter_icons:
-  image_path: "images/ic_launcher.png"
-  android: true # can specify file name here e.g. "ic_launcher"
-  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+#  flutter_launcher_icons: "^0.7.0"
+#
+#flutter_icons:
+#  image_path: "images/ic_launcher.png"
+#  android: true # can specify file name here e.g. "ic_launcher"
+#  ios: true # can specify file name here e.g. "My-Launcher-Icon"
 
 
 # For information on the generic Dart part of this file, see the
