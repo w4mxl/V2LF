@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
 
-class DrawerLeft extends StatefulWidget {
-  @override
-  _DrawerLeftState createState() => _DrawerLeftState();
-}
-
-class _DrawerLeftState extends State<DrawerLeft> {
-  int _selectedIndex = 0;
-
+class DrawerLeft extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Drawer(
@@ -18,7 +12,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
             accountName: new Text("w4mxl"),
             accountEmail: new Text("mxl1989@gmail.com"),
             currentAccountPicture: new GestureDetector(
-              onTap: () => print("显示个人主页web"), // todo
+              onTap: () {
+                // 判断登录状态 todo
+                //未登录
+                Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+              },
               child: new CircleAvatar(
                 backgroundImage:
                     new NetworkImage("https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro"),
@@ -30,18 +28,16 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),*/
           ),
           // todo 目前没必要，这里后面考虑要不要有
-          new ListTile(
+          /*new ListTile(
             leading: new Icon(Icons.explore),
             title: new Text("浏览"),
-            selected: 0 == _selectedIndex,
             onTap: () {
               Navigator.pop(context);
             },
-          ),
+          ),*/
           new ListTile(
             leading: new Icon(Icons.apps),
             title: new Text("节点"),
-            selected: 1 == _selectedIndex,
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
@@ -60,10 +56,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
             leading: new Icon(Icons.settings),
             title: new Text("设置"),
           ),
-          /*new ListTile(
+          new ListTile(
             leading: new Icon(Icons.feedback),
             title: new Text("反馈"),
-          ),*/
+          ),
           new AboutListTile(
             icon: new Icon(Icons.info),
             child: new Text("关于"),
