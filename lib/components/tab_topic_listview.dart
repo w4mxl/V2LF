@@ -112,7 +112,6 @@ class TopicItemView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         new Container(
-                          padding: const EdgeInsets.only(bottom: 4.0),
                           child: new Row(
                             children: <Widget>[
                               new Text(

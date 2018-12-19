@@ -44,6 +44,10 @@ flutter:
       fonts:
         - asset: fonts/Ubuntu-Regular.ttf
 
+    - family: NotoSerifSC
+      fonts:
+        - asset: fonts/NotoSerifSC-Regular.otf
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
