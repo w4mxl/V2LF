@@ -12,8 +12,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   @override
   Widget build(BuildContext context) {
     const List<TabData> tabs = const <TabData>[
@@ -55,6 +53,11 @@ class _MyAppState extends State<MyApp> {
               ),
               drawer: new DrawerLeft())),
     );
+
+    Future<bool> loginState() async {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      return sharedPreferences.getBool("is_login");
+    }
   }
 }
 
