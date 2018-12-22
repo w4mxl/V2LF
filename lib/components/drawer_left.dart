@@ -57,7 +57,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     new CircleAvatar(
                   backgroundImage: isLogined
                       ? new NetworkImage("https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro")
-                      : new AssetImage("images/ic_account_circle_white_48dp.png"),
+                      : new AssetImage("images/ic_person.png"),
                 ),
               ),
               // todo 这里可以根据一天的不同时间显示不同的background，增加美观

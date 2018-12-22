@@ -60,7 +60,9 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
      - images/ic_launcher.png
-     - images/ic_account_circle_white_48dp.png
+     - images/ic_person.png
+     - images/logo_v2lf.png
+     - images/ic_sync_white_24dp.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
