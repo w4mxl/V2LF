@@ -54,7 +54,9 @@ class _LoginPageState extends State<LoginPage> {
     child: MaterialButton(
       minWidth: 200.0,
       height: 48.0,
-      onPressed: () {},
+      onPressed: () {
+        // todo 非空检查-登录判断结果
+      },
       color: Colors.blueGrey,
       child: Text('Log In', style: TextStyle(color: Colors.white)),
     ),
@@ -73,7 +75,9 @@ class _LoginPageState extends State<LoginPage> {
         Icons.close,
         size: 20.0,
       ),
-      onPressed: () {});
+      onPressed: () {
+        Navigator.of(context).pop();
+      });
 
   @override
   Widget build(BuildContext context) {
