@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.only(left: 8.0),
         child: FadeInImage.assetNetwork(
             width: 158.0,
+            height: 40.0,
             placeholder: "images/ic_sync_white_24dp.png",
             image: "https://ws1.sinaimg.cn/large/006tNbRwgy1fyfiufpg27j308w0280sq.jpg"),
       ),
@@ -76,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
         size: 20.0,
       ),
       onPressed: () {
-        Navigator.of(context).pop();
+        //Navigator.of(context).pop();
       });
 
   @override
@@ -89,6 +90,14 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.of(context).pop();
             }),
       ),*/
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        backgroundColor: Colors.red[300],
+        mini: true,
+        child: Icon(Icons.close),
+      ),
       body: new Center(
         child: ListView(
           shrinkWrap: true,
@@ -112,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             loginButton,
             forgotLabel,
-            closePage
+            //closePage
           ],
         ),
       ),
