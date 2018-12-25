@@ -31,26 +31,33 @@ class _MyAppState extends State<MyApp> {
     ];
 
     return new MaterialApp(
-      theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Ubuntu'),
+      theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(
-              appBar: new AppBar(
-                  //title: new Text("explore"),
-                  elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
-                  bottom: new TabBar(
-                    isScrollable: true,
-                    tabs: tabs.map((TabData choice) {
-                      return new Tab(
-                        text: choice.title,
-                      );
+              body: NestedScrollView(
+                  headerSliverBuilder: (BuildContext context, bool bodyIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                          pinned: true,
+                          floating: true,
+                          snap: true,
+                          elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+                          bottom: new TabBar(
+                            isScrollable: true,
+                            tabs: tabs.map((TabData choice) {
+                              return new Tab(
+                                text: choice.title,
+                              );
+                            }).toList(),
+                          ))
+                    ];
+                  },
+                  body: new TabBarView(
+                    children: tabs.map((TabData choice) {
+                      return new TopicListView(choice.key);
                     }).toList(),
                   )),
-              body: new TabBarView(
-                children: tabs.map((TabData choice) {
-                  return new TopicListView(choice.key);
-                }).toList(),
-              ),
               drawer: new DrawerLeft())),
     );
 

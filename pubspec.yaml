@@ -41,13 +41,19 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   fonts:
+    - family: Whitney
+      fonts:
+        - asset: assets/fonts/Whitney-Book.ttf
+        - asset: assets/fonts/Whitney-BookItalic.ttf
+          style: italic
+
     - family: Ubuntu
       fonts:
-        - asset: fonts/Ubuntu-Regular.ttf
+        - asset: assets/fonts/Ubuntu-Regular.ttf
 
     - family: NotoSerifSC
       fonts:
-        - asset: fonts/NotoSerifSC-Regular.otf
+        - asset: assets/fonts/NotoSerifSC-Regular.otf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -59,10 +65,10 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-     - images/ic_launcher.png
-     - images/ic_person.png
-     - images/logo_v2lf.png
-     - images/ic_sync_white_24dp.png
+     - assets/images/ic_launcher.png
+     - assets/images/ic_person.png
+     - assets/images/logo_v2lf.png
+     - assets/images/ic_sync_white_24dp.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
