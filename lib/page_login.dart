@@ -6,7 +6,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final logo = Image.asset("images/logo_v2lf.png");
+  final logo = Image.asset("assets/images/logo_v2lf.png");
 
   final userName = TextFormField(
     autofocus: false,

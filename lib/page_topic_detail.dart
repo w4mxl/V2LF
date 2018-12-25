@@ -15,33 +15,20 @@ class TopicDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Topic detils',
-      theme: new ThemeData(
-        primaryColor: Colors.blueGrey,
-      ),
-      home: new Scaffold(
-          appBar: new AppBar(
-            // title: new Text(topic.title),
-            leading: new GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: new Icon(Icons.arrow_back),
-            ),
-          ),
-          body: new Container(
-            color: const Color(0xFFD8D2D1),
-            child: new ListView(
-              children: <Widget>[
-                /// topic content
-                new TopicContentView(topicId),
+    return new Scaffold(
+      appBar: new AppBar(),
+      body: new Container(
+        color: const Color(0xFFD8D2D1),
+        child: new ListView(
+          children: <Widget>[
+            /// topic content
+            new TopicContentView(topicId),
 
-                /// topic replies
-                new RepliesView(topicId),
-              ],
-            ),
-          )),
+            /// topic replies
+            new RepliesView(topicId),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
     ];
 
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
