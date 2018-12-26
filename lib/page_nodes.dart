@@ -25,7 +25,10 @@ class _NodePageState extends State<NodesPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: const Text('节点导航')),
+      appBar: new AppBar(
+        title: const Text('节点导航'),
+        actions: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: () {})],
+      ),
       body: new Container(
           color: const Color(0xFFD8D2D1),
           child: new Center(
@@ -101,5 +104,31 @@ class NodeGroupWidget extends StatelessWidget {
       ),
       onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
     );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    return null;
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    return null;
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // TODO: implement buildSuggestions
+    return null;
   }
 }
