@@ -111,7 +111,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 applicationName: "V2lf",
                 applicationVersion: "v0.0.1",
                 applicationIcon: new Image.asset(
-                  "assets/images/ic_launcher.png",
+                  "assets/images/icon/ic_launcher.png",
                   width: 64.0,
                   height: 64.0,
                 ),
