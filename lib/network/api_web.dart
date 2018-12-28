@@ -105,9 +105,9 @@ class V2exApi {
       RegExp exp4Node = new RegExp(reg4NodeItem);
       Iterable<Match> matchNodes = exp4Node.allMatches(match.group(0));
       for (Match matchNode in matchNodes) {
-        NodeItem nodeItem = new NodeItem();
-        nodeItem.nodeId = matchNode.group(1);
-        nodeItem.nodeName = matchNode.group(2);
+        NodeItem nodeItem = new NodeItem(matchNode.group(1), matchNode.group(2));
+        /*nodeItem.nodeId = matchNode.group(1);
+        nodeItem.nodeName = matchNode.group(2);*/
         nodeGroup.nodes.add(nodeItem);
       }
       nodeGroups.add(nodeGroup);

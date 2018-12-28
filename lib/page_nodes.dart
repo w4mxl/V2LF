@@ -13,9 +13,10 @@ class NodesPage extends StatefulWidget {
   }
 }
 
-class _NodePageState extends State<NodesPage> {
-  List<NodeGroup> nodeGroups = <NodeGroup>[];
+List<NodeGroup> nodeGroups = <NodeGroup>[];
+List<NodeItem> allNodes = <NodeItem>[];
 
+class _NodePageState extends State<NodesPage> {
   @override
   void initState() {
     super.initState();
@@ -27,16 +28,24 @@ class _NodePageState extends State<NodesPage> {
     return new Scaffold(
       appBar: new AppBar(
         title: const Text('节点导航'),
-        actions: <Widget>[IconButton(icon: Icon(Icons.search), onPressed: () {})],
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+              })
+        ],
       ),
       body: new Container(
           color: const Color(0xFFD8D2D1),
           child: new Center(
-            child: new ListView.builder(
-              padding: const EdgeInsets.only(bottom: 15.0),
-              itemBuilder: itemBuilder,
-              itemCount: nodeGroups.length,
-            ),
+            child: nodeGroups.length > 0
+                ? new ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    itemBuilder: itemBuilder,
+                    itemCount: nodeGroups.length,
+                  )
+                : CircularProgressIndicator(),
           )),
     );
   }
@@ -47,6 +56,14 @@ class _NodePageState extends State<NodesPage> {
       this.setState(() {
         nodeGroups.clear();
         nodeGroups.addAll(tmpGroups);
+
+        if (nodeGroups.length > 0) {
+          for (var nodeGroup in nodeGroups) {
+            for (var nodeItem in nodeGroup.nodes) {
+              allNodes.add(nodeItem);
+            }
+          }
+        }
       });
     }
   }
@@ -107,28 +124,66 @@ class NodeGroupWidget extends StatelessWidget {
   }
 }
 
+// 论坛节点搜索
 class DataSearch extends SearchDelegate<String> {
+  final List<NodeItem> meLikeNodes = <NodeItem>[
+    NodeItem('share', '分享发现'),
+    NodeItem('programmer', '程序员'),
+    NodeItem('kindle', 'Kindle'),
+    NodeItem('iphone', 'iPhone'),
+    NodeItem('ipad', 'iPad'),
+    NodeItem('invest', '投资'),
+    NodeItem('jobs', '酷工作'),
+    NodeItem('shanghai', '上海'),
+  ];
+
   @override
   List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    return null;
+    return [
+      IconButton(
+        icon: Icon(Icons.close),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
   }
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    return null;
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios),
+      onPressed: () {
+        close(context, null);
+      },
+    );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
     return null;
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return null;
+    final suggestionNodes = query.isEmpty ? meLikeNodes : allNodes.where((p) => p.nodeName.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+            leading: Icon(Icons.filter_list),
+            title: RichText(
+                text: TextSpan(
+                    text: suggestionNodes[index].nodeName.substring(0, query.length),
+                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                    children: [
+                  TextSpan(
+                      text: suggestionNodes[index].nodeName.substring(query.length),
+                      style: DefaultTextStyle.of(context).style)
+                ])),
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
+          ),
+      itemCount: suggestionNodes.length,
+    );
   }
 }
