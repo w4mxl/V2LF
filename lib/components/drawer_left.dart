@@ -108,7 +108,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new AboutListTile(
                 icon: new Icon(Icons.info),
                 child: new Text("关于"),
-                applicationName: "V2lf",
+                applicationName: "V2LF",
                 applicationVersion: "v0.0.1",
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
