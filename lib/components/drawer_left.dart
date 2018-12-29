@@ -138,7 +138,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         TextSpan(
                             style: aboutTextStyle,
                             text:
-                                "V2LF is a v2ex unoffical app.'V2LF' means 'way to love flutter'.\n\nTo see the source code for this app, please visit the "),
+                                "V2LF is a v2ex unofficial app.'V2LF' means 'way to love flutter'.\n\nTo see the source code for this app, please visit the "),
                         _LinkTextSpan(
                           style: linkStyle,
                           url: 'https://github.com/w4mxl/V2exByFlutter',
