@@ -11,6 +11,7 @@ The original intention of developing this app is to learn flutter.Designed with 
 
 ## ScreenShot
 
+![V2LF-v0.0.4](screenshot/V2LF-v0.0.4.gif)
 
 ## To-Do
 - [ ] Login logic
