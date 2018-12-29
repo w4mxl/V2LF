@@ -11,7 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   final userName = TextFormField(
     autofocus: false,
     decoration: InputDecoration(
-        hintText: '用户名',
+        hintText: 'account',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
   );
@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     autofocus: false,
     obscureText: true,
     decoration: InputDecoration(
-        hintText: '密码',
+        hintText: 'password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
   );
@@ -32,14 +32,14 @@ class _LoginPageState extends State<LoginPage> {
           child: TextFormField(
         autofocus: false,
         decoration: InputDecoration(
-            hintText: '验证码',
+            hintText: 'captcha',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       )),
       Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: FadeInImage.assetNetwork(
-            width: 158.0,
+            width: 145.0,
             height: 40.0,
             placeholder: "images/ic_sync_white_24dp.png",
             image: "https://ws1.sinaimg.cn/large/006tNbRwgy1fyfiufpg27j308w0280sq.jpg"),
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     shadowColor: Colors.blueGrey.shade100,
     elevation: 5.0,
     child: MaterialButton(
-      minWidth: 200.0,
+      minWidth: double.infinity,
       height: 48.0,
       onPressed: () {
         // todo 非空检查-登录判断结果
@@ -83,48 +83,41 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-      ),*/
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        backgroundColor: Colors.red[300],
-        mini: true,
-        child: Icon(Icons.close),
-      ),
-      body: new Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            logo,
-            SizedBox(
-              height: 30.0,
-            ),
-            userName,
-            SizedBox(
-              height: 10.0,
-            ),
-            password,
-            SizedBox(
-              height: 10.0,
-            ),
-            captcha,
-            SizedBox(
-              height: 40.0,
-            ),
-            loginButton,
-            forgotLabel,
-            //closePage
-          ],
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          backgroundColor: Colors.red[300],
+          mini: true,
+          child: Icon(Icons.close),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  logo,
+                  SizedBox(
+                    height: 70.0,
+                  ),
+                  userName,
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  password,
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  captcha,
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  loginButton,
+                  forgotLabel,
+                ],
+              )),
+        ));
   }
 }
