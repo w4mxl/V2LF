@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// 2018/12/30 21:23
+// 用 Charles 分析了一下 V2ex 网站登录的过程
+// 通过模拟网站登录的过程，实现登录。登录后保存cookie，为了后面实现评论和回复作准备
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
