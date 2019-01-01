@@ -130,7 +130,8 @@ class V2exApi {
 
     final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
 
-    final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
+    final String reg4CharactersClickTimes =
+        "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
     final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
@@ -167,7 +168,8 @@ class V2exApi {
       item.replyCount = match4TRC.group(2);
       item.title = match4TRC.group(3);
       if (regString.contains("个字符")) {
-        Match match4CharactersClickTimes = new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+        Match match4CharactersClickTimes =
+            new RegExp(reg4CharactersClickTimes).firstMatch(regString);
         item.characters = match4CharactersClickTimes.group(1);
         item.clickTimes = match4CharactersClickTimes.group(2);
       }
@@ -177,5 +179,10 @@ class V2exApi {
       topics.add(item);
     }
     return topics;
+  }
+
+  // 获取登录信息
+  Future parseSignInForm() async {
+    // name password captcha once
   }
 }
