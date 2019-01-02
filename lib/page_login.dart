@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/network/api_web.dart';
 
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
@@ -84,6 +85,16 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         //Navigator.of(context).pop();
       });
+
+  @override
+  void initState() {
+    super.initState();
+    loadCaptcha();
+  }
+
+  Future loadCaptcha() async {
+    await v2exApi.parseLoginForm();
+  }
 
   @override
   Widget build(BuildContext context) {
