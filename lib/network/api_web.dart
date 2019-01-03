@@ -5,7 +5,9 @@ import 'dart:io';
 
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/node.dart';
+import 'package:xpath/xpath.dart';
 
 V2exApi v2exApi = new V2exApi();
 
@@ -116,7 +118,7 @@ class V2exApi {
     return nodeGroups;
   }
 
-  // 导航页获取特定节点下的topics
+  // 节点导航页获取特定节点下的topics
   Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
@@ -182,7 +184,50 @@ class V2exApi {
   }
 
   // 获取登录信息
-  Future parseSignInForm() async {
+  Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
+    LoginFormData loginFormData = new LoginFormData();
+    var uri = new Uri.https('www.v2ex.com', '/signin');
+    print(uri);
+    var request = await httpClient.getUrl(uri); // Uri.parse("https://www.v2ex.com/go/share")
+    //使用iPhone的UA
+    request.headers.add("user-agent",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1");
+    //等待连接服务器（会将请求信息发送给服务器）
+    var response = await request.close();
+    var responseBody = await response.transform(utf8.decoder).join();
+    print(responseBody);
+
+    var tree = ETree.fromString(responseBody);
+    //print(tree.xpath('//*[@id="content"]/h1/text()')[0].name); // print hello
+
+    loginFormData.username = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.password = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.captcha = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+
+    loginFormData.once = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
+
+    print("\n" +
+        loginFormData.username +
+        "\n" +
+        loginFormData.password +
+        "\n" +
+        loginFormData.captcha +
+        "\n" +
+        loginFormData.once);
+
+    return loginFormData;
   }
 }
