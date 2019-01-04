@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/api_web.dart';
 
 // 2018/12/30 21:23
@@ -10,6 +11,8 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
+
+LoginFormData loginFormData;
 
 class _LoginPageState extends State<LoginPage> {
   final logo = Image.asset("assets/images/logo_v2lf.png");
@@ -43,13 +46,18 @@ class _LoginPageState extends State<LoginPage> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       )),
       Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: FadeInImage.assetNetwork(
-            width: 145.0,
-            height: 40.0,
-            placeholder: "images/ic_sync_white_24dp.png",
-            image: "https://ws1.sinaimg.cn/large/006tNbRwgy1fyfiufpg27j308w0280sq.jpg"),
-      ),
+          padding: const EdgeInsets.only(left: 8.0),
+          child: loginFormData != null
+              ? Image.memory(
+                  loginFormData.bytes,
+                  width: 145.0,
+                  height: 40.0,
+                )
+              : IconButton(
+                  icon: Icon(Icons.sync),
+                  onPressed: () {
+                    // loadCaptcha();
+                  })),
     ],
   );
 
@@ -93,7 +101,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future loadCaptcha() async {
-    await v2exApi.parseLoginForm();
+    var formData = await v2exApi.parseLoginForm();
+    setState(() {
+      loginFormData = formData;
+    });
   }
 
   @override

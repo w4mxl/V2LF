@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
@@ -187,19 +189,14 @@ class V2exApi {
   Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
     LoginFormData loginFormData = new LoginFormData();
-    var uri = new Uri.https('www.v2ex.com', '/signin');
-    print(uri);
-    var request = await httpClient.getUrl(uri); // Uri.parse("https://www.v2ex.com/go/share")
-    //使用iPhone的UA
-    request.headers.add("user-agent",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1");
-    //等待连接服务器（会将请求信息发送给服务器）
-    var response = await request.close();
-    var responseBody = await response.transform(utf8.decoder).join();
-    print(responseBody);
 
-    var tree = ETree.fromString(responseBody);
-    //print(tree.xpath('//*[@id="content"]/h1/text()')[0].name); // print hello
+    var dio = new Dio();
+    dio.options.headers = {
+      'user-agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+    };
+    var response = await dio.get("https://www.v2ex.com/signin");
+    var tree = ETree.fromString(response.data);
 
     loginFormData.username = tree
         .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
@@ -219,14 +216,19 @@ class V2exApi {
         .first
         .attributes["value"];
 
-    print("\n" +
-        loginFormData.username +
+    print(loginFormData.username +
         "\n" +
         loginFormData.password +
         "\n" +
         loginFormData.captcha +
         "\n" +
         loginFormData.once);
+
+    dio.options.responseType = ResponseType.STREAM;
+    response = await dio.get("https://www.v2ex.com/_captcha?once=" + loginFormData.once);
+    var uint8list = await consolidateHttpClientResponseBytes(response.data);
+    if (uint8list.lengthInBytes == 0) throw new Exception('NetworkImage is an empty file');
+    loginFormData.bytes = uint8list;
 
     return loginFormData;
   }

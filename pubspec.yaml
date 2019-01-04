@@ -26,6 +26,7 @@ dependencies:
   cached_network_image: ^0.5.1 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.13.3+3 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath
+  dio: ^1.0.13 # https://pub.dartlang.org/packages/dio
 
 dev_dependencies:
   flutter_test:
