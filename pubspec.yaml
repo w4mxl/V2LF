@@ -27,6 +27,7 @@ dependencies:
   html: ^0.13.3+3 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath
   dio: ^1.0.13 # https://pub.dartlang.org/packages/dio
+  rxdart: ^0.20.0 # https://pub.flutter-io.cn/packages/rxdart
 
 dev_dependencies:
   flutter_test:
