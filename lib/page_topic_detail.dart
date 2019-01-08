@@ -1,10 +1,12 @@
 // 话题详情页+评论列表
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
+import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/network/api_network.dart';
+import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/utils/time_base.dart';
+import 'package:flutter_html_view/flutter_html_text.dart';
 import "package:flutter_markdown/flutter_markdown.dart";
 import 'package:url_launcher/url_launcher.dart';
 
@@ -172,13 +174,13 @@ class TopicContentView extends StatelessWidget {
           }),
     );
   }
+}
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
@@ -190,12 +192,12 @@ class RepliesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      child: new FutureBuilder<RepliesResp>(
-          future: NetworkApi.getReplies(topicId),
+      child: new FutureBuilder<List<ReplyItem>>(
+          future: v2exApi.parseTopicReplies(topicId.toString()),
           builder: (context, result) {
             if (result.hasData) {
               // 返回数据为空
-              if (result.data.list.length == 0) {
+              if (result.data.length == 0) {
                 return new Center(
                   child: new Text("目前尚无回复",
                       style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
@@ -205,7 +207,8 @@ class RepliesView extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                 color: Colors.white,
                 child: new Column(
-                  children: result.data.list.map((Reply reply) {
+                  children: result.data.map((ReplyItem reply) {
+                    //print(reply.content.toString());
                     return new Container(
                       padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                       child: new Row(
@@ -220,7 +223,7 @@ class RepliesView extends StatelessWidget {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image: new NetworkImage(
-                                  'https:' + reply.member.avatar_large,
+                                  'https:' + reply.avatar,
                                 ),
                               ),
                             ),
@@ -234,7 +237,7 @@ class RepliesView extends StatelessWidget {
                                 new Row(
                                   children: <Widget>[
                                     new Text(
-                                      reply.member.username,
+                                      reply.userName,
                                       style: new TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey,
@@ -243,7 +246,8 @@ class RepliesView extends StatelessWidget {
                                     new Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: new Text(
-                                        new TimeBase(reply.last_modified).getShowTime(),
+                                        reply.lastReplyTime,
+                                        //new TimeBase(reply.last_modified).getShowTime(),
                                         style: new TextStyle(
                                           color: const Color(0xFFcccccc),
                                           fontSize: 12.0,
@@ -254,12 +258,19 @@ class RepliesView extends StatelessWidget {
                                 ),
                                 new Container(
                                   padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                                  child: new Text(
+                                  child: HtmlText(
+                                    data: reply.content,
+                                    onLaunchFail: (url) {
+                                      print("launch $url failed");
+                                    },
+                                  )
+                                      /*new Text(
                                     reply.content.toString(),
                                     softWrap: true,
                                     overflow: TextOverflow.clip,
                                     style: new TextStyle(fontSize: 14.0, color: Colors.black),
-                                  ),
+                                  )*/
+                                      ,
                                 ),
                                 new Container(
                                   width: 300.0,

@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:xpath/xpath.dart';
@@ -195,7 +196,7 @@ class V2exApi {
       'user-agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
     };
-    var response = await dio.get("https://www.v2ex.com/signin");
+    var response = await dio.get(v2exUrl + "/signin");
     var tree = ETree.fromString(response.data);
 
     loginFormData.username = tree
@@ -231,5 +232,31 @@ class V2exApi {
     loginFormData.bytes = uint8list;
 
     return loginFormData;
+  }
+
+  // 获取帖子下面的评论信息
+  Future<List<ReplyItem>> parseTopicReplies(String topicId) async {
+    List<ReplyItem> replies = new List();
+
+    var dio = new Dio();
+    dio.options.headers = {
+      'user-agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+    };
+    var response = await dio.get(v2exUrl + "/t/" + topicId + "?p=1"); // todo 可能多页
+
+    var tree = ETree.fromString(response.data);
+
+    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
+    for (var aNode in aRootNode) {
+      ReplyItem replyItem = new ReplyItem();
+      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
+      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
+      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
+      replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
+      replies.add(replyItem);
+    }
+
+    return replies;
   }
 }
