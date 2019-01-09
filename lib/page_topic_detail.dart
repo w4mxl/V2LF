@@ -1,13 +1,14 @@
 // 话题详情页+评论列表
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
-import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/utils/time_base.dart';
-import 'package:flutter_html_view/flutter_html_text.dart';
-import "package:flutter_markdown/flutter_markdown.dart";
+import 'package:flutter_app/utils/url_helper.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TopicDetails extends StatelessWidget {
@@ -157,8 +158,15 @@ class TopicContentView extends StatelessWidget {
                     new Container(
                       padding:
                           const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-                      child: MarkdownBody(
-                          data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),
+                      child: Html(
+                        data: result.data.list[0].content_rendered,
+                        defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                        onLinkTap: (url) {
+                          _launchURL(url);
+                        },
+                      ),
+                      /*MarkdownBody(
+                          data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),*/
                       /*child: new Text(
                         result.data.list[0].content,
                         softWrap: true,
@@ -178,9 +186,13 @@ class TopicContentView extends StatelessWidget {
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url);
+    await launch(url, forceWebView: true);
   } else {
-    throw 'Could not launch $url';
+    Fluttertoast.showToast(
+        msg: 'Could not launch $url',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIos: 1,
+        gravity: ToastGravity.BOTTOM);
   }
 }
 
@@ -192,12 +204,12 @@ class RepliesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      child: new FutureBuilder<List<ReplyItem>>(
-          future: v2exApi.parseTopicReplies(topicId.toString()),
+      child: new FutureBuilder<RepliesResp>(
+          future: NetworkApi.getReplies(topicId),
           builder: (context, result) {
             if (result.hasData) {
               // 返回数据为空
-              if (result.data.length == 0) {
+              if (result.data.list.length == 0) {
                 return new Center(
                   child: new Text("目前尚无回复",
                       style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
@@ -207,8 +219,7 @@ class RepliesView extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
                 color: Colors.white,
                 child: new Column(
-                  children: result.data.map((ReplyItem reply) {
-                    //print(reply.content.toString());
+                  children: result.data.list.map((Reply reply) {
                     return new Container(
                       padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                       child: new Row(
@@ -223,7 +234,7 @@ class RepliesView extends StatelessWidget {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image: new NetworkImage(
-                                  'https:' + reply.avatar,
+                                  'https:' + reply.member.avatar_large,
                                 ),
                               ),
                             ),
@@ -237,7 +248,7 @@ class RepliesView extends StatelessWidget {
                                 new Row(
                                   children: <Widget>[
                                     new Text(
-                                      reply.userName,
+                                      reply.member.username,
                                       style: new TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey,
@@ -246,8 +257,7 @@ class RepliesView extends StatelessWidget {
                                     new Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: new Text(
-                                        reply.lastReplyTime,
-                                        //new TimeBase(reply.last_modified).getShowTime(),
+                                        new TimeBase(reply.last_modified).getShowTime(),
                                         style: new TextStyle(
                                           color: const Color(0xFFcccccc),
                                           fontSize: 12.0,
@@ -257,21 +267,36 @@ class RepliesView extends StatelessWidget {
                                   ],
                                 ),
                                 new Container(
-                                  padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                                  child: HtmlText(
-                                    data: reply.content,
-                                    onLaunchFail: (url) {
-                                      print("launch $url failed");
-                                    },
-                                  )
-                                      /*new Text(
+                                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                                    // 评论内容
+                                    child: Html(
+                                      data: reply.content_rendered,
+                                      defaultTextStyle:
+                                          TextStyle(color: Colors.black, fontSize: 14.0),
+                                      onLinkTap: (url) {
+                                        if (UrlHelper.canLaunchInApp(context, url)) {
+                                          return;
+                                        } else if (url.contains("/member/")) {
+                                          // @xxx 需要补齐 base url
+                                          url = V2exApi.v2exUrl + url;
+                                          print(url);
+                                        }
+                                        _launchURL(url);
+                                      },
+                                    )
+                                    /*HtmlText(
+                                      data: reply.content_rendered,
+                                      onLaunchFail: (url) {
+                                        print("launch $url failed");
+                                      },
+                                    )*/
+                                    /*new Text(
                                     reply.content.toString(),
                                     softWrap: true,
                                     overflow: TextOverflow.clip,
                                     style: new TextStyle(fontSize: 14.0, color: Colors.black),
                                   )*/
-                                      ,
-                                ),
+                                    ),
                                 new Container(
                                   width: 300.0,
                                   height: 0.2,

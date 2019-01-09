@@ -17,7 +17,7 @@ V2exApi v2exApi = new V2exApi();
 class V2exApi {
   var httpClient = new HttpClient();
 
-  final v2exUrl = "https://www.v2ex.com";
+  static final v2exUrl = "https://www.v2ex.com";
 
   static final V2exApi _v2exApi = new V2exApi._internal();
 
