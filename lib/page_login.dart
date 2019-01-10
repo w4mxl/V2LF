@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
@@ -99,25 +100,18 @@ class _LoginPageState extends State<LoginPage> {
 
     final loginButton = StreamBuilder<bool>(
       stream: bloc.submitCheck,
-      builder: (context, snapshot) => Material(
-            clipBehavior: Clip.antiAlias,
+      builder: (context, snapshot) => CupertinoButton(
             borderRadius: BorderRadius.circular(30.0),
-            shadowColor: Colors.blueGrey.shade100,
-            elevation: 5.0,
-            child: MaterialButton(
-              color: Colors.blueGrey,
-              minWidth: double.infinity,
-              height: 48.0,
-              disabledColor: Colors.grey,
-              onPressed: snapshot.hasData
-                  ? () {
-                      // 登录
-                      // todo 非空检查-登录判断结果
-                      print("xxx");
-                    }
-                  : null,
-              child: Text('Log In', style: TextStyle(color: Colors.white)),
-            ),
+            color: Colors.blueGrey,
+            disabledColor: Colors.grey,
+            onPressed: snapshot.hasData
+                ? () {
+                    // 登录
+                    // todo 非空检查-登录判断结果
+                    print("xxx");
+                  }
+                : null,
+            child: Text('Log In', style: TextStyle(color: Colors.white)),
           ),
     );
 
@@ -136,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          backgroundColor: Colors.red[300],
+          backgroundColor: Colors.grey[400],
           mini: true,
           child: Icon(Icons.close),
         ),
@@ -161,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   captcha,
                   SizedBox(
-                    height: 40.0,
+                    height: 60.0,
                   ),
                   loginButton,
                   forgotLabel,
