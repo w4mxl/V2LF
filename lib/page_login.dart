@@ -7,7 +7,7 @@ import 'package:flutter_app/network/api_web.dart';
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
 // 通过模拟网站登录的过程，实现登录。登录后保存cookie，为了后面实现评论和回复作准备
-// name password captcha once
+// name password captcha once next
 
 class LoginPage extends StatefulWidget {
   @override
@@ -42,10 +42,10 @@ class _LoginPageState extends State<LoginPage> {
             onChanged: bloc.accountChanged,
             autofocus: false,
             decoration: InputDecoration(
+                labelText: "Account",
+                hintText: 'Enter account',
                 errorText: snapshot.error,
-                hintText: 'account',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+                border: OutlineInputBorder()),
           ),
     );
 
@@ -56,10 +56,10 @@ class _LoginPageState extends State<LoginPage> {
             autofocus: false,
             obscureText: true,
             decoration: InputDecoration(
+                labelText: "Password",
+                hintText: 'Enter password',
                 errorText: snapshot.error,
-                hintText: 'password',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+                border: OutlineInputBorder()),
           ),
     );
 
@@ -72,10 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                       onChanged: bloc.captchaChanged,
                       autofocus: false,
                       decoration: InputDecoration(
+                          labelText: "Captcha",
+                          hintText: 'Enter right captcha',
                           errorText: snapshot.error,
-                          hintText: 'captcha',
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+                          border: OutlineInputBorder()),
                     ))),
         Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -83,8 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                 ? GestureDetector(
                     child: Image.memory(
                       loginFormData.bytes,
-                      width: 145.0,
-                      height: 40.0,
+                      height: 55.0,
                     ),
                     onTap: () {
                       refreshCaptcha();
@@ -100,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
 
     final loginButton = StreamBuilder<bool>(
       stream: bloc.submitCheck,
-      builder: (context, snapshot) => CupertinoButton(
-            borderRadius: BorderRadius.circular(30.0),
+      builder: (context, snapshot) => RaisedButton(
             color: Colors.blueGrey,
+            padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 30.0, right: 30.0),
             disabledColor: Colors.grey,
             onPressed: snapshot.hasData
                 ? () {
@@ -125,42 +124,47 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
+
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          backgroundColor: Colors.grey[400],
-          mini: true,
-          child: Icon(Icons.close),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.all(30.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  logo,
-                  SizedBox(
-                    height: 70.0,
-                  ),
-                  userName,
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  password,
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  captcha,
-                  SizedBox(
-                    height: 60.0,
-                  ),
-                  loginButton,
-                  forgotLabel,
-                ],
-              )),
-        ));
+      body: SingleChildScrollView(
+        child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                logo,
+                SizedBox(
+                  height: 70.0,
+                ),
+                userName,
+                SizedBox(
+                  height: 20.0,
+                ),
+                password,
+                SizedBox(
+                  height: 20.0,
+                ),
+                captcha,
+                SizedBox(
+                  height: 50.0,
+                ),
+                loginButton,
+                forgotLabel,
+              ],
+            )),
+      ),
+      floatingActionButton: showFab
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              backgroundColor: Colors.grey[400],
+              mini: true,
+              child: Icon(Icons.close),
+            )
+          : null,
+    );
   }
 }
