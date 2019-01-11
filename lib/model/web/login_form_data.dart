@@ -7,4 +7,13 @@ class LoginFormData {
   String once = '';
   String captcha = '';
   Uint8List bytes;
+
+  String usernameInput = '';
+  String passwordInput = '';
+  String captchaInput = '';
+
+  @override
+  String toString() {
+    return '\n$username:$usernameInput,\n$password:$passwordInput,\n$captcha:$captchaInput\nonce:$once\nnext:/';
+  }
 }

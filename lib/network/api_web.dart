@@ -234,6 +234,18 @@ class V2exApi {
     return loginFormData;
   }
 
+  // 获取 POST
+  Future loginPost(LoginFormData loginFormData) async {
+    print(loginFormData.toString());
+    /*var dio = new Dio();
+    dio.options.headers = {
+      'user-agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+    };
+    var response = await dio.get(v2exUrl + "/signin");
+    var tree = ETree.fromString(response.data);*/
+  }
+
   // 获取帖子下面的评论信息
   Future<List<ReplyItem>> parseTopicReplies(String topicId) async {
     List<ReplyItem> replies = new List();

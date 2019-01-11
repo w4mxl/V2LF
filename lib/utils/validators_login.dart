@@ -21,10 +21,10 @@ mixin LoginValidators {
 
   var captchaValidator =
       StreamTransformer<String, String>.fromHandlers(handleData: (captcha, sink) {
-    if (captcha.length > 4) {
+    if (captcha.length > 3) {
       sink.add(captcha);
     } else {
-      sink.addError("Captcha length should be greater than 4 chars.");
+      sink.addError("Captcha length should be greater than 3 chars.");
     }
   });
 }

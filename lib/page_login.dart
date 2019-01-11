@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/api_web.dart';
@@ -33,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 全屏
+    SystemChrome.setEnabledSystemUIOverlays([]);
     final bloc = BlocLogin();
     final logo = Image.asset("assets/images/logo_v2lf.png");
 
@@ -84,6 +87,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: Image.memory(
                       loginFormData.bytes,
                       height: 55.0,
+                      width: 160.0,
+                      fit: BoxFit.fill,
                     ),
                     onTap: () {
                       refreshCaptcha();
@@ -101,15 +106,8 @@ class _LoginPageState extends State<LoginPage> {
       stream: bloc.submitCheck,
       builder: (context, snapshot) => RaisedButton(
             color: Colors.blueGrey,
-            padding: const EdgeInsets.only(top: 15.0, bottom: 15.0, left: 30.0, right: 30.0),
-            disabledColor: Colors.grey,
-            onPressed: snapshot.hasData
-                ? () {
-                    // 登录
-                    // todo 非空检查-登录判断结果
-                    print("xxx");
-                  }
-                : null,
+            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
+            onPressed: snapshot.hasData ? () => bloc.submit(loginFormData) : null,
             child: Text('Log In', style: TextStyle(color: Colors.white)),
           ),
     );
@@ -136,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 logo,
                 SizedBox(
-                  height: 70.0,
+                  height: 60.0,
                 ),
                 userName,
                 SizedBox(
@@ -148,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 captcha,
                 SizedBox(
-                  height: 50.0,
+                  height: 40.0,
                 ),
                 loginButton,
                 forgotLabel,
@@ -166,5 +164,12 @@ class _LoginPageState extends State<LoginPage> {
             )
           : null,
     );
+  }
+
+  @override
+  void dispose() {
+    // 取消全屏
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    super.dispose();
   }
 }

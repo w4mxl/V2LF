@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/utils/validators_login.dart';
 import 'package:rxdart/rxdart.dart';
 
-class BlocLogin extends Object with LoginValidators implements BaseBloc {
+class BlocLogin extends Object with LoginValidators {
   final _accountController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
   final _captchaController = BehaviorSubject<String>();
@@ -27,18 +29,17 @@ class BlocLogin extends Object with LoginValidators implements BaseBloc {
   Stream<bool> get submitCheck =>
       Observable.combineLatest3(account, password, captcha, (a, p, c) => true);
 
-  submit() {
-    print("xyx");
+  submit(LoginFormData loginFormData) {
+    loginFormData.usernameInput = _accountController.value;
+    loginFormData.passwordInput = _passwordController.value;
+    loginFormData.captchaInput = _captchaController.value;
+    v2exApi.loginPost(loginFormData);
   }
 
-  @override
-  void dispose() {
+  dispose() {
+    // todo close
     _accountController?.close();
     _passwordController?.close();
     _captchaController?.close();
   }
-}
-
-abstract class BaseBloc {
-  void dispose();
 }
