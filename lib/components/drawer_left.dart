@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -115,7 +116,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.feedback),
                 title: new Text("反馈"),
                 onTap: () {
-                  launch("mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
+                  _launchURL(
+                      "mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
                 },
               ),
               new AboutListTile(
@@ -186,4 +188,16 @@ class _LinkTextSpan extends TextSpan {
               ..onTap = () {
                 launch(url);
               });
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    Fluttertoast.showToast(
+        msg: '您似乎没在手机上安装邮件客户端 ?',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIos: 1,
+        gravity: ToastGravity.BOTTOM);
+  }
 }
