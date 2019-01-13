@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter_app/model/web/login_form_data.dart';
-import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/utils/validators_login.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,13 +27,6 @@ class BlocLogin extends Object with LoginValidators {
 
   Stream<bool> get submitCheck =>
       Observable.combineLatest3(account, password, captcha, (a, p, c) => true);
-
-  submit(LoginFormData loginFormData) {
-    loginFormData.usernameInput = _accountController.value;
-    loginFormData.passwordInput = _passwordController.value;
-    loginFormData.captchaInput = _captchaController.value;
-    v2exApi.loginPost(loginFormData);
-  }
 
   dispose() {
     // todo close

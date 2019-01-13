@@ -14,6 +14,6 @@ class LoginFormData {
 
   @override
   String toString() {
-    return '\n$username:$usernameInput,\n$password:$passwordInput,\n$captcha:$captchaInput\nonce:$once\nnext:/';
+    return ' \n$username:$usernameInput,\n$password:$passwordInput,\n$captcha:$captchaInput\nonce:$once\nnext:/';
   }
 }

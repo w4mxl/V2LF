@@ -16,6 +16,9 @@ class LoginPage extends StatefulWidget {
 }
 
 LoginFormData loginFormData;
+String fieldAccount;
+String fieldPassword;
+String fieldCaptcha;
 
 class _LoginPageState extends State<LoginPage> {
   @override
@@ -42,7 +45,10 @@ class _LoginPageState extends State<LoginPage> {
     final userName = StreamBuilder<String>(
       stream: bloc.account,
       builder: (context, snapshot) => TextField(
-            onChanged: bloc.accountChanged,
+            onChanged: (text) {
+              bloc.accountChanged(text);
+              fieldAccount = text;
+            },
             autofocus: false,
             decoration: InputDecoration(
                 labelText: "Account",
@@ -55,7 +61,10 @@ class _LoginPageState extends State<LoginPage> {
     final password = StreamBuilder<String>(
       stream: bloc.password,
       builder: (context, snapshot) => TextField(
-            onChanged: bloc.passwordChanged,
+            onChanged: (text) {
+              bloc.passwordChanged(text);
+              fieldPassword = text;
+            },
             autofocus: false,
             obscureText: true,
             decoration: InputDecoration(
@@ -72,7 +81,10 @@ class _LoginPageState extends State<LoginPage> {
             child: StreamBuilder<String>(
                 stream: bloc.captcha,
                 builder: (context, snapshot) => TextField(
-                      onChanged: bloc.captchaChanged,
+                      onChanged: (text) {
+                        bloc.captchaChanged(text);
+                        fieldCaptcha = text;
+                      },
                       autofocus: false,
                       decoration: InputDecoration(
                           labelText: "Captcha",
@@ -107,7 +119,22 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, snapshot) => RaisedButton(
             color: Colors.blueGrey,
             padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
-            onPressed: snapshot.hasData ? () => bloc.submit(loginFormData) : null,
+            onPressed: snapshot.hasData
+                ? () {
+                    if (loginFormData != null &&
+                        fieldAccount != null &&
+                        fieldPassword != null &&
+                        fieldCaptcha != null) {
+                      loginFormData.usernameInput = fieldAccount;
+                      loginFormData.passwordInput = fieldPassword;
+                      loginFormData.captchaInput = fieldCaptcha;
+                      //var formData = bloc.submit(loginFormData);
+                      print(loginFormData.toString());
+                      v2exApi.loginPost(loginFormData);
+                      // Fluttertoast.showToast(msg: '$loginPost');
+                    }
+                  }
+                : null,
             child: Text('Log In', style: TextStyle(color: Colors.white)),
           ),
     );
@@ -156,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
       floatingActionButton: showFab
           ? FloatingActionButton(
               onPressed: () {
+                // bloc.dispose(); // todo
                 Navigator.of(context).pop();
               },
               backgroundColor: Colors.grey[400],
