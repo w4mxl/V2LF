@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/validators_login.dart';
 import 'package:rxdart/rxdart.dart';
 
