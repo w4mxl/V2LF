@@ -1,5 +1,7 @@
 // 话题列表页
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
@@ -141,7 +143,9 @@ class TopicItemView extends StatelessWidget {
                           ),
                         ),
                         new Text(
-                          topic.lastReplyTime == '' ? '暂无评论' : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          topic.lastReplyTime == ''
+                              ? '暂无评论'
+                              : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
                           style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],

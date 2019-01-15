@@ -1,3 +1,6 @@
+const String SP_USERNAME = "username";
+const String SP_AVATAR = "avatar";
+
 const String HOST = 'https://jiasule.v2ex.com/';
 const String API_PATH = 'api/';
 

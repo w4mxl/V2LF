@@ -5,7 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/network/constants.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xpath/xpath.dart';
 
 DioSingleton dioSingleton = new DioSingleton();
@@ -81,7 +84,7 @@ class DioSingleton {
   }
 
   // 获取 POST
-  Future loginPost(LoginFormData loginFormData) async {
+  Future<bool> loginPost(LoginFormData loginFormData) async {
     _dio.options.headers = {
       "Origin": v2exHost,
       "Referer": v2exHost + "/signin",
@@ -117,16 +120,34 @@ class DioSingleton {
       var elementOfAvatarImg =
           tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
       if (elementOfAvatarImg != null) {
+        // 获取用户头像
+        String avatar = elementOfAvatarImg.attributes["src"];
+        // 获取到的是24*24大小，改成73*73
+        //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
+        //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
+        var regExp1 = RegExp(r's=24');
+        var regExp2 = RegExp(r'normal');
+        if (avatar.contains(regExp1)) {
+          avatar = avatar.replaceFirst(regExp1, 's=73');
+        } else if (avatar.contains(regExp2)) {
+          avatar = avatar.replaceFirst(regExp2, 'large');
+        }
+
         String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
-        var account = href.substring('/member/'.length);
-        print("wml success!!!!:" + account);
-        Fluttertoast.showToast(msg: '登录成功：$account');
+        var username = href.substring('/member/'.length);
+        Fluttertoast.showToast(msg: '登录成功：$username');
+        // 保存 username avatar
+        SharedPreferences sp = await getSP();
+        sp.setString(SP_AVATAR, avatar);
+        sp.setString(SP_USERNAME, username);
+        // todo 判断用户是否开启了两步验证
+        return true;
       } else {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
         var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
         print("wml error!!!!：$errorInfo");
         Fluttertoast.showToast(msg: '登录过程中遇到一些问题：$errorInfo');
-        // todo 刷新验证码
+        return false;
       }
     } on DioError catch (e) {
       // todo
@@ -134,6 +155,7 @@ class DioSingleton {
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
+      return false;
     }
   }
 

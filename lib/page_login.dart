@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/utils/eventbus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
@@ -42,6 +46,9 @@ class _LoginPageState extends State<LoginPage> {
     final bloc = BlocLogin();
     final logo = Image.asset("assets/images/logo_v2lf.png");
 
+    FocusNode passwordTextFieldNode = FocusNode();
+    FocusNode captchaTextFieldNode = FocusNode();
+
     final userName = StreamBuilder<String>(
       stream: bloc.account,
       builder: (context, snapshot) => TextField(
@@ -50,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               fieldAccount = text;
             },
             autofocus: false,
+            onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
             decoration: InputDecoration(
                 labelText: "Account",
                 hintText: 'Enter account',
@@ -66,6 +74,8 @@ class _LoginPageState extends State<LoginPage> {
               fieldPassword = text;
             },
             autofocus: false,
+            onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
+            focusNode: passwordTextFieldNode,
             obscureText: true,
             decoration: InputDecoration(
                 labelText: "Password",
@@ -86,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                         fieldCaptcha = text;
                       },
                       autofocus: false,
+                      focusNode: captchaTextFieldNode,
                       decoration: InputDecoration(
                           labelText: "Captcha",
                           hintText: 'Enter right captcha',
@@ -120,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.blueGrey,
             padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
             onPressed: snapshot.hasData
-                ? () {
+                ? () async {
                     if (loginFormData != null &&
                         fieldAccount != null &&
                         fieldPassword != null &&
@@ -130,8 +141,14 @@ class _LoginPageState extends State<LoginPage> {
                       loginFormData.captchaInput = fieldCaptcha;
                       //var formData = bloc.submit(loginFormData);
                       print(loginFormData.toString());
-                      dioSingleton.loginPost(loginFormData);
-                      // Fluttertoast.showToast(msg: '$loginPost');
+                      bool loginResult = await dioSingleton.loginPost(loginFormData);
+                      if (loginResult) {
+                        print("wml success!!!!");
+                        bus.emit("login");
+                        Navigator.of(context).pop();
+                      } else {
+                        refreshCaptcha();
+                      }
                     }
                   }
                 : null,
@@ -145,7 +162,8 @@ class _LoginPageState extends State<LoginPage> {
         style: TextStyle(color: Colors.black54),
       ),
       onPressed: () {
-        // todo 忘记密码 -> 跳转到重置密码web页面
+        // 忘记密码 -> 跳转到重置密码web页面
+        launch("https://www.v2ex.com/forgot");
       },
     );
 

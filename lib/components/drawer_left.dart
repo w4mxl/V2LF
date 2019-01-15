@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/network/constants.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
+import 'package:flutter_app/utils/eventbus.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,7 +17,6 @@ class DrawerLeft extends StatefulWidget {
 }
 
 class _DrawerLeftState extends State<DrawerLeft> {
-  bool isLogined = false;
   String userName = "", avatar = "";
 
   @override
@@ -28,6 +32,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle aboutTextStyle = themeData.textTheme.body2;
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
+    //监听登录事件
+    bus.on("login", (arg) {
+      // do something
+      checkLoginState();
+    });
+
     return SizedBox(
       width: 260.0,
       child: new Drawer(
@@ -37,20 +47,22 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new UserAccountsDrawerHeader(
                 accountName: GestureDetector(
                   onTap: () {
-                    if (!isLogined) {
+                    if (userName.isEmpty) {
                       Navigator.push(
                           context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                    } else {
+                      // todo -> 个人中心页面
                     }
                   },
                   child: new Text(
-                    isLogined ? userName : "       登录",
+                    userName.isNotEmpty ? userName : "       登录",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 accountEmail: new Text(""), // todo 邮箱
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
-                    if (!isLogined) {
+                    if (userName.isEmpty) {
                       //未登录
                       Navigator.push(
                           context, new MaterialPageRoute(builder: (context) => new LoginPage()));
@@ -66,9 +78,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     height: 90.0,
                   )*/
                       new CircleAvatar(
-                    backgroundImage: isLogined
-                        ? new NetworkImage(
-                            "https://cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=73&d=retro")
+                    backgroundImage: avatar.isNotEmpty
+                        ? new NetworkImage("https:" + avatar)
                         : new AssetImage("assets/images/ic_person.png"),
                   ),
                 ),
@@ -166,14 +177,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
   }
 
   Future checkLoginState() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getBool("is_login") != null) {
+    SharedPreferences sp = await getSP();
+    var spUsername = sp.getString(SP_USERNAME);
+    if (spUsername != null && spUsername.length > 0) {
       setState(() {
-        isLogined = sharedPreferences.getBool("is_login");
-        if (isLogined) {
-          userName = sharedPreferences.getString("user_name");
-          avatar = sharedPreferences.getString("avatar");
-        }
+        userName = spUsername;
+        avatar = sp.getString(SP_AVATAR);
       });
     }
   }
