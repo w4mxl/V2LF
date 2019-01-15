@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
 import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/network/api_web.dart';
+import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/utils/time_base.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -278,7 +278,7 @@ class RepliesView extends StatelessWidget {
                                           return;
                                         } else if (url.contains("/member/")) {
                                           // @xxx 需要补齐 base url
-                                          url = V2exApi.v2exUrl + url;
+                                          url = DioSingleton.v2exHost + url;
                                           print(url);
                                         }
                                         _launchURL(url);

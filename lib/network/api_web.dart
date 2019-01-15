@@ -2,15 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
-import 'package:flutter_app/model/web/item_topic_reply.dart';
-import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:xpath/xpath.dart';
 
 // 通过爬取网页数据作为返回
 
@@ -18,9 +12,6 @@ V2exApi v2exApi = new V2exApi();
 
 class V2exApi {
   var httpClient = new HttpClient();
-  var dio;
-
-  static final v2exUrl = "https://www.v2ex.com";
 
   static final V2exApi _v2exApi = new V2exApi._internal();
 
@@ -187,143 +178,5 @@ class V2exApi {
       topics.add(item);
     }
     return topics;
-  }
-
-  // 获取登录信息
-  Future<LoginFormData> parseLoginForm() async {
-    // name password captcha once
-    LoginFormData loginFormData = new LoginFormData();
-
-    dio = new Dio(Options(
-      baseUrl: v2exUrl,
-      connectTimeout: 5000,
-      receiveTimeout: 100000,
-      headers: {
-        'user-agent':
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-      },
-    ));
-    // 对cookie进行持久化
-    // dio.cookieJar = new PersistCookieJar("./cookies");
-    var response = await dio.get("/signin");
-    var tree = ETree.fromString(response.data);
-    // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[1]/td[2]/input
-    // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[2]/td[2]/input[2]
-    // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[4]/td[2]/input
-    loginFormData.username = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-    loginFormData.password = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-    loginFormData.captcha = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-
-    loginFormData.once = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
-        .first
-        .attributes["value"];
-
-    print(" \n" +
-        loginFormData.username +
-        "\n" +
-        loginFormData.password +
-        "\n" +
-        loginFormData.captcha +
-        "\n" +
-        loginFormData.once);
-
-    dio.options.responseType = ResponseType.STREAM;
-    response = await dio.get("/_captcha?once=" + loginFormData.once);
-    var uint8list = await consolidateHttpClientResponseBytes(response.data);
-    if (uint8list.lengthInBytes == 0) throw new Exception('NetworkImage is an empty file');
-    loginFormData.bytes = uint8list;
-
-    return loginFormData;
-  }
-
-  // 获取 POST
-  Future loginPost(LoginFormData loginFormData) async {
-    //var dio = new Dio();
-    dio.options.headers = {
-      "Origin": v2exUrl,
-      "Referer": v2exUrl + "/signin",
-      'user-agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-    };
-    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    dio.options.responseType = ResponseType.JSON;
-    dio.options.validateStatus = (int status) {
-      return status >= 200 && status < 300 || status == 304 || status == 302;
-    };
-
-    FormData formData = new FormData.from({
-      "once": loginFormData.once,
-      "next": "/",
-      loginFormData.username: loginFormData.usernameInput,
-      loginFormData.password: loginFormData.passwordInput,
-      loginFormData.captcha: loginFormData.captchaInput
-    });
-
-    try {
-      var response = await dio.post(v2exUrl + "/signin", data: formData);
-      if (response.statusCode == 302) {
-        dio.options.headers = {
-          'user-agent':
-              'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-        };
-        dio.options.contentType = ContentType.json;
-        response = await dio.get(v2exUrl);
-      }
-      var tree = ETree.fromString(response.data);
-      print(response.data);
-      // //*[@id="Top"]/div/div/table/tbody/tr/td[3]/a[1]/img
-      var elementOfAvatarImg =
-          tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
-      if (elementOfAvatarImg != null) {
-        print("wml success!!!!!:" + elementOfAvatarImg.parent.attributes["href"]);
-      } else {
-        // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
-        var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
-        print("wml ┐(´-｀)┌ ：$errorInfo");
-        Fluttertoast.showToast(msg: '登录过程中遇到一些问题：$errorInfo');
-      }
-    } on DioError catch (e) {
-      //if (e.response.statusCode == 302) {
-      print(e.response.data);
-      print(e.response.headers);
-      print(e.response.request);
-      //}
-    }
-  }
-
-  // 获取帖子下面的评论信息
-  Future<List<ReplyItem>> parseTopicReplies(String topicId) async {
-    List<ReplyItem> replies = new List();
-
-    var dio = new Dio();
-    dio.options.headers = {
-      'user-agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-    };
-    var response = await dio.get(v2exUrl + "/t/" + topicId + "?p=1"); // todo 可能多页
-
-    var tree = ETree.fromString(response.data);
-
-    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
-    for (var aNode in aRootNode) {
-      ReplyItem replyItem = new ReplyItem();
-      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
-      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
-      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
-      replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
-      replies.add(replyItem);
-    }
-
-    return replies;
   }
 }

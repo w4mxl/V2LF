@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
-import 'package:flutter_app/network/api_web.dart';
+import 'package:flutter_app/network/dio_singleton.dart';
 
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // 刷新（首次获取）验证码
   Future refreshCaptcha() async {
-    var formData = await v2exApi.parseLoginForm();
+    var formData = await dioSingleton.parseLoginForm();
     setState(() {
       loginFormData = formData;
     });
@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       loginFormData.captchaInput = fieldCaptcha;
                       //var formData = bloc.submit(loginFormData);
                       print(loginFormData.toString());
-                      v2exApi.loginPost(loginFormData);
+                      dioSingleton.loginPost(loginFormData);
                       // Fluttertoast.showToast(msg: '$loginPost');
                     }
                   }
