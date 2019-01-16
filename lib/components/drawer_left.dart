@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -54,12 +55,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       // todo -> 个人中心页面
                     }
                   },
-                  child: new Text(
-                    userName.isNotEmpty ? userName : "       登录",
+                  child: Text(
+                    userName.isNotEmpty ? userName : "登录",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                accountEmail: new Text(""), // todo 邮箱
+                accountEmail: Text(userName.isNotEmpty
+                    ? poems[Random().nextInt(poems.length - 1)]
+                    : ""), // todo 随机一句短诗词
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {

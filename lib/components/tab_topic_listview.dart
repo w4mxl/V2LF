@@ -40,6 +40,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 child: new Container(
                     color: const Color(0xFFD8D2D1),
                     child: new ListView(
+                        physics: ClampingScrollPhysics(),
                         padding: const EdgeInsets.only(bottom: 15.0),
                         children: snapshot.data.map((TabTopicItem topic) {
                           return new TopicItemView(topic);

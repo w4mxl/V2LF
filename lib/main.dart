@@ -36,29 +36,22 @@ class _MyAppState extends State<MyApp> {
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(
-              body: NestedScrollView(
-                  headerSliverBuilder: (BuildContext context, bool bodyIsScrolled) {
-                    return <Widget>[
-                      SliverAppBar(
-                          pinned: true,
-                          floating: true,
-                          snap: true,
-                          elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
-                          bottom: new TabBar(
-                            isScrollable: true,
-                            tabs: tabs.map((TabData choice) {
-                              return new Tab(
-                                text: choice.title,
-                              );
-                            }).toList(),
-                          ))
-                    ];
-                  },
-                  body: new TabBarView(
-                    children: tabs.map((TabData choice) {
-                      return new TopicListView(choice.key);
-                    }).toList(),
-                  )),
+              appBar: AppBar(
+                title: new TabBar(
+                  isScrollable: true,
+                  tabs: tabs.map((TabData choice) {
+                    return new Tab(
+                      text: choice.title,
+                    );
+                  }).toList(),
+                ),
+                elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+              ),
+              body: new TabBarView(
+                children: tabs.map((TabData choice) {
+                  return new TopicListView(choice.key);
+                }).toList(),
+              ),
               drawer: new DrawerLeft())),
     );
 
