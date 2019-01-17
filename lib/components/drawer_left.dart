@@ -122,7 +122,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new Divider(),
               new ListTile(
-                enabled: false,
                 leading: new Icon(Icons.settings),
                 title: new Text("设置"),
               ),

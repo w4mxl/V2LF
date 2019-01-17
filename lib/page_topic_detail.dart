@@ -1,5 +1,3 @@
-// 话题详情页+评论列表
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// 话题详情页+评论列表
 class TopicDetails extends StatelessWidget {
   //final TabTopicItem topic;
   final int topicId;
@@ -20,15 +19,15 @@ class TopicDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: const Color(0xFFD8D2D1),
       appBar: new AppBar(),
-      body: new Container(
-        color: const Color(0xFFD8D2D1),
-        child: new ListView(
+      body: SingleChildScrollView(
+        child: new Column(
           children: <Widget>[
-            /// topic content
+            // topic content
             new TopicContentView(topicId),
 
-            /// topic replies
+            // topic replies
             new RepliesView(topicId),
           ],
         ),
@@ -47,8 +46,8 @@ class TopicContentView extends StatelessWidget {
     return new Container(
       child: new FutureBuilder<TopicsResp>(
           future: NetworkApi.getTopicDetails(topicId),
-          builder: (context, result) {
-            if (result.hasData) {
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return new Card(
                 margin: const EdgeInsets.all(8.0),
                 color: Colors.white,
@@ -68,7 +67,7 @@ class TopicContentView extends StatelessWidget {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image: new NetworkImage(
-                                    'https:' + result.data.list[0].member.avatar_large),
+                                    'https:' + snapshot.data.list[0].member.avatar_large),
                               ),
                             ),
                           ),
@@ -80,7 +79,7 @@ class TopicContentView extends StatelessWidget {
                                 child: new Row(
                                   children: <Widget>[
                                     new Text(
-                                      result.data.list[0].member.username,
+                                      snapshot.data.list[0].member.username,
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       style: new TextStyle(
@@ -94,7 +93,7 @@ class TopicContentView extends StatelessWidget {
                                       size: 16.0,
                                     ),
                                     new Text(
-                                      result.data.list[0].node.title,
+                                      snapshot.data.list[0].node.title,
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       style: new TextStyle(
@@ -115,7 +114,7 @@ class TopicContentView extends StatelessWidget {
                                   new Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
                                       child: new Text(
-                                        new TimeBase(result.data.list[0].last_modified)
+                                        new TimeBase(snapshot.data.list[0].last_modified)
                                             .getShowTime(), // todo:   + "，100次点击"
                                         style:
                                             new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
@@ -132,7 +131,7 @@ class TopicContentView extends StatelessWidget {
                           new Padding(
                             padding: const EdgeInsets.only(left: 4.0),
                             child: new Text(
-                              result.data.list[0].replies.toString(),
+                              snapshot.data.list[0].replies.toString(),
                               style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
                             ),
                           )
@@ -145,7 +144,7 @@ class TopicContentView extends StatelessWidget {
                           const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
                       width: 500.0,
                       child: new Text(
-                        result.data.list[0].title,
+                        snapshot.data.list[0].title,
                         softWrap: true,
                         style: new TextStyle(
                           color: Colors.black87,
@@ -159,7 +158,7 @@ class TopicContentView extends StatelessWidget {
                       padding:
                           const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                       child: Html(
-                        data: result.data.list[0].content_rendered,
+                        data: snapshot.data.list[0].content_rendered,
                         defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
                         onLinkTap: (url) {
                           _launchURL(url);
@@ -177,22 +176,14 @@ class TopicContentView extends StatelessWidget {
                 ),
               );
             }
-
-            return new Container(width: 0.0, height: 0.0);
+            return new Container(
+              padding: const EdgeInsets.all(40.0),
+              child: new Center(
+                child: new CircularProgressIndicator(),
+              ),
+            );
           }),
     );
-  }
-}
-
-_launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url, forceWebView: true);
-  } else {
-    Fluttertoast.showToast(
-        msg: 'Could not launch $url',
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIos: 1,
-        gravity: ToastGravity.BOTTOM);
   }
 }
 
@@ -317,13 +308,21 @@ class RepliesView extends StatelessWidget {
               );
             }
 
-            return new Container(
-              padding: const EdgeInsets.all(10.0),
-              child: new Center(
-                child: new CircularProgressIndicator(),
-              ),
-            );
+            return new Container(width: 0.0, height: 0.0);
           }),
     );
+  }
+}
+
+// 外链跳转
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url, forceWebView: true);
+  } else {
+    Fluttertoast.showToast(
+        msg: 'Could not launch $url',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIos: 1,
+        gravity: ToastGravity.BOTTOM);
   }
 }
