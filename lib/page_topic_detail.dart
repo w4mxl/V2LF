@@ -47,141 +47,150 @@ class TopicContentView extends StatelessWidget {
       child: new FutureBuilder<TopicsResp>(
           future: NetworkApi.getTopicDetails(topicId),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return new Card(
-                margin: const EdgeInsets.all(8.0),
-                color: Colors.white,
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Container(
-                            margin: const EdgeInsets.only(right: 10.0),
-                            width: 40.0,
-                            height: 40.0,
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                fit: BoxFit.fill,
-                                image: new NetworkImage(
-                                    'https:' + snapshot.data.list[0].member.avatar_large),
-                              ),
-                            ),
-                          ),
-                          new Expanded(
-                              child: new Column(
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return new Container(
+                  padding: const EdgeInsets.all(40.0),
+                  child: new Center(
+                    child: new CircularProgressIndicator(),
+                  ),
+                );
+              default:
+                if (snapshot.hasError)
+                  return new Center(
+                    child: new Text("Error：${snapshot.error}"),
+                  );
+                else {
+                  return new Card(
+                    margin: const EdgeInsets.all(8.0),
+                    color: Colors.white,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: new Row(
                             children: <Widget>[
                               new Container(
-                                padding: const EdgeInsets.only(bottom: 2.0),
-                                child: new Row(
-                                  children: <Widget>[
-                                    new Text(
-                                      snapshot.data.list[0].member.username,
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style: new TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    new Icon(
-                                      Icons.keyboard_arrow_right,
-                                      color: Colors.green,
-                                      size: 16.0,
-                                    ),
-                                    new Text(
-                                      snapshot.data.list[0].node.title,
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style: new TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
+                                margin: const EdgeInsets.only(right: 10.0),
+                                width: 40.0,
+                                height: 40.0,
+                                decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: new NetworkImage(
+                                        'https:' + snapshot.data.list[0].member.avatar_large),
+                                  ),
                                 ),
                               ),
-                              Row(
+                              new Expanded(
+                                  child: new Column(
                                 children: <Widget>[
-                                  new Icon(
-                                    Icons.keyboard,
-                                    size: 16.0,
-                                    color: Colors.grey[500],
+                                  new Container(
+                                    padding: const EdgeInsets.only(bottom: 2.0),
+                                    child: new Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          snapshot.data.list[0].member.username,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          style: new TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        new Icon(
+                                          Icons.keyboard_arrow_right,
+                                          color: Colors.green,
+                                          size: 16.0,
+                                        ),
+                                        new Text(
+                                          snapshot.data.list[0].node.title,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          style: new TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  new Padding(
-                                      padding: const EdgeInsets.only(left: 4.0),
-                                      child: new Text(
-                                        new TimeBase(snapshot.data.list[0].last_modified)
-                                            .getShowTime(), // todo:   + "，100次点击"
-                                        style:
-                                            new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
-                                      ))
+                                  Row(
+                                    children: <Widget>[
+                                      new Icon(
+                                        Icons.keyboard,
+                                        size: 16.0,
+                                        color: Colors.grey[500],
+                                      ),
+                                      new Padding(
+                                          padding: const EdgeInsets.only(left: 4.0),
+                                          child: new Text(
+                                            new TimeBase(snapshot.data.list[0].last_modified)
+                                                .getShowTime(), // todo:   + "，100次点击"
+                                            style: new TextStyle(
+                                                fontSize: 12.0, color: Colors.grey[500]),
+                                          ))
+                                    ],
+                                  )
                                 ],
+                              )),
+                              new Icon(
+                                Icons.comment,
+                                size: 18.0,
+                                color: Colors.grey,
+                              ),
+                              new Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: new Text(
+                                  snapshot.data.list[0].replies.toString(),
+                                  style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                                ),
                               )
                             ],
-                          )),
-                          new Icon(
-                            Icons.comment,
-                            size: 18.0,
-                            color: Colors.grey,
                           ),
-                          new Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: new Text(
-                              snapshot.data.list[0].replies.toString(),
-                              style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    // topic title
-                    new Container(
-                      padding:
-                          const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-                      width: 500.0,
-                      child: new Text(
-                        snapshot.data.list[0].title,
-                        softWrap: true,
-                        style: new TextStyle(
-                          color: Colors.black87,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                    // topic content
-                    new Container(
-                      padding:
-                          const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-                      child: Html(
-                        data: snapshot.data.list[0].content_rendered,
-                        defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
-                        onLinkTap: (url) {
-                          _launchURL(url);
-                        },
-                      ),
-                      /*MarkdownBody(
+                        // topic title
+                        new Container(
+                          padding: const EdgeInsets.only(
+                              left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+                          width: 500.0,
+                          child: new Text(
+                            snapshot.data.list[0].title,
+                            softWrap: true,
+                            style: new TextStyle(
+                              color: Colors.black87,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        // topic content
+                        new Container(
+                          padding: const EdgeInsets.only(
+                              left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+                          child: Html(
+                            data: snapshot.data.list[0].content_rendered,
+                            defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                            onLinkTap: (url) {
+                              _launchURL(url);
+                            },
+                          ),
+                          /*MarkdownBody(
                           data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),*/
-                      /*child: new Text(
+                          /*child: new Text(
                         result.data.list[0].content,
                         softWrap: true,
                         style: new TextStyle(color: Colors.black87, fontSize: 14.0),
                       ),*/
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
+                  );
+                }
             }
-            return new Container(
-              padding: const EdgeInsets.all(40.0),
-              child: new Center(
-                child: new CircularProgressIndicator(),
-              ),
-            );
           }),
     );
   }
