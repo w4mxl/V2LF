@@ -67,8 +67,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      Navigator.push(
-                          context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      Navigator.push(context,
+                          new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
                     }

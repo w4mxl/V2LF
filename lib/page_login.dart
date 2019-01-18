@@ -25,10 +25,14 @@ String fieldPassword;
 String fieldCaptcha;
 
 class _LoginPageState extends State<LoginPage> {
+  FocusNode passwordTextFieldNode, captchaTextFieldNode;
+
   @override
   void initState() {
     super.initState();
     refreshCaptcha();
+    passwordTextFieldNode = FocusNode();
+    captchaTextFieldNode = FocusNode();
   }
 
   // 刷新（首次获取）验证码
@@ -41,13 +45,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 全屏
-    SystemChrome.setEnabledSystemUIOverlays([]);
     final bloc = BlocLogin();
-    final logo = Image.asset("assets/images/logo_v2lf.png");
-
-    FocusNode passwordTextFieldNode = FocusNode();
-    FocusNode captchaTextFieldNode = FocusNode();
+    final logo = Image.asset(
+      "assets/images/logo_v2lf.png",
+      width: 10.0,
+    );
 
     final userName = StreamBuilder<String>(
       stream: bloc.account,
@@ -56,8 +58,10 @@ class _LoginPageState extends State<LoginPage> {
               bloc.accountChanged(text);
               fieldAccount = text;
             },
-            autofocus: false,
-            onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
+            onEditingComplete: () {
+              FocusScope.of(context).requestFocus(passwordTextFieldNode);
+            },
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
                 labelText: "Account",
                 hintText: 'Enter account',
@@ -73,8 +77,11 @@ class _LoginPageState extends State<LoginPage> {
               bloc.passwordChanged(text);
               fieldPassword = text;
             },
-            autofocus: false,
-            onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
+            onEditingComplete: () {
+              //passwordTextFieldNode.unfocus();
+              FocusScope.of(context).requestFocus(captchaTextFieldNode);
+            },
+            textInputAction: TextInputAction.next,
             focusNode: passwordTextFieldNode,
             obscureText: true,
             decoration: InputDecoration(
@@ -95,7 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                         bloc.captchaChanged(text);
                         fieldCaptcha = text;
                       },
-                      autofocus: false,
+                      onEditingComplete: () {
+                        // 收起键盘
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
                       focusNode: captchaTextFieldNode,
                       decoration: InputDecoration(
                           labelText: "Captcha",
@@ -127,32 +137,36 @@ class _LoginPageState extends State<LoginPage> {
 
     final loginButton = StreamBuilder<bool>(
       stream: bloc.submitCheck,
-      builder: (context, snapshot) => RaisedButton(
-            color: Colors.blueGrey,
-            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
-            onPressed: snapshot.hasData
-                ? () async {
-                    if (loginFormData != null &&
-                        fieldAccount != null &&
-                        fieldPassword != null &&
-                        fieldCaptcha != null) {
-                      loginFormData.usernameInput = fieldAccount;
-                      loginFormData.passwordInput = fieldPassword;
-                      loginFormData.captchaInput = fieldCaptcha;
-                      //var formData = bloc.submit(loginFormData);
-                      print(loginFormData.toString());
-                      bool loginResult = await dioSingleton.loginPost(loginFormData);
-                      if (loginResult) {
-                        print("wml success!!!!");
-                        bus.emit("login");
-                        Navigator.of(context).pop();
-                      } else {
-                        refreshCaptcha();
+      builder: (context, snapshot) => ButtonTheme(
+            child: RaisedButton(
+              color: Colors.blueGrey,
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
+              onPressed: snapshot.hasData
+                  ? () async {
+                      if (loginFormData != null &&
+                          fieldAccount != null &&
+                          fieldPassword != null &&
+                          fieldCaptcha != null) {
+                        loginFormData.usernameInput = fieldAccount;
+                        loginFormData.passwordInput = fieldPassword;
+                        loginFormData.captchaInput = fieldCaptcha;
+                        //var formData = bloc.submit(loginFormData);
+                        print(loginFormData.toString());
+                        bool loginResult = await dioSingleton.loginPost(loginFormData);
+                        if (loginResult) {
+                          print("wml success!!!!");
+                          bus.emit("login");
+                          Navigator.of(context).pop();
+                        } else {
+                          refreshCaptcha();
+                        }
                       }
                     }
-                  }
-                : null,
-            child: Text('Log In', style: TextStyle(color: Colors.white)),
+                  : null,
+              child: Text('Log In', style: TextStyle(color: Colors.white)),
+            ),
+            height: 50.0,
+            minWidth: 300.0,
           ),
     );
 
@@ -163,59 +177,45 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: () {
         // 忘记密码 -> 跳转到重置密码web页面
-        launch("https://www.v2ex.com/forgot");
+        launch("https://www.v2ex.com/forgot", forceWebView: true);
       },
     );
 
-    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
-
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                logo,
-                SizedBox(
-                  height: 60.0,
-                ),
-                userName,
-                SizedBox(
-                  height: 20.0,
-                ),
-                password,
-                SizedBox(
-                  height: 20.0,
-                ),
-                captcha,
-                SizedBox(
-                  height: 40.0,
-                ),
-                loginButton,
-                forgotLabel,
-              ],
-            )),
-      ),
-      floatingActionButton: showFab
-          ? FloatingActionButton(
-              onPressed: () {
-                // bloc.dispose(); // todo
-                Navigator.of(context).pop();
-              },
-              backgroundColor: Colors.grey[400],
-              mini: true,
-              child: Icon(Icons.close),
-            )
-          : null,
+      appBar: AppBar(),
+      body: Container(
+          color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.only(left: 30.0, right: 30.0),
+          child: ListView(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              logo,
+              SizedBox(
+                height: 20.0,
+              ),
+              userName,
+              SizedBox(
+                height: 15.0,
+              ),
+              password,
+              SizedBox(
+                height: 15.0,
+              ),
+              captcha,
+              SizedBox(
+                height: 30.0,
+              ),
+              loginButton,
+              forgotLabel,
+            ],
+          )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
   @override
   void dispose() {
-    // 取消全屏
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
   }
 }
