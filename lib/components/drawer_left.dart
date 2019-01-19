@@ -181,6 +181,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     SharedPreferences sp = await getSP();
     var spUsername = sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
+      // todo 加了这个后每次刷新的体验要优化一下
       var poem = await NetworkApi.getPoem();
       print(poem.token);
       setState(() {
