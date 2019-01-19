@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/constants.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
@@ -18,11 +18,10 @@ class DrawerLeft extends StatefulWidget {
 }
 
 class _DrawerLeftState extends State<DrawerLeft> {
-  String userName = "", avatar = "";
+  String userName = "", avatar = "", poemOne = "";
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkLoginState();
   }
@@ -56,19 +55,19 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     }
                   },
                   child: Text(
-                    userName.isNotEmpty ? userName : "登录",
+                    userName.isNotEmpty ? userName : "       登录",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 accountEmail: Text(userName.isNotEmpty
-                    ? poems[Random().nextInt(poems.length - 1)]
-                    : ""), // todo 随机一句短诗词
+                    ? poemOne
+                    : ""), // todo 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      Navigator.push(
+                          context, new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
                     }
@@ -182,9 +181,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
     SharedPreferences sp = await getSP();
     var spUsername = sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
+      var poem = await NetworkApi.getPoem();
+      print(poem.token);
       setState(() {
         userName = spUsername;
         avatar = sp.getString(SP_AVATAR);
+        if (poem != null) poemOne = poem.data.content;
       });
     }
   }

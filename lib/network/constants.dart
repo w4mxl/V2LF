@@ -1,3 +1,16 @@
+// 获取今日诗词token
+// {
+//   "status": "success",
+//   "data": "RgU1rBKtLym/MhhYIXs42WNoqLyZeXY3EkAcDNrcfKkzj8ILIsAP1Hx0NGhdOO1I"
+// }
+const String API_JINRISHICI_TOKEN = 'https://v2.jinrishici.com/token';
+
+// 您需要在 HTTP 的 Headers 头中指定 Token
+// X-User-Token： RgU1rBKtLym/MhhYIXs42WNoqLyZeXY3EkAcDNrcfKkzj8ILIsAP1Hx0NGhdOO1I
+const String API_JINRISHICI_ONE = 'https://v2.jinrishici.com/one.json';
+
+const String SP_JINRISHICI_TOKEN = "jinrishici_token";
+
 const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
 
