@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/constants.dart';
 import 'package:flutter_app/page_login.dart';
@@ -18,7 +19,8 @@ class DrawerLeft extends StatefulWidget {
 }
 
 class _DrawerLeftState extends State<DrawerLeft> {
-  String userName = "", avatar = "", poemOne = "";
+  String userName = "", avatar = "";
+  Poem poemOne;
 
   @override
   void initState() {
@@ -59,9 +61,25 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                accountEmail: Text(userName.isNotEmpty
-                    ? poemOne
-                    : ""), // todo 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
+                accountEmail: GestureDetector(
+                  onTap: () {
+                    if (poemOne != null) {
+                      // 显示诗词dialog
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) => SimpleDialog(
+                                title: Text(poemOne.data.origin.title),
+                                children: <Widget>[
+                                  Text(poemOne.data.origin.dynasty +
+                                      "·" +
+                                      poemOne.data.origin.author),
+                                  //poemOne.data.origin.content.forEach((line) => Text(line)),
+                                ],
+                              ));
+                    }
+                  },
+                  child: Text(userName.isNotEmpty ? poemOne.data.content : ""),
+                ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
@@ -72,14 +90,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       // todo -> 个人中心页面
                     }
                   },
-                  child:
-                      /*new FadeInImage.assetNetwork(
-                    placeholder: "images/ic_account_circle_white_48dp.png",
-                    image: avatar,
-                    width: 90.0,
-                    height: 90.0,
-                  )*/
-                      new CircleAvatar(
+                  child: new CircleAvatar(
                     backgroundImage: avatar.isNotEmpty
                         ? new NetworkImage("https:" + avatar)
                         : new AssetImage("assets/images/ic_person.png"),
@@ -165,9 +176,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       ],
                     )),
                   )
-                  /*new Text("Another v2ex unoffical app.\n"),
-                  new Text("'V2LF' means 'way to love flutter'.\n"),
-                  new Text('¯\\_(ツ)_/¯')*/
                 ],
               )
             ],
@@ -182,14 +190,20 @@ class _DrawerLeftState extends State<DrawerLeft> {
     var spUsername = sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       // todo 加了这个后每次刷新的体验要优化一下
-      var poem = await NetworkApi.getPoem();
-      print(poem.token);
+      getOnePoem();
       setState(() {
         userName = spUsername;
         avatar = sp.getString(SP_AVATAR);
-        if (poem != null) poemOne = poem.data.content;
       });
     }
+  }
+
+  Future getOnePoem() async {
+    var poem = await NetworkApi.getPoem();
+    print(poem.token);
+    setState(() {
+      if (poem != null) poemOne = poem;
+    });
   }
 }
 
