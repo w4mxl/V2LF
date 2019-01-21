@@ -1,13 +1,39 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/utils/constants.dart' as Constants;
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<SharedPreferences> getSP() async {
+Future<SharedPreferences> getSp() async {
   SharedPreferences sp;
   if (sp == null) {
     sp = await SharedPreferences.getInstance();
   }
   return sp;
+}
+
+class SpHelper {
+  // 获取设置好的语言
+  static Future<LanguageModel> getLanguageModel() async {
+    SharedPreferences sp = await getSp();
+    String _saveLanguage = sp.getString(Constants.KEY_LANGUAGE);
+    if (_saveLanguage.isNotEmpty) {
+      Map userMap = json.decode(_saveLanguage);
+      return LanguageModel.fromJson(userMap);
+    }
+    return null;
+  }
+
+  // 获取设置好的主题
+  static Future<String> getThemeColor() async {
+    SharedPreferences sp = await getSp();
+    String _colorKey = sp.getString(Constants.KEY_THEME_COLOR);
+    if (_colorKey.isEmpty) {
+      _colorKey = 'gray';
+    }
+    return _colorKey;
+  }
 }
 
 const List<String> poems = [

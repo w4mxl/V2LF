@@ -1,8 +1,13 @@
+import 'package:fluintl/fluintl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/tab_topic_listview.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/resources/strings.dart';
+import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(new MyApp());
 
@@ -12,6 +17,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale _locale;
+  Color _themeColor = ColorT.app_main;
+
+  @override
+  void initState() {
+    super.initState();
+    setLocalizedValues(localizedValues); //配置多语言资源
+    _initAsync();
+  }
+
+  void _initAsync() async {
+    if (!mounted) return;
+    _loadLocale();
+  }
+
+  void _loadLocale() async {
+    LanguageModel model = await SpHelper.getLanguageModel();
+    String _colorKey = await SpHelper.getThemeColor();
+    setState(() {
+      if (model != null) {
+        _locale = new Locale(model.languageCode, model.countryCode);
+      } else {
+        _locale = null;
+      }
+
+      if (themeColorMap[_colorKey] != null) _themeColor = themeColorMap[_colorKey];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const List<TabData> tabs = const <TabData>[
@@ -32,6 +66,13 @@ class _MyAppState extends State<MyApp> {
 
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: _locale,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CustomLocalizations.delegate
+      ],
+      supportedLocales: CustomLocalizations.supportedLocales,
       theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
@@ -55,10 +96,10 @@ class _MyAppState extends State<MyApp> {
               drawer: new DrawerLeft())),
     );
 
-    Future<bool> loginState() async {
+    /*Future<bool> loginState() async {
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       return sharedPreferences.getBool("is_login");
-    }
+    }*/
   }
 }
 

@@ -4,9 +4,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/network/constants.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
+import 'package:flutter_app/page_setting.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -152,6 +153,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new ListTile(
                 leading: new Icon(Icons.settings),
                 title: new Text("设置"),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context, new MaterialPageRoute(builder: (context) => new SettingPage()));
+                },
               ),
               new ListTile(
                 leading: new Icon(Icons.feedback),
@@ -204,7 +210,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
   }
 
   Future checkLoginState() async {
-    SharedPreferences sp = await getSP();
+    SharedPreferences sp = await getSp();
     var spUsername = sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       // todo 加了这个后每次刷新的体验要优化一下

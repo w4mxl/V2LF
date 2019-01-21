@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
-import 'package:flutter_app/network/constants.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -137,7 +137,7 @@ class DioSingleton {
         var username = href.substring('/member/'.length);
         Fluttertoast.showToast(msg: '登录成功：$username');
         // 保存 username avatar
-        SharedPreferences sp = await getSP();
+        SharedPreferences sp = await getSp();
         sp.setString(SP_AVATAR, avatar);
         sp.setString(SP_USERNAME, username);
         // todo 判断用户是否开启了两步验证

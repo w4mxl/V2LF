@@ -1,3 +1,6 @@
+const String KEY_LANGUAGE = 'key_language';
+const String KEY_THEME_COLOR = 'key_theme_color';
+
 // 获取今日诗词token
 // {
 //   "status": "success",
