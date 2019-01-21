@@ -68,17 +68,35 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) => SimpleDialog(
-                                title: Text(poemOne.data.origin.title),
                                 children: <Widget>[
-                                  Text(poemOne.data.origin.dynasty +
-                                      "·" +
-                                      poemOne.data.origin.author),
-                                  //poemOne.data.origin.content.forEach((line) => Text(line)),
+                                  Center(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          poemOne.data.origin.title,
+                                          style: TextStyle(
+                                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 10.0),
+                                        Text(poemOne.data.origin.dynasty +
+                                            "·" +
+                                            poemOne.data.origin.author),
+                                        Container(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            children: poemOne.data.origin.content
+                                                .map((value) => Text(value))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ));
                     }
                   },
-                  child: Text(userName.isNotEmpty ? poemOne.data.content : ""),
+                  child: Text(poemOne != null ? poemOne.data.content : ""),
                 ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
