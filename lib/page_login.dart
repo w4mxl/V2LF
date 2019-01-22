@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -155,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                         bool loginResult = await dioSingleton.loginPost(loginFormData);
                         if (loginResult) {
                           print("wml success!!!!");
-                          bus.emit("login");
+                          bus.emit(EVENT_NAME_LOGIN);
                           Navigator.of(context).pop();
                         } else {
                           refreshCaptcha();

@@ -1,7 +1,9 @@
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/page_setting_language.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/resources/strings.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 
 // 设置页面
 class SettingPage extends StatelessWidget {
@@ -60,20 +62,22 @@ class SettingPage extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text('todo'
-                    /*SpHelper.getLanguageModel() == null
+                Text(
+                    SpHelper.getLanguageModel() == null
                         ? IntlUtil.getString(context, Ids.languageAuto)
                         : IntlUtil.getString(context, SpHelper.getLanguageModel().titleId,
                             languageCode: 'zh', countryCode: 'CH'),
                     style: TextStyle(
                       fontSize: 14.0,
                       color: ColorT.gray_99,
-                    )*/
-                    ),
+                    )),
                 Icon(Icons.keyboard_arrow_right)
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => LanguagePageSetting()));
+            },
           )
         ],
       ),

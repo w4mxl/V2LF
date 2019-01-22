@@ -35,7 +35,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     //监听登录事件
-    bus.on("login", (arg) {
+    bus.on(EVENT_NAME_LOGIN, (arg) {
       // do something
       checkLoginState();
     });

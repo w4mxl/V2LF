@@ -6,6 +6,8 @@ import 'package:flutter_app/components/tab_topic_listview.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/resources/strings.dart';
+import 'package:flutter_app/utils/constants.dart';
+import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,6 +52,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    //监听登录事件
+    bus.on(EVENT_NAME_SETTING, (arg) {
+      _loadLocale();
+    });
+
     const List<TabData> tabs = const <TabData>[
       const TabData(title: '技术', key: 'tech'),
       const TabData(title: '创意', key: 'creative'),
