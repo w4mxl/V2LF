@@ -9,9 +9,8 @@ import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
-import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DrawerLeft extends StatefulWidget {
@@ -209,15 +208,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
     );
   }
 
-  Future checkLoginState() async {
-    SharedPreferences sp = await getSp();
-    var spUsername = sp.getString(SP_USERNAME);
+  checkLoginState() {
+    var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
-      // todo 加了这个后每次刷新的体验要优化一下
       getOnePoem();
       setState(() {
         userName = spUsername;
-        avatar = sp.getString(SP_AVATAR);
+        avatar = SpHelper.sp.getString(SP_AVATAR);
       });
     }
   }

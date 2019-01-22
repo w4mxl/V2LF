@@ -6,8 +6,9 @@ import 'package:flutter_app/components/tab_topic_listview.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/resources/strings.dart';
-import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(new MyApp());
 
@@ -28,13 +29,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _initAsync() async {
+    SpHelper.sp = await SharedPreferences.getInstance();
     if (!mounted) return;
     _loadLocale();
   }
 
   void _loadLocale() async {
-    LanguageModel model = await SpHelper.getLanguageModel();
-    String _colorKey = await SpHelper.getThemeColor();
+    LanguageModel model = SpHelper.getLanguageModel();
+    String _colorKey = SpHelper.getThemeColor();
     setState(() {
       if (model != null) {
         _locale = new Locale(model.languageCode, model.countryCode);

@@ -7,9 +7,8 @@ import 'package:flutter_app/model/resp_site_info.dart';
 import 'package:flutter_app/model/resp_topics.dart';
 import 'package:flutter_app/utils/constants.dart' as Constants;
 import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NetworkApi {
   static Future _read(String url) {
@@ -49,15 +48,14 @@ class NetworkApi {
   }*/
 
   static Future<Poem> getPoem() async {
-    SharedPreferences sp = await getSp();
-    var spJinrishiciToken = sp.getString(SP_JINRISHICI_TOKEN);
+    var spJinrishiciToken = SpHelper.sp.getString(SP_JINRISHICI_TOKEN);
     print('wml:$spJinrishiciToken');
     Map<String, String> headers = {'X-User-Token': spJinrishiciToken};
     String response = await http.read(Constants.API_JINRISHICI_ONE,
         headers: spJinrishiciToken != null ? headers : null);
     var poem = Poem.fromMap(json.decode(response));
     if (poem.status == 'success') {
-      if (spJinrishiciToken == null) sp.setString(SP_JINRISHICI_TOKEN, poem.token);
+      if (spJinrishiciToken == null) SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);
       return poem;
     }
     return null;
