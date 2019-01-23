@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale;
-  Color _themeColor = ColorT.app_main;
+  MaterialColor _themeColor = ColorT.app_main;
 
   @override
   void initState() {
@@ -77,12 +77,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
+        GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
         CustomLocalizations.delegate
       ],
       supportedLocales: CustomLocalizations.supportedLocales,
-      theme: new ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'Whitney'),
+      theme: new ThemeData(primarySwatch: _themeColor, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(

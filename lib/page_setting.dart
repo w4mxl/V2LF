@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/page_setting_language.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/resources/strings.dart';
+import 'package:flutter_app/utils/constants.dart';
+import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 
 // 设置页面
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print(Localizations.localeOf(context).toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(IntlUtil.getString(context, Ids.titleSetting)),
@@ -32,7 +35,8 @@ class SettingPage extends StatelessWidget {
                   Color value = themeColorMap[key];
                   return new InkWell(
                     onTap: () {
-                      // todo
+                      SpHelper.sp.setString(KEY_THEME_COLOR, key);
+                      bus.emit(EVENT_NAME_SETTING);
                     },
                     child: new Container(
                       margin: EdgeInsets.all(5.0),
