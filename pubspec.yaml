@@ -34,11 +34,13 @@ dependencies:
   flutter_html: ^0.8.2 # https://github.com/Sub6Resources/flutter_html
   fluttertoast: ^2.2.3 # https://pub.dartlang.org/packages/fluttertoast
   fluintl: ^0.1.2 # 多语言 国际化 https://pub.dartlang.org/packages/fluintl
+  intl: ^0.15.7 # https://pub.dartlang.org/packages/intl
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_launcher_icons: "^0.7.0"
+  intl_translation: ^0.17.2 # https://pub.dartlang.org/packages/intl_translation
 
 flutter_icons:
   android: true
