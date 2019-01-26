@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/tab_topic_listview.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/resources/strings.dart';
@@ -75,13 +76,24 @@ class _MyAppState extends State<MyApp> {
 
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      locale: _locale,
+      //locale: _locale,
       localizationsDelegates: [
+        const MyLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
         GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
-        CustomLocalizations.delegate
       ],
-      supportedLocales: CustomLocalizations.supportedLocales,
+      // Full Chinese support for CN, TW, and HK
+      supportedLocales: [
+        const Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'), // generic simplified Chinese 'zh_Hans'
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), // generic traditional Chinese 'zh_Hant'
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'), // 'zh_Hans_CN'
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'), // 'zh_Hant_TW'
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
+        const Locale('en', ''),
+      ],
+      // supportedLocales: CustomLocalizations.supportedLocales,
+      // localeResolutionCallback: CustomLocalizations.delegate.,
       theme: new ThemeData(primarySwatch: _themeColor, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,

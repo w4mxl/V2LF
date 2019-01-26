@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/page_login.dart';
@@ -50,14 +51,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 accountName: GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
-                      Navigator.push(
-                          context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
                     }
                   },
                   child: Text(
-                    userName.isNotEmpty ? userName : "       登录",
+                    userName.isNotEmpty ? userName : "      " + MyLocalizations.of(context).login,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -74,19 +74,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                       children: <Widget>[
                                         Text(
                                           poemOne.data.origin.title,
-                                          style: TextStyle(
-                                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(height: 10.0),
-                                        Text(poemOne.data.origin.dynasty +
-                                            "·" +
-                                            poemOne.data.origin.author),
+                                        Text(poemOne.data.origin.dynasty + "·" + poemOne.data.origin.author),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Column(
-                                            children: poemOne.data.origin.content
-                                                .map((value) => Text(value))
-                                                .toList(),
+                                            children: poemOne.data.origin.content.map((value) => Text(value)).toList(),
                                           ),
                                         ),
                                       ],
@@ -102,16 +97,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      Navigator.push(
-                          context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
                     }
                   },
                   child: new CircleAvatar(
-                    backgroundImage: avatar.isNotEmpty
-                        ? new NetworkImage("https:" + avatar)
-                        : new AssetImage("assets/images/ic_person.png"),
+                    backgroundImage: avatar.isNotEmpty ? new NetworkImage("https:" + avatar) : new AssetImage("assets/images/ic_person.png"),
                   ),
                 ),
                 // todo 这里可以根据一天的不同时间显示不同的background，增加美观
@@ -134,8 +126,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text("节点"),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
                 },
               ),
               new ListTile(
@@ -154,16 +145,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text("设置"),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context, new MaterialPageRoute(builder: (context) => new SettingPage()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
                 },
               ),
               new ListTile(
                 leading: new Icon(Icons.feedback),
                 title: new Text("反馈"),
                 onTap: () {
-                  _launchURL(
-                      "mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
+                  _launchURL("mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
                 },
               ),
               new AboutListTile(
@@ -243,10 +232,6 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    Fluttertoast.showToast(
-        msg: '您似乎没在手机上安装邮件客户端 ?',
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIos: 1,
-        gravity: ToastGravity.BOTTOM);
+    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }

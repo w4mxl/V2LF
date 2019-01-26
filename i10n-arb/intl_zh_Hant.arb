@@ -1,0 +1,10 @@
+{
+  "@@last_modified": "2019-01-26T11:27:30.905630",
+  "@@locale":"zh_Hant",
+  "login": "登錄",
+  "@login": {
+    "description": "Title for left drawer login text",
+    "type": "text",
+    "placeholders": {}
+  }
+}
