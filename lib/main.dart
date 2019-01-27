@@ -1,4 +1,3 @@
-import 'package:fluintl/fluintl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_app/components/tab_topic_listview.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/resources/strings.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -27,7 +25,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    setLocalizedValues(localizedValues); //配置多语言资源
     _initAsync();
   }
 
@@ -42,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     String _colorKey = SpHelper.getThemeColor();
     setState(() {
       if (model != null) {
-        _locale = new Locale(model.languageCode, model.countryCode);
+        _locale = Locale.fromSubtags(languageCode: model.languageCode, scriptCode: model.scriptCode);
       } else {
         _locale = null;
       }
@@ -76,7 +73,7 @@ class _MyAppState extends State<MyApp> {
 
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      //locale: _locale,
+      locale: _locale,
       localizationsDelegates: [
         const MyLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
@@ -92,8 +89,6 @@ class _MyAppState extends State<MyApp> {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      // supportedLocales: CustomLocalizations.supportedLocales,
-      // localeResolutionCallback: CustomLocalizations.delegate.,
       theme: new ThemeData(primarySwatch: _themeColor, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,

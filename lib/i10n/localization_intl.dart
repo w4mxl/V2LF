@@ -31,13 +31,11 @@ class MyLocalizations {
     return Localizations.of<MyLocalizations>(context, MyLocalizations);
   }
 
-  String get login {
-    return Intl.message(
-      'Login',
-      name: 'login',
-      desc: 'Title for left drawer login text',
-    );
-  }
+  String get login => Intl.message('Login', name: 'login');
+  String get languageAuto => Intl.message('Auto', name: 'languageAuto');
+  String get titleSetting => Intl.message('Setting', name: 'titleSetting');
+  String get titleTheme => Intl.message('Theme', name: 'titleTheme');
+  String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
 }
 
 //Locale代理类

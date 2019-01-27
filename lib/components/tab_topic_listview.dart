@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -32,6 +33,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
   @override
   Widget build(BuildContext context) {
+    Fluttertoast.showToast(msg: "wml: " + Localizations.localeOf(context).toString());
     return new FutureBuilder<List<TabTopicItem>>(
         future: topicListFuture,
         builder: (context, snapshot) {

@@ -3,7 +3,26 @@
   "@@locale":"zh_Hans",
   "login": "登录",
   "@login": {
-    "description": "Title for left drawer login text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languageAuto": "跟随系统",
+  "@languageAuto": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleSetting": "设置",
+  "@titleSetting": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleTheme": "主题",
+  "@titleTheme": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleLanguage": "多语言",
+  "@titleLanguage": {
     "type": "text",
     "placeholders": {}
   }

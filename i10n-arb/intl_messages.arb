@@ -1,8 +1,27 @@
 {
-  "@@last_modified": "2019-01-26T11:27:30.905630",
+  "@@last_modified": "2019-01-27T20:24:03.672473",
   "login": "Login",
   "@login": {
-    "description": "Title for left drawer login text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languageAuto": "Auto",
+  "@languageAuto": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleSetting": "Setting",
+  "@titleSetting": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleTheme": "Theme",
+  "@titleTheme": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleLanguage": "Language",
+  "@titleLanguage": {
     "type": "text",
     "placeholders": {}
   }

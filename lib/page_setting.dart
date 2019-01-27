@@ -1,20 +1,52 @@
-import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/page_setting_language.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/resources/strings.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/utils.dart';
 
 // 设置页面
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
+  @override
+  _SettingPageState createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  List<LanguageModel> _list = new List();
+  LanguageModel _currentLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _list.add(LanguageModel('', ''));
+    _list.add(LanguageModel('zh', 'Hans'));
+    _list.add(LanguageModel('zh', 'Hant'));
+    _list.add(LanguageModel('en', 'US'));
+
+    _currentLanguage = SpHelper.getLanguageModel();
+    if (_currentLanguage == null) {
+      _currentLanguage = _list[0];
+    }
+
+    _updateData();
+  }
+
+  void _updateData() {
+    print(_currentLanguage.toString());
+    String language = _currentLanguage.scriptCode;
+    for (int i = 0, length = _list.length; i < length; i++) {
+      _list[i].isSelected = (_list[i].scriptCode == language);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(Localizations.localeOf(context).toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text(IntlUtil.getString(context, Ids.titleSetting)),
+        title: Text(MyLocalizations.of(context).titleSetting),
       ),
       body: ListView(
         children: <Widget>[
@@ -25,7 +57,7 @@ class SettingPage extends StatelessWidget {
                 Icon(Icons.color_lens, color: ColorT.gray_66),
                 Padding(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text(IntlUtil.getString(context, Ids.titleTheme)),
+                  child: Text(MyLocalizations.of(context).titleTheme),
                 )
               ],
             ),
@@ -50,7 +82,7 @@ class SettingPage extends StatelessWidget {
             ],
           ),
           // 多语言设置
-          ListTile(
+          ExpansionTile(
             title: Row(
               children: <Widget>[
                 Icon(
@@ -59,32 +91,62 @@ class SettingPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text(IntlUtil.getString(context, Ids.titleLanguage)),
+                  child: Text(MyLocalizations.of(context).titleLanguage),
                 ),
-              ],
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
+                Expanded(
+                  child: Text(
                     SpHelper.getLanguageModel() == null
-                        ? IntlUtil.getString(context, Ids.languageAuto)
-                        : IntlUtil.getString(context, SpHelper.getLanguageModel().titleId,
-                            languageCode: 'zh', countryCode: 'CH'),
+                        ? MyLocalizations.of(context).languageAuto
+                        : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode, SpHelper.getLanguageModel().scriptCode),
                     style: TextStyle(
                       fontSize: 14.0,
                       color: ColorT.gray_99,
-                    )),
-                Icon(Icons.keyboard_arrow_right)
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
               ],
             ),
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => LanguagePageSetting()));
-            },
+            children: <Widget>[
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _list.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    LanguageModel model = _list[index];
+                    return new ListTile(
+                      title: new Text(
+                        (model.languageCode.isEmpty
+                            ? MyLocalizations.of(context).languageAuto
+                            : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
+                        style: new TextStyle(fontSize: 13.0),
+                      ),
+                      trailing: new Radio(
+                          value: true,
+                          groupValue: model.isSelected == true,
+                          //activeColor: Colors.indigoAccent,
+                          onChanged: (value) {
+                            setState(() {
+                              updateLanguage(model);
+                            });
+                          }),
+                      onTap: () {
+                        setState(() {
+                          updateLanguage(model);
+                        });
+                      },
+                    );
+                  }),
+            ],
           )
         ],
       ),
     );
+  }
+
+  void updateLanguage(LanguageModel model) {
+    _currentLanguage = model;
+    _updateData();
+    SpHelper.putObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
+    bus.emit(EVENT_NAME_SETTING);
   }
 }

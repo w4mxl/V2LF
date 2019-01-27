@@ -3,7 +3,26 @@
   "@@locale":"zh_Hant",
   "login": "登錄",
   "@login": {
-    "description": "Title for left drawer login text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "languageAuto": "與系統同步",
+  "@languageAuto": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleSetting": "設置",
+  "@titleSetting": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleTheme": "主題",
+  "@titleTheme": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleLanguage": "多語言",
+  "@titleLanguage": {
     "type": "text",
     "placeholders": {}
   }
