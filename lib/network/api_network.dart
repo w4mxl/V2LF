@@ -34,8 +34,7 @@ class NetworkApi {
   }
 
   static Future<RepliesResp> getReplies(int topicId) async {
-    return RepliesResp.fromJson(
-        await _get(Constants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
+    return RepliesResp.fromJson(await _get(Constants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
   }
 
   static Future<SiteInfoResp> getSiteInfo() async {
@@ -48,10 +47,8 @@ class NetworkApi {
 
   static Future<Poem> getPoem() async {
     var spJinrishiciToken = SpHelper.sp.getString(SP_JINRISHICI_TOKEN);
-    print('wml:$spJinrishiciToken');
     Map<String, String> headers = {'X-User-Token': spJinrishiciToken};
-    String response = await http.read(Constants.API_JINRISHICI_ONE,
-        headers: spJinrishiciToken != null ? headers : null);
+    String response = await http.read(Constants.API_JINRISHICI_ONE, headers: spJinrishiciToken != null ? headers : null);
     var poem = Poem.fromMap(json.decode(response));
     if (poem.status == 'success') {
       if (spJinrishiciToken == null) SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);

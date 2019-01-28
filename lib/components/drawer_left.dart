@@ -8,6 +8,7 @@ import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_setting.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -77,11 +78,24 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(height: 10.0),
-                                        Text(poemOne.data.origin.dynasty + "·" + poemOne.data.origin.author),
+                                        Text(
+                                          '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
+                                          style: TextStyle(color: ColorT.app_main[700]),
+                                        ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Column(
-                                            children: poemOne.data.origin.content.map((value) => Text(value)).toList(),
+                                            children: poemOne.data.origin.content
+                                                .map((value) => Text(
+                                                      value
+                                                          .replaceAll('。', '。\n')
+                                                          .replaceAll('，', '，\n')
+                                                          .replaceAll('？', '？\n')
+                                                          .replaceAll('！', '！\n'),
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(fontSize: 16.0),
+                                                    ))
+                                                .toList(),
                                           ),
                                         ),
                                       ],
@@ -210,7 +224,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
 
   Future getOnePoem() async {
     var poem = await NetworkApi.getPoem();
-    print(poem.token);
     setState(() {
       if (poem != null) poemOne = poem;
     });

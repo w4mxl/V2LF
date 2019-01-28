@@ -34,7 +34,6 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
   @override
   Widget build(BuildContext context) {
-    Fluttertoast.showToast(msg: "wml: " + Localizations.localeOf(context).toString());
     return new FutureBuilder<List<TabTopicItem>>(
         future: topicListFuture,
         builder: (context, snapshot) {
