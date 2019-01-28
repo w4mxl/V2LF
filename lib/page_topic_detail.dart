@@ -95,17 +95,22 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               padding: const EdgeInsets.all(10.0),
                               child: new Row(
                                 children: <Widget>[
-                                  new Container(
-                                    margin: const EdgeInsets.only(right: 10.0),
-                                    width: 40.0,
-                                    height: 40.0,
-                                    decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: new NetworkImage('https:' + snapshot.data.topicsResp.list[0].member.avatar_large),
+                                  // 头像
+                                  GestureDetector(
+                                    child: new Container(
+                                      margin: const EdgeInsets.only(right: 10.0),
+                                      width: 40.0,
+                                      height: 40.0,
+                                      decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: new NetworkImage('https:' + snapshot.data.topicsResp.list[0].member.avatar_large),
+                                        ),
                                       ),
                                     ),
+                                    onTap: () =>
+                                        _launchURL(DioSingleton.v2exHost + '/member/' + snapshot.data.topicsResp.list[0].member.username),
                                   ),
                                   new Expanded(
                                       child: new Column(
@@ -114,17 +119,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         padding: const EdgeInsets.only(bottom: 2.0),
                                         child: new Row(
                                           children: <Widget>[
-                                            new Text(
-                                              snapshot.data.topicsResp.list[0].member.username,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                                            // 用户ID
+                                            GestureDetector(
+                                              child: new Text(
+                                                snapshot.data.topicsResp.list[0].member.username,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                                style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                                              ),
+                                              onTap: () => _launchURL(
+                                                  DioSingleton.v2exHost + '/member/' + snapshot.data.topicsResp.list[0].member.username),
                                             ),
                                             new Icon(
                                               Icons.keyboard_arrow_right,
                                               color: Colors.green,
                                               size: 16.0,
                                             ),
+                                            // 节点名称
                                             GestureDetector(
                                               child: new Text(
                                                 snapshot.data.topicsResp.list[0].node.title,

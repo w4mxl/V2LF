@@ -146,16 +146,19 @@ class TopicItemView extends StatelessWidget {
                         )
                       ],
                     )),
-                    Material(
-                      color: ColorT.app_main[400],
-                      shape: new StadiumBorder(),
-                      child: new Container(
-                        width: 35.0,
-                        height: 20.0,
-                        alignment: Alignment.center,
-                        child: new Text(
-                          topic.replyCount,
-                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                    Offstage(
+                      offstage: topic.replyCount == '0',
+                      child: Material(
+                        color: ColorT.app_main[400],
+                        shape: new StadiumBorder(),
+                        child: new Container(
+                          width: 35.0,
+                          height: 20.0,
+                          alignment: Alignment.center,
+                          child: new Text(
+                            topic.replyCount,
+                            style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                          ),
                         ),
                       ),
                     )
