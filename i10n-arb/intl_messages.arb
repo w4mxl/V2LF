@@ -1,9 +1,17 @@
 {
-  "@@last_modified": "2019-01-27T20:24:03.672473",
+  "@@last_modified": "2019-01-28T10:57:30.235960",
+  "@@locale":"en",
   "login": "Login",
   "@login": {
     "type": "text",
     "placeholders": {}
+  },
+  "toastLoginSuccess": "Welcome back, {name}!",
+  "@toastLoginSuccess": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
   },
   "languageAuto": "Auto",
   "@languageAuto": {

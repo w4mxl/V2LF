@@ -32,9 +32,15 @@ class MyLocalizations {
   }
 
   String get login => Intl.message('Login', name: 'login');
+
+  toastLoginSuccess(name) => Intl.message('Welcome back, $name!', name: 'toastLoginSuccess', args: [name]);
+
   String get languageAuto => Intl.message('Auto', name: 'languageAuto');
+
   String get titleSetting => Intl.message('Setting', name: 'titleSetting');
+
   String get titleTheme => Intl.message('Theme', name: 'titleTheme');
+
   String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
 }
 

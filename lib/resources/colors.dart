@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorT {
-  static const MaterialColor app_main = Colors.blueGrey;
+  static MaterialColor app_main = Colors.blueGrey;
 
   static const Color transparent_80 = Color(0x80000000); //<!--204-->
 

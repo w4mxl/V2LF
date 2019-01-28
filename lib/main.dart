@@ -20,7 +20,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale;
-  MaterialColor _themeColor = ColorT.app_main;
 
   @override
   void initState() {
@@ -44,7 +43,9 @@ class _MyAppState extends State<MyApp> {
         _locale = null;
       }
 
-      if (themeColorMap[_colorKey] != null) _themeColor = themeColorMap[_colorKey];
+      if (themeColorMap[_colorKey] != null) {
+        ColorT.app_main = themeColorMap[_colorKey];
+      }
     });
   }
 
@@ -89,7 +90,7 @@ class _MyAppState extends State<MyApp> {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: _themeColor, fontFamily: 'Whitney'),
+      theme: new ThemeData(primarySwatch: ColorT.app_main, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(

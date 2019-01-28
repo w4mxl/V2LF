@@ -55,8 +55,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _futureBuilderFuture = Future.wait(
-            [NetworkApi.getTopicDetails(widget.topicId), NetworkApi.getReplies(widget.topicId)])
+    _futureBuilderFuture = Future.wait([NetworkApi.getTopicDetails(widget.topicId), NetworkApi.getReplies(widget.topicId)])
         .then((response) => new Merged(topicsResp: response[0], repliesResp: response[1]));
   }
 
@@ -102,8 +101,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: new NetworkImage('https:' +
-                                            snapshot.data.topicsResp.list[0].member.avatar_large),
+                                        image: new NetworkImage('https:' + snapshot.data.topicsResp.list[0].member.avatar_large),
                                       ),
                                     ),
                                   ),
@@ -118,10 +116,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               snapshot.data.topicsResp.list[0].member.username,
                                               textAlign: TextAlign.left,
                                               maxLines: 1,
-                                              style: new TextStyle(
-                                                fontSize: 14.0,
-                                                color: Colors.black87,
-                                              ),
+                                              style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
                                             ),
                                             new Icon(
                                               Icons.keyboard_arrow_right,
@@ -132,10 +127,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               snapshot.data.topicsResp.list[0].node.title,
                                               textAlign: TextAlign.left,
                                               maxLines: 1,
-                                              style: new TextStyle(
-                                                fontSize: 14.0,
-                                                color: Colors.green,
-                                              ),
+                                              style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
                                             ),
                                           ],
                                         ),
@@ -150,11 +142,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           new Padding(
                                               padding: const EdgeInsets.only(left: 4.0),
                                               child: new Text(
-                                                new TimeBase(snapshot
-                                                        .data.topicsResp.list[0].last_modified)
+                                                new TimeBase(snapshot.data.topicsResp.list[0].last_modified)
                                                     .getShowTime(), // todo:   + "，100次点击"
-                                                style: new TextStyle(
-                                                    fontSize: 12.0, color: Colors.grey[500]),
+                                                style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
                                               ))
                                         ],
                                       )
@@ -177,8 +167,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             ),
                             // topic title
                             new Container(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+                              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
                               width: 500.0,
                               child: new Text(
                                 snapshot.data.topicsResp.list[0].title,
@@ -192,8 +181,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             ),
                             // topic content
                             new Container(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+                              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
                               child: Html(
                                 data: snapshot.data.topicsResp.list[0].content_rendered,
                                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
@@ -214,8 +202,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       ),
                       snapshot.data.repliesResp.list.length == 0
                           ? Center(
-                              child: new Text("目前尚无回复",
-                                  style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
+                              child: new Text("目前尚无回复", style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
                             )
                           : new Card(
                               elevation: 0.0,
@@ -229,8 +216,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       print('wml');
                                     },
                                     child: new Container(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                                       child: new Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
@@ -258,16 +244,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                   children: <Widget>[
                                                     new Text(
                                                       reply.member.username,
-                                                      style: new TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.grey,
-                                                          fontWeight: FontWeight.bold),
+                                                      style: new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                                     ),
                                                     new Padding(
                                                       padding: const EdgeInsets.only(left: 8.0),
                                                       child: new Text(
-                                                        new TimeBase(reply.last_modified)
-                                                            .getShowTime(),
+                                                        new TimeBase(reply.last_modified).getShowTime(),
                                                         style: new TextStyle(
                                                           color: const Color(0xFFcccccc),
                                                           fontSize: 12.0,
@@ -277,16 +259,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                   ],
                                                 ),
                                                 new Container(
-                                                    padding: const EdgeInsets.only(
-                                                        bottom: 10.0, top: 5.0),
+                                                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                                                     // 评论内容
                                                     child: Html(
                                                       data: reply.content_rendered,
-                                                      defaultTextStyle: TextStyle(
-                                                          color: Colors.black, fontSize: 14.0),
+                                                      defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
                                                       onLinkTap: (url) {
-                                                        if (UrlHelper.canLaunchInApp(
-                                                            context, url)) {
+                                                        if (UrlHelper.canLaunchInApp(context, url)) {
                                                           return;
                                                         } else if (url.contains("/member/")) {
                                                           // @xxx 需要补齐 base url
@@ -331,10 +310,6 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url, forceWebView: true, statusBarBrightness: Brightness.light);
   } else {
-    Fluttertoast.showToast(
-        msg: 'Could not launch $url',
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIos: 1,
-        gravity: ToastGravity.BOTTOM);
+    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }

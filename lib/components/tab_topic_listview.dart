@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TopicListView extends StatefulWidget {
@@ -123,10 +124,7 @@ class TopicItemView extends StatelessWidget {
                                 topic.memberId,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.black87,
-                                ),
+                                style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
                               ),
                               new Icon(
                                 Icons.keyboard_arrow_right,
@@ -137,32 +135,28 @@ class TopicItemView extends StatelessWidget {
                                 topic.nodeName,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.green,
-                                ),
+                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
                         ),
                         new Text(
-                          topic.lastReplyTime == ''
-                              ? '暂无评论'
-                              : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          topic.lastReplyTime == '' ? '暂无评论' : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
                           style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],
                     )),
-                    new Icon(
-                      Icons.comment,
-                      size: 18.0,
-                      color: Colors.grey,
-                    ),
-                    new Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: new Text(
-                        topic.replyCount,
-                        style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                    Material(
+                      color: ColorT.app_main[400],
+                      shape: new StadiumBorder(),
+                      child: new Container(
+                        width: 35.0,
+                        height: 20.0,
+                        alignment: Alignment.center,
+                        child: new Text(
+                          topic.replyCount,
+                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                        ),
                       ),
                     )
                   ],

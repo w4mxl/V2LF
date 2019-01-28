@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -46,31 +47,16 @@ class DioSingleton {
     };
     var response = await _dio.get("/signin");
     var tree = ETree.fromString(response.data);
-    loginFormData.username = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-    loginFormData.password = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-    loginFormData.captcha = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']")
-        .first
-        .attributes["name"];
-    loginFormData.once = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
-        .first
-        .attributes["value"];
+    loginFormData.username =
+        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']").first.attributes["name"];
+    loginFormData.password =
+        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']").first.attributes["name"];
+    loginFormData.captcha =
+        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']").first.attributes["name"];
+    loginFormData.once =
+        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']").first.attributes["value"];
 
-    print(" \n" +
-        loginFormData.username +
-        "\n" +
-        loginFormData.password +
-        "\n" +
-        loginFormData.captcha +
-        "\n" +
-        loginFormData.once);
+    print(" \n" + loginFormData.username + "\n" + loginFormData.password + "\n" + loginFormData.captcha + "\n" + loginFormData.once);
 
     _dio.options.responseType = ResponseType.STREAM;
     response = await _dio.get("/_captcha?once=" + loginFormData.once);
@@ -115,8 +101,7 @@ class DioSingleton {
         response = await _dio.get(v2exHost);
       }
       var tree = ETree.fromString(response.data);
-      var elementOfAvatarImg =
-          tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
+      var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
       if (elementOfAvatarImg != null) {
         // 获取用户头像
         String avatar = elementOfAvatarImg.attributes["src"];
@@ -133,7 +118,6 @@ class DioSingleton {
 
         String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
         var username = href.substring('/member/'.length);
-        Fluttertoast.showToast(msg: '登录成功：$username');
         // 保存 username avatar
         SpHelper.sp.setString(SP_AVATAR, avatar);
         SpHelper.sp.setString(SP_USERNAME, username);

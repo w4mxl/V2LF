@@ -6,6 +6,13 @@
     "type": "text",
     "placeholders": {}
   },
+  "toastLoginSuccess": "歡迎回來，{name}!",
+  "@toastLoginSuccess": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
   "languageAuto": "與系統同步",
   "@languageAuto": {
     "type": "text",
