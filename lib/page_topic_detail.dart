@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_topics.dart';
+import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/utils/time_base.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -123,11 +125,18 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               color: Colors.green,
                                               size: 16.0,
                                             ),
-                                            new Text(
-                                              snapshot.data.topicsResp.list[0].node.title,
-                                              textAlign: TextAlign.left,
-                                              maxLines: 1,
-                                              style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                                            GestureDetector(
+                                              child: new Text(
+                                                snapshot.data.topicsResp.list[0].node.title,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 1,
+                                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                                              ),
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  new MaterialPageRoute(
+                                                      builder: (context) => NodeTopics(NodeItem(snapshot.data.topicsResp.list[0].node.name,
+                                                          snapshot.data.topicsResp.list[0].node.title)))),
                                             ),
                                           ],
                                         ),

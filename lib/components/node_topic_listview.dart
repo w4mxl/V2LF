@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/resources/colors.dart';
 
 class NodeTopicListView extends StatefulWidget {
   final String tabKey;
@@ -118,7 +119,6 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new GestureDetector(
       onTap: () {
-        // todo 跳转详情页面
         Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(topic.topicId))),
@@ -148,7 +148,7 @@ class TopicItemView extends StatelessWidget {
                   ),*/
                   new Expanded(
                     child: new Container(
-                        margin: const EdgeInsets.only(right: 10.0),
+                        margin: const EdgeInsets.only(right: 20.0),
                         child: new Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -157,12 +157,11 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.title,
-                                /*maxLines: 2,
-                    overflow: TextOverflow.ellipsis,*/
-                                style: new TextStyle(fontSize: 16.0, color: const Color(0xff778087)),
+                                style: new TextStyle(fontSize: 16.0, color: Colors.black87),
                               ),
                             ),
                             new Container(
+                              margin: const EdgeInsets.only(top: 4.0),
                               child: new Row(
                                 children: <Widget>[
                                   new Text(
@@ -170,8 +169,8 @@ class TopicItemView extends StatelessWidget {
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
                                     style: new TextStyle(
-                                      fontSize: 11.0,
-                                      color: const Color(0xffcccccc),
+                                      fontSize: 12.0,
+                                      color: Colors.black54,
                                     ),
                                   ),
                                   new Text(
@@ -189,23 +188,24 @@ class TopicItemView extends StatelessWidget {
                           ],
                         )),
                   ),
-                  new Icon(
-                    Icons.comment,
-                    size: 18.0,
-                    color: Colors.grey,
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(left: 4.0, right: 5.0),
-                    child: new Text(
-                      topic.replyCount,
-                      style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                  Material(
+                    color: ColorT.app_main[400],
+                    shape: new StadiumBorder(),
+                    child: new Container(
+                      width: 35.0,
+                      height: 20.0,
+                      alignment: Alignment.center,
+                      child: new Text(
+                        topic.replyCount,
+                        style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                      ),
                     ),
                   )
                 ],
               ),
             ),
             new Divider(
-              height: 5.0,
+              height: 6.0,
             )
           ],
         ),
