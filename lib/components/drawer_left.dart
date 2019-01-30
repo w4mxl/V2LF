@@ -144,14 +144,22 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               new ListTile(
-                enabled: userName.isEmpty, // todo 登录后打开
+                enabled: userName.isNotEmpty, // todo 登录后打开
                 leading: new Icon(Icons.notifications),
                 title: new Text("通知"),
+                onTap: () {
+                  Navigator.pop(context);
+                  // todo
+                },
               ),
               new ListTile(
-                enabled: userName.isEmpty, // todo 登录后打开
+                enabled: userName.isNotEmpty, // todo 登录后打开
                 leading: new Icon(Icons.favorite),
                 title: new Text("收藏"),
+                onTap: () {
+                  Navigator.pop(context);
+                  // todo
+                },
               ),
               new Divider(),
               new ListTile(
