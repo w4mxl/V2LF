@@ -151,6 +151,16 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   // todo
+                  chromeSafariBrowser.open("https://flutter.io/", options: {
+                    "addShareButton": false,
+                    "toolbarBackgroundColor": "#000000",
+                    "dismissButtonStyle": 1,
+                    "preferredBarTintColor": "#000000",
+                  },
+                      optionsFallback: {
+                        "toolbarTopBackgroundColor": "#000000",
+                        "closeButtonCaption": "Close"
+                      });
                 },
               ),
               new ListTile(
@@ -251,7 +261,6 @@ class _LinkTextSpan extends TextSpan {
 }
 
 class MyInAppBrowser extends InAppBrowser {
-
   @override
   Future onLoadStart(String url) async {
     print("\n\nStarted $url\n\n");
@@ -271,8 +280,9 @@ class MyInAppBrowser extends InAppBrowser {
   void onExit() {
     print("\n\nBrowser closed!\n\n");
   }
-
 }
+
+MyInAppBrowser inAppBrowserFallback = new MyInAppBrowser();
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
   MyChromeSafariBrowser(browserFallback) : super(browserFallback);
