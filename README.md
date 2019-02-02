@@ -14,12 +14,12 @@ The original intention of developing this app is to learn flutter.Designed with 
 ![V2LF-v0.0.4](screenshot/V2LF-v0.0.4.gif)
 
 ## To-Do
-- [ ] Login logic
+- [x] Login logic
 - [ ] Page My favorites
 - [ ] Add comment
 - [ ] Reply comment
 - [ ] Notifications
-- [ ] Settings
+- [x] Settings
 
 ## Done
 - [x] Page Main (主页)
