@@ -148,7 +148,7 @@ class TopicItemView extends StatelessWidget {
                     Offstage(
                       offstage: topic.replyCount == '0',
                       child: Material(
-                        color: ColorT.app_main[400],
+                        color: ColorT.appMainColor[400],
                         shape: new StadiumBorder(),
                         child: new Container(
                           width: 35.0,

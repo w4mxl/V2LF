@@ -1,7 +1,7 @@
 // 特定节点话题列表页面
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/node_topic_listview.dart';
+import 'package:flutter_app/components/listview_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
 
 class NodeTopics extends StatefulWidget {

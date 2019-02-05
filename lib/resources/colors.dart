@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorT {
-  static MaterialColor app_main = Colors.blueGrey;
+  static MaterialColor appMainColor = Colors.blueGrey;
 
   static const Color transparent_80 = Color(0x80000000); //<!--204-->
 
@@ -14,7 +14,6 @@ class ColorT {
   static const Color gray_33 = Color(0xFF333333); //51
   static const Color gray_66 = Color(0xFF666666); //102
   static const Color gray_99 = Color(0xFF999999); //153
-  static const Color common_orange = Color(0XFFFC9153); //252 145 83
   static const Color gray_ef = Color(0XFFEFEFEF); //153
 }
 

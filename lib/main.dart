@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
-import 'package:flutter_app/components/tab_topic_listview.dart';
+import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       }
 
       if (themeColorMap[_colorKey] != null) {
-        ColorT.app_main = themeColorMap[_colorKey];
+        ColorT.appMainColor = themeColorMap[_colorKey];
       }
     });
   }
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: ColorT.app_main, fontFamily: 'Whitney'),
+      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: 'Whitney'),
       home: new DefaultTabController(
           length: tabs.length,
           child: new Scaffold(
