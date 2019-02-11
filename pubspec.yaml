@@ -35,7 +35,8 @@ dependencies:
   fluttertoast: ^2.2.3 # https://pub.dartlang.org/packages/fluttertoast
   fluintl: ^0.1.2 # 多语言 国际化 https://pub.dartlang.org/packages/fluintl
   intl: ^0.15.7 # https://pub.dartlang.org/packages/intl
-  flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
+  # flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
+  flame: ^0.10.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -86,6 +87,7 @@ flutter:
      - assets/images/ic_person.png
      - assets/images/logo_v2lf.png
      - assets/images/ic_sync_white_24dp.png
+     - assets/images/minotaur.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

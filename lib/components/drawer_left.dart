@@ -14,7 +14,6 @@ import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_inappbrowser/flutter_inappbrowser.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -81,7 +80,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                         SizedBox(height: 10.0),
                                         Text(
                                           '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
-                                          style: TextStyle(color: ColorT.app_main[700]),
+                                          style: TextStyle(color: ColorT.appMainColor[700]),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
@@ -151,16 +150,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   // todo
-                  chromeSafariBrowser.open("https://flutter.io/", options: {
-                    "addShareButton": false,
-                    "toolbarBackgroundColor": "#000000",
-                    "dismissButtonStyle": 1,
-                    "preferredBarTintColor": "#000000",
-                  },
-                      optionsFallback: {
-                        "toolbarTopBackgroundColor": "#000000",
-                        "closeButtonCaption": "Close"
-                      });
                 },
               ),
               new ListTile(
@@ -259,51 +248,6 @@ class _LinkTextSpan extends TextSpan {
                 launch(url);
               });
 }
-
-class MyInAppBrowser extends InAppBrowser {
-  @override
-  Future onLoadStart(String url) async {
-    print("\n\nStarted $url\n\n");
-  }
-
-  @override
-  Future onLoadStop(String url) async {
-    print("\n\nStopped $url\n\n");
-  }
-
-  @override
-  void onLoadError(String url, int code, String message) {
-    print("\n\nCan't load $url.. Error: $message\n\n");
-  }
-
-  @override
-  void onExit() {
-    print("\n\nBrowser closed!\n\n");
-  }
-}
-
-MyInAppBrowser inAppBrowserFallback = new MyInAppBrowser();
-
-class MyChromeSafariBrowser extends ChromeSafariBrowser {
-  MyChromeSafariBrowser(browserFallback) : super(browserFallback);
-
-  @override
-  void onOpened() {
-    print("ChromeSafari browser opened");
-  }
-
-  @override
-  void onLoaded() {
-    print("ChromeSafari browser loaded");
-  }
-
-  @override
-  void onClosed() {
-    print("ChromeSafari browser closed");
-  }
-}
-
-MyChromeSafariBrowser chromeSafariBrowser = new MyChromeSafariBrowser(inAppBrowserFallback);
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
