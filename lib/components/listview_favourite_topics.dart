@@ -1,4 +1,4 @@
-// node listview
+// 收藏 listview
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -7,16 +7,16 @@ import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
-class NodeTopicListView extends StatefulWidget {
+class FavTopicListView extends StatefulWidget {
   final String tabKey;
 
-  NodeTopicListView(this.tabKey);
+  FavTopicListView(this.tabKey);
 
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAliveClientMixin {
   int p = 1;
   bool isUpLoading = false;
   List<NodeTopicItem> items = new List();
@@ -159,13 +159,26 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.title,
-                                style: new TextStyle(fontSize: 16.0, color: Colors.black87),
+                                style: new TextStyle(fontSize: 16.0, color: Colors.black),
                               ),
                             ),
                             new Container(
-                              margin: const EdgeInsets.only(top: 4.0),
+                              margin: const EdgeInsets.only(top: 5.0),
                               child: new Row(
                                 children: <Widget>[
+                                  // 头像
+                                  new Container(
+                                    margin: const EdgeInsets.only(right: 10.0),
+                                    width: 20.0,
+                                    height: 20.0,
+                                    decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: new NetworkImage(topic.avatar),
+                                      ),
+                                    ),
+                                  ),
                                   new Text(
                                     topic.memberId,
                                     textAlign: TextAlign.left,

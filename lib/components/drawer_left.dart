@@ -117,7 +117,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     }
                   },
                   child: new CircleAvatar(
-                    backgroundImage: avatar.isNotEmpty ? new NetworkImage("https:" + avatar) : new AssetImage("assets/images/ic_person.png"),
+                    backgroundImage: avatar.isNotEmpty
+                        ? new NetworkImage("https:" + avatar)
+                        : new AssetImage("assets/images/ic_person.png"),
                   ),
                 ),
                 // todo 这里可以根据一天的不同时间显示不同的background，增加美观
@@ -253,6 +255,7 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+    Fluttertoast.showToast(
+        msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }
