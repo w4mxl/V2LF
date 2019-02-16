@@ -6,6 +6,9 @@ import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:flame/animation.dart' as animation;
+import 'package:flame/flame.dart';
+import 'package:flame/position.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
@@ -97,7 +100,8 @@ class _SettingPageState extends State<SettingPage> {
                   child: Text(
                     SpHelper.getLanguageModel() == null
                         ? MyLocalizations.of(context).languageAuto
-                        : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode, SpHelper.getLanguageModel().scriptCode),
+                        : Utils.getLanguageName(
+                            context, SpHelper.getLanguageModel().languageCode, SpHelper.getLanguageModel().scriptCode),
                     style: TextStyle(
                       fontSize: 14.0,
                       color: ColorT.gray_99,
@@ -137,7 +141,11 @@ class _SettingPageState extends State<SettingPage> {
                     );
                   }),
             ],
-          )
+          ),
+          Center(
+            child: Flame.util.animationAsWidget(
+                Position(256.0, 256.0), animation.Animation.sequenced('minotaur.png', 19, textureWidth: 96.0)),
+          ),
         ],
       ),
     );
