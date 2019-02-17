@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -67,7 +68,7 @@ class DioSingleton {
     return loginFormData;
   }
 
-  // 获取 POST
+  // 登录 POST -> 获取用户信息
   Future<bool> loginPost(LoginFormData loginFormData) async {
     _dio.options.headers = {
       "Origin": v2exHost,
@@ -138,6 +139,15 @@ class DioSingleton {
       print(e.response.request);
       return false;
     }
+  }
+
+  // 获取「我的收藏」下的topics
+  Future<List<FavTopicItem>> getFavTopics(int p) async {
+    List<FavTopicItem> topics = new List<FavTopicItem>();
+    var response = await _dio.get(v2exHost + "/my/topics" + "?p="+ p.toString()); // todo 可能多页
+    var tree = ETree.fromString(response.data);
+    print(response.data);
+    return topics;
   }
 
   // 获取帖子下面的评论信息
