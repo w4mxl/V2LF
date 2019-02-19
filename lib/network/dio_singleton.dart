@@ -144,6 +144,7 @@ class DioSingleton {
   // 获取「我的收藏」下的topics
   Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
+    // 调用 _dio 之前检查登录时保存的cookie是否带上了
     var response = await _dio.get(v2exHost + "/my/topics" + "?p="+ p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
     print(response.data);
