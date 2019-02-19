@@ -14,12 +14,14 @@ The original intention of developing this app is to learn flutter.Designed with 
 <center><image src="screenshot/V2LF-v0.0.4.gif" width="350"/></center>
 
 ## To-Do
-- [x] Page My favorites
-- [x] Page Notifications
+
 - [ ] Add comment
 - [ ] Reply comment
 
 ## Done
+
+- [x] Page My favorites
+- [x] Page Notifications
 - [x] Settings
 - [x] Login logic
 - [x] Page Main (主页)
