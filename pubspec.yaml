@@ -25,7 +25,7 @@ dependencies:
   flutter_markdown: ^0.2.0
   shared_preferences: ^0.4.3
   url_launcher: ^4.0.3
-  cached_network_image: ^0.5.1 # https://pub.dartlang.org/packages/cached_network_image
+  cached_network_image: ^0.6.0+1 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.13.3+3 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath     还不支持 ETree.toString(Element) :(
   dio: ^1.0.13 # https://pub.dartlang.org/packages/dio
@@ -36,7 +36,8 @@ dependencies:
   fluintl: ^0.1.2 # 多语言 国际化 https://pub.dartlang.org/packages/fluintl
   intl: ^0.15.7 # https://pub.dartlang.org/packages/intl
   # flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
-  flame: ^0.10.2
+  # flame: ^0.10.2
+  path_provider: ^0.5.0+1 # https://pub.dartlang.org/packages/path_provider#-installing-tab-
 dev_dependencies:
   flutter_test:
     sdk: flutter

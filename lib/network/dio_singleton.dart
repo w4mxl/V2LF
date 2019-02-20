@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xpath/xpath.dart';
+import 'package:path_provider/path_provider.dart';
 
 DioSingleton dioSingleton = new DioSingleton();
 
@@ -70,6 +72,9 @@ class DioSingleton {
 
   // 登录 POST -> 获取用户信息
   Future<bool> loginPost(LoginFormData loginFormData) async {
+    Directory tempDir = await getTemporaryDirectory();
+    _dio.cookieJar = new PersistCookieJar(dir: tempDir.path);
+
     _dio.options.headers = {
       "Origin": v2exHost,
       "Referer": v2exHost + "/signin",
