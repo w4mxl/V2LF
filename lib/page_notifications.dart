@@ -20,7 +20,7 @@ class _NotificationTopicsState extends State<NotificationTopics> {
       appBar: new AppBar(
         title: new Text('我的收藏 · 161'),
       ),
-      body: new FavTopicListView(widget.node.nodeId),
+      // body: new FavTopicListView(widget.node.nodeId),
     );
   }
 }

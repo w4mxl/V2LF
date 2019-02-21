@@ -50,16 +50,31 @@ class DioSingleton {
     };
     var response = await _dio.get("/signin");
     var tree = ETree.fromString(response.data);
-    loginFormData.username =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.password =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.captcha =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.once =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']").first.attributes["value"];
+    loginFormData.username = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.password = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.captcha = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.once = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
 
-    print(" \n" + loginFormData.username + "\n" + loginFormData.password + "\n" + loginFormData.captcha + "\n" + loginFormData.once);
+    print(" \n" +
+        loginFormData.username +
+        "\n" +
+        loginFormData.password +
+        "\n" +
+        loginFormData.captcha +
+        "\n" +
+        loginFormData.once);
 
     _dio.options.responseType = ResponseType.STREAM;
     response = await _dio.get("/_captcha?once=" + loginFormData.once);
@@ -150,19 +165,36 @@ class DioSingleton {
   Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
     // 调用 _dio 之前检查登录时保存的cookie是否带上了
-    var response = await _dio.get(v2exHost + "/my/topics" + "?p="+ p.toString()); // todo 可能多页
+    var response = await _dio.get(v2exHost + "/my/topics" + "?p=" + p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
     var aRootNode = tree.xpath("//*[@class='cell item']");
-    for (var aNode in aRootNode) {
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        FavTopicItem favTopicItem = new FavTopicItem();
+        favTopicItem.topicTitle = aNode.xpath("/table/tr/td[3]/span[1]/a/text()")[0].name; //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
+        favTopicItem.nodeName = aNode.xpath("/table/tr/td[3]/span[2]/a[1]/text()")[0].name;
+        favTopicItem.avatar = aNode
+            .xpath("/table/tr/td[1]/a[1]/img[@class='avatar']")
+            .first
+            .attributes["src"];
+        favTopicItem.memberId = aNode.xpath("/table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
 
-      FavTopicItem favTopicItem = new FavTopicItem();
-      favTopicItem.avatar = aNode.xpath("./table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
-      favTopicItem.nodeName = aNode.xpath("./table/tr/td[3]/span[2]/a[1]/text()")[0].name;
-      favTopicItem.memberId = aNode.xpath("./table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
+        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/text()[2]
+        favTopicItem.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[2]/text()[2]")[0].name.replaceAll('&nbsp;', "");
 
-      topics.add(favTopicItem);
+        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/strong[2]/a
+        favTopicItem.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[2]/strong[2]/a/text()")[0].name;
 
+        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[4]/a
+        favTopicItem.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
+
+        topics.add(favTopicItem);
+      }
+    } else {
+      // todo 可能未登录
+      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
     }
+
     return topics;
   }
 

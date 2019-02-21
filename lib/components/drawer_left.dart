@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
+import 'package:flutter_app/page_favourite_topics.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_setting.dart';
@@ -160,6 +161,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text("收藏"),
                 onTap: () {
                   Navigator.pop(context);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics()));
                   // todo
                 },
               ),

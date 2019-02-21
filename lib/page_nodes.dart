@@ -119,7 +119,7 @@ class NodeGroupWidget extends StatelessWidget {
         ),
         decoration: new BoxDecoration(borderRadius: new BorderRadius.circular(5.0), color: Colors.white),
       ),
-      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics(node))),
+      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
     );
   }
 }

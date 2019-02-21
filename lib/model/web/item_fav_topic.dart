@@ -3,7 +3,7 @@ class FavTopicItem {
   String memberId = '';
   String topicId = '';
   String avatar = '';
-  String topicContent = '';
+  String topicTitle = '';
   String replyCount = '';
   String nodeId = '';
   String nodeName = '';

@@ -10,9 +10,6 @@ import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
 class FavTopicListView extends StatefulWidget {
-  final String tabKey;
-
-  FavTopicListView(this.tabKey);
 
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
@@ -145,7 +142,7 @@ class TopicItemView extends StatelessWidget {
                               new Container(
                                 alignment: Alignment.centerLeft,
                                 child: new Text(
-                                  topic.topicContent,
+                                  topic.topicTitle,
                                   style: new TextStyle(fontSize: 16.0, color: Colors.black),
                                 ),
                               ),
@@ -165,16 +162,16 @@ class TopicItemView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    new Text(
+                                    /*new Text(
                                       " • ",
                                       style: new TextStyle(
                                         fontSize: 12.0,
                                         color: const Color(0xffcccccc),
                                       ),
-                                    ),
+                                    ),*/
                                     // 圆形头像
                                     new Container(
-                                      margin: const EdgeInsets.only(right: 5.0),
+                                      margin: const EdgeInsets.only(left:6.0,right: 4.0),
                                       width: 20.0,
                                       height: 20.0,
                                       child: CircleAvatar(
@@ -188,13 +185,15 @@ class TopicItemView extends StatelessWidget {
                                         color: Colors.black54,
                                       ),
                                     ),
-                                    new Text(
-                                      ' • ${topic.memberId} • ${topic.memberId}',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style: new TextStyle(
-                                        fontSize: 11.0,
-                                        color: const Color(0xffcccccc),
+                                    Expanded(
+                                      child: new Text(
+                                        '${topic.lastReplyTime} • ${topic.lastReplyMId}',
+                                        textAlign: TextAlign.left,
+                                        maxLines: 1,
+                                        style: new TextStyle(
+                                          fontSize: 11.0,
+                                          color: const Color(0xffcccccc),
+                                        ),
                                       ),
                                     ),
                                   ],
