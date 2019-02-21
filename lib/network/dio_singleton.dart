@@ -152,7 +152,17 @@ class DioSingleton {
     // 调用 _dio 之前检查登录时保存的cookie是否带上了
     var response = await _dio.get(v2exHost + "/my/topics" + "?p="+ p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
-    print(response.data);
+    var aRootNode = tree.xpath("//*[@class='cell item']");
+    for (var aNode in aRootNode) {
+
+      FavTopicItem favTopicItem = new FavTopicItem();
+      favTopicItem.avatar = aNode.xpath("./table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
+      favTopicItem.nodeName = aNode.xpath("./table/tr/td[3]/span[2]/a[1]/text()")[0].name;
+      favTopicItem.memberId = aNode.xpath("./table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
+
+      topics.add(favTopicItem);
+
+    }
     return topics;
   }
 

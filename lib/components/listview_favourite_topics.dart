@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
@@ -20,7 +21,7 @@ class FavTopicListView extends StatefulWidget {
 class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAliveClientMixin {
   int p = 1;
   bool isUpLoading = false;
-  List<NodeTopicItem> items = new List();
+  List<FavTopicItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
 
@@ -33,7 +34,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        getTopics();
+        //getTopics();
       }
     });
   }
@@ -44,12 +45,11 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
         isUpLoading = true;
       });
     }
-    // List<NodeTopicItem> newEntries =
-    await dioSingleton.getFavTopics(p++);
+    List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
     print(p);
     setState(() {
-      //items.addAll(newEntries);
-      //isUpLoading = false;
+      items.addAll(newEntries);
+      isUpLoading = false;
     });
   }
 
@@ -92,7 +92,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<NodeTopicItem> newEntries = await v2exApi.getNodeTopicsByTabKey(widget.tabKey, p);
+    List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
@@ -112,7 +112,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
 
 /// topic item view
 class TopicItemView extends StatelessWidget {
-  final NodeTopicItem topic;
+  final FavTopicItem topic;
 
   TopicItemView(this.topic);
 
@@ -145,7 +145,7 @@ class TopicItemView extends StatelessWidget {
                               new Container(
                                 alignment: Alignment.centerLeft,
                                 child: new Text(
-                                  topic.title,
+                                  topic.topicContent,
                                   style: new TextStyle(fontSize: 16.0, color: Colors.black),
                                 ),
                               ),
@@ -160,7 +160,7 @@ class TopicItemView extends StatelessWidget {
                                         padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 2.0, bottom: 2.0),
                                         alignment: Alignment.center,
                                         child: new Text(
-                                          '优惠信息',
+                                          topic.nodeName,
                                           style: new TextStyle(fontSize: 12.0, color: Colors.white),
                                         ),
                                       ),
@@ -178,7 +178,7 @@ class TopicItemView extends StatelessWidget {
                                       width: 20.0,
                                       height: 20.0,
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage(topic.avatar),
+                                        backgroundImage: NetworkImage("https:${topic.avatar}"),
                                       ),
                                     ),
                                     new Text(
@@ -189,7 +189,7 @@ class TopicItemView extends StatelessWidget {
                                       ),
                                     ),
                                     new Text(
-                                      ' • ${topic.characters} • ${topic.clickTimes}',
+                                      ' • ${topic.memberId} • ${topic.memberId}',
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       style: new TextStyle(
