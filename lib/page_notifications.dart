@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/components/listview_notifications.dart';
 import 'package:flutter_app/model/web/node.dart';
 
 class NotificationTopics extends StatefulWidget {
-
   @override
   _NotificationTopicsState createState() => _NotificationTopicsState();
 }
@@ -17,7 +17,7 @@ class _NotificationTopicsState extends State<NotificationTopics> {
       appBar: new AppBar(
         title: new Text('通知'),
       ),
-      // body: new FavTopicListView(widget.node.nodeId),
+      body: new NotificationsListView(),
     );
   }
 }
