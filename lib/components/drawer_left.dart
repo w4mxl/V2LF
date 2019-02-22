@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
+import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_favourite_topics.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
+import 'package:flutter_app/page_notifications.dart';
 import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/constants.dart';
@@ -56,6 +58,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
+                      _launchURL(DioSingleton.v2exHost + '/member/' + userName);
                     }
                   },
                   child: Text(
@@ -115,6 +118,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
                     } else {
                       // todo -> 个人中心页面
+                      _launchURL(DioSingleton.v2exHost + '/member/' + userName);
                     }
                   },
                   child: new CircleAvatar(
@@ -152,7 +156,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text("通知"),
                 onTap: () {
                   Navigator.pop(context);
-                  // todo
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationTopics()));
                 },
               ),
               new ListTile(
@@ -162,7 +166,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics()));
-                  // todo
                 },
               ),
               new Divider(),
@@ -255,7 +258,7 @@ class _LinkTextSpan extends TextSpan {
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url);
+    await launch(url, forceWebView: true);
   } else {
     Fluttertoast.showToast(
         msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);

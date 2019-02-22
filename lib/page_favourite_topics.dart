@@ -26,7 +26,7 @@ class _FavTopicsState extends State<FavTopics> {
 
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('主题收藏 [$count]'),
+        title: new Text('主题收藏 [ $count ]'),
       ),
       body: new FavTopicListView(),
     );
