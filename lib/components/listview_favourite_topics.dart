@@ -10,13 +10,14 @@ import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
 class FavTopicListView extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
 class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAliveClientMixin {
   int p = 1;
+  int maxPage = 1;
+
   bool isUpLoading = false;
   List<FavTopicItem> items = new List();
 
@@ -31,7 +32,11 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        //getTopics();
+        if (items.length > 0 && p <= maxPage) {
+          getTopics();
+        } else {
+          print("没有更多...");
+        }
       }
     });
   }
@@ -47,6 +52,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     setState(() {
       items.addAll(newEntries);
       isUpLoading = false;
+      maxPage = newEntries[0].maxPage;
     });
   }
 
@@ -80,7 +86,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text("正在加载第" + p.toString() + "页..."),
+        child: Text(p <= maxPage ? "正在加载第" + p.toString() + "页..." : "---- 🙄 ----"),
       ),
     );
   }
@@ -129,12 +135,12 @@ class TopicItemView extends StatelessWidget {
           child: new Column(
             children: <Widget>[
               new Container(
-                padding: const EdgeInsets.all(14.0),
+                padding: const EdgeInsets.all(12.0),
                 child: new Row(
                   children: <Widget>[
                     new Expanded(
                       child: new Container(
-                          margin: const EdgeInsets.only(right: 20.0),
+                          margin: const EdgeInsets.only(right: 8.0),
                           child: new Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -148,55 +154,63 @@ class TopicItemView extends StatelessWidget {
                               ),
                               new Container(
                                 margin: const EdgeInsets.only(top: 5.0),
-                                child: new Row(
-                                  children: <Widget>[
-                                    Material(
-                                      color: ColorT.appMainColor[100],
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-                                      child: new Container(
-                                        padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 2.0, bottom: 2.0),
-                                        alignment: Alignment.center,
-                                        child: new Text(
-                                          topic.nodeName,
-                                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: new Row(
+                                    children: <Widget>[
+                                      Material(
+                                        color: ColorT.appMainColor[200],
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+                                        child: new Container(
+                                          padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 1.0, bottom: 1.0),
+                                          alignment: Alignment.center,
+                                          child: new Text(
+                                            topic.nodeName,
+                                            style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    /*new Text(
-                                      " • ",
-                                      style: new TextStyle(
-                                        fontSize: 12.0,
-                                        color: const Color(0xffcccccc),
+                                      /*new Text(
+                                        " • ",
+                                        style: new TextStyle(
+                                          fontSize: 12.0,
+                                          color: const Color(0xffcccccc),
+                                        ),
+                                      ),*/
+                                      // 圆形头像
+                                      new Container(
+                                        margin: const EdgeInsets.only(left: 6.0, right: 4.0),
+                                        width: 20.0,
+                                        height: 20.0,
+                                        child: CircleAvatar(
+                                          backgroundImage: NetworkImage("https:${topic.avatar}"),
+                                        ),
                                       ),
-                                    ),*/
-                                    // 圆形头像
-                                    new Container(
-                                      margin: const EdgeInsets.only(left:6.0,right: 4.0),
-                                      width: 20.0,
-                                      height: 20.0,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage("https:${topic.avatar}"),
+                                      new Text(
+                                        topic.memberId,
+                                        style: new TextStyle(
+                                          fontSize: 12.0,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                    new Text(
-                                      topic.memberId,
-                                      style: new TextStyle(
-                                        fontSize: 12.0,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: new Text(
-                                        '${topic.lastReplyTime} • ${topic.lastReplyMId}',
+                                      new Text(
+                                        '${topic.lastReplyTime}• ',
                                         textAlign: TextAlign.left,
                                         maxLines: 1,
                                         style: new TextStyle(
-                                          fontSize: 11.0,
+                                          fontSize: 12.0,
                                           color: const Color(0xffcccccc),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      new Text(
+                                        topic.lastReplyMId,
+                                        style: new TextStyle(
+                                          fontSize: 12.0,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

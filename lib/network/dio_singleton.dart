@@ -8,6 +8,8 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/utils/constants.dart';
+import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xpath/xpath.dart';
@@ -161,32 +163,49 @@ class DioSingleton {
     }
   }
 
-  // 获取「我的收藏」下的topics
+  // 获取「主题收藏」下的topics
   Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
     // 调用 _dio 之前检查登录时保存的cookie是否带上了
     var response = await _dio.get(v2exHost + "/my/topics" + "?p=" + p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
+
+    //*[@id="Wrapper"]/div/div/div[1]/div/strong
+    var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
+    bus.emit(EVENT_NAME_FAV_COUNTS, int.parse(count));
+    var page = tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name;
+
+    // Fluttertoast.showToast(msg: '收藏总数：$count，页数：$page');
+
     var aRootNode = tree.xpath("//*[@class='cell item']");
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         FavTopicItem favTopicItem = new FavTopicItem();
-        favTopicItem.topicTitle = aNode.xpath("/table/tr/td[3]/span[1]/a/text()")[0].name; //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
+
+        favTopicItem.maxPage = int.parse(page);
+
+        favTopicItem.topicTitle = aNode
+            .xpath("/table/tr/td[3]/span[1]/a/text()")[0]
+            .name; //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
+
+        String topicUrl = aNode.xpath("/table/tr/td[3]/span[1]/a").first.attributes["href"]; // 得到是 /t/522540#reply17
+        favTopicItem.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+
         favTopicItem.nodeName = aNode.xpath("/table/tr/td[3]/span[2]/a[1]/text()")[0].name;
-        favTopicItem.avatar = aNode
-            .xpath("/table/tr/td[1]/a[1]/img[@class='avatar']")
-            .first
-            .attributes["src"];
+        favTopicItem.avatar = aNode.xpath("/table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
         favTopicItem.memberId = aNode.xpath("/table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
 
-        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/text()[2]
-        favTopicItem.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[2]/text()[2]")[0].name.replaceAll('&nbsp;', "");
+        if (aNode.xpath("/table/tr/td[4]/a/text()") != null) {
+          // 有评论数
+          //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[4]/a
+          favTopicItem.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
 
-        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/strong[2]/a
-        favTopicItem.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[2]/strong[2]/a/text()")[0].name;
+          //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/text()[2]
+          favTopicItem.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[2]/text()[2]")[0].name.replaceAll('&nbsp;', "");
 
-        //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[4]/a
-        favTopicItem.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
+          //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/strong[2]/a
+          favTopicItem.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[2]/strong[2]/a/text()")[0].name;
+        }
 
         topics.add(favTopicItem);
       }

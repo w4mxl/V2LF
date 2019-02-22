@@ -59,3 +59,4 @@ const String API_JINRISHICI_ONE = 'https://v2.jinrishici.com/one.json';
 
 const String EVENT_NAME_LOGIN = 'login';
 const String EVENT_NAME_SETTING = 'setting';
+const String EVENT_NAME_FAV_COUNTS = 'fav_count';
