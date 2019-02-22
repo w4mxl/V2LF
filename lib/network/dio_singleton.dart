@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
+import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/constants.dart';
@@ -215,6 +216,53 @@ class DioSingleton {
     }
 
     return topics;
+  }
+
+  // 获取「通知」下的列表信息
+  Future<List<NotificationItem>> getNotifications(int p) async {
+    List<NotificationItem> notifications = new List<NotificationItem>();
+    // 调用 _dio 之前检查登录时保存的cookie是否带上了
+    var response = await _dio.get(v2exHost + "/notifications" + "?p=" + p.toString()); // todo 可能多页
+    var tree = ETree.fromString(response.data);
+
+    //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
+    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name;
+    Fluttertoast.showToast(msg: '页数：$page');
+
+    var aRootNode = tree.xpath("//*[@class='cell']");
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        NotificationItem item = new NotificationItem();
+
+        item.maxPage = int.parse(page.split('/')[1]);
+
+        //*[@id="n_9690800"]/table/tbody/tr/td[1]/a/img
+        item.avatar = aNode
+            .xpath("/table/tr/td[1]/a/img[@class='avatar']")
+            .first
+            .attributes["src"];
+        item.date = aNode.xpath("/table/tr/td[2]/span[2]/text()")[0].name.replaceAll('&nbsp;', "");
+
+        //*[@id="n_9690800"]/table/tbody/tr/td[2]/span[1]
+        item.title = aNode
+            .xpath("/table/tr/td[2]/span[1]/text()")[0]
+            .name;
+
+        if(aNode.xpath("/table/tr/td[2]/div[@class='payload']")!=null){
+          item.reply = aNode.xpath("/table/tr/td[2]/div[@class='payload']").first.xpath("/text()")[0].name;
+        }
+
+        String topicUrl = aNode.xpath("/table/tr/td[2]/span[1]/a[2]").first.attributes["href"]; // 得到是 /t/522540#reply17
+        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+
+        notifications.add(item);
+      }
+    } else {
+      // todo 可能未登录
+      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
+    }
+
+    return notifications;
   }
 
   // 获取帖子下面的评论信息

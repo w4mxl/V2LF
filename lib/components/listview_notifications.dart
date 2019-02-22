@@ -1,12 +1,12 @@
-// 收藏 listview
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/web/item_fav_topic.dart';
+import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
+// 通知 listview
 class NotificationsListView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
@@ -17,7 +17,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   int maxPage = 1;
 
   bool isUpLoading = false;
-  List<FavTopicItem> items = new List();
+  List<NotificationItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
 
@@ -45,7 +45,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
         isUpLoading = true;
       });
     }
-    List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
+    List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
     print(p);
     setState(() {
       items.addAll(newEntries);
@@ -90,7 +90,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p);
+    List<NotificationItem> newEntries = await dioSingleton.getNotifications(p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
@@ -108,11 +108,11 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   }
 }
 
-/// topic item view
+/// notification item view
 class TopicItemView extends StatelessWidget {
-  final FavTopicItem topic;
+  final NotificationItem notificationItem;
 
-  TopicItemView(this.topic);
+  TopicItemView(this.notificationItem);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(topic.topicId))),
+          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(notificationItem.topicId))),
         );
       },
       child: new Container(
@@ -138,12 +138,12 @@ class TopicItemView extends StatelessWidget {
                         width: 32.0,
                         height: 32.0,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage("https:${topic.avatar}"),
+                          backgroundImage: NetworkImage("https:${notificationItem.avatar}"),
                         ),
                       ),
                       // 20天前
                       new Text(
-                        '20 天前',
+                        notificationItem.date,
                         style: new TextStyle(
                           fontSize: 12.0,
                           color: Colors.black54,
@@ -161,53 +161,15 @@ class TopicItemView extends StatelessWidget {
                             new Container(
                               alignment: Alignment.centerLeft,
                               child: new Text(
-                                topic.topicTitle,
+                                notificationItem.title,
                                 style: new TextStyle(fontSize: 16.0, color: Colors.black),
                               ),
                             ),
                             new Container(
                               margin: const EdgeInsets.only(top: 5.0),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: new Row(
-                                  children: <Widget>[
-                                    Material(
-                                      color: ColorT.appMainColor[200],
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-                                      child: new Container(
-                                        padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 1.0, bottom: 1.0),
-                                        alignment: Alignment.center,
-                                        child: new Text(
-                                          topic.nodeName,
-                                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    /*new Text(
-                                      " • ",
-                                      style: new TextStyle(
-                                        fontSize: 12.0,
-                                        color: const Color(0xffcccccc),
-                                      ),
-                                    ),*/
-                                    new Text(
-                                      '${topic.lastReplyTime}• ',
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style: new TextStyle(
-                                        fontSize: 12.0,
-                                        color: const Color(0xffcccccc),
-                                      ),
-                                    ),
-                                    new Text(
-                                      topic.lastReplyMId,
-                                      style: new TextStyle(
-                                        fontSize: 12.0,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              child: new Text(
+                                notificationItem.reply,
+                                style: new TextStyle(fontSize: 16.0, color: Colors.black),
                               ),
                             ),
                           ],
