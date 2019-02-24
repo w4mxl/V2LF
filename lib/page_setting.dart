@@ -142,6 +142,25 @@ class _SettingPageState extends State<SettingPage> {
                   }),
             ],
           ),
+          Offstage(
+            offstage: !isLogined(),
+            child: GestureDetector(
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    Divider(height: 0.0,),
+                    Container(padding:const EdgeInsets.all(14.0), child: Text('退出登录', style: TextStyle(color: Colors.red, fontSize: 18.0),)),
+                    Divider(height: 0.0,),
+
+                  ],
+                ),
+              ),
+              onTap: (){
+
+              },
+            ),
+          ),
           /*Center(
             child: Flame.util.animationAsWidget(
                 Position(256.0, 256.0), animation.Animation.sequenced('minotaur.png', 19, textureWidth: 96.0)),
@@ -149,6 +168,14 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
     );
+  }
+
+  bool isLogined() {
+    var spUsername = SpHelper.sp.getString(SP_USERNAME);
+    if (spUsername != null && spUsername.length > 0) {
+      return true;
+    }
+    return false;
   }
 
   void updateLanguage(LanguageModel model) {

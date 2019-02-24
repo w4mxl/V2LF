@@ -90,7 +90,7 @@ class DioSingleton {
 
   // 登录 POST -> 获取用户信息
   Future<bool> loginPost(LoginFormData loginFormData) async {
-    Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     _dio.cookieJar = new PersistCookieJar(dir: tempDir.path);
 
     _dio.options.headers = {
