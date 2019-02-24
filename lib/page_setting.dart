@@ -6,6 +6,7 @@ import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -142,8 +143,9 @@ class _SettingPageState extends State<SettingPage> {
                   }),
             ],
           ),
+          // 退出登录
           Offstage(
-            offstage: !isLogined(),
+            offstage: !checkLogin(),
             child: GestureDetector(
               child: Container(
                 color: Colors.white,
@@ -157,7 +159,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               onTap: (){
-
+                delete
               },
             ),
           ),
@@ -170,7 +172,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  bool isLogined() {
+  bool checkLogin() {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       return true;

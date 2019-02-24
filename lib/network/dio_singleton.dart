@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
@@ -12,9 +11,10 @@ import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:xpath/xpath.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:xpath/xpath.dart';
 
 DioSingleton dioSingleton = new DioSingleton();
 
@@ -90,8 +90,9 @@ class DioSingleton {
 
   // 登录 POST -> 获取用户信息
   Future<bool> loginPost(LoginFormData loginFormData) async {
-    Directory tempDir = await getApplicationDocumentsDirectory();
-    _dio.cookieJar = new PersistCookieJar(dir: tempDir.path);
+    String cookiePath = await Utils.getCookiePath();
+    PersistCookieJar cookieJar =  new PersistCookieJar(dir: cookiePath);
+    _dio.cookieJar = cookieJar;
 
     _dio.options.headers = {
       "Origin": v2exHost,

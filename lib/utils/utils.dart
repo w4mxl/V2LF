@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 const List<String> poems = [
   '晚食以当肉，安步以当车',
@@ -28,4 +32,16 @@ class Utils {
       return '繁體中文';
     }
   }
+
+  static Future<String> getCookiePath() async {
+    Directory tempDir = await getApplicationDocumentsDirectory();
+    String tempPath = tempDir.path + "/v2lf_cookie";
+    Directory dir = new Directory(tempPath);
+    bool b = await dir.exists();
+    if (!b) {
+      dir.createSync(recursive: true);
+    }
+    return tempPath;
+  }
+
 }
