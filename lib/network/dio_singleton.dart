@@ -158,6 +158,7 @@ class DioSingleton {
     } on DioError catch (e) {
       // todo
       Fluttertoast.showToast(msg: '登录失败');
+      cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);

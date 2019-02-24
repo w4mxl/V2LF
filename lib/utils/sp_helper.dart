@@ -9,6 +9,7 @@ const String KEY_THEME_COLOR = 'key_theme_color';
 
 const String SP_JINRISHICI_TOKEN = "jinrishici_token";
 
+// 与登录状态有关
 const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
 

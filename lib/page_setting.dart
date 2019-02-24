@@ -159,7 +159,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ),
               onTap: (){
-                delete
+                logout();
               },
             ),
           ),
@@ -178,6 +178,16 @@ class _SettingPageState extends State<SettingPage> {
       return true;
     }
     return false;
+  }
+
+  void logout() async {
+    // 清除 cookie
+    String cookiePath = await Utils.getCookiePath();
+    PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
+    cookieJar.deleteAll();
+    // 清除用户信息
+    SpHelper.sp.remove(SP_USERNAME);
+    SpHelper.sp.remove(SP_AVATAR);
   }
 
   void updateLanguage(LanguageModel model) {
