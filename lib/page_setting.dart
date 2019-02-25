@@ -148,18 +148,43 @@ class _SettingPageState extends State<SettingPage> {
             offstage: !checkLogin(),
             child: GestureDetector(
               child: Container(
+                margin: const EdgeInsets.only(top: 84.0, bottom: 20.0),
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    Divider(height: 0.0,),
-                    Container(padding:const EdgeInsets.all(14.0), child: Text('退出登录', style: TextStyle(color: Colors.red, fontSize: 18.0),)),
-                    Divider(height: 0.0,),
-
+                    Divider(
+                      height: 0.0,
+                    ),
+                    Container(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          '退出登录',
+                          style: TextStyle(color: Colors.red, fontSize: 18.0),
+                        )),
+                    Divider(
+                      height: 0.0,
+                    ),
                   ],
                 ),
               ),
-              onTap: (){
-                logout();
+              onTap: () {
+                // ⏏ 确认对话框
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          content: Text('您确定要退出登录吗？'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('取消'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            FlatButton(
+                                onPressed: () {
+                                  logout();
+                                },
+                                child: Text('退出')),
+                          ],
+                        ));
               },
             ),
           ),
@@ -188,6 +213,9 @@ class _SettingPageState extends State<SettingPage> {
     // 清除用户信息
     SpHelper.sp.remove(SP_USERNAME);
     SpHelper.sp.remove(SP_AVATAR);
+
+    Navigator.of(context).pop();
+    bus.emit(EVENT_NAME_LOGIN);
   }
 
   void updateLanguage(LanguageModel model) {

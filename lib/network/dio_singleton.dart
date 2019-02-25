@@ -13,7 +13,6 @@ import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:xpath/xpath.dart';
 
 DioSingleton dioSingleton = new DioSingleton();
@@ -28,6 +27,10 @@ class DioSingleton {
   factory DioSingleton() => _dioSingleton;
 
   DioSingleton._internal() {
+    setDio();
+  }
+
+  void setDio() async {
     if (_dio == null) {
       Options options = new Options();
       options.baseUrl = v2exHost;
@@ -35,9 +38,12 @@ class DioSingleton {
       options.connectTimeout = 5 * 1000;
       options.headers = {
         'user-agent':
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
       };
       _dio = new Dio(options);
+      String cookiePath = await Utils.getCookiePath();
+      PersistCookieJar cookieJar =  new PersistCookieJar(dir: cookiePath);
+      _dio.cookieJar = cookieJar;
     }
   }
 
@@ -90,10 +96,6 @@ class DioSingleton {
 
   // 登录 POST -> 获取用户信息
   Future<bool> loginPost(LoginFormData loginFormData) async {
-    String cookiePath = await Utils.getCookiePath();
-    PersistCookieJar cookieJar =  new PersistCookieJar(dir: cookiePath);
-    _dio.cookieJar = cookieJar;
-
     _dio.options.headers = {
       "Origin": v2exHost,
       "Referer": v2exHost + "/signin",
@@ -158,7 +160,7 @@ class DioSingleton {
     } on DioError catch (e) {
       // todo
       Fluttertoast.showToast(msg: '登录失败');
-      cookieJar.deleteAll();
+      //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
