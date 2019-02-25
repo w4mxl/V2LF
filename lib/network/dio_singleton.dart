@@ -14,6 +14,8 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:xpath/xpath.dart';
+import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
+import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 
 DioSingleton dioSingleton = new DioSingleton();
 
@@ -233,38 +235,58 @@ class DioSingleton {
     var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name;
     Fluttertoast.showToast(msg: '页数：$page');
 
-    var aRootNode = tree.xpath("//*[@class='cell']");
+    // Use html parser and query selector
+    var document = parse(response.data);
+    List<dom.Element> aRootNode = document.querySelectorAll('div.cell');
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         NotificationItem item = new NotificationItem();
-
-        item.maxPage = int.parse(page.split('/')[1]);
-
-        //*[@id="n_9690800"]/table/tbody/tr/td[1]/a/img
+        //#n_9690800 > table > tbody > tr > td:nth-child(1) > a > img
         item.avatar = aNode
-            .xpath("/table/tr/td[1]/a/img[@class='avatar']")
-            .first
+            .querySelector('table > tbody > tr > td:nth-child(1) > a > img')
             .attributes["src"];
-        item.date = aNode.xpath("/table/tr/td[2]/span[2]/text()")[0].name.replaceAll('&nbsp;', "");
+        // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.snow
+        // item.date = aNode.querySelector('table > tbody > tr > td:nth-child(2)').text;
 
-        //*[@id="n_9690800"]/table/tbody/tr/td[2]/span[1]
-        item.title = aNode
-            .xpath("/table/tr/td[2]/span[1]/text()")[0]
-            .name;
-
-        if(aNode.xpath("/table/tr/td[2]/div[@class='payload']")!=null){
-          item.reply = aNode.xpath("/table/tr/td[2]/div[@class='payload']").first.xpath("/text()")[0].name;
-        }
-
-        String topicUrl = aNode.xpath("/table/tr/td[2]/span[1]/a[2]").first.attributes["href"]; // 得到是 /t/522540#reply17
-        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+        // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade
+        // item.title = aNode.querySelector('table > tbody > tr > td:nth-child(2) > span').outerHtml;
+        print(item.title);
 
         notifications.add(item);
       }
-    } else {
-      // todo 可能未登录
-      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
     }
+//    var aRootNode = tree.xpath("//*[@class='cell']");
+//    if (aRootNode != null) {
+//      for (var aNode in aRootNode) {
+//        NotificationItem item = new NotificationItem();
+//
+//        item.maxPage = int.parse(page.split('/')[1]);
+//
+//        //*[@id="n_9690800"]/table/tbody/tr/td[1]/a/img
+//        item.avatar = aNode
+//            .xpath("/table/tr/td[1]/a/img[@class='avatar']")
+//            .first
+//            .attributes["src"];
+//        item.date = aNode.xpath("/table/tr/td[2]/span[2]/text()")[0].name.replaceAll('&nbsp;', "");
+//
+//        //*[@id="n_9690800"]/table/tbody/tr/td[2]/span[1]
+//        item.title = aNode
+//            .xpath("/table/tr/td[2]/span[1]/text()")[0]
+//            .name;
+//
+//        if(aNode.xpath("/table/tr/td[2]/div[@class='payload']")!=null){
+//          item.reply = aNode.xpath("/table/tr/td[2]/div[@class='payload']").first.xpath("/text()")[0].name;
+//        }
+//
+//        String topicUrl = aNode.xpath("/table/tr/td[2]/span[1]/a[2]").first.attributes["href"]; // 得到是 /t/522540#reply17
+//        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+//
+//        notifications.add(item);
+//      }
+//    } else {
+//      // todo 可能未登录
+//      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
+//    }
 
     return notifications;
   }
