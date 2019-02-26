@@ -270,6 +270,14 @@ class DioSingleton {
               .querySelector('table > tbody > tr > td:nth-child(3) > div.payload')
               .innerHtml;
         }
+        // document.querySelector('#n_6036816 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(2)')
+
+        String topicUrl = aNode
+            .querySelector('table > tbody > tr > td:nth-child(3) > span.fade > a:nth-child(2)')
+            .attributes["href"]; // 得到是 /t/522540#reply17
+        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+        print(item.topicId);
+
 
         notifications.add(item);
       }

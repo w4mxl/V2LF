@@ -48,7 +48,6 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
       });
     }
     List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
-    print(p);
     setState(() {
       items.addAll(newEntries);
       isUpLoading = false;

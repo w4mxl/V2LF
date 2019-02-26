@@ -239,6 +239,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
 
   Future getOnePoem() async {
     var poem = await NetworkApi.getPoem();
+    if (!mounted) return;
     setState(() {
       if (poem != null) poemOne = poem;
     });

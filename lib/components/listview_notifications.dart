@@ -49,7 +49,6 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
       });
     }
     List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
-    print(p);
     setState(() {
       items.addAll(newEntries);
       isUpLoading = false;
@@ -166,7 +165,7 @@ class TopicItemView extends StatelessWidget {
                             // title
                             new Container(
                               alignment: Alignment.centerLeft,
-                              child: Html(
+                              child: Html( // todo 这里还有点展示问题，是flutter_html那边的问题
                                 data: notificationItem.title,
                                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 16.0),
                                 onLinkTap: (url) {
