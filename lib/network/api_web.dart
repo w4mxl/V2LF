@@ -115,7 +115,7 @@ class V2exApi {
     return nodeGroups;
   }
 
-  // 节点导航页获取特定节点下的topics
+  // 节点导航页 -> 获取特定节点下的topics
   Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 

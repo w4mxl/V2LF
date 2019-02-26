@@ -233,7 +233,7 @@ class DioSingleton {
 
     //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
     var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name;
-    Fluttertoast.showToast(msg: '页数：$page');
+    // Fluttertoast.showToast(msg: '页数：$page');
 
     // Use html parser and query selector
     var document = parse(response.data);
@@ -241,20 +241,40 @@ class DioSingleton {
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         NotificationItem item = new NotificationItem();
+
+        item.maxPage = int.parse(page.split('/')[1]);
+
         //#n_9690800 > table > tbody > tr > td:nth-child(1) > a > img
         item.avatar = aNode
             .querySelector('table > tbody > tr > td:nth-child(1) > a > img')
             .attributes["src"];
         // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.snow
-        // item.date = aNode.querySelector('table > tbody > tr > td:nth-child(2)').text;
+        // 可能得到 '44 天前' 或者 '2017-06-14 16:33:13 +08:00  '
+        String date = aNode
+            .querySelector('table > tbody > tr > td:nth-child(3) > span.snow')
+            .text;
+        if (!date.contains('天')) {
+          date = date.split(' ')[0];
+        }
+        item.date = date;
 
-        // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade
-        // item.title = aNode.querySelector('table > tbody > tr > td:nth-child(2) > span').outerHtml;
-        print(item.title);
+        // document.querySelector('#n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade')
+        // 明明是 td:nth-child(2) ，可是取出来是 null，而 td:nth-child(3) 才对
+        item.title = aNode
+            .querySelector('table > tbody > tr > td:nth-child(3) > span.fade')
+            .innerHtml;
+
+        // document.querySelector('#n_9472572 > table > tbody > tr > td:nth-child(2) > div.payload')
+        if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload')!=null) {
+          item.reply = aNode
+              .querySelector('table > tbody > tr > td:nth-child(3) > div.payload')
+              .innerHtml;
+        }
 
         notifications.add(item);
       }
     }
+//    这种方式有点问题，就是，解析 title reply 等时解析不全。是xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath 还不完善
 //    var aRootNode = tree.xpath("//*[@class='cell']");
 //    if (aRootNode != null) {
 //      for (var aNode in aRootNode) {

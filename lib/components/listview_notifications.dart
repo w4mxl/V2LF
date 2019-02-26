@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/url_helper.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // 通知 listview
 class NotificationsListView extends StatefulWidget {
@@ -58,17 +61,20 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Widget build(BuildContext context) {
     if (items.length > 0) {
       return new RefreshIndicator(
-          child: ListView.builder(
-              controller: _scrollController,
-              itemCount: items.length + 1,
-              itemBuilder: (context, index) {
-                if (index == items.length) {
-                  // 滑到了最后一个item
-                  return _buildLoadText();
-                } else {
-                  return new TopicItemView(items[index]);
-                }
-              }),
+          child: Container(
+            color: Colors.white,
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: items.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == items.length) {
+                    // 滑到了最后一个item
+                    return _buildLoadText();
+                  } else {
+                    return new TopicItemView(items[index]);
+                  }
+                }),
+          ),
           onRefresh: _onRefresh);
     }
     // By default, show a loading spinner
@@ -134,7 +140,7 @@ class TopicItemView extends StatelessWidget {
                     children: <Widget>[
                       // 圆形头像
                       new Container(
-                        margin: const EdgeInsets.only(bottom: 1.0),
+                        margin: const EdgeInsets.only(bottom: 4.0),
                         width: 32.0,
                         height: 32.0,
                         child: CircleAvatar(
@@ -157,19 +163,46 @@ class TopicItemView extends StatelessWidget {
                         child: new Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            /// title
+                            // title
                             new Container(
                               alignment: Alignment.centerLeft,
-                              child: new Text(
-                                notificationItem.title,
-                                style: new TextStyle(fontSize: 16.0, color: Colors.black),
+                              child: Html(
+                                data: notificationItem.title,
+                                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 16.0),
+                                onLinkTap: (url) {
+                                  if (UrlHelper.canLaunchInApp(context, url)) {
+                                    return;
+                                  } else if (url.contains("/member/")) {
+                                    // @xxx 需要补齐 base url
+                                    url = DioSingleton.v2exHost + url;
+                                    print(url);
+                                  }
+                                  _launchURL(url);
+                                },
+                                useRichText: true,
                               ),
                             ),
-                            new Container(
-                              margin: const EdgeInsets.only(top: 5.0),
-                              child: new Text(
-                                notificationItem.reply,
-                                style: new TextStyle(fontSize: 16.0, color: Colors.black),
+                            // reply
+                            Offstage(
+                              offstage: notificationItem.reply.isEmpty,
+                              child: new Container(
+                                margin: const EdgeInsets.only(top: 8.0),
+                                child: Html(
+                                  data: notificationItem.reply,
+                                  defaultTextStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+                                  backgroundColor: Colors.grey[100],
+                                  padding: EdgeInsets.all(4.0),
+                                  onLinkTap: (url) {
+                                    if (UrlHelper.canLaunchInApp(context, url)) {
+                                      return;
+                                    } else if (url.contains("/member/")) {
+                                      // @xxx 需要补齐 base url
+                                      url = DioSingleton.v2exHost + url;
+                                      print(url);
+                                    }
+                                    _launchURL(url);
+                                  },
+                                ),
                               ),
                             ),
                           ],
@@ -185,5 +218,14 @@ class TopicItemView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// 外链跳转
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url, forceWebView: true);
+  } else {
+    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }
