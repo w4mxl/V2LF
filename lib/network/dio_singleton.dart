@@ -8,6 +8,7 @@ import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -40,11 +41,11 @@ class DioSingleton {
       options.connectTimeout = 5 * 1000;
       options.headers = {
         'user-agent':
-        'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
       };
       _dio = new Dio(options);
       String cookiePath = await Utils.getCookiePath();
-      PersistCookieJar cookieJar =  new PersistCookieJar(dir: cookiePath);
+      PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
       _dio.cookieJar = cookieJar;
     }
   }
@@ -170,7 +171,7 @@ class DioSingleton {
     }
   }
 
-  // 获取「主题收藏」下的topics
+  // 获取「主题收藏」下的topics [xpath 解析的]
   Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
     // 调用 _dio 之前检查登录时保存的cookie是否带上了
@@ -224,7 +225,7 @@ class DioSingleton {
     return topics;
   }
 
-  // 获取「通知」下的列表信息
+  // 获取「通知」下的列表信息 [html 解析的]
   Future<List<NotificationItem>> getNotifications(int p) async {
     List<NotificationItem> notifications = new List<NotificationItem>();
     // 调用 _dio 之前检查登录时保存的cookie是否带上了
@@ -245,14 +246,10 @@ class DioSingleton {
         item.maxPage = int.parse(page.split('/')[1]);
 
         //#n_9690800 > table > tbody > tr > td:nth-child(1) > a > img
-        item.avatar = aNode
-            .querySelector('table > tbody > tr > td:nth-child(1) > a > img')
-            .attributes["src"];
+        item.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > a > img').attributes["src"];
         // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.snow
         // 可能得到 '44 天前' 或者 '2017-06-14 16:33:13 +08:00  '
-        String date = aNode
-            .querySelector('table > tbody > tr > td:nth-child(3) > span.snow')
-            .text;
+        String date = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.snow').text;
         if (!date.contains('天')) {
           date = date.split(' ')[0];
         }
@@ -260,15 +257,11 @@ class DioSingleton {
 
         // document.querySelector('#n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade')
         // 明明是 td:nth-child(2) ，可是取出来是 null，而 td:nth-child(3) 才对
-        item.title = aNode
-            .querySelector('table > tbody > tr > td:nth-child(3) > span.fade')
-            .innerHtml;
+        item.title = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml;
 
         // document.querySelector('#n_9472572 > table > tbody > tr > td:nth-child(2) > div.payload')
-        if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload')!=null) {
-          item.reply = aNode
-              .querySelector('table > tbody > tr > td:nth-child(3) > div.payload')
-              .innerHtml;
+        if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload') != null) {
+          item.reply = aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload').innerHtml;
         }
         // document.querySelector('#n_6036816 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(2)')
 
@@ -277,7 +270,6 @@ class DioSingleton {
             .attributes["href"]; // 得到是 /t/522540#reply17
         item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
         print(item.topicId);
-
 
         notifications.add(item);
       }
@@ -319,29 +311,64 @@ class DioSingleton {
     return notifications;
   }
 
-  // 获取帖子下面的评论信息
-  Future<List<ReplyItem>> parseTopicReplies(String topicId) async {
-    List<ReplyItem> replies = new List();
+  // 获取帖子详情及下面的评论信息
+  Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
+    TopicDetailModel detailModel = TopicDetailModel();
+    List<ReplyItem> replies = List();
 
-    var dio = new Dio();
-    dio.options.headers = {
-      'user-agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-    };
-    var response = await dio.get(v2exHost + "/t/" + topicId + "?p=1"); // todo 可能多页
+    var response = await _dio.get(v2exHost + "/t/" + "538643" + "?p=1"); // todo 可能多页
+    // Use html parser and query selector
+    var document = parse(response.data);
 
-    var tree = ETree.fromString(response.data);
-
-    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
-    for (var aNode in aRootNode) {
-      ReplyItem replyItem = new ReplyItem();
-      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
-      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
-      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
-      replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
-      replies.add(replyItem);
+    if (p == 1) {
+      if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
+        detailModel.maxPage =
+            int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
+      }
     }
 
-    return replies;
+    print("###详情页-评论页数：" + detailModel.maxPage.toString());
+
+    detailModel.avatar = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
+    detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
+    detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
+    detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').innerHtml;
+
+    if (document.querySelector('#Wrapper > div > div.box.transparent') == null) { // 有评论
+      detailModel.replyCount = document
+          .querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)')
+          .text.trim().split('回复')[0];
+    }
+
+    detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
+    detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
+
+
+    List<dom.Element> rootNode = document.querySelectorAll('div.cell[id]');
+    if (rootNode != null) {
+      print('hahaha');
+      for (var aNode in rootNode) {
+        ReplyItem replyItem = new ReplyItem();
+        replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
+        replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
+        replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
+        replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+        replies.add(replyItem);
+      }
+    }
+//    var tree = ETree.fromString(response.data);
+//
+//    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
+//    for (var aNode in aRootNode) {
+//      ReplyItem replyItem = new ReplyItem();
+//      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
+//      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
+//      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
+//      //replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
+//      replies.add(replyItem);
+//    }
+
+    detailModel.replyList = replies;
+    return detailModel;
   }
 }
