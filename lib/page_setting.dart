@@ -176,10 +176,11 @@ class _SettingPageState extends State<SettingPage> {
                           actions: <Widget>[
                             FlatButton(
                               child: Text('取消'),
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                             ),
                             FlatButton(
                                 onPressed: () {
+                                  Navigator.of(context, rootNavigator: true).pop();
                                   logout();
                                 },
                                 child: Text('退出')),
@@ -214,7 +215,7 @@ class _SettingPageState extends State<SettingPage> {
     SpHelper.sp.remove(SP_USERNAME);
     SpHelper.sp.remove(SP_AVATAR);
 
-    Navigator.of(context).pop();
+    Navigator.pop(context);
     bus.emit(EVENT_NAME_LOGIN);
   }
 

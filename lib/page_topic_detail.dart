@@ -55,7 +55,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _futureBuilderFuture = Future.wait([NetworkApi.getTopicDetails(widget.topicId), NetworkApi.getReplies(widget.topicId)])
         .then((response) => new Merged(topicsResp: response[0], repliesResp: response[1]));
@@ -105,12 +104,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         shape: BoxShape.circle,
                                         image: new DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: new NetworkImage('https:' + snapshot.data.topicsResp.list[0].member.avatar_large),
+                                          image: new NetworkImage(
+                                              'https:' + snapshot.data.topicsResp.list[0].member.avatar_large),
                                         ),
                                       ),
                                     ),
-                                    onTap: () =>
-                                        _launchURL(DioSingleton.v2exHost + '/member/' + snapshot.data.topicsResp.list[0].member.username),
+                                    onTap: () => _launchURL(DioSingleton.v2exHost +
+                                        '/member/' +
+                                        snapshot.data.topicsResp.list[0].member.username),
                                   ),
                                   new Expanded(
                                       child: new Column(
@@ -125,10 +126,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                 snapshot.data.topicsResp.list[0].member.username,
                                                 textAlign: TextAlign.left,
                                                 maxLines: 1,
-                                                style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                                                style: new TextStyle(
+                                                    fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
                                               ),
-                                              onTap: () => _launchURL(
-                                                  DioSingleton.v2exHost + '/member/' + snapshot.data.topicsResp.list[0].member.username),
+                                              onTap: () => _launchURL(DioSingleton.v2exHost +
+                                                  '/member/' +
+                                                  snapshot.data.topicsResp.list[0].member.username),
                                             ),
                                             new Icon(
                                               Icons.keyboard_arrow_right,
@@ -141,12 +144,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                 snapshot.data.topicsResp.list[0].node.title,
                                                 textAlign: TextAlign.left,
                                                 maxLines: 1,
-                                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                                                style: new TextStyle(
+                                                    fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
                                               ),
                                               onTap: () => Navigator.push(
                                                   context,
                                                   new MaterialPageRoute(
-                                                      builder: (context) => NodeTopics(NodeItem(snapshot.data.topicsResp.list[0].node.name,
+                                                      builder: (context) => NodeTopics(NodeItem(
+                                                          snapshot.data.topicsResp.list[0].node.name,
                                                           snapshot.data.topicsResp.list[0].node.title)))),
                                             ),
                                           ],
@@ -221,10 +226,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         ),
                       ),
                       snapshot.data.repliesResp.list.length == 0
-                          ? Center(
-                              child: new Text("目前尚无回复", style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
-                            )
-                          : new Card(
+                          ? Container(
+                              padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
+                              child: Center(
+                                child: new Text("目前尚无回复", style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
+                              ))
+                          : Card(
                               elevation: 0.0,
                               margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
                               color: Colors.white,
@@ -264,7 +271,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                   children: <Widget>[
                                                     new Text(
                                                       reply.member.username,
-                                                      style: new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                                      style: new TextStyle(
+                                                          fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                                     ),
                                                     new Padding(
                                                       padding: const EdgeInsets.only(left: 8.0),
@@ -328,8 +336,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true, statusBarBrightness: Brightness.light);
+    await launch(url, forceWebView: true); // , statusBarBrightness: Brightness.light
   } else {
-    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+    Fluttertoast.showToast(
+        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }
