@@ -311,7 +311,7 @@ class DioSingleton {
     return notifications;
   }
 
-  // 获取帖子详情及下面的评论信息
+  // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
   Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
     TopicDetailModel detailModel = TopicDetailModel();
     List<ReplyItem> replies = List();
@@ -320,42 +320,45 @@ class DioSingleton {
     // Use html parser and query selector
     var document = parse(response.data);
 
-    if (p == 1) {
-      if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
-        detailModel.maxPage =
-            int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
-      }
-    }
-
-    print("###详情页-评论页数：" + detailModel.maxPage.toString());
-
-    detailModel.avatar = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
+    detailModel.avatar =
+        document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
     detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').innerHtml;
 
-    if (document.querySelector('#Wrapper > div > div.box.transparent') == null) { // 有评论
-      detailModel.replyCount = document
-          .querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)')
-          .text.trim().split('回复')[0];
-    }
-
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
     detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
 
+    // 判断是否有评论
+    if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
+      // 表示有评论
+      detailModel.replyCount =
+          document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0];
 
-    List<dom.Element> rootNode = document.querySelectorAll('div.cell[id]');
-    if (rootNode != null) {
-      print('hahaha');
-      for (var aNode in rootNode) {
-        ReplyItem replyItem = new ReplyItem();
-        replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
-        replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
-        replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
-        replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
-        replies.add(replyItem);
+      if (p == 1) {
+        // 只有第一页这样的解析才对
+        if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
+          detailModel.maxPage =
+              int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
+        }
+      }
+      print("###获取详情页-评论的页数：" + detailModel.maxPage.toString());
+
+      List<dom.Element> rootNode = document.querySelectorAll('div.cell[id]');
+      if (rootNode != null) {
+        print('hahaha');
+        for (var aNode in rootNode) {
+          ReplyItem replyItem = new ReplyItem();
+          replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
+          replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
+          replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
+          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replies.add(replyItem);
+        }
       }
     }
+    detailModel.replyList = replies;
+
 //    var tree = ETree.fromString(response.data);
 //
 //    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
@@ -368,7 +371,6 @@ class DioSingleton {
 //      replies.add(replyItem);
 //    }
 
-    detailModel.replyList = replies;
     return detailModel;
   }
 }

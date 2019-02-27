@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/resp_replies.dart';
-import 'package:flutter_app/model/resp_topics.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
-import 'package:flutter_app/utils/time_base.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -85,7 +80,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       _detailModel = topicDetailModel;
       replyList.addAll(topicDetailModel.replyList);
       isUpLoading = false;
-      if (p == 2) {
+      if (p == 2) { // 其实是表示第一页的请求时
         maxPage = topicDetailModel.maxPage;
         print('maxPage:' + maxPage.toString());
       }
@@ -99,11 +94,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           child: Container(
             child: Column(
               children: <Widget>[
-                new Card(
+                Card(
                   elevation: 0.4,
                   margin: const EdgeInsets.all(8.0),
                   color: Colors.white,
-                  child: new Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       new Container(
@@ -275,13 +270,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             } else {
                               ReplyItem reply = replyList[index];
                               return GestureDetector(
-                                onTap: () {
-                                  Fluttertoast.showToast(
-                                      msg: 'clicked comment item',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      timeInSecForIos: 1,
-                                      gravity: ToastGravity.BOTTOM);
-                                },
                                 child: new Container(
                                   padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                                   child: new Row(
@@ -349,6 +337,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     ],
                                   ),
                                 ),
+                                onTap: () {
+                                  Fluttertoast.showToast(
+                                      msg: 'clicked comment item',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      timeInSecForIos: 1,
+                                      gravity: ToastGravity.BOTTOM);
+                                },
                               );
                             }
                           },

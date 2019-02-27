@@ -9,7 +9,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// 通知 listview
+// 通知列表页面
 class NotificationsListView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
