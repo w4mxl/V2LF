@@ -18,7 +18,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   int p = 1;
   int maxPage = 1;
 
-  bool isUpLoading = false;
+  bool isLoading = false;// 正在请求的过程中多次下拉或上拉会造成多次加载更多的情况，通过这个字段解决
   List<FavTopicItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
@@ -42,17 +42,15 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   }
 
   Future getTopics() async {
-    if (!isUpLoading) {
+    if (!isLoading) {
+      isLoading = true;
+      List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
       setState(() {
-        isUpLoading = true;
+        items.addAll(newEntries);
+        isLoading = false;
+        maxPage = newEntries[0].maxPage;
       });
     }
-    List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
-    setState(() {
-      items.addAll(newEntries);
-      isUpLoading = false;
-      maxPage = newEntries[0].maxPage;
-    });
   }
 
   @override

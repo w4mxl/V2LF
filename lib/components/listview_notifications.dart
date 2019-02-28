@@ -19,7 +19,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   int p = 1;
   int maxPage = 1;
 
-  bool isUpLoading = false;
+  bool isLoading = false;
   List<NotificationItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
@@ -43,17 +43,15 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   }
 
   Future getTopics() async {
-    if (!isUpLoading) {
+    if (!isLoading) {
+      isLoading = true;
+      List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
       setState(() {
-        isUpLoading = true;
+        items.addAll(newEntries);
+        isLoading = false;
+        maxPage = newEntries[0].maxPage;
       });
     }
-    List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
-    setState(() {
-      items.addAll(newEntries);
-      isUpLoading = false;
-      maxPage = newEntries[0].maxPage;
-    });
   }
 
   @override
