@@ -313,10 +313,11 @@ class DioSingleton {
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
   Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
+    print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
     List<ReplyItem> replies = List();
 
-    var response = await _dio.get(v2exHost + "/t/" + "538643" + "?p=1"); // todo 可能多页
+    var response = await _dio.get(v2exHost + "/t/" + topicId.toString() + "?p=" + p.toString()); // todo 可能多页
     // Use html parser and query selector
     var document = parse(response.data);
 
@@ -342,11 +343,8 @@ class DioSingleton {
               int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
         }
       }
-      print("###获取详情页-评论的页数：" + detailModel.maxPage.toString());
-
-      List<dom.Element> rootNode = document.querySelectorAll('div.cell[id]');
+      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
       if (rootNode != null) {
-        print('hahaha');
         for (var aNode in rootNode) {
           ReplyItem replyItem = new ReplyItem();
           replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
