@@ -21,11 +21,51 @@ class TopicDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: const Color(0xFFD8D2D1),
-      appBar: new AppBar(),
+      appBar: new AppBar(
+        title: Text('帖子详情'),
+        actions: <Widget>[
+          IconButton(icon: Icon(actions[0].icon), onPressed: () {}),
+          IconButton(icon: Icon(actions[1].icon), onPressed: () {}),
+          PopupMenuButton<Action>(
+            itemBuilder: (BuildContext context) {
+              return actions.skip(2).map<PopupMenuItem<Action>>((Action action) {
+                return PopupMenuItem<Action>(
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(action.icon),
+                      ),
+                      Text(action.title)
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
       body: new TopicDetailView(topicId),
     );
   }
 }
+
+class Action {
+  const Action({this.title, this.icon});
+
+  final String title;
+  final IconData icon;
+}
+
+const List<Action> actions = <Action>[
+  Action(title: '回复', icon: Icons.reply),
+  Action(title: '收藏', icon: Icons.favorite_border),
+  Action(title: '感谢', icon: Icons.thumb_up),
+  Action(title: '分享', icon: Icons.share),
+  Action(title: '浏览器', icon: Icons.explore),
+  Action(title: '复制链接', icon: Icons.link),
+  Action(title: '复制内容', icon: Icons.content_copy),
+];
 
 class TopicDetailView extends StatefulWidget {
   final int topicId;
@@ -214,7 +254,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   ],
                 )),
                 new Icon(
-                  Icons.comment,
+                  Icons.chat_bubble_outline,
                   size: 18.0,
                   color: Colors.grey,
                 ),
