@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
+import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
@@ -408,8 +409,35 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         style: new TextStyle(color: Colors.black87, fontSize: 14.0),
                       ),*/
           ),
+          // 附言
+          Offstage(
+            offstage: _detailModel.subtleList.length == 0,
+            child: Column(
+                children:
+                _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                  return _buildSubtle(subtle);
+                }).toList()),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSubtle(TopicSubtleItem subtle) {
+    return Column(
+      children: <Widget>[
+        Divider(),
+        Text(subtle.fade),
+        Container(
+          padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+          child: Html(
+            data: subtle.content,
+            defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+            onLinkTap: (url) {
+              _launchURL(url);
+            },
+          ),),
+      ],
     );
   }
 

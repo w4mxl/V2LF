@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
+import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/utils/constants.dart';
@@ -315,6 +316,7 @@ class DioSingleton {
   Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
+    List<TopicSubtleItem> subtleList; // 附言
     List<ReplyItem> replies = List();
 
     var response = await _dio.get(v2exHost + "/t/" + topicId.toString() + "?p=" + p.toString()); // todo 可能多页
@@ -329,6 +331,18 @@ class DioSingleton {
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
     detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
+
+    // 附言
+    List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
+    if(appendNodes!=null && appendNodes.length>0){
+      for (var node in appendNodes){
+        TopicSubtleItem subtleItem = TopicSubtleItem();
+        subtleItem.fade = node.querySelector('span.fade').text;
+        subtleItem.content = node.querySelector('div.topic_content').innerHtml;
+        subtleList.add(subtleItem);
+      }
+    }
+    detailModel.subtleList = subtleList;
 
     // 判断是否有评论
     if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
