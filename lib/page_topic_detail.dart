@@ -89,7 +89,7 @@ class _TopicDetailsState extends State<TopicDetails> {
                       // line is filled up.
                       maxLines: null,
                       // maxLength: 200,
-                      decoration: InputDecoration.collapsed(hintText: "请尽量让自己的回复有助于他人"),
+                      decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让自己的回复有助于他人"),
                       controller: _textController,
                       onChanged: (String text) => setState(() => _isComposing = text.length > 0),
                       onSubmitted: _onTextMsgSubmitted,

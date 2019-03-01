@@ -121,10 +121,18 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       _launchURL(DioSingleton.v2exHost + '/member/' + userName);
                     }
                   },
-                  child: new CircleAvatar(
-                    backgroundImage: avatar.isNotEmpty
-                        ? new NetworkImage("https:" + avatar)
-                        : new AssetImage("assets/images/ic_person.png"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: avatar.isNotEmpty
+                              ? new NetworkImage("https:" + avatar)
+                              : new AssetImage("assets/images/ic_person.png"),
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2.0,
+                        )),
                   ),
                 ),
                 // todo 这里可以根据一天的不同时间显示不同的background，增加美观
@@ -189,7 +197,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 child: new Text("关于"),
                 applicationName: "V2LF",
                 applicationVersion: "v0.0.4",
-                applicationLegalese: '© 2018 Wml',
+                applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
                   width: 64.0,
