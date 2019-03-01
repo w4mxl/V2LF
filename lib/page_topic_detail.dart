@@ -6,30 +6,135 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // 话题详情页+评论列表
-class TopicDetails extends StatelessWidget {
+class TopicDetails extends StatefulWidget {
   final int topicId;
 
   TopicDetails(this.topicId);
+
+  @override
+  _TopicDetailsState createState() => _TopicDetailsState();
+}
+
+class _TopicDetailsState extends State<TopicDetails> {
+  bool isLogin = false;
+
+  List<Action> actions = <Action>[
+    // todo 多语言处理
+    Action(id: 'reply', title: '回复', icon: Icons.reply),
+    Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
+    Action(id: 'thank', title: '感谢', icon: Icons.thumb_up),
+    Action(id: 'web', title: '浏览器', icon: Icons.explore),
+    Action(id: 'link', title: '复制链接', icon: Icons.link),
+    Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
+    Action(id: 'share', title: '分享', icon: Icons.share),
+  ];
+
+  final TextEditingController _textController = TextEditingController();
+  bool _isComposing = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // check login state
+    var spUsername = SpHelper.sp.getString(SP_USERNAME);
+    if (spUsername != null && spUsername.length > 0) {
+      isLogin = true;
+    } else {
+      // 没登录还不能'感谢'
+      actions.removeAt(2);
+    }
+  }
+
+  void _select(Action action) {
+    switch (action.id) {
+      case 'reply':
+        print(action.title);
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => SimpleDialog(
+                  contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 40.0),
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Text('取消'),
+                          onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+                        ),
+                        Expanded(
+                            child: Center(
+                                child: Text(
+                          '回复',
+                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                        ))),
+                        IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: _isComposing ? () => _onTextMsgSubmitted(_textController.text) : null,
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    TextField(
+                      autofocus: true,
+                      keyboardType: TextInputType.multiline,
+                      // Setting maxLines=null makes the text field auto-expand when one
+                      // line is filled up.
+                      maxLines: null,
+                      // maxLength: 200,
+                      decoration: InputDecoration.collapsed(hintText: "请尽量让自己的回复有助于他人"),
+                      controller: _textController,
+                      onChanged: (String text) => setState(() => _isComposing = text.length > 0),
+                      onSubmitted: _onTextMsgSubmitted,
+                    ),
+                  ],
+                ));
+
+        break;
+      case 'favorite':
+        print(action.title);
+        break;
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: const Color(0xFFD8D2D1),
       appBar: new AppBar(
-        title: Text('帖子详情'),
         actions: <Widget>[
-          IconButton(icon: Icon(actions[0].icon), onPressed: () {}),
-          IconButton(icon: Icon(actions[1].icon), onPressed: () {}),
+          Offstage(
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(actions[0].icon),
+                    onPressed: () {
+                      _select(actions[0]);
+                    }),
+                IconButton(
+                    icon: Icon(actions[1].icon),
+                    onPressed: () {
+                      _select(actions[1]);
+                    }),
+              ],
+            ),
+            offstage: !isLogin,
+          ),
           PopupMenuButton<Action>(
+            onSelected: _select,
             itemBuilder: (BuildContext context) {
               return actions.skip(2).map<PopupMenuItem<Action>>((Action action) {
                 return PopupMenuItem<Action>(
+                  value: action,
                   child: Row(
                     children: <Widget>[
                       Padding(
@@ -45,27 +150,30 @@ class TopicDetails extends StatelessWidget {
           ),
         ],
       ),
-      body: new TopicDetailView(topicId),
+      body: new TopicDetailView(widget.topicId),
     );
+  }
+
+  // Triggered when text is submitted (send button pressed).
+  Future<Null> _onTextMsgSubmitted(String text) async {
+    // Clear input text field.
+    _textController.clear();
+    _isComposing = false;
+    Navigator.of(context, rootNavigator: true).pop();
+    /*setState(() {
+
+    });*/
+    // todo send reply
   }
 }
 
 class Action {
-  const Action({this.title, this.icon});
+  const Action({this.id, this.title, this.icon});
 
+  final String id;
   final String title;
   final IconData icon;
 }
-
-const List<Action> actions = <Action>[
-  Action(title: '回复', icon: Icons.reply),
-  Action(title: '收藏', icon: Icons.favorite_border),
-  Action(title: '感谢', icon: Icons.thumb_up),
-  Action(title: '分享', icon: Icons.share),
-  Action(title: '浏览器', icon: Icons.explore),
-  Action(title: '复制链接', icon: Icons.link),
-  Action(title: '复制内容', icon: Icons.content_copy),
-];
 
 class TopicDetailView extends StatefulWidget {
   final int topicId;
