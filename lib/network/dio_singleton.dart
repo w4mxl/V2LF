@@ -316,7 +316,7 @@ class DioSingleton {
   Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
-    List<TopicSubtleItem> subtleList; // 附言
+    List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
     var response = await _dio.get(v2exHost + "/t/" + topicId.toString() + "?p=" + p.toString()); // todo 可能多页

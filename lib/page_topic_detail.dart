@@ -393,7 +393,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           ),
           // topic content
           new Container(
-            padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Html(
               data: _detailModel.content,
               defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
@@ -426,16 +426,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Widget _buildSubtle(TopicSubtleItem subtle) {
     return Column(
       children: <Widget>[
-        Divider(),
-        Text(subtle.fade),
+        Divider(height: 0,),
         Container(
-          padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0, right: 10.0),
-          child: Html(
-            data: subtle.content,
-            defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
-            onLinkTap: (url) {
-              _launchURL(url);
-            },
+          color: const Color(0xFFfffff9),
+          padding: const EdgeInsets.only(left:10.0,right: 10.0,top: 4.0,bottom: 4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(subtle.fade,style: TextStyle(color: Colors.grey, fontSize: 12.0),),
+              Html(
+                data: subtle.content,
+                padding: EdgeInsets.only(top: 4.0),
+                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 12.0),
+                onLinkTap: (url) {
+                  _launchURL(url);
+                },
+              ),
+            ],
           ),),
       ],
     );
