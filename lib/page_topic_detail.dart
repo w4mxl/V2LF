@@ -38,8 +38,7 @@ class _TopicDetailsState extends State<TopicDetails> {
     Action(id: 'share', title: '分享', icon: Icons.share),
   ];
 
-  final TextEditingController _textController = TextEditingController();
-  bool _isComposing = false;
+  String _lastEditCommentDraft;
 
   @override
   void initState() {
@@ -61,44 +60,8 @@ class _TopicDetailsState extends State<TopicDetails> {
         print(action.title);
         showDialog(
             context: context,
-            builder: (BuildContext context) => SimpleDialog(
-                  contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 40.0),
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Text('取消'),
-                          onTap: () => Navigator.of(context, rootNavigator: true).pop(),
-                        ),
-                        Expanded(
-                            child: Center(
-                                child: Text(
-                          '回复',
-                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                        ))),
-                        IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: _isComposing ? () => _onTextMsgSubmitted(_textController.text) : null,
-                        ),
-                      ],
-                    ),
-                    Divider(),
-                    TextField(
-                      autofocus: true,
-                      keyboardType: TextInputType.multiline,
-                      // Setting maxLines=null makes the text field auto-expand when one
-                      // line is filled up.
-                      maxLines: null,
-                      // maxLength: 200,
-                      decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让自己的回复有助于他人"),
-                      controller: _textController,
-                      onChanged: (String text) => setState(() => _isComposing = text.length > 0),
-                      onSubmitted: _onTextMsgSubmitted,
-                    ),
-                  ],
-                ));
-
+            builder: (BuildContext context) => DialogOfComment(_lastEditCommentDraft, _onValueChange),
+            barrierDismissible: false);
         break;
       case 'favorite':
         print(action.title);
@@ -106,6 +69,10 @@ class _TopicDetailsState extends State<TopicDetails> {
       default:
         break;
     }
+  }
+
+  void _onValueChange(String value) {
+    _lastEditCommentDraft = value;
   }
 
   @override
@@ -155,16 +122,86 @@ class _TopicDetailsState extends State<TopicDetails> {
       body: new TopicDetailView(widget.topicId),
     );
   }
+}
+
+class DialogOfComment extends StatefulWidget {
+  final String initialValue;
+  final void Function(String) onValueChange;
+
+  DialogOfComment(this.initialValue, this.onValueChange);
+
+  @override
+  _DialogOfCommentState createState() => _DialogOfCommentState();
+}
+
+class _DialogOfCommentState extends State<DialogOfComment> {
+  final TextEditingController _textController = TextEditingController();
+  bool _isComposing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController.text = widget.initialValue;
+    _isComposing = widget.initialValue.isNotEmpty;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 40.0),
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              child: Text('取消'),
+              onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+            ),
+            Expanded(
+                child: Center(
+                    child: Text(
+              '回复',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ))),
+            IconButton(
+              icon: Icon(Icons.send),
+              onPressed: _isComposing ? () => _onTextMsgSubmitted(_textController.text) : null,
+            ),
+          ],
+        ),
+        Divider(),
+        TextField(
+          autofocus: true,
+          keyboardType: TextInputType.multiline,
+          // Setting maxLines=null makes the text field auto-expand when one
+          // line is filled up.
+          maxLines: null,
+          // maxLength: 200,
+          decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让回复有助于他人"),
+          controller: _textController,
+          onChanged: (String text) => setState(() {
+                _isComposing = text.length > 0;
+                widget.onValueChange(text);
+              }),
+          onSubmitted: _onTextMsgSubmitted,
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
     // Clear input text field.
     _textController.clear();
+    widget.onValueChange("");
     _isComposing = false;
     Navigator.of(context, rootNavigator: true).pop();
-    /*setState(() {
-
-    });*/
     // todo send reply
   }
 }
