@@ -7,7 +7,6 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -38,7 +37,7 @@ class _TopicDetailsState extends State<TopicDetails> {
     Action(id: 'share', title: '分享', icon: Icons.share),
   ];
 
-  String _lastEditCommentDraft;
+  String _lastEditCommentDraft = '';
 
   @override
   void initState() {
@@ -59,9 +58,9 @@ class _TopicDetailsState extends State<TopicDetails> {
       case 'reply':
         print(action.title);
         showDialog(
-            context: context,
-            builder: (BuildContext context) => DialogOfComment(_lastEditCommentDraft, _onValueChange),
-            barrierDismissible: false);
+          context: context,
+          builder: (BuildContext context) => DialogOfComment(_lastEditCommentDraft, _onValueChange),
+        );
         break;
       case 'favorite':
         print(action.title);
