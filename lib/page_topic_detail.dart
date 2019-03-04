@@ -196,11 +196,21 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
+    bool loginResult = await dioSingleton.replyTopic("522540", "Test Comment");
+    if (loginResult) {
+      print("wml success!!!!");
+      Fluttertoast.showToast(msg: 'success!');
+      //bus.emit(EVENT_NAME_LOGIN);
+      //Navigator.of(context).pop();
+    } else {
+      //refreshCaptcha();
+    }
+
     // Clear input text field.
-    _textController.clear();
+    /*_textController.clear();
     widget.onValueChange("");
     _isComposing = false;
-    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context, rootNavigator: true).pop();*/
     // todo send reply
   }
 }

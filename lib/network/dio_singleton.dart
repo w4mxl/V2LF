@@ -51,6 +51,49 @@ class DioSingleton {
     }
   }
 
+  // 回复帖子
+  Future<bool> replyTopic(String topicId,String content ) async {
+    var response = await _dio.get("/signin");
+    var tree = ETree.fromString(response.data);
+    String once = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
+    print(once);
+
+    if (once == null || once.isEmpty)
+      return false;
+
+    _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+    _dio.options.validateStatus = (int status) {
+      return status >= 200 && status < 300 || status == 304 || status == 302;
+    };
+
+    FormData formData = new FormData.from({
+      "once": once,
+      "content": content,
+    });
+
+    try {
+      var response = await _dio.post("/t/" + topicId, data: formData);
+      if (response.statusCode == 302) {
+        // 这里实际已经评论成功了
+        _dio.options.contentType = ContentType.json;
+      }
+      print(response.headers.value("etag"));
+      return true;
+
+    } on DioError catch (e) {
+      Fluttertoast.showToast(msg: '回复失败');
+      //cookieJar.deleteAll();
+      print(e.response.data);
+      print(e.response.headers);
+      print(e.response.request);
+      return false;
+    }
+  }
+
+
   // 获取登录信息
   Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
