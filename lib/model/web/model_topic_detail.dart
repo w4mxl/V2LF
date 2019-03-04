@@ -17,7 +17,7 @@ class TopicDetailModel {
   String replyCount = '0';
   String smallGray = '';
 
-  String content;
+  String content = '';
   List<TopicSubtleItem> subtleList; // 附言
 
   int maxPage = 1; // 共有多少页数评论

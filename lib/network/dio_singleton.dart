@@ -330,8 +330,13 @@ class DioSingleton {
     detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
-    detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
 
+    // 判断是否有正文
+    if (document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div') != null) {
+      detailModel.content = document
+          .querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div')
+          .innerHtml;
+    }
     // 附言
     List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
     if(appendNodes!=null && appendNodes.length>0){
