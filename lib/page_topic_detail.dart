@@ -7,6 +7,7 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -264,71 +265,71 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       elevation: 0.4,
       margin: const EdgeInsets.all(8.0),
       color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Container(
-            padding: const EdgeInsets.all(10.0),
-            child: new Row(
-              children: <Widget>[
-                // 头像
-                GestureDetector(
-                  child: new Container(
-                    margin: const EdgeInsets.only(right: 10.0),
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage('https:' + _detailModel.avatar),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              padding: const EdgeInsets.all(10.0),
+              child: new Row(
+                children: <Widget>[
+                  // 头像
+                  GestureDetector(
+                    child: new Container(
+                      margin: const EdgeInsets.only(right: 10.0),
+                      width: 40.0,
+                      height: 40.0,
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: new NetworkImage('https:' + _detailModel.avatar),
+                        ),
                       ),
                     ),
+                    onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
                   ),
-                  onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
-                ),
-                new Expanded(
-                    child: new Column(
-                  children: <Widget>[
-                    new Container(
-                      padding: const EdgeInsets.only(bottom: 2.0),
-                      child: new Row(
-                        children: <Widget>[
-                          // 用户ID
-                          GestureDetector(
-                            child: new Text(
-                              _detailModel.createdId,
-                              textAlign: TextAlign.left,
-                              maxLines: 1,
-                              style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                  new Expanded(
+                      child: new Column(
+                    children: <Widget>[
+                      new Container(
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        child: new Row(
+                          children: <Widget>[
+                            // 用户ID
+                            GestureDetector(
+                              child: new Text(
+                                _detailModel.createdId,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
                             ),
-                            onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
-                          ),
-                          new Icon(
-                            Icons.keyboard_arrow_right,
-                            color: Colors.green,
-                            size: 16.0,
-                          ),
-                          // 节点名称
-                          GestureDetector(
-                            child: new Text(
-                              _detailModel.nodeName,
-                              textAlign: TextAlign.left,
-                              maxLines: 1,
-                              style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                            new Icon(
+                              Icons.keyboard_arrow_right,
+                              color: Colors.green,
+                              size: 16.0,
                             ),
-                            onTap: () => Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) =>
-                                        NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
-                          ),
-                        ],
+                            // 节点名称
+                            GestureDetector(
+                              child: new Text(
+                                _detailModel.nodeName,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                          NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
+                      Row(
                         children: <Widget>[
                           new Icon(
                             Icons.keyboard,
@@ -337,88 +338,72 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           ),
                           new Padding(
                             padding: const EdgeInsets.only(left: 4.0),
-                            child: Html(
-                              // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
-                              data: _detailModel.smallGray,
-                              defaultTextStyle: TextStyle(color: Colors.grey[500], fontSize: 12.0),
-                              onLinkTap: (url) {
-                                if (UrlHelper.canLaunchInApp(context, url)) {
-                                  return;
-                                } else if (url.contains("/member/")) {
-                                  // @xxx 需要补齐 base url
-                                  url = DioSingleton.v2exHost + url;
-                                  print(url);
-                                }
-                                _launchURL(url);
-                              },
+                            child: Text(
+                              _detailModel.smallGray,
+                              style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
                             ),
-//                                        new Text(
-//                                          _detailModel.lastReplyTime,
-//                                          style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
-//                                        ),
                           )
                         ],
-                      ),
-                    )
-                  ],
-                )),
-                new Icon(
-                  Icons.chat_bubble_outline,
-                  size: 18.0,
-                  color: Colors.grey,
-                ),
-                new Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: new Text(
-                    _detailModel.replyCount,
-                    style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                      )
+                    ],
+                  )),
+                  new Icon(
+                    Icons.chat_bubble_outline,
+                    size: 18.0,
+                    color: Colors.grey,
                   ),
-                )
-              ],
-            ),
-          ),
-          // topic title
-          new Container(
-            padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-            width: 500.0,
-            child: new Text(
-              _detailModel.topicTitle,
-              softWrap: true,
-              style: new TextStyle(
-                color: Colors.black87,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+                  new Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: new Text(
+                      _detailModel.replyCount,
+                      style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                    ),
+                  )
+                ],
               ),
             ),
-          ),
-          // topic content
-          new Container(
-            padding: const EdgeInsets.all(10.0),
-            child: Html(
-              data: _detailModel.content,
-              defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
-              onLinkTap: (url) {
-                _launchURL(url);
-              },
+            // topic title
+            new Container(
+              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+              width: 500.0,
+              child: new Text(
+                _detailModel.topicTitle,
+                softWrap: true,
+                style: new TextStyle(
+                  color: Colors.black87,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            /*MarkdownBody(
-                          data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),*/
-            /*child: new Text(
-                        result.data.list[0].content,
-                        softWrap: true,
-                        style: new TextStyle(color: Colors.black87, fontSize: 14.0),
-                      ),*/
-          ),
-          // 附言
-          Offstage(
-            offstage: _detailModel.subtleList.length == 0,
-            child: Column(
-                children:
-                _detailModel.subtleList.map((TopicSubtleItem subtle) {
-                  return _buildSubtle(subtle);
-                }).toList()),
-          ),
-        ],
+            // topic content
+            new Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Html(
+                data: _detailModel.content,
+                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                onLinkTap: (url) {
+                  _launchURL(url);
+                },
+              ),
+              /*MarkdownBody(
+                            data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),*/
+              /*child: new Text(
+                          result.data.list[0].content,
+                          softWrap: true,
+                          style: new TextStyle(color: Colors.black87, fontSize: 14.0),
+                        ),*/
+            ),
+            // 附言
+            Offstage(
+              offstage: _detailModel.subtleList.length == 0,
+              child: Column(
+                  children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                return _buildSubtle(subtle);
+              }).toList()),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -426,14 +411,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Widget _buildSubtle(TopicSubtleItem subtle) {
     return Column(
       children: <Widget>[
-        Divider(height: 0,),
+        Divider(
+          height: 0,
+        ),
         Container(
           color: const Color(0xFFfffff9),
-          padding: const EdgeInsets.only(left:10.0,right: 10.0,top: 4.0,bottom: 4.0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(subtle.fade,style: TextStyle(color: Colors.grey, fontSize: 12.0),),
+              Text(
+                subtle.fade,
+                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+              ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
@@ -443,7 +433,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 },
               ),
             ],
-          ),),
+          ),
+        ),
       ],
     );
   }
@@ -497,17 +488,53 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               children: <Widget>[
                                 new Row(
                                   children: <Widget>[
+                                    // 评论用户ID
                                     new Text(
                                       reply.userName,
                                       style: new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                     ),
+                                    // 评论时间和平台
                                     new Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
+                                      padding: const EdgeInsets.only(left: 6.0, right: 4.0),
                                       child: new Text(
                                         reply.lastReplyTime,
                                         style: new TextStyle(
                                           color: const Color(0xFFcccccc),
                                           fontSize: 12.0,
+                                        ),
+                                      ),
+                                    ),
+                                    // 获得感谢数
+                                    Offstage(
+                                      offstage: reply.favorites.isEmpty,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.favorite,
+                                            color: Color(0xFFcccccc),
+                                            size: 14.0,
+                                          ),
+                                          Text(
+                                            reply.favorites,
+                                            style: TextStyle(
+                                              color: const Color(0xFFcccccc),
+                                              fontSize: 12.0,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Material(
+                                      color: Color(0xFFf0f0f0),
+                                      shape: new StadiumBorder(),
+                                      child: new Container(
+                                        width: 20.0,
+                                        height: 14.0,
+                                        alignment: Alignment.center,
+                                        child: new Text(
+                                          reply.number,
+                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
                                         ),
                                       ),
                                     ),

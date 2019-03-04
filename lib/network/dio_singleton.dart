@@ -327,7 +327,7 @@ class DioSingleton {
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
-    detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').innerHtml;
+    detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
     detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
@@ -364,7 +364,15 @@ class DioSingleton {
           replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
           replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
           replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
+          if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
+            replyItem.favorites = aNode
+                .querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']")
+                .text
+                .split(" ")[1];
+          }
+          replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
           replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+
           replies.add(replyItem);
         }
       }

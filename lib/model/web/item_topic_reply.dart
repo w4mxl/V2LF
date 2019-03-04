@@ -5,4 +5,6 @@ class ReplyItem {
   String lastReplyTime = '';
   String content = '';
   String replyId = '';
+  String favorites = '';
+  String number = ''; // 楼层
 }
