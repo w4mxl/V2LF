@@ -16,6 +16,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 final key = GlobalKey<_TopicDetailViewState>();
 
+bool isLogin = false;
+
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
   final int topicId;
@@ -27,7 +29,6 @@ class TopicDetails extends StatefulWidget {
 }
 
 class _TopicDetailsState extends State<TopicDetails> {
-  bool isLogin = false;
 
   List<Action> actions = <Action>[
     // todo 多语言处理
@@ -604,39 +605,46 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         ],
                       ),
                     ),
-                    onTap: () {
-                      // 点击评论列表item，弹出操作 bottom sheet
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: Icon(Icons.reply),
-                                  title: Text('回复'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    select(Action(id:'reply_comment',title: reply.userName));
-                                  },
-                                ),
-                                ListTile(
-                                  leading: Icon(Icons.thumb_up),
-                                  title: Text('感谢'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                    leading: Icon(Icons.forum),
-                                    title: Text('查看对话'),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    }),
-                              ],
-                            );
-                          });
-                    },
+                      onTap: () {
+                        if (isLogin) {
+                          // 点击评论列表item，弹出操作 bottom sheet
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: Icon(Icons.reply),
+                                      title: Text('回复'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        select(Action(id: 'reply_comment', title: reply.userName));
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.thumb_up),
+                                      title: Text('感谢'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    ListTile(
+                                        leading: Icon(Icons.forum),
+                                        title: Text('查看对话'),
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        }),
+                                  ],
+                                );
+                              });
+                        } else {
+                          Fluttertoast.showToast(msg: '登录后有更多操作 😬',
+                              toastLength: Toast.LENGTH_SHORT,
+                              timeInSecForIos: 1,
+                              gravity: ToastGravity.CENTER);
+                        }
+                      }
                   );
                 }
               },
