@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/bottomsheet_comment.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
@@ -109,7 +110,7 @@ class _TopicDetailsState extends State<TopicDetails> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(action.icon),
+                        child: IconTheme.merge(data: IconThemeData(color: Colors.black45), child: Icon(action.icon)),
                       ),
                       Text(action.title)
                     ],
@@ -305,7 +306,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   Card detailCard(BuildContext context) {
     return Card(
-      elevation: 0.4,
+      elevation: 0.0,
       margin: const EdgeInsets.all(8.0),
       color: Colors.white,
       child: Padding(
@@ -429,13 +430,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   _launchURL(url);
                 },
               ),
-              /*MarkdownBody(
-                            data: result.data.list[0].content, onTapLink: (href) => _launchURL(href)),*/
-              /*child: new Text(
-                          result.data.list[0].content,
-                          softWrap: true,
-                          style: new TextStyle(color: Colors.black87, fontSize: 14.0),
-                        ),*/
             ),
             // 附言
             Offstage(
@@ -504,6 +498,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 } else {
                   ReplyItem reply = replyList[index];
                   return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     child: new Container(
                       padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                       child: new Row(
@@ -607,11 +602,36 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       ),
                     ),
                     onTap: () {
-                      Fluttertoast.showToast(
-                          msg: 'clicked comment item',
-                          toastLength: Toast.LENGTH_SHORT,
-                          timeInSecForIos: 1,
-                          gravity: ToastGravity.BOTTOM);
+                      // 点击评论列表item，弹出操作 bottom sheet
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: Icon(Icons.reply),
+                                  title: Text('回复'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.thumb_up),
+                                  title: Text('感谢'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                    leading: Icon(Icons.forum),
+                                    title: Text('查看对话'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    }),
+                              ],
+                            );
+                          });
                     },
                   );
                 }
@@ -625,7 +645,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 );
               },
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(), // 禁用滚动事件
             ),
           );
   }
