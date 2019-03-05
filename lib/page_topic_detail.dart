@@ -68,6 +68,16 @@ class _TopicDetailsState extends State<TopicDetails> {
       case 'favorite':
         print(action.title);
         break;
+      case 'reply_comment':
+        print(action.title);
+        _lastEditCommentDraft = _lastEditCommentDraft + " @" + action.title + " ";
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange);
+            }
+        );
+        break;
       default:
         break;
     }
@@ -121,7 +131,7 @@ class _TopicDetailsState extends State<TopicDetails> {
           ),
         ],
       ),
-      body: new TopicDetailView(key, widget.topicId),
+      body: new TopicDetailView(key, widget.topicId,_select),
     );
   }
 }
@@ -213,18 +223,11 @@ class _DialogOfCommentState extends State<DialogOfComment> {
   }
 }
 
-class Action {
-  const Action({this.id, this.title, this.icon});
-
-  final String id;
-  final String title;
-  final IconData icon;
-}
-
 class TopicDetailView extends StatefulWidget {
   final int topicId;
+  final void Function(Action action) select;
 
-  TopicDetailView(Key key, this.topicId) : super(key: key);
+  TopicDetailView(Key key, this.topicId, this.select) : super(key: key);
 
   @override
   _TopicDetailViewState createState() => _TopicDetailViewState();
@@ -288,7 +291,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     // 详情view
                     detailCard(context),
                     // 评论view
-                    commentCard(),
+                    commentCard(widget.select),
                   ],
                 ),
               ),
@@ -476,7 +479,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     );
   }
 
-  StatelessWidget commentCard() {
+  StatelessWidget commentCard(void Function(Action action) select) {
     return replyList.length == 0
         ? Container(
             // 无回复
@@ -614,6 +617,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   title: Text('回复'),
                                   onTap: () {
                                     Navigator.pop(context);
+                                    select(Action(id:'reply_comment',title: reply.userName));
                                   },
                                 ),
                                 ListTile(
@@ -674,6 +678,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       }
     });
   }
+}
+
+class Action {
+  const Action({this.id, this.title, this.icon});
+
+  final String id;
+  final String title;
+  final IconData icon;
 }
 
 // 外链跳转
