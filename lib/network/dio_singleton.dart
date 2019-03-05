@@ -52,7 +52,7 @@ class DioSingleton {
   }
 
   // 回复帖子
-  Future<bool> replyTopic(String topicId,String content ) async {
+  Future<bool> replyTopic(String topicId, String content) async {
     var response = await _dio.get("/signin");
     var tree = ETree.fromString(response.data);
     String once = tree
@@ -61,8 +61,9 @@ class DioSingleton {
         .attributes["value"];
     print(once);
 
-    if (once == null || once.isEmpty)
+    if (once == null || once.isEmpty) {
       return false;
+    }
 
     _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
     _dio.options.validateStatus = (int status) {
@@ -76,13 +77,18 @@ class DioSingleton {
 
     try {
       var response = await _dio.post("/t/" + topicId, data: formData);
-      if (response.statusCode == 302) {
-        // 这里实际已经评论成功了
-        _dio.options.contentType = ContentType.json;
-      }
-      print(response.headers.value("etag"));
-      return true;
+      _dio.options.contentType = ContentType.json; // 还原
+      var document = parse(response.data);
+      if (document.querySelector('#Wrapper > div > div > div.problem') != null) {
+        // 回复失败
+        String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
 
+        Fluttertoast.showToast(msg: '$problem');
+        return false;
+      }
+
+      // 回复成功
+      return true;
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '回复失败');
       //cookieJar.deleteAll();
@@ -92,7 +98,6 @@ class DioSingleton {
       return false;
     }
   }
-
 
   // 获取登录信息
   Future<LoginFormData> parseLoginForm() async {
@@ -370,20 +375,19 @@ class DioSingleton {
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
-    detailModel.smallGray = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
+    detailModel.smallGray =
+        document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
 
     // 判断是否有正文
     if (document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div') != null) {
-      detailModel.content = document
-          .querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div')
-          .innerHtml;
+      detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
     }
     // 附言
     List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
-    if(appendNodes!=null && appendNodes.length>0){
-      for (var node in appendNodes){
+    if (appendNodes != null && appendNodes.length > 0) {
+      for (var node in appendNodes) {
         TopicSubtleItem subtleItem = TopicSubtleItem();
         subtleItem.fade = node.querySelector('span.fade').text;
         subtleItem.content = node.querySelector('div.topic_content').innerHtml;
@@ -413,10 +417,8 @@ class DioSingleton {
           replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
           replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
           if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
-            replyItem.favorites = aNode
-                .querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']")
-                .text
-                .split(" ")[1];
+            replyItem.favorites =
+                aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
           }
           replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
           replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;

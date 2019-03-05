@@ -13,6 +13,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+final key = GlobalKey<_TopicDetailViewState>();
+
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
   final int topicId;
@@ -59,7 +61,7 @@ class _TopicDetailsState extends State<TopicDetails> {
         print(action.title);
         showDialog(
           context: context,
-          builder: (BuildContext context) => DialogOfComment(_lastEditCommentDraft, _onValueChange),
+          builder: (BuildContext context) => DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange),
         );
         break;
       case 'favorite':
@@ -118,16 +120,17 @@ class _TopicDetailsState extends State<TopicDetails> {
           ),
         ],
       ),
-      body: new TopicDetailView(widget.topicId),
+      body: new TopicDetailView(key, widget.topicId),
     );
   }
 }
 
 class DialogOfComment extends StatefulWidget {
+  final int topicId;
   final String initialValue;
   final void Function(String) onValueChange;
 
-  DialogOfComment(this.initialValue, this.onValueChange);
+  DialogOfComment(this.topicId, this.initialValue, this.onValueChange);
 
   @override
   _DialogOfCommentState createState() => _DialogOfCommentState();
@@ -196,22 +199,16 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
-    bool loginResult = await dioSingleton.replyTopic("522540", "Test Comment");
+    bool loginResult = await dioSingleton.replyTopic(widget.topicId.toString(), text);
     if (loginResult) {
-      print("wml success!!!!");
-      Fluttertoast.showToast(msg: 'success!');
-      //bus.emit(EVENT_NAME_LOGIN);
-      //Navigator.of(context).pop();
-    } else {
-      //refreshCaptcha();
+      Fluttertoast.showToast(msg: '回复成功!');
+      // Clear input text field.
+      _textController.clear();
+      widget.onValueChange("");
+      _isComposing = false;
+      Navigator.of(context, rootNavigator: true).pop();
+      key.currentState._onRefresh();
     }
-
-    // Clear input text field.
-    /*_textController.clear();
-    widget.onValueChange("");
-    _isComposing = false;
-    Navigator.of(context, rootNavigator: true).pop();*/
-    // todo send reply
   }
 }
 
@@ -226,7 +223,7 @@ class Action {
 class TopicDetailView extends StatefulWidget {
   final int topicId;
 
-  TopicDetailView(this.topicId);
+  TopicDetailView(Key key, this.topicId) : super(key: key);
 
   @override
   _TopicDetailViewState createState() => _TopicDetailViewState();
