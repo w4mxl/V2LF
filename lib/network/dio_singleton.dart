@@ -103,8 +103,8 @@ class DioSingleton {
   Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
     LoginFormData loginFormData = new LoginFormData();
-    _dio.options.contentType = ContentType.json;
-    _dio.options.responseType = ResponseType.JSON;
+    //_dio.options.contentType = ContentType.json;
+    //_dio.options.responseType = ResponseType.JSON;
     _dio.options.headers = {
       'user-agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
@@ -139,6 +139,7 @@ class DioSingleton {
 
     _dio.options.responseType = ResponseType.STREAM;
     response = await _dio.get("/_captcha?once=" + loginFormData.once);
+    _dio.options.responseType = ResponseType.JSON; // 还原
     var uint8list = await consolidateHttpClientResponseBytes(response.data);
     if (uint8list.lengthInBytes == 0) throw new Exception('NetworkImage is an empty file');
     loginFormData.bytes = uint8list;
@@ -155,7 +156,7 @@ class DioSingleton {
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
     };
     _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    _dio.options.responseType = ResponseType.JSON;
+    //_dio.options.responseType = ResponseType.JSON;
     _dio.options.validateStatus = (int status) {
       return status >= 200 && status < 300 || status == 304 || status == 302;
     };
@@ -170,13 +171,13 @@ class DioSingleton {
 
     try {
       var response = await _dio.post("/signin", data: formData);
+      _dio.options.contentType = ContentType.json; // 还原
       if (response.statusCode == 302) {
         // 这里实际已经登录成功了
         _dio.options.headers = {
           'user-agent':
               'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
         };
-        _dio.options.contentType = ContentType.json;
         response = await _dio.get(v2exHost);
       }
       var tree = ETree.fromString(response.data);

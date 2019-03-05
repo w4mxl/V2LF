@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/bottomsheet_comment.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
@@ -33,8 +32,8 @@ class _TopicDetailsState extends State<TopicDetails> {
   List<Action> actions = <Action>[
     // todo 多语言处理
     Action(id: 'reply', title: '回复', icon: Icons.reply),
+    Action(id: 'thank', title: '感谢', icon: Icons.local_florist),
     Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
-    Action(id: 'thank', title: '感谢', icon: Icons.thumb_up),
     Action(id: 'web', title: '浏览器', icon: Icons.explore),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
@@ -51,10 +50,10 @@ class _TopicDetailsState extends State<TopicDetails> {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       isLogin = true;
-    } else {
+    } /*else {
       // 没登录还不能'感谢'
       actions.removeAt(2);
-    }
+    }*/
   }
 
   void _select(Action action) {
@@ -107,6 +106,11 @@ class _TopicDetailsState extends State<TopicDetails> {
                     onPressed: () {
                       _select(actions[1]);
                     }),
+                IconButton(
+                    icon: Icon(actions[2].icon),
+                    onPressed: () {
+                      _select(actions[2]);
+                    }),
               ],
             ),
             offstage: !isLogin,
@@ -114,13 +118,13 @@ class _TopicDetailsState extends State<TopicDetails> {
           PopupMenuButton<Action>(
             onSelected: _select,
             itemBuilder: (BuildContext context) {
-              return actions.skip(2).map<PopupMenuItem<Action>>((Action action) {
+              return actions.skip(3).map<PopupMenuItem<Action>>((Action action) {
                 return PopupMenuItem<Action>(
                   value: action,
                   child: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
+                        padding: const EdgeInsets.only(right: 10.0),
                         child: IconTheme.merge(data: IconThemeData(color: Colors.black45), child: Icon(action.icon)),
                       ),
                       Text(action.title)
@@ -556,6 +560,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             color: Color(0xFFcccccc),
                                             size: 14.0,
                                           ),
+                                          SizedBox(width: 2.0),
                                           Text(
                                             reply.favorites,
                                             style: TextStyle(
@@ -623,7 +628,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       },
                                     ),
                                     ListTile(
-                                      leading: Icon(Icons.thumb_up),
+                                      leading: Icon(Icons.local_florist),
                                       title: Text('感谢'),
                                       onTap: () {
                                         Navigator.pop(context);
