@@ -131,7 +131,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
                         border: Border.all(
                           color: Colors.white,
-                          width: 2.0,
+                          width: 1.0,
                         )),
                   ),
                 ),

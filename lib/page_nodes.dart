@@ -160,7 +160,7 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    return Center(child: Text('┐(´-｀)┌'));
   }
 
   @override
@@ -169,7 +169,7 @@ class DataSearch extends SearchDelegate<String> {
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.filter_list),
+            leading: Icon(Icons.forward),
             title: RichText(
                 text: TextSpan(
                     text: suggestionNodes[index].nodeName.substring(0, query.length),
