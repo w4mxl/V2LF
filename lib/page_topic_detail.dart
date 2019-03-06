@@ -247,6 +247,25 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     }
   }
 
+  Future _thankReply(String replyID) async {
+    setState(() {
+      _saving = true;
+    });
+    bool isSuccess = await dioSingleton.thankTopicReply(replyID, _detailModel.token);
+    if (isSuccess) {
+      setState(() {
+        _saving = false;
+        // todo 更新UI
+        Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
+      });
+    } else {
+      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
+      setState(() {
+        _saving = false;
+      });
+    }
+  }
+
   void _select(Action action) {
     switch (action.id) {
       case 'reply':
@@ -303,6 +322,31 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             builder: (BuildContext context) {
               return DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange);
             });
+        break;
+      case 'thank_reply':
+        print(action.title);
+        if (_detailModel.token.isNotEmpty) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                content: Text('你确定要向 TA 发送谢意？'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('取消'),
+                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                  ),
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        // 感谢回复
+                        _thankReply(action.title);
+                      },
+                      child: Text('确定')),
+                ],
+              ));
+        } else {
+          Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
+        }
         break;
       default:
         break;
@@ -709,6 +753,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       title: Text('感谢回复者'),
                                       onTap: () {
                                         Navigator.pop(context);
+                                        select(Action(id: 'thank_reply', title: reply.replyId));
                                       },
                                     ),
                                     ListTile(

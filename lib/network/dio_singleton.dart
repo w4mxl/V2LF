@@ -432,7 +432,8 @@ class DioSingleton {
           }
           replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
           replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
-
+          replyItem.replyId = aNode.attributes["id"].substring(2);
+          print(replyItem.replyId);
           replies.add(replyItem);
         }
       }
@@ -476,8 +477,8 @@ class DioSingleton {
   }
 
   // 感谢某条评论
-  Future<bool> thankTopicComment(int topicId, String token) async {
-    var response = await _dio.post("/thank/topic/" + topicId.toString() + "?t=" + token);
+  Future<bool> thankTopicReply(String replyID, String token) async {
+    var response = await _dio.post("/thank/reply/" + replyID + "?t=" + token);
     if (response.statusCode == 200 && response.data.toString().isEmpty) {
       return true;
     }
