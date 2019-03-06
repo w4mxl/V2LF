@@ -19,6 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  DateTime _lastPressedAt; //上次点击时间
   Locale _locale;
 
   @override
@@ -72,45 +73,56 @@ class _MyAppState extends State<MyApp> {
   const TabData(title: '最近', key: 'recent'),*/
     ];
 
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: _locale,
-      localizationsDelegates: [
-        const MyLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
-        GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
-      ],
-      // Full Chinese support for CN, TW, and HK
-      supportedLocales: [
-        const Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'), // generic simplified Chinese 'zh_Hans'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), // generic traditional Chinese 'zh_Hant'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'), // 'zh_Hans_CN'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'), // 'zh_Hant_TW'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
-        const Locale('en', ''),
-      ],
-      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: 'Whitney'),
-      home: new DefaultTabController(
-          length: tabs.length,
-          child: new Scaffold(
-              appBar: AppBar(
-                title: new TabBar(
-                  isScrollable: true,
-                  tabs: tabs.map((TabData choice) {
-                    return new Tab(
-                      text: choice.title,
-                    );
+    return WillPopScope(
+      child: new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: _locale,
+        localizationsDelegates: [
+          const MyLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
+          GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
+        ],
+        // Full Chinese support for CN, TW, and HK
+        supportedLocales: [
+          const Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'), // generic simplified Chinese 'zh_Hans'
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), // generic traditional Chinese 'zh_Hant'
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'), // 'zh_Hans_CN'
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'), // 'zh_Hant_TW'
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
+          const Locale('en', ''),
+        ],
+        theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: 'Whitney'),
+        home: new DefaultTabController(
+            length: tabs.length,
+            child: new Scaffold(
+                appBar: AppBar(
+                  title: new TabBar(
+                    isScrollable: true,
+                    tabs: tabs.map((TabData choice) {
+                      return new Tab(
+                        text: choice.title,
+                      );
+                    }).toList(),
+                  ),
+                  elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+                ),
+                body: new TabBarView(
+                  children: tabs.map((TabData choice) {
+                    return new TopicListView(choice.key);
                   }).toList(),
                 ),
-                elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
-              ),
-              body: new TabBarView(
-                children: tabs.map((TabData choice) {
-                  return new TopicListView(choice.key);
-                }).toList(),
-              ),
-              drawer: new DrawerLeft())),
+                drawer: new DrawerLeft())),
+      ),
+      onWillPop: () async {
+        if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+          // 1秒内连续按两次返回键退出
+          // 两次点击间隔超过1秒则重新计时
+          _lastPressedAt = DateTime.now();
+          return false;
+        }
+        return true;
+      },
     );
 
     /*Future<bool> loginState() async {
