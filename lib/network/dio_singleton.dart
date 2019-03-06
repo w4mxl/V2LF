@@ -464,7 +464,7 @@ class DioSingleton {
     return false;
   }
 
-  // 收藏/取消收藏 主题
+  // 收藏/取消收藏 主题 todo 发现操作过其中一次后，再次请求虽然也返回200，但是并没有实际成功！！
   Future<bool> favoriteTopic(bool isFavorite, int topicId, String token) async {
     String url = isFavorite
         ? ("/unfavorite/topic/" + topicId.toString() + "?t=" + token)
