@@ -165,7 +165,7 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: Html( // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                                 data: notificationItem.title,
-                                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 15.0),
                                 onLinkTap: (url) {
                                   if (UrlHelper.canLaunchInApp(context, url)) {
                                     return;
@@ -186,7 +186,7 @@ class TopicItemView extends StatelessWidget {
                                 margin: const EdgeInsets.only(top: 8.0),
                                 child: Html(
                                   data: notificationItem.reply,
-                                  defaultTextStyle: TextStyle(color: Colors.black, fontSize: 16.0),
+                                  defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
                                   backgroundColor: Colors.grey[100],
                                   padding: EdgeInsets.all(4.0),
                                   onLinkTap: (url) {

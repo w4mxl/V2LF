@@ -20,6 +20,10 @@ class TopicDetailModel {
   String content = '';
   List<TopicSubtleItem> subtleList; // 附言
 
+  String token = ''; // 用于收藏、感谢、忽略等操作
+  bool isFavorite = false; // 是否已收藏
+  bool isThank = false; // 是否已感谢
+
   int maxPage = 1; // 共有多少页数评论
 
   List<ReplyItem> replyList;

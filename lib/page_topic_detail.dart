@@ -65,6 +65,10 @@ class _TopicDetailsState extends State<TopicDetails> {
           builder: (BuildContext context) => DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange),
         );
         break;
+      case 'thank':
+        print(action.title);
+
+        break;
       case 'favorite':
         print(action.title);
         break;
@@ -629,7 +633,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     ),
                                     ListTile(
                                       leading: Icon(Icons.local_florist),
-                                      title: Text('感谢'),
+                                      title: Text('感谢回复者'),
                                       onTap: () {
                                         Navigator.pop(context);
                                       },
@@ -657,8 +661,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 return new Container(
                   margin: const EdgeInsets.only(left: 45.0),
                   width: 300.0,
-                  height: 0.2,
-                  color: Colors.black87,
+                  height: 1,
+                  color: Theme.of(context).dividerColor,
                 );
               },
               shrinkWrap: true,
