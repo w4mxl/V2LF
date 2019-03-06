@@ -12,6 +12,7 @@ import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 final key = GlobalKey<_TopicDetailViewState>();
 
@@ -28,20 +29,6 @@ class TopicDetails extends StatefulWidget {
 }
 
 class _TopicDetailsState extends State<TopicDetails> {
-
-  List<Action> actions = <Action>[
-    // todo 多语言处理
-    Action(id: 'reply', title: '回复', icon: Icons.reply),
-    Action(id: 'thank', title: '感谢', icon: Icons.local_florist),
-    Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
-    Action(id: 'web', title: '浏览器', icon: Icons.explore),
-    Action(id: 'link', title: '复制链接', icon: Icons.link),
-    Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
-    Action(id: 'share', title: '分享', icon: Icons.share),
-  ];
-
-  String _lastEditCommentDraft = '';
-
   @override
   void initState() {
     super.initState();
@@ -50,98 +37,16 @@ class _TopicDetailsState extends State<TopicDetails> {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       isLogin = true;
-    } /*else {
+    }
+    /*else {
       // 没登录还不能'感谢'
       actions.removeAt(2);
     }*/
   }
 
-  void _select(Action action) {
-    switch (action.id) {
-      case 'reply':
-        print(action.title);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange),
-        );
-        break;
-      case 'thank':
-        print(action.title);
-
-        break;
-      case 'favorite':
-        print(action.title);
-        break;
-      case 'reply_comment':
-        print(action.title);
-        _lastEditCommentDraft = _lastEditCommentDraft + " @" + action.title + " ";
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange);
-            }
-        );
-        break;
-      default:
-        break;
-    }
-  }
-
-  void _onValueChange(String value) {
-    _lastEditCommentDraft = value;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: const Color(0xFFD8D2D1),
-      appBar: new AppBar(
-        actions: <Widget>[
-          Offstage(
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(actions[0].icon),
-                    onPressed: () {
-                      _select(actions[0]);
-                    }),
-                IconButton(
-                    icon: Icon(actions[1].icon),
-                    onPressed: () {
-                      _select(actions[1]);
-                    }),
-                IconButton(
-                    icon: Icon(actions[2].icon),
-                    onPressed: () {
-                      _select(actions[2]);
-                    }),
-              ],
-            ),
-            offstage: !isLogin,
-          ),
-          PopupMenuButton<Action>(
-            onSelected: _select,
-            itemBuilder: (BuildContext context) {
-              return actions.skip(3).map<PopupMenuItem<Action>>((Action action) {
-                return PopupMenuItem<Action>(
-                  value: action,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconTheme.merge(data: IconThemeData(color: Colors.black45), child: Icon(action.icon)),
-                      ),
-                      Text(action.title)
-                    ],
-                  ),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: new TopicDetailView(key, widget.topicId,_select),
-    );
+    return new TopicDetailView(key, widget.topicId);
   }
 }
 
@@ -234,15 +139,29 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
 class TopicDetailView extends StatefulWidget {
   final int topicId;
-  final void Function(Action action) select;
 
-  TopicDetailView(Key key, this.topicId, this.select) : super(key: key);
+  TopicDetailView(Key key, this.topicId) : super(key: key);
 
   @override
   _TopicDetailViewState createState() => _TopicDetailViewState();
 }
 
 class _TopicDetailViewState extends State<TopicDetailView> {
+  bool _saving = false;
+
+  List<Action> actions = <Action>[
+    // todo 多语言处理
+    Action(id: 'reply', title: '回复', icon: Icons.reply),
+    Action(id: 'thank', title: '感谢', icon: Icons.local_florist),
+    Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
+    Action(id: 'web', title: '浏览器', icon: Icons.explore),
+    Action(id: 'link', title: '复制链接', icon: Icons.link),
+    Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
+    Action(id: 'share', title: '分享', icon: Icons.share),
+  ];
+
+  String _lastEditCommentDraft = '';
+
   int p = 1;
   int maxPage = 1;
 
@@ -288,32 +207,147 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     }
   }
 
+  void _onValueChange(String value) {
+    _lastEditCommentDraft = value;
+  }
+
+  Future _thankTopic() async {
+    bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
+    if (isSuccess) {
+      setState(() {
+        _saving = false;
+        _detailModel.isThank = true;
+      });
+    } else {
+      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
+    }
+  }
+
+  void _select(Action action) {
+    switch (action.id) {
+      case 'reply':
+        print(action.title);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange),
+        );
+        break;
+      case 'thank':
+        print(action.title);
+        if (_detailModel.isThank) {
+          Fluttertoast.showToast(msg: '已经发送过感谢了 😉', gravity: ToastGravity.CENTER);
+        } else {
+          if (_detailModel.token.isNotEmpty) {
+            // 发送感谢
+            setState(() {
+              _saving = true;
+            });
+            _thankTopic();
+          } else {
+            Fluttertoast.showToast(msg: '操作失败,无法获取 once 😞', gravity: ToastGravity.CENTER);
+          }
+        }
+
+        break;
+      case 'favorite':
+        print(action.title);
+        if (_detailModel.isFavorite) {
+          // 取消收藏
+        } else {
+          // 收藏
+        }
+        break;
+      case 'reply_comment':
+        print(action.title);
+        _lastEditCommentDraft = _lastEditCommentDraft + " @" + action.title + " ";
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DialogOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange);
+            });
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (_detailModel != null) {
-      return RefreshIndicator(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    // 详情view
-                    detailCard(context),
-                    // 评论view
-                    commentCard(widget.select),
-                  ],
-                ),
-              ),
-              controller: _scrollController,
+    return new Scaffold(
+      backgroundColor: const Color(0xFFD8D2D1),
+      appBar: new AppBar(
+        actions: <Widget>[
+          Offstage(
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(actions[0].icon),
+                    onPressed: () {
+                      _select(actions[0]);
+                    }),
+                IconButton(
+                    icon: Icon(actions[1].icon),
+                    onPressed: () {
+                      _select(actions[1]);
+                    }),
+                IconButton(
+                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? Icons.favorite : actions[2].icon),
+                    onPressed: () {
+                      _select(actions[2]);
+                    }),
+              ],
             ),
+            offstage: !isLogin,
           ),
-          onRefresh: _onRefresh);
-    }
-    return new Container(
-        padding: const EdgeInsets.all(40.0),
-        child: new Center(
-          child: new CircularProgressIndicator(),
-        ));
+          PopupMenuButton<Action>(
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return actions.skip(3).map<PopupMenuItem<Action>>((Action action) {
+                return PopupMenuItem<Action>(
+                  value: action,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: IconTheme.merge(data: IconThemeData(color: Colors.black45), child: Icon(action.icon)),
+                      ),
+                      Text(action.title)
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
+      //body: new TopicDetailView(key, widget.topicId,_select),
+      body: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: _detailModel != null
+            ? RefreshIndicator(
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          // 详情view
+                          detailCard(context),
+                          // 评论view
+                          commentCard(_select),
+                        ],
+                      ),
+                    ),
+                    controller: _scrollController,
+                  ),
+                ),
+                onRefresh: _onRefresh)
+            : new Container(
+                padding: const EdgeInsets.all(40.0),
+                child: new Center(
+                  child: new CircularProgressIndicator(),
+                )),
+      ),
+    );
   }
 
   Card detailCard(BuildContext context) {
@@ -510,110 +544,111 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 } else {
                   ReplyItem reply = replyList[index];
                   return GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    child: new Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                      child: new Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new Container(
-                            margin: const EdgeInsets.only(right: 10.0),
-                            width: 25.0,
-                            height: 25.0,
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                fit: BoxFit.fill,
-                                image: new NetworkImage(
-                                  'https:' + reply.avatar,
+                      behavior: HitTestBehavior.opaque,
+                      child: new Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                        child: new Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Container(
+                              margin: const EdgeInsets.only(right: 10.0),
+                              width: 25.0,
+                              height: 25.0,
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                    'https:' + reply.avatar,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          new Expanded(
-                              child: new Container(
-                            margin: const EdgeInsets.only(top: 2.0),
-                            child: new Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                new Row(
-                                  children: <Widget>[
-                                    // 评论用户ID
-                                    new Text(
-                                      reply.userName,
-                                      style: new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
-                                    ),
-                                    // 评论时间和平台
-                                    new Padding(
-                                      padding: const EdgeInsets.only(left: 6.0, right: 4.0),
-                                      child: new Text(
-                                        reply.lastReplyTime,
-                                        style: new TextStyle(
-                                          color: const Color(0xFFcccccc),
-                                          fontSize: 12.0,
-                                        ),
+                            new Expanded(
+                                child: new Container(
+                              margin: const EdgeInsets.only(top: 2.0),
+                              child: new Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  new Row(
+                                    children: <Widget>[
+                                      // 评论用户ID
+                                      new Text(
+                                        reply.userName,
+                                        style:
+                                            new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                    // 获得感谢数
-                                    Offstage(
-                                      offstage: reply.favorites.isEmpty,
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.favorite,
-                                            color: Color(0xFFcccccc),
-                                            size: 14.0,
-                                          ),
-                                          SizedBox(width: 2.0),
-                                          Text(
-                                            reply.favorites,
-                                            style: TextStyle(
-                                              color: const Color(0xFFcccccc),
-                                              fontSize: 12.0,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Material(
-                                      color: Color(0xFFf0f0f0),
-                                      shape: new StadiumBorder(),
-                                      child: new Container(
-                                        width: 20.0,
-                                        height: 14.0,
-                                        alignment: Alignment.center,
+                                      // 评论时间和平台
+                                      new Padding(
+                                        padding: const EdgeInsets.only(left: 6.0, right: 4.0),
                                         child: new Text(
-                                          reply.number,
-                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                          reply.lastReplyTime,
+                                          style: new TextStyle(
+                                            color: const Color(0xFFcccccc),
+                                            fontSize: 12.0,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                new Container(
-                                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                                    // 评论内容
-                                    child: Html(
-                                      data: reply.content,
-                                      defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
-                                      onLinkTap: (url) {
-                                        if (UrlHelper.canLaunchInApp(context, url)) {
-                                          return;
-                                        } else if (url.contains("/member/")) {
-                                          // @xxx 需要补齐 base url
-                                          url = DioSingleton.v2exHost + url;
-                                          print(url);
-                                        }
-                                        _launchURL(url);
-                                      },
-                                    )),
-                              ],
-                            ),
-                          )),
-                        ],
+                                      // 获得感谢数
+                                      Offstage(
+                                        offstage: reply.favorites.isEmpty,
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.favorite,
+                                              color: Color(0xFFcccccc),
+                                              size: 14.0,
+                                            ),
+                                            SizedBox(width: 2.0),
+                                            Text(
+                                              reply.favorites,
+                                              style: TextStyle(
+                                                color: const Color(0xFFcccccc),
+                                                fontSize: 12.0,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Material(
+                                        color: Color(0xFFf0f0f0),
+                                        shape: new StadiumBorder(),
+                                        child: new Container(
+                                          width: 20.0,
+                                          height: 14.0,
+                                          alignment: Alignment.center,
+                                          child: new Text(
+                                            reply.number,
+                                            style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  new Container(
+                                      padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                                      // 评论内容
+                                      child: Html(
+                                        data: reply.content,
+                                        defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
+                                        onLinkTap: (url) {
+                                          if (UrlHelper.canLaunchInApp(context, url)) {
+                                            return;
+                                          } else if (url.contains("/member/")) {
+                                            // @xxx 需要补齐 base url
+                                            url = DioSingleton.v2exHost + url;
+                                            print(url);
+                                          }
+                                          _launchURL(url);
+                                        },
+                                      )),
+                                ],
+                              ),
+                            )),
+                          ],
+                        ),
                       ),
-                    ),
                       onTap: () {
                         if (isLogin) {
                           // 点击评论列表item，弹出操作 bottom sheet
@@ -648,13 +683,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 );
                               });
                         } else {
-                          Fluttertoast.showToast(msg: '登录后有更多操作 😬',
+                          Fluttertoast.showToast(
+                              msg: '登录后有更多操作 😬',
                               toastLength: Toast.LENGTH_SHORT,
                               timeInSecForIos: 1,
                               gravity: ToastGravity.CENTER);
                         }
-                      }
-                  );
+                      });
                 }
               },
               separatorBuilder: (context, index) {

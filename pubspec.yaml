@@ -38,6 +38,8 @@ dependencies:
   # flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
   # flame: ^0.10.2
   path_provider: ^0.5.0+1 # https://pub.dartlang.org/packages/path_provider#-installing-tab-
+  modal_progress_hud: ^0.1.2 # https://github.com/mmcc007/modal_progress_hud
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -399,14 +399,15 @@ class DioSingleton {
 
     // token 是否收藏
     // <a href="/unfavorite/topic/541492?t=lqstjafahqohhptitvcrplmjbllwqsxc" class="op">取消收藏</a>
-    String collect = document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
+    String collect =
+        document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
     detailModel.token = collect.split('?t=')[1];
     detailModel.isFavorite = collect.startsWith('/unfavorite');
     // 是否感谢 document.querySelector('#topic_thank > span')
     detailModel.isThank = document.querySelector('#topic_thank > span') != null;
     print(document.querySelector('#topic_thank').innerHtml);
-    print(detailModel.isFavorite==true?'yes':'no');
-    print(detailModel.isThank==true?'yes':'no');
+    print(detailModel.isFavorite == true ? 'yes' : 'no');
+    print(detailModel.isThank == true ? 'yes' : 'no');
 
     // 判断是否有评论
     if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
@@ -454,5 +455,14 @@ class DioSingleton {
 //    }
 
     return detailModel;
+  }
+
+  // 感谢主题
+  Future<bool> thankTopic(int topicId, String token) async {
+    var response = await _dio.post("/thank/topic/" + topicId.toString() + "?t=" + token);
+    if (response.statusCode == 200 && response.data.toString().isEmpty) {
+      return true;
+    }
+    return false;
   }
 }
