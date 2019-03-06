@@ -7,7 +7,6 @@ import 'package:flutter_app/model/web/item_topic_subtle.dart';
 /// @desc  : 帖子详情（含评论）数据
 
 class TopicDetailModel {
-
   String topicId = '';
   String nodeId = '';
   String nodeName = '';
@@ -17,7 +16,8 @@ class TopicDetailModel {
   String replyCount = '0';
   String smallGray = '';
 
-  String content = '';
+  String content = ''; // 纯文本
+  String content_rendered = ''; // 带html标签
   List<TopicSubtleItem> subtleList; // 附言
 
   String token = ''; // 用于收藏、感谢、忽略等操作

@@ -359,13 +359,13 @@ class DioSingleton {
   }
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
-  Future<TopicDetailModel> getTopicDetailAndReplies(int topicId, int p) async {
+  Future<TopicDetailModel> getTopicDetailAndReplies(String topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
     List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
-    var response = await _dio.get(v2exHost + "/t/" + topicId.toString() + "?p=" + p.toString()); // todo 可能多页
+    var response = await _dio.get(v2exHost + "/t/" + topicId + "?p=" + p.toString()); // todo 可能多页
     // Use html parser and query selector
     var document = parse(response.data);
 
@@ -380,7 +380,8 @@ class DioSingleton {
 
     // 判断是否有正文
     if (document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div') != null) {
-      detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
+      detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').text;
+      detailModel.content_rendered = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
     }
     // 附言
     List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
@@ -396,13 +397,14 @@ class DioSingleton {
 
     // token 是否收藏
     // <a href="/unfavorite/topic/541492?t=lqstjafahqohhptitvcrplmjbllwqsxc" class="op">取消收藏</a>
-    String collect =
-        document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
-    detailModel.token = collect.split('?t=')[1];
-    detailModel.isFavorite = collect.startsWith('/unfavorite');
+    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']") != null) {
+      String collect =
+          document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
+      detailModel.token = collect.split('?t=')[1];
+      detailModel.isFavorite = collect.startsWith('/unfavorite');
+    }
     // 是否感谢 document.querySelector('#topic_thank > span')
     detailModel.isThank = document.querySelector('#topic_thank > span') != null;
-    print(document.querySelector('#topic_thank').innerHtml);
     print(detailModel.isFavorite == true ? 'yes' : 'no');
     print(detailModel.isThank == true ? 'yes' : 'no');
 
@@ -456,8 +458,8 @@ class DioSingleton {
   }
 
   // 感谢主题
-  Future<bool> thankTopic(int topicId, String token) async {
-    var response = await _dio.post("/thank/topic/" + topicId.toString() + "?t=" + token);
+  Future<bool> thankTopic(String topicId, String token) async {
+    var response = await _dio.post("/thank/topic/" + topicId + "?t=" + token);
     if (response.statusCode == 200 && response.data.toString().isEmpty) {
       return true;
     }
@@ -465,10 +467,9 @@ class DioSingleton {
   }
 
   // 收藏/取消收藏 主题 todo 发现操作过其中一次后，再次请求虽然也返回200，但是并没有实际成功！！
-  Future<bool> favoriteTopic(bool isFavorite, int topicId, String token) async {
-    String url = isFavorite
-        ? ("/unfavorite/topic/" + topicId.toString() + "?t=" + token)
-        : ("/favorite/topic/" + topicId.toString() + "?t=" + token);
+  Future<bool> favoriteTopic(bool isFavorite, String topicId, String token) async {
+    String url =
+        isFavorite ? ("/unfavorite/topic/" + topicId + "?t=" + token) : ("/favorite/topic/" + topicId + "?t=" + token);
     var response = await _dio.get(url);
     if (response.statusCode == 200) {
       return true;

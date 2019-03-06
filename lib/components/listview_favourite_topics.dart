@@ -122,7 +122,7 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(topic.topicId))),
+          new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),
         );
       },
       child: Card(

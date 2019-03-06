@@ -85,7 +85,7 @@ class TopicItemView extends StatelessWidget {
         // todo 跳转详情页面
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(topic.topicId))),
+          new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),
         );
       },
       child: new Card(

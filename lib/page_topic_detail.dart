@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
@@ -20,7 +21,7 @@ bool isLogin = false;
 
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
-  final int topicId;
+  final String topicId;
 
   TopicDetails(this.topicId);
 
@@ -51,7 +52,7 @@ class _TopicDetailsState extends State<TopicDetails> {
 }
 
 class DialogOfComment extends StatefulWidget {
-  final int topicId;
+  final String topicId;
   final String initialValue;
   final void Function(String) onValueChange;
 
@@ -124,7 +125,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
-    bool loginResult = await dioSingleton.replyTopic(widget.topicId.toString(), text);
+    bool loginResult = await dioSingleton.replyTopic(widget.topicId, text);
     if (loginResult) {
       Fluttertoast.showToast(msg: '回复成功!');
       // Clear input text field.
@@ -138,7 +139,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 }
 
 class TopicDetailView extends StatefulWidget {
-  final int topicId;
+  final String topicId;
 
   TopicDetailView(Key key, this.topicId) : super(key: key);
 
@@ -314,6 +315,32 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
         }
         break;
+      case 'web':
+        print(action.title);
+        // 用默认浏览器打开帖子链接
+        launch(DioSingleton.v2exHost + '/t/' + widget.topicId, forceSafariVC: false);
+        break;
+      case 'link':
+        print(action.title);
+        // 复制链接到剪贴板
+        Clipboard.setData(ClipboardData(text: DioSingleton.v2exHost + '/t/' + widget.topicId));
+        Fluttertoast.showToast(msg: '已复制好帖子链接', gravity: ToastGravity.CENTER);
+        break;
+      case 'copy':
+        print(action.title);
+        // 复制帖子内容到剪贴板
+        if (_detailModel != null && _detailModel.content.isNotEmpty) {
+          Clipboard.setData(ClipboardData(text: _detailModel.content));
+          Fluttertoast.showToast(msg: '已复制好帖子内容', gravity: ToastGravity.CENTER);
+        } else {
+          Fluttertoast.showToast(msg: '帖子内容为空', gravity: ToastGravity.CENTER);
+        }
+        break;
+      case 'share':
+        print(action.title);
+        // 分享
+        Fluttertoast.showToast(msg: '请期待～', gravity: ToastGravity.CENTER);
+        break;
       case 'reply_comment':
         print(action.title);
         _lastEditCommentDraft = _lastEditCommentDraft + " @" + action.title + " ";
@@ -329,21 +356,21 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           showDialog(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                content: Text('你确定要向 TA 发送谢意？'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('取消'),
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-                  ),
-                  FlatButton(
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        // 感谢回复
-                        _thankReply(action.title);
-                      },
-                      child: Text('确定')),
-                ],
-              ));
+                    content: Text('你确定要向 TA 发送谢意？'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('取消'),
+                        onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                      ),
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            // 感谢回复
+                            _thankReply(action.title);
+                          },
+                          child: Text('确定')),
+                    ],
+                  ));
         } else {
           Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
         }
@@ -543,7 +570,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 softWrap: true,
                 style: new TextStyle(
                   color: Colors.black87,
-                  fontSize: 18.0,
+                  fontSize: 19.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -552,7 +579,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             new Container(
               padding: const EdgeInsets.all(10.0),
               child: Html(
-                data: _detailModel.content,
+                data: _detailModel.content_rendered,
                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
                 onLinkTap: (url) {
                   _launchURL(url);

@@ -123,7 +123,7 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(int.parse(notificationItem.topicId))),
+          new MaterialPageRoute(builder: (context) => new TopicDetails(notificationItem.topicId)),
         );
       },
       child: new Container(
