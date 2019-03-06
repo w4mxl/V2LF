@@ -212,6 +212,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _thankTopic() async {
+    setState(() {
+      _saving = true;
+    });
     bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
       setState(() {
@@ -220,6 +223,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       });
     } else {
       Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
+      setState(() {
+        _saving = false;
+      });
+    }
+  }
+
+  Future _favoriteTopic() async {
+    setState(() {
+      _saving = true;
+    });
+    bool isSuccess = await dioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
+    if (isSuccess) {
+      setState(() {
+        _saving = false;
+        _detailModel.isFavorite = !_detailModel.isFavorite;
+      });
+    } else {
+      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
+      setState(() {
+        _saving = false;
+      });
     }
   }
 
@@ -238,23 +262,37 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           Fluttertoast.showToast(msg: '已经发送过感谢了 😉', gravity: ToastGravity.CENTER);
         } else {
           if (_detailModel.token.isNotEmpty) {
-            // 发送感谢
-            setState(() {
-              _saving = true;
-            });
-            _thankTopic();
+            // ⏏ 确认对话框
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      content: Text('你确定要向本主题创建者发送谢意？'),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('取消'),
+                          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                        ),
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              // 发送感谢
+                              _thankTopic();
+                            },
+                            child: Text('确定')),
+                      ],
+                    ));
           } else {
-            Fluttertoast.showToast(msg: '操作失败,无法获取 once 😞', gravity: ToastGravity.CENTER);
+            Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
           }
         }
-
         break;
       case 'favorite':
         print(action.title);
-        if (_detailModel.isFavorite) {
-          // 取消收藏
+        if (_detailModel.token.isNotEmpty) {
+          // 收藏 / 取消收藏
+          _favoriteTopic();
         } else {
-          // 收藏
+          Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
         }
         break;
       case 'reply_comment':

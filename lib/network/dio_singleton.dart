@@ -44,6 +44,9 @@ class DioSingleton {
         'user-agent':
             'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
       };
+      options.validateStatus = (int status) {
+        return status >= 200 && status < 300 || status == 304 || status == 302;
+      };
       _dio = new Dio(options);
       String cookiePath = await Utils.getCookiePath();
       PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
@@ -66,9 +69,6 @@ class DioSingleton {
     }
 
     _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    _dio.options.validateStatus = (int status) {
-      return status >= 200 && status < 300 || status == 304 || status == 302;
-    };
 
     FormData formData = new FormData.from({
       "once": once,
@@ -157,9 +157,6 @@ class DioSingleton {
     };
     _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
     //_dio.options.responseType = ResponseType.JSON;
-    _dio.options.validateStatus = (int status) {
-      return status >= 200 && status < 300 || status == 304 || status == 302;
-    };
 
     FormData formData = new FormData.from({
       "once": loginFormData.once,
@@ -459,6 +456,27 @@ class DioSingleton {
 
   // 感谢主题
   Future<bool> thankTopic(int topicId, String token) async {
+    var response = await _dio.post("/thank/topic/" + topicId.toString() + "?t=" + token);
+    if (response.statusCode == 200 && response.data.toString().isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  // 收藏/取消收藏 主题
+  Future<bool> favoriteTopic(bool isFavorite, int topicId, String token) async {
+    String url = isFavorite
+        ? ("/unfavorite/topic/" + topicId.toString() + "?t=" + token)
+        : ("/favorite/topic/" + topicId.toString() + "?t=" + token);
+    var response = await _dio.get(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  // 感谢某条评论
+  Future<bool> thankTopicComment(int topicId, String token) async {
     var response = await _dio.post("/thank/topic/" + topicId.toString() + "?t=" + token);
     if (response.statusCode == 200 && response.data.toString().isEmpty) {
       return true;
