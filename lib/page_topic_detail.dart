@@ -375,6 +375,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
         }
         break;
+      case 'reply_copy':
+        print(action.title);
+        // 复制评论内容到剪贴板
+        Clipboard.setData(ClipboardData(text: action.title));
+        Fluttertoast.showToast(msg: '已复制好评论内容', gravity: ToastGravity.CENTER);
+        break;
       default:
         break;
     }
@@ -739,7 +745,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                                       // 评论内容
                                       child: Html(
-                                        data: reply.content,
+                                        data: reply.content_rendered,
                                         defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
                                         onLinkTap: (url) {
                                           if (UrlHelper.canLaunchInApp(context, url)) {
@@ -768,27 +774,36 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     ListTile(
-                                      leading: Icon(Icons.reply),
-                                      title: Text('回复'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(id: 'reply_comment', title: reply.userName));
-                                      },
-                                    ),
-                                    ListTile(
                                       leading: Icon(Icons.local_florist),
-                                      title: Text('感谢回复者'),
+                                      title: Text('感谢评论'),
                                       onTap: () {
                                         Navigator.pop(context);
                                         select(Action(id: 'thank_reply', title: reply.replyId));
                                       },
                                     ),
                                     ListTile(
-                                        leading: Icon(Icons.forum),
-                                        title: Text('查看对话'),
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        }),
+                                      leading: Icon(Icons.reply),
+                                      title: Text('回复评论'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        select(Action(id: 'reply_comment', title: reply.userName));
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.content_copy),
+                                      title: Text('拷贝评论'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        select(Action(id: 'reply_copy', title: reply.content));
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.forum),
+                                      title: Text('查看对话'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
                                   ],
                                 );
                               });

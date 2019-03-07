@@ -433,7 +433,8 @@ class DioSingleton {
                 aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
           }
           replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
-          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replyItem.content_rendered = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
           replyItem.replyId = aNode.attributes["id"].substring(2);
           print(replyItem.replyId);
           replies.add(replyItem);
