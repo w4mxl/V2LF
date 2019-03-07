@@ -12,8 +12,8 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final key = GlobalKey<_TopicDetailViewState>();
 
@@ -33,20 +33,25 @@ class _TopicDetailsState extends State<TopicDetails> {
   @override
   void initState() {
     super.initState();
-
     // check login state
+    checkLoginState();
+    print('initState');
+  }
+
+  checkLoginState() {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       isLogin = true;
+    } else {
+      isLogin = false;
     }
-    /*else {
-      // 没登录还不能'感谢'
-      actions.removeAt(2);
-    }*/
   }
 
   @override
   Widget build(BuildContext context) {
+    //监听登录事件
+    print('监听登录事件:' + (isLogin == true ? 'true' : 'false'));
+
     return new TopicDetailView(key, widget.topicId);
   }
 }

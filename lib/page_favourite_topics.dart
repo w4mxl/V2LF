@@ -1,10 +1,10 @@
 // 我的主题收藏列表页面
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
-import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
+import 'package:flutter_app/utils/events.dart';
 
 class FavTopics extends StatefulWidget {
   @override
@@ -13,16 +13,18 @@ class FavTopics extends StatefulWidget {
 
 class _FavTopicsState extends State<FavTopics> {
   int count = 0;
+  StreamSubscription loginSubscription;
 
   @override
   Widget build(BuildContext context) {
-    //监听登录事件
-    bus.on(EVENT_NAME_FAV_COUNTS, (arg) {
-      // do something
+    //监听事件
+    loginSubscription = eventBus.on<MyEventFavCounts>().listen((event){
       setState(() {
-        count = arg;
+        count = int.parse(event.count);
       });
     });
+
+    loginSubscription.cancel();
 
     return new Scaffold(
       appBar: new AppBar(
@@ -35,6 +37,6 @@ class _FavTopicsState extends State<FavTopics> {
   @override
   void dispose() {
     super.dispose();
-    bus.off(EVENT_NAME_FAV_COUNTS);
+    loginSubscription.cancel();
   }
 }

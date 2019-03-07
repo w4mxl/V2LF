@@ -5,8 +5,7 @@ import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +24,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+    //监听设置中的变动
+    eventBus.on<MyEventSettingChange>().listen((event){
+      _loadLocale();
+    });
+
     _initAsync();
   }
 
@@ -52,10 +57,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //监听登录事件
-    bus.on(EVENT_NAME_SETTING, (arg) {
-      _loadLocale();
-    });
 
     const List<TabData> tabs = const <TabData>[
       const TabData(title: '技术', key: 'tech'),

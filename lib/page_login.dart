@@ -7,8 +7,6 @@ import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
-import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,10 +52,10 @@ class _LoginPageState extends State<LoginPage> {
       "assets/images/logo_v2lf.png",
       width: 10.0,
     );
-
     final userName = StreamBuilder<String>(
       stream: bloc.account,
       builder: (context, snapshot) => TextField(
+            autofocus: true,
             onChanged: (text) {
               bloc.accountChanged(text);
               fieldAccount = text;
@@ -66,8 +64,8 @@ class _LoginPageState extends State<LoginPage> {
               FocusScope.of(context).requestFocus(passwordTextFieldNode);
             },
             textInputAction: TextInputAction.next,
-            decoration:
-                InputDecoration(labelText: "Account", hintText: 'Enter account', errorText: snapshot.error, border: OutlineInputBorder()),
+            decoration: InputDecoration(
+                labelText: "Account", hintText: 'Enter account', errorText: snapshot.error, border: OutlineInputBorder()),
           ),
     );
 
@@ -85,8 +83,8 @@ class _LoginPageState extends State<LoginPage> {
             textInputAction: TextInputAction.next,
             focusNode: passwordTextFieldNode,
             obscureText: true,
-            decoration:
-                InputDecoration(labelText: "Password", hintText: 'Enter password', errorText: snapshot.error, border: OutlineInputBorder()),
+            decoration: InputDecoration(
+                labelText: "Password", hintText: 'Enter password', errorText: snapshot.error, border: OutlineInputBorder()),
           ),
     );
 
@@ -106,7 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       focusNode: captchaTextFieldNode,
                       decoration: InputDecoration(
-                          labelText: "Captcha", hintText: 'Enter right captcha', errorText: snapshot.error, border: OutlineInputBorder()),
+                          labelText: "Captcha",
+                          hintText: 'Enter right captcha',
+                          errorText: snapshot.error,
+                          border: OutlineInputBorder()),
                     ))),
         Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -147,8 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                         bool loginResult = await dioSingleton.loginPost(loginFormData);
                         if (loginResult) {
                           print("wml success!!!!");
-                          Fluttertoast.showToast(msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
-                          bus.emit(EVENT_NAME_LOGIN);
+                          Fluttertoast.showToast(
+                              msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
                           Navigator.of(context).pop();
                         } else {
                           refreshCaptcha();
@@ -175,7 +176,14 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Row(
+          children: <Widget>[
+            logo,
+            Text('登录'),
+          ],
+        ),
+      ),
       body: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
@@ -183,9 +191,8 @@ class _LoginPageState extends State<LoginPage> {
           child: ListView(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              logo,
               SizedBox(
-                height: 20.0,
+                height: 15.0,
               ),
               userName,
               SizedBox(

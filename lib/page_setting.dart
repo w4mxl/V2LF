@@ -1,12 +1,11 @@
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -55,100 +54,113 @@ class _SettingPageState extends State<SettingPage> {
       body: ListView(
         children: <Widget>[
           // 主题设置
-          ExpansionTile(
-            title: Row(
+          Container(
+            color: Colors.white,
+            child: Column(
               children: <Widget>[
-                Icon(Icons.color_lens, color: ColorT.gray_66),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text(MyLocalizations.of(context).titleTheme),
-                )
-              ],
-            ),
-            children: <Widget>[
-              Wrap(
-                children: themeColorMap.keys.map((key) {
-                  Color value = themeColorMap[key];
-                  return new InkWell(
-                    onTap: () {
-                      SpHelper.sp.setString(KEY_THEME_COLOR, key);
-                      bus.emit(EVENT_NAME_SETTING);
-                    },
-                    child: new Container(
-                      margin: EdgeInsets.all(5.0),
-                      width: 36.0,
-                      height: 36.0,
-                      color: value,
-                    ),
-                  );
-                }).toList(),
-              )
-            ],
-          ),
-          // 多语言设置
-          ExpansionTile(
-            title: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.language,
-                  color: ColorT.gray_66,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  child: Text(MyLocalizations.of(context).titleLanguage),
-                ),
-                Expanded(
-                  child: Text(
-                    SpHelper.getLanguageModel() == null
-                        ? MyLocalizations.of(context).languageAuto
-                        : Utils.getLanguageName(
-                            context, SpHelper.getLanguageModel().languageCode, SpHelper.getLanguageModel().scriptCode),
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: ColorT.gray_99,
-                    ),
-                    textAlign: TextAlign.right,
+                ExpansionTile(
+                  title: Row(
+                    children: <Widget>[
+                      Icon(Icons.color_lens, color: ColorT.gray_66),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0),
+                        child: Text(MyLocalizations.of(context).titleTheme),
+                      )
+                    ],
                   ),
+                  children: <Widget>[
+                    Wrap(
+                      children: themeColorMap.keys.map((key) {
+                        Color value = themeColorMap[key];
+                        return new InkWell(
+                          onTap: () {
+                            SpHelper.sp.setString(KEY_THEME_COLOR, key);
+                            eventBus.fire(new MyEventSettingChange());
+                          },
+                          child: new Container(
+                            margin: EdgeInsets.all(5.0),
+                            width: 36.0,
+                            height: 36.0,
+                            color: value,
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
+                Divider(
+                  height: 0.0,
+                ),
+                // 多语言设置
+                ExpansionTile(
+                  title: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.language,
+                        color: ColorT.gray_66,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.0),
+                        child: Text(MyLocalizations.of(context).titleLanguage),
+                      ),
+                      Expanded(
+                        child: Text(
+                          SpHelper.getLanguageModel() == null
+                              ? MyLocalizations.of(context).languageAuto
+                              : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode,
+                                  SpHelper.getLanguageModel().scriptCode),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: ColorT.gray_99,
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  children: <Widget>[
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _list.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          LanguageModel model = _list[index];
+                          return new ListTile(
+                            title: new Text(
+                              (model.languageCode.isEmpty
+                                  ? MyLocalizations.of(context).languageAuto
+                                  : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
+                              style: new TextStyle(fontSize: 13.0),
+                            ),
+                            trailing: new Radio(
+                                value: true,
+                                groupValue: model.isSelected == true,
+                                //activeColor: Colors.indigoAccent,
+                                onChanged: (value) {
+                                  setState(() {
+                                    updateLanguage(model);
+                                  });
+                                }),
+                            onTap: () {
+                              setState(() {
+                                updateLanguage(model);
+                              });
+                            },
+                          );
+                        }),
+                  ],
+                ),
+                Divider(
+                  height: 0.0,
                 ),
               ],
             ),
-            children: <Widget>[
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    LanguageModel model = _list[index];
-                    return new ListTile(
-                      title: new Text(
-                        (model.languageCode.isEmpty
-                            ? MyLocalizations.of(context).languageAuto
-                            : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
-                        style: new TextStyle(fontSize: 13.0),
-                      ),
-                      trailing: new Radio(
-                          value: true,
-                          groupValue: model.isSelected == true,
-                          //activeColor: Colors.indigoAccent,
-                          onChanged: (value) {
-                            setState(() {
-                              updateLanguage(model);
-                            });
-                          }),
-                      onTap: () {
-                        setState(() {
-                          updateLanguage(model);
-                        });
-                      },
-                    );
-                  }),
-            ],
           ),
           // 退出登录
           Offstage(
             offstage: !checkLogin(),
             child: GestureDetector(
               child: Container(
-                margin: const EdgeInsets.only(top: 84.0, bottom: 20.0),
+                margin: const EdgeInsets.only(top: 100.0, bottom: 20.0),
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
@@ -216,13 +228,12 @@ class _SettingPageState extends State<SettingPage> {
     SpHelper.sp.remove(SP_AVATAR);
 
     Navigator.pop(context);
-    bus.emit(EVENT_NAME_LOGIN);
   }
 
   void updateLanguage(LanguageModel model) {
     _currentLanguage = model;
     _updateData();
     SpHelper.putObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
-    bus.emit(EVENT_NAME_SETTING);
+    eventBus.fire(new MyEventSettingChange());
   }
 }

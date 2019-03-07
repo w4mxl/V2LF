@@ -11,7 +11,7 @@ import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -227,7 +227,7 @@ class DioSingleton {
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
     var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
-    bus.emit(EVENT_NAME_FAV_COUNTS, int.parse(count));
+    eventBus.fire(new MyEventFavCounts(count));
     var page = tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name;
 
     // Fluttertoast.showToast(msg: '收藏总数：$count，页数：$page');

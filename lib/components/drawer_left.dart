@@ -12,8 +12,6 @@ import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_notifications.dart';
 import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/eventbus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +28,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
   @override
   void initState() {
     super.initState();
-    checkLoginState();
   }
 
   @override
@@ -40,10 +37,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     //监听登录事件
-    bus.on(EVENT_NAME_LOGIN, (arg) {
-      // do something
-      checkLoginState();
-    });
+    print('监听登录事件:' + userName);
+    checkLoginState();
+    if (userName.length > 0) {
+      getOnePoem();
+    }
 
     return SizedBox(
       width: 260.0,
@@ -237,11 +235,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
   checkLoginState() {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
-      getOnePoem();
-      setState(() {
         userName = spUsername;
         avatar = SpHelper.sp.getString(SP_AVATAR);
-      });
     }
   }
 
