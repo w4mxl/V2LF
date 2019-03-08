@@ -18,13 +18,11 @@ class _FavTopicsState extends State<FavTopics> {
   @override
   Widget build(BuildContext context) {
     //监听事件
-    loginSubscription = eventBus.on<MyEventFavCounts>().listen((event){
+    loginSubscription = eventBus.on<MyEventFavCounts>().listen((event) {
       setState(() {
         count = int.parse(event.count);
       });
     });
-
-    loginSubscription.cancel();
 
     return new Scaffold(
       appBar: new AppBar(

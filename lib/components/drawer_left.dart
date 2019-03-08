@@ -198,7 +198,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text("关于"),
                 applicationName: "V2LF",
-                applicationVersion: "v0.0.4",
+                applicationVersion: "v0.4.4",
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
@@ -214,11 +214,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         TextSpan(
                             style: aboutTextStyle,
                             text:
-                                "V2LF is a v2ex unofficial app.'V2LF' means 'way to love flutter'.\n\nTo see the source code for this app, please visit the "),
+                                "V2LF is a v2ex unofficial app.'V2LF' means 'way to love flutter'.\n\nTo see the progress for this project, please visit the "),
                         _LinkTextSpan(
                           style: linkStyle,
-                          url: 'https://github.com/w4mxl/V2exByFlutter',
-                          text: 'v2lf github repo',
+                          url: 'https://trello.com/b/YPOJsfQx/v2lf',
+                          text: 'v2lf roadmap',
                         ),
                         TextSpan(
                           style: aboutTextStyle,

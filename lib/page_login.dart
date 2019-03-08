@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     final bloc = BlocLogin();
     final logo = Image.asset(
       "assets/images/logo_v2lf.png",
-      width: 10.0,
+      width: 26.0,
     );
     final userName = StreamBuilder<String>(
       stream: bloc.account,

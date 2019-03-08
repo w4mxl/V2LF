@@ -160,7 +160,7 @@ class _SettingPageState extends State<SettingPage> {
             offstage: !checkLogin(),
             child: GestureDetector(
               child: Container(
-                margin: const EdgeInsets.only(top: 100.0, bottom: 20.0),
+                margin: const EdgeInsets.only(top: 150.0, bottom: 20.0),
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
