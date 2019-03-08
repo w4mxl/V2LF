@@ -156,11 +156,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   bool _saving = false;
 
   List<Action> actions = <Action>[
-    // todo 多语言处理
     Action(id: 'reply', title: '回复', icon: Icons.reply),
     Action(id: 'thank', title: '感谢', icon: Icons.local_florist),
     Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
-    Action(id: 'web', title: '浏览器', icon: Icons.explore),
+    Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
     Action(id: 'share', title: '分享', icon: Icons.share),

@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/utils/events.dart';
 
 class FavTopics extends StatefulWidget {
@@ -26,7 +27,7 @@ class _FavTopicsState extends State<FavTopics> {
 
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('主题收藏 [ $count ]'),
+        title: new Text(MyLocalizations.of(context).favorites +' [ $count ]'),
       ),
       body: new FavTopicListView(),
     );

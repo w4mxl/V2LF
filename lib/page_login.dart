@@ -65,7 +65,10 @@ class _LoginPageState extends State<LoginPage> {
             },
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-                labelText: "Account", hintText: 'Enter account', errorText: snapshot.error, border: OutlineInputBorder()),
+                labelText: MyLocalizations.of(context).account,
+                hintText: MyLocalizations.of(context).enterAccount,
+                errorText: snapshot.error,
+                border: OutlineInputBorder()),
           ),
     );
 
@@ -84,7 +87,9 @@ class _LoginPageState extends State<LoginPage> {
             focusNode: passwordTextFieldNode,
             obscureText: true,
             decoration: InputDecoration(
-                labelText: "Password", hintText: 'Enter password', errorText: snapshot.error, border: OutlineInputBorder()),
+                labelText: MyLocalizations.of(context).password,
+                hintText: MyLocalizations.of(context).enterPassword,
+                errorText: snapshot.error, border: OutlineInputBorder()),
           ),
     );
 
@@ -104,8 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       focusNode: captchaTextFieldNode,
                       decoration: InputDecoration(
-                          labelText: "Captcha",
-                          hintText: 'Enter right captcha',
+                          labelText: MyLocalizations.of(context).captcha,
+                          hintText: MyLocalizations.of(context).enterCaptcha,
                           errorText: snapshot.error,
                           border: OutlineInputBorder()),
                     ))),
@@ -147,7 +152,6 @@ class _LoginPageState extends State<LoginPage> {
                         print(loginFormData.toString());
                         bool loginResult = await dioSingleton.loginPost(loginFormData);
                         if (loginResult) {
-                          print("wml success!!!!");
                           Fluttertoast.showToast(
                               msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
                           Navigator.of(context).pop();
@@ -157,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     }
                   : null,
-              child: Text('Log In', style: TextStyle(color: Colors.white)),
+              child: Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white)),
             ),
             height: 50.0,
             minWidth: 300.0,
@@ -166,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final forgotLabel = FlatButton(
       child: Text(
-        'Forgot password?',
+        MyLocalizations.of(context).forgetPassword,
         style: TextStyle(color: Colors.black54),
       ),
       onPressed: () {
@@ -180,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
         title: Row(
           children: <Widget>[
             logo,
-            Text('登录'),
+            Text(MyLocalizations.of(context).login),
           ],
         ),
       ),

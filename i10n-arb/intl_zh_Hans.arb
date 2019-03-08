@@ -32,5 +32,147 @@
   "@titleLanguage": {
     "type": "text",
     "placeholders": {}
+  },
+  "nodes": "节点",
+  "@nodes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "notifications": "通知",
+  "@notifications": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "收藏",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings": "设置",
+  "@settings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback": "反馈",
+  "@feedback": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "about": "关于",
+  "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "loadingPage": "正在加载第{num}页...",
+  "@loadingPage": {
+    "type": "text",
+    "placeholders": {
+      "num": {}
+    }
+  },
+  "noComment": "暂无回复",
+  "@noComment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "account": "用户名",
+  "@account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAccount": "请输入用户名",
+  "@enterAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "密码",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterPassword": "请输入密码",
+  "@enterPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "captcha": "验证码",
+  "@captcha": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterCaptcha": "输入右侧验证码",
+  "@enterCaptcha": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "forgetPassword": "忘记密码 ?",
+  "@forgetPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutLong": "退出登录",
+  "@logoutLong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sureLogout": "您确定要退出登录吗？",
+  "@sureLogout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "退出",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reply": "回复",
+  "@reply": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "replyHint": "(u_u) 请尽量让回复有助于他人",
+  "@replyHint": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "replySuccess": "回复成功!",
+  "@replySuccess": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "thank": "感谢",
+  "@thank": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "actionFav": "收藏",
+  "@actionFav": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "browser": "浏览器打开",
+  "@browser": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyLink": "复制链接",
+  "@copyLink": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyContent": "复制内容",
+  "@copyContent": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "share": "分享",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
   }
 }

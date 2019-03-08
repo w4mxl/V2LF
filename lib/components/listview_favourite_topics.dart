@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
@@ -83,7 +84,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(p <= maxPage ? "正在加载第" + p.toString() + "页..." : "---- 🙄 ----"),
+        child: Text(p <= maxPage ? MyLocalizations.of(context).loadingPage(p.toString()) : "---- 🙄 ----"),
       ),
     );
   }

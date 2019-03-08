@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
@@ -140,7 +141,7 @@ class TopicItemView extends StatelessWidget {
                           ),
                         ),
                         new Text(
-                          topic.lastReplyTime == '' ? '暂无评论' : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          topic.lastReplyTime == '' ? MyLocalizations.of(context).noComment : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
                           style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
 import 'package:flutter_app/components/listview_notifications.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/node.dart';
 
 class NotificationTopics extends StatefulWidget {
@@ -15,7 +16,7 @@ class _NotificationTopicsState extends State<NotificationTopics> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('通知'),
+        title: new Text(MyLocalizations.of(context).notifications),
       ),
       body: new NotificationsListView(),
     );

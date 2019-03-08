@@ -42,6 +42,48 @@ class MyLocalizations {
   String get titleTheme => Intl.message('Theme', name: 'titleTheme');
 
   String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
+
+  // drawer
+  String get nodes => Intl.message('Nodes', name: 'nodes');
+  String get notifications => Intl.message('Notifications', name: 'notifications');
+  String get favorites => Intl.message('Favorites', name: 'favorites');
+  String get settings => Intl.message('Settings', name: 'settings');
+  String get feedback => Intl.message('Feedback', name: 'feedback');
+  String get about => Intl.message('About', name: 'about');
+
+
+  loadingPage(num) => Intl.message('Loading page $num ...', name: 'loadingPage', args: [num]);
+
+  String get noComment => Intl.message('no comment yet', name: 'noComment');
+  String get account => Intl.message('Account', name: 'account');
+  String get enterAccount => Intl.message('Enter account', name: 'enterAccount');
+  String get password => Intl.message('Password', name: 'password');
+  String get enterPassword => Intl.message('Enter password', name: 'enterPassword');
+
+  String get captcha => Intl.message('Captcha', name: 'captcha');
+  String get enterCaptcha => Intl.message('Enter right captcha', name: 'enterCaptcha');
+  String get forgetPassword => Intl.message('Forgot password ?', name: 'forgetPassword');
+
+  String get logoutLong => Intl.message('Log out', name: 'logoutLong');
+  String get sureLogout => Intl.message('Are you sure you want to sign out ?', name: 'sureLogout');
+
+  String get logout => Intl.message('Logout', name: 'logout');
+  String get cancel => Intl.message('Cancel', name: 'cancel');
+
+  String get reply => Intl.message('Reply', name: 'reply');
+
+
+  String get replyHint => Intl.message('(u_u)  Please try to make the reply helpful to others', name: 'replyHint');
+  String get replySuccess => Intl.message('Reply Success!', name: 'replySuccess');
+  String get thank => Intl.message('Thank', name: 'thank');
+  String get actionFav => Intl.message('Favorite', name: 'actionFav');
+
+
+  String get browser => Intl.message('Open from browser', name: 'browser');
+  String get copyLink => Intl.message('Copy link', name: 'copyLink');
+  String get copyContent => Intl.message('Copy content', name: 'copyContent');
+  String get share => Intl.message('Share', name: 'share');
+
 }
 
 //Locale代理类

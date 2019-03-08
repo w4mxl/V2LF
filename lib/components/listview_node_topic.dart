@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
@@ -84,7 +85,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text("正在加载第" + p.toString() + "页..."),
+        child: Text(MyLocalizations.of(context).loadingPage(p.toString())),
       ),
     );
   }

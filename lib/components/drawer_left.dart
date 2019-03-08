@@ -154,7 +154,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
 
               new ListTile(
                 leading: new Icon(Icons.apps),
-                title: new Text("节点"),
+                title: new Text(MyLocalizations.of(context).nodes),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
@@ -163,7 +163,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new ListTile(
                 enabled: userName.isNotEmpty, // todo 登录后打开
                 leading: new Icon(Icons.notifications),
-                title: new Text("通知"),
+                title: new Text(MyLocalizations.of(context).notifications),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationTopics()));
@@ -172,7 +172,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new ListTile(
                 enabled: userName.isNotEmpty, // todo 登录后打开
                 leading: new Icon(Icons.favorite),
-                title: new Text("收藏"),
+                title: new Text(MyLocalizations.of(context).favorites),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics()));
@@ -181,7 +181,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new Divider(),
               new ListTile(
                 leading: new Icon(Icons.settings),
-                title: new Text("设置"),
+                title: new Text(MyLocalizations.of(context).settings),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
@@ -189,14 +189,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.feedback),
-                title: new Text("反馈"),
+                title: new Text(MyLocalizations.of(context).feedback),
                 onTap: () {
                   _launchURL("mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
                 },
               ),
               new AboutListTile(
                 icon: new Icon(Icons.info),
-                child: new Text("关于"),
+                child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
                 applicationVersion: "v0.4.4",
                 applicationLegalese: '© 2019 Wml',

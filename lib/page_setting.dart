@@ -170,7 +170,7 @@ class _SettingPageState extends State<SettingPage> {
                     Container(
                         padding: const EdgeInsets.all(14.0),
                         child: Text(
-                          '退出登录',
+                          MyLocalizations.of(context).logoutLong,
                           style: TextStyle(color: Colors.red, fontSize: 18.0),
                         )),
                     Divider(
@@ -184,10 +184,10 @@ class _SettingPageState extends State<SettingPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          content: Text('您确定要退出登录吗？'),
+                          content: Text(MyLocalizations.of(context).sureLogout),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text('取消'),
+                              child: Text(MyLocalizations.of(context).cancel),
                               onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                             ),
                             FlatButton(
@@ -195,7 +195,7 @@ class _SettingPageState extends State<SettingPage> {
                                   Navigator.of(context, rootNavigator: true).pop();
                                   logout();
                                 },
-                                child: Text('退出')),
+                                child: Text(MyLocalizations.of(context).logout)),
                           ],
                         ));
               },
