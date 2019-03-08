@@ -28,6 +28,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
   @override
   void initState() {
     super.initState();
+    checkLoginState();
   }
 
   @override
@@ -35,13 +36,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final ThemeData themeData = Theme.of(context);
     final TextStyle aboutTextStyle = themeData.textTheme.body2;
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
-
-    //监听登录事件
-    print('监听登录事件:' + userName);
-    checkLoginState();
-    if (userName.length > 0) {
-      getOnePoem();
-    }
 
     return SizedBox(
       width: 260.0,
@@ -53,7 +47,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 accountName: GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      future.then((value) {
+                        setState(() {
+                          checkLoginState();
+                        });
+                      });
                     } else {
                       // todo -> 个人中心页面
                       _launchURL(DioSingleton.v2exHost + '/member/' + userName);
@@ -113,7 +112,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      future.then((value) {
+                        setState(() {
+                          checkLoginState();
+                        });
+                      });
                     } else {
                       // todo -> 个人中心页面
                       _launchURL(DioSingleton.v2exHost + '/member/' + userName);
@@ -237,6 +241,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     if (spUsername != null && spUsername.length > 0) {
         userName = spUsername;
         avatar = SpHelper.sp.getString(SP_AVATAR);
+        getOnePoem();
     }
   }
 

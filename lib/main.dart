@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     //监听设置中的变动
-    eventBus.on<MyEventSettingChange>().listen((event){
+    eventBus.on<MyEventSettingChange>().listen((event) {
       _loadLocale();
     });
 
@@ -35,13 +35,13 @@ class _MyAppState extends State<MyApp> {
 
   void _initAsync() async {
     SpHelper.sp = await SharedPreferences.getInstance();
-    if (!mounted) return;
     _loadLocale();
   }
 
   void _loadLocale() async {
     LanguageModel model = SpHelper.getLanguageModel();
     String _colorKey = SpHelper.getThemeColor();
+    if (!mounted) return;
     setState(() {
       if (model != null) {
         _locale = Locale.fromSubtags(languageCode: model.languageCode, scriptCode: model.scriptCode);
@@ -57,7 +57,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     const List<TabData> tabs = const <TabData>[
       const TabData(title: '技术', key: 'tech'),
       const TabData(title: '创意', key: 'creative'),
