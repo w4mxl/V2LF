@@ -131,7 +131,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             // 多语言设置
             Container(
-              margin: const EdgeInsets.only(top: 40.0, bottom: 20.0),
+              margin: const EdgeInsets.only(top: 24.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -201,12 +201,35 @@ class _SettingPageState extends State<SettingPage> {
                 ],
               ),
             ),
+            // 主页tab设置
+            Container(
+              margin: const EdgeInsets.only(top: 24.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.table_chart),
+                    title: Text('主页 TAB'),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: (){
+                      // todo
+                    },
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
             // 退出登录
             Offstage(
               offstage: !checkLogin(),
               child: GestureDetector(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 100.0, bottom: 20.0),
+                  margin: const EdgeInsets.only(top: 60.0, bottom: 20.0),
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[

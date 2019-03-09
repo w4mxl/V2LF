@@ -270,6 +270,6 @@ _launchURL(String url) async {
     await launch(url, forceWebView: true);
   } else {
     Fluttertoast.showToast(
-        msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+        msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
   }
 }
