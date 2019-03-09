@@ -1,4 +1,5 @@
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
@@ -19,6 +20,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
+  bool _switchSystemFont = false;
 
   @override
   void initState() {
@@ -35,6 +37,11 @@ class _SettingPageState extends State<SettingPage> {
     }
 
     _updateData();
+
+    String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
+    if (_spFont != null && _spFont == 'System') {
+      _switchSystemFont = true;
+    }
   }
 
   void _updateData() {
@@ -51,161 +58,201 @@ class _SettingPageState extends State<SettingPage> {
       appBar: AppBar(
         title: Text(MyLocalizations.of(context).titleSetting),
       ),
-      body: ListView(
-        children: <Widget>[
-          // 主题设置
-          Container(
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                ExpansionTile(
-                  title: Row(
+      body: Container(
+        color: CupertinoColors.extraLightBackgroundGray,
+        child: ListView(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              margin: EdgeInsets.only(top: 40.0),
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  // 主题设置
+                  ExpansionTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(Icons.color_lens, color: ColorT.gray_66),
+                        Padding(
+                          padding: EdgeInsets.only(left: 32.0),
+                          child: Text(MyLocalizations.of(context).titleTheme),
+                        )
+                      ],
+                    ),
                     children: <Widget>[
-                      Icon(Icons.color_lens, color: ColorT.gray_66),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Text(MyLocalizations.of(context).titleTheme),
+                      Wrap(
+                        children: themeColorMap.keys.map((key) {
+                          Color value = themeColorMap[key];
+                          return new InkWell(
+                            onTap: () {
+                              SpHelper.sp.setString(KEY_THEME_COLOR, key);
+                              eventBus.fire(new MyEventSettingChange());
+                            },
+                            child: new Container(
+                              margin: EdgeInsets.all(5.0),
+                              width: 36.0,
+                              height: 36.0,
+                              color: value,
+                            ),
+                          );
+                        }).toList(),
                       )
                     ],
                   ),
-                  children: <Widget>[
-                    Wrap(
-                      children: themeColorMap.keys.map((key) {
-                        Color value = themeColorMap[key];
-                        return new InkWell(
-                          onTap: () {
-                            SpHelper.sp.setString(KEY_THEME_COLOR, key);
-                            eventBus.fire(new MyEventSettingChange());
-                          },
-                          child: new Container(
-                            margin: EdgeInsets.all(5.0),
-                            width: 36.0,
-                            height: 36.0,
-                            color: value,
-                          ),
-                        );
-                      }).toList(),
-                    )
-                  ],
-                ),
-                Divider(
-                  height: 0.0,
-                ),
-                // 多语言设置
-                ExpansionTile(
-                  title: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.language,
-                        color: ColorT.gray_66,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Text(MyLocalizations.of(context).titleLanguage),
-                      ),
-                      Expanded(
-                        child: Text(
-                          SpHelper.getLanguageModel() == null
-                              ? MyLocalizations.of(context).languageAuto
-                              : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode,
-                                  SpHelper.getLanguageModel().scriptCode),
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: ColorT.gray_99,
-                          ),
-                          textAlign: TextAlign.right,
+                  Divider(
+                    height: 0.0,
+                    indent: 20.0,
+                  ),
+                  // 字体切换
+                  SwitchListTile(
+                    value: _switchSystemFont,
+                    onChanged: (value) {
+                      setState(() {
+                        _switchSystemFont = value;
+                        if(value){
+                          SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
+                        }else {
+                          SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
+                        }
+                        eventBus.fire(new MyEventSettingChange());
+                      });
+                    },
+                    title: Text(MyLocalizations.of(context).titleSystemFont),
+                    secondary: Icon(Icons.font_download),
+                    selected: false,
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
+            // 多语言设置
+            Container(
+              margin: const EdgeInsets.only(top: 40.0, bottom: 20.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ExpansionTile(
+                    title: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.language,
+                          color: ColorT.gray_66,
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 32.0),
+                          child: Text(MyLocalizations.of(context).titleLanguage),
+                        ),
+                        Expanded(
+                          child: Text(
+                            SpHelper.getLanguageModel() == null
+                                ? MyLocalizations.of(context).languageAuto
+                                : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode,
+                                    SpHelper.getLanguageModel().scriptCode),
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: ColorT.gray_99,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                    children: <Widget>[
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _list.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            LanguageModel model = _list[index];
+                            return new ListTile(
+                              title: new Text(
+                                (model.languageCode.isEmpty
+                                    ? MyLocalizations.of(context).languageAuto
+                                    : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
+                                style: new TextStyle(fontSize: 13.0),
+                              ),
+                              trailing: new Radio(
+                                  value: true,
+                                  groupValue: model.isSelected == true,
+                                  //activeColor: Colors.indigoAccent,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      updateLanguage(model);
+                                    });
+                                  }),
+                              onTap: () {
+                                setState(() {
+                                  updateLanguage(model);
+                                });
+                              },
+                            );
+                          }),
+                    ],
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
+            // 退出登录
+            Offstage(
+              offstage: !checkLogin(),
+              child: GestureDetector(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 100.0, bottom: 20.0),
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Divider(
+                        height: 0.0,
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Text(
+                            MyLocalizations.of(context).logoutLong,
+                            style: TextStyle(color: Colors.red, fontSize: 18.0),
+                          )),
+                      Divider(
+                        height: 0.0,
                       ),
                     ],
                   ),
-                  children: <Widget>[
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _list.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          LanguageModel model = _list[index];
-                          return new ListTile(
-                            title: new Text(
-                              (model.languageCode.isEmpty
-                                  ? MyLocalizations.of(context).languageAuto
-                                  : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
-                              style: new TextStyle(fontSize: 13.0),
-                            ),
-                            trailing: new Radio(
-                                value: true,
-                                groupValue: model.isSelected == true,
-                                //activeColor: Colors.indigoAccent,
-                                onChanged: (value) {
-                                  setState(() {
-                                    updateLanguage(model);
-                                  });
-                                }),
-                            onTap: () {
-                              setState(() {
-                                updateLanguage(model);
-                              });
-                            },
-                          );
-                        }),
-                  ],
                 ),
-                Divider(
-                  height: 0.0,
-                ),
-              ],
-            ),
-          ),
-          // 退出登录
-          Offstage(
-            offstage: !checkLogin(),
-            child: GestureDetector(
-              child: Container(
-                margin: const EdgeInsets.only(top: 150.0, bottom: 20.0),
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      height: 0.0,
-                    ),
-                    Container(
-                        padding: const EdgeInsets.all(14.0),
-                        child: Text(
-                          MyLocalizations.of(context).logoutLong,
-                          style: TextStyle(color: Colors.red, fontSize: 18.0),
-                        )),
-                    Divider(
-                      height: 0.0,
-                    ),
-                  ],
-                ),
+                onTap: () {
+                  // ⏏ 确认对话框
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            content: Text(MyLocalizations.of(context).sureLogout),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text(MyLocalizations.of(context).cancel),
+                                onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                              ),
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                    logout();
+                                  },
+                                  child: Text(MyLocalizations.of(context).logout)),
+                            ],
+                          ));
+                },
               ),
-              onTap: () {
-                // ⏏ 确认对话框
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          content: Text(MyLocalizations.of(context).sureLogout),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text(MyLocalizations.of(context).cancel),
-                              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-                            ),
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context, rootNavigator: true).pop();
-                                  logout();
-                                },
-                                child: Text(MyLocalizations.of(context).logout)),
-                          ],
-                        ));
-              },
             ),
-          ),
-          /*Center(
-            child: Flame.util.animationAsWidget(
-                Position(256.0, 256.0), animation.Animation.sequenced('minotaur.png', 19, textureWidth: 96.0)),
-          ),*/
-        ],
+            /*Center(
+              child: Flame.util.animationAsWidget(
+                  Position(256.0, 256.0), animation.Animation.sequenced('minotaur.png', 19, textureWidth: 96.0)),
+            ),*/
+          ],
+        ),
       ),
     );
   }

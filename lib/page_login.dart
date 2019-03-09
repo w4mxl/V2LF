@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     final bloc = BlocLogin();
     final logo = Image.asset(
       "assets/images/logo_v2lf.png",
-      width: 26.0,
+      width: 48.0,
     );
     final userName = StreamBuilder<String>(
       stream: bloc.account,
@@ -184,7 +184,10 @@ class _LoginPageState extends State<LoginPage> {
         title: Row(
           children: <Widget>[
             logo,
-            Text(MyLocalizations.of(context).login),
+            Padding(
+              padding: const EdgeInsets.only(left:4.0),
+              child: Text(MyLocalizations.of(context).login),
+            ),
           ],
         ),
       ),

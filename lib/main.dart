@@ -20,6 +20,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DateTime _lastPressedAt; //上次点击时间
   Locale _locale;
+  String _fontFamily = 'Whitney';
 
   @override
   void initState() {
@@ -41,6 +42,8 @@ class _MyAppState extends State<MyApp> {
   void _loadLocale() async {
     LanguageModel model = SpHelper.getLanguageModel();
     String _colorKey = SpHelper.getThemeColor();
+    String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
+
     if (!mounted) return;
     setState(() {
       if (model != null) {
@@ -52,6 +55,13 @@ class _MyAppState extends State<MyApp> {
       if (themeColorMap[_colorKey] != null) {
         ColorT.appMainColor = themeColorMap[_colorKey];
       }
+
+      if (_spFont != null && _spFont == 'System') {
+        _fontFamily = null;
+      } else {
+        _fontFamily = 'Whitney';
+      }
+
     });
   }
 
@@ -91,7 +101,7 @@ class _MyAppState extends State<MyApp> {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: 'Whitney'),
+      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily),
       home: WillPopScope(
         child: new DefaultTabController(
             length: tabs.length,

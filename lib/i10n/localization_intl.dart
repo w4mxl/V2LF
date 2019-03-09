@@ -40,6 +40,7 @@ class MyLocalizations {
   String get titleSetting => Intl.message('Setting', name: 'titleSetting');
 
   String get titleTheme => Intl.message('Theme', name: 'titleTheme');
+  String get titleSystemFont => Intl.message('System Font', name: 'titleSystemFont');
 
   String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
 

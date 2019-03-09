@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String KEY_LANGUAGE = 'key_language';
 const String KEY_THEME_COLOR = 'key_theme_color';
 
+// font
+const String SP_FONT_FAMILY = "font_family";
+
 const String SP_JINRISHICI_TOKEN = "jinrishici_token";
 
 // 与登录状态有关

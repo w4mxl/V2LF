@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "thank" : MessageLookupByLibrary.simpleMessage("感謝"),
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("多語言"),
     "titleSetting" : MessageLookupByLibrary.simpleMessage("設置"),
+    "titleSystemFont" : MessageLookupByLibrary.simpleMessage("系統字體"),
     "titleTheme" : MessageLookupByLibrary.simpleMessage("主題"),
     "toastLoginSuccess" : m1
   };
