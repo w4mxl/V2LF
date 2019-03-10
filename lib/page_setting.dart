@@ -202,28 +202,28 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
             // 主页tab设置
-            Container(
-              margin: const EdgeInsets.only(top: 24.0),
-              color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  Divider(
-                    height: 0.0,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.table_chart),
-                    title: Text('主页 TAB'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-                      // todo
-                    },
-                  ),
-                  Divider(
-                    height: 0.0,
-                  ),
-                ],
-              ),
-            ),
+//            Container(
+//              margin: const EdgeInsets.only(top: 24.0),
+//              color: Colors.white,
+//              child: Column(
+//                children: <Widget>[
+//                  Divider(
+//                    height: 0.0,
+//                  ),
+//                  ListTile(
+//                    leading: Icon(Icons.table_chart),
+//                    title: Text('主页 TAB'),
+//                    trailing: Icon(Icons.arrow_forward_ios),
+//                    onTap: (){
+//                      // todo
+//                    },
+//                  ),
+//                  Divider(
+//                    height: 0.0,
+//                  ),
+//                ],
+//              ),
+//            ),
             // 退出登录
             Offstage(
               offstage: !checkLogin(),
