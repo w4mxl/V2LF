@@ -9,6 +9,7 @@ import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 // 通知列表页面
 class NotificationsListView extends StatefulWidget {
@@ -21,6 +22,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   int maxPage = 1;
 
   bool isLoading = false;
+  bool empty = false;
   List<NotificationItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
@@ -48,9 +50,13 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
       isLoading = true;
       List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
       setState(() {
-        items.addAll(newEntries);
         isLoading = false;
-        maxPage = newEntries[0].maxPage;
+        if (newEntries.length > 0) {
+          items.addAll(newEntries);
+          maxPage = newEntries[0].maxPage;
+        } else {
+          empty = true;
+        }
       });
     }
   }
@@ -74,6 +80,31 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
                 }),
           ),
           onRefresh: _onRefresh);
+    } else if (empty == true) {
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                  width: 128.0,
+                  height: 114.0,
+                  margin: EdgeInsets.only(bottom: 30),
+                  child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+              Container(
+                margin: EdgeInsets.only(bottom: 114),
+                width: 250,
+                child: Text("You don't have any notifications yet.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.black.withOpacity(0.75),
+                      height: 1.2,
+                    )),
+              ),
+            ])
+      ]);
     }
     // By default, show a loading spinner
     return new Center(
@@ -164,7 +195,8 @@ class TopicItemView extends StatelessWidget {
                             // title
                             new Container(
                               alignment: Alignment.centerLeft,
-                              child: Html( // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
+                              child: Html(
+                                // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                                 data: notificationItem.title,
                                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 15.0),
                                 onLinkTap: (url) {
@@ -224,6 +256,7 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url, forceWebView: true);
   } else {
-    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+    Fluttertoast.showToast(
+        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
   }
 }

@@ -1,6 +1,7 @@
 // 收藏 listview
 import 'dart:async';
 
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
@@ -19,6 +20,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   int maxPage = 1;
 
   bool isLoading = false;// 正在请求的过程中多次下拉或上拉会造成多次加载更多的情况，通过这个字段解决
+  bool empty = false;
   List<FavTopicItem> items = new List();
 
   ScrollController _scrollController = new ScrollController();
@@ -46,9 +48,13 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
       isLoading = true;
       List<FavTopicItem> newEntries = await dioSingleton.getFavTopics(p++);
       setState(() {
-        items.addAll(newEntries);
         isLoading = false;
-        maxPage = newEntries[0].maxPage;
+        if(newEntries.length>0){
+          items.addAll(newEntries);
+          maxPage = newEntries[0].maxPage;
+        }else {
+          empty = true;
+        }
       });
     }
   }
@@ -72,6 +78,39 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
                 }),
           ),
           onRefresh: _onRefresh);
+    } else if (empty == true) {
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                  width: 128.0,
+                  height: 114.0,
+                  margin: EdgeInsets.only(bottom: 30),
+                  child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+              Container(
+                padding: EdgeInsets.only(bottom: 21),
+                width: 250,
+                child: Text("You haven’t favorited anything yet.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.black.withOpacity(0.80),
+                      height: 1.2,
+                    )),
+              ),
+              Container(
+                width: 270,
+                margin: EdgeInsets.only(bottom: 114),
+                child: Text("Browse to a topic and tap on the heart icon to save something in this list.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 17, height: 1.5, color: Colors.black.withOpacity(0.75))),
+              ),
+            ])
+      ]);
     }
     // By default, show a loading spinner
     return new Center(

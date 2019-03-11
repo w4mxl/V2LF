@@ -10,14 +10,13 @@ import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
-import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:xpath/xpath.dart';
-import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
+import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
+import 'package:xpath/xpath.dart';
 
 DioSingleton dioSingleton = new DioSingleton();
 
@@ -228,7 +227,10 @@ class DioSingleton {
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
     var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
     eventBus.fire(new MyEventFavCounts(count));
-    var page = tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name;
+    var page = tree.xpath("//*[@class='page_normal']") != null ? tree
+        .xpath("//*[@class='page_normal']")
+        .last
+        .xpath("/text()")[0].name : '1';
 
     // Fluttertoast.showToast(msg: '收藏总数：$count，页数：$page');
 
@@ -266,7 +268,7 @@ class DioSingleton {
       }
     } else {
       // todo 可能未登录
-      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
+      Fluttertoast.showToast(msg: '获取收藏失败');
     }
 
     return topics;
@@ -280,7 +282,8 @@ class DioSingleton {
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
-    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name;
+    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()") != null ?
+    tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name : null;
     // Fluttertoast.showToast(msg: '页数：$page');
 
     // Use html parser and query selector
@@ -290,7 +293,9 @@ class DioSingleton {
       for (var aNode in aRootNode) {
         NotificationItem item = new NotificationItem();
 
-        item.maxPage = int.parse(page.split('/')[1]);
+        if (page != null) {
+          item.maxPage = int.parse(page.split('/')[1]);
+        }
 
         //#n_9690800 > table > tbody > tr > td:nth-child(1) > a > img
         item.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > a > img').attributes["src"];

@@ -27,7 +27,7 @@ class _FavTopicsState extends State<FavTopics> {
 
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(MyLocalizations.of(context).favorites +' [ $count ]'),
+        title: new Text(MyLocalizations.of(context).favorites +' · $count'),
       ),
       body: new FavTopicListView(),
     );
