@@ -14,6 +14,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 final key = GlobalKey<_TopicDetailViewState>();
 
@@ -342,8 +343,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         break;
       case 'share':
         print(action.title);
-        // 分享
-        Fluttertoast.showToast(msg: '请期待～', gravity: ToastGravity.CENTER);
+        // 分享: 帖子标题+链接
+        if (_detailModel != null) {
+          var text = _detailModel.topicTitle.isNotEmpty
+              ? _detailModel.topicTitle + " " + DioSingleton.v2exHost + '/t/' + widget.topicId
+              : _detailModel.content + " " + DioSingleton.v2exHost + '/t/' + widget.topicId;
+          Share.share(text);
+        }
         break;
       case 'reply_comment':
         print(action.title);
