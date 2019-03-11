@@ -595,7 +595,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             new Container(
               padding: const EdgeInsets.all(10.0),
               child: Html(
-                data: _detailModel.content_rendered,
+                data: _detailModel.contentRendered,
                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
                 onLinkTap: (url) {
                   _launchURL(url);
@@ -755,7 +755,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                                       // 评论内容
                                       child: Html(
-                                        data: reply.content_rendered,
+                                        data: reply.contentRendered,
                                         defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
                                         onLinkTap: (url) {
                                           if (UrlHelper.canLaunchInApp(context, url)) {

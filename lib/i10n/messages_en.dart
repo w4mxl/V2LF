@@ -18,9 +18,9 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
-  static m0(num) => "Loading page ${num} ...";
+  static m0(num) => "Loading page $num ...";
 
-  static m1(name) => "Welcome back, ${name}!";
+  static m1(name) => "Welcome back, $name!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {

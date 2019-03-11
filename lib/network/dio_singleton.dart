@@ -225,12 +225,13 @@ class DioSingleton {
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
-    var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
-    eventBus.fire(new MyEventFavCounts(count));
-    var page = tree.xpath("//*[@class='page_normal']") != null ? tree
-        .xpath("//*[@class='page_normal']")
-        .last
-        .xpath("/text()")[0].name : '1';
+    if (tree.xpath("//*[@class='gray']") != null) {
+      var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
+      eventBus.fire(new MyEventFavCounts(count));
+    }
+    var page = tree.xpath("//*[@class='page_normal']") != null
+        ? tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name
+        : '1';
 
     // Fluttertoast.showToast(msg: '收藏总数：$count，页数：$page');
 
@@ -267,8 +268,8 @@ class DioSingleton {
         topics.add(favTopicItem);
       }
     } else {
-      // todo 可能未登录
-      Fluttertoast.showToast(msg: '获取收藏失败');
+      // todo 可能未登录或者没有
+      // Fluttertoast.showToast(msg: '获取收藏失败');
     }
 
     return topics;
@@ -282,8 +283,9 @@ class DioSingleton {
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
-    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()") != null ?
-    tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name : null;
+    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()") != null
+        ? tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name
+        : null;
     // Fluttertoast.showToast(msg: '页数：$page');
 
     // Use html parser and query selector
@@ -386,7 +388,7 @@ class DioSingleton {
     // 判断是否有正文
     if (document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div') != null) {
       detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').text;
-      detailModel.content_rendered = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
+      detailModel.contentRendered = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
     }
     // 附言
     List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
@@ -438,7 +440,8 @@ class DioSingleton {
                 aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
           }
           replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
-          replyItem.content_rendered = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replyItem.contentRendered =
+              aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
           replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
           replyItem.replyId = aNode.attributes["id"].substring(2);
           print(replyItem.replyId);

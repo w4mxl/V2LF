@@ -25,12 +25,12 @@ class RepliesResp {
 class Reply {
   int created;
   int id;
-  int last_modified;
-  int last_touched;
+  int lastModified;
+  int lastTouched;
   int replies;
   String content;
-  String content_rendered;
-  String last_reply_by;
+  String contentRendered;
+  String lastReplyBy;
   String title;
   String url;
   Member member;
@@ -38,12 +38,12 @@ class Reply {
   Reply.fromParams(
       {this.created,
       this.id,
-      this.last_modified,
-      this.last_touched,
+      this.lastModified,
+      this.lastTouched,
       this.replies,
       this.content,
-      this.content_rendered,
-      this.last_reply_by,
+      this.contentRendered,
+      this.lastReplyBy,
       this.title,
       this.url,
       this.member});
@@ -51,12 +51,12 @@ class Reply {
   Reply.fromJson(jsonRes) {
     created = jsonRes['created'];
     id = jsonRes['id'];
-    last_modified = jsonRes['last_modified'];
-    last_touched = jsonRes['last_touched'];
+    lastModified = jsonRes['last_modified'];
+    lastTouched = jsonRes['last_touched'];
     replies = jsonRes['replies'];
     content = jsonRes['content'];
-    content_rendered = jsonRes['content_rendered'];
-    last_reply_by = jsonRes['last_reply_by'];
+    contentRendered = jsonRes['content_rendered'];
+    lastReplyBy = jsonRes['last_reply_by'];
     title = jsonRes['title'];
     url = jsonRes['url'];
     member = new Member.fromJson(jsonRes['member']);
@@ -64,6 +64,6 @@ class Reply {
 
   @override
   String toString() {
-    return '{"created": $created,"id": $id,"last_modified": $last_modified,"last_touched": $last_touched,"replies": $replies,"content": ${content != null ? '${json.encode(content)}' : 'null'},"content_rendered": ${content_rendered != null ? '${json.encode(content_rendered)}' : 'null'},"last_reply_by": ${last_reply_by != null ? '${json.encode(last_reply_by)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'},"url": ${url != null ? '${json.encode(url)}' : 'null'},"member": $member}';
+    return '{"created": $created,"id": $id,"last_modified": $lastModified,"last_touched": $lastTouched,"replies": $replies,"content": ${content != null ? '${json.encode(content)}' : 'null'},"content_rendered": ${contentRendered != null ? '${json.encode(contentRendered)}' : 'null'},"last_reply_by": ${lastReplyBy != null ? '${json.encode(lastReplyBy)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'},"url": ${url != null ? '${json.encode(url)}' : 'null'},"member": $member}';
   }
 }
