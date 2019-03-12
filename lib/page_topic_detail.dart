@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
@@ -399,7 +400,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: const Color(0xFFD8D2D1),
+      backgroundColor: CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(

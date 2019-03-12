@@ -191,14 +191,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.feedback),
                 title: new Text(MyLocalizations.of(context).feedback),
                 onTap: () {
-                  _launchURL("mailto:smith@example.org?subject=V2LF%20Feedback&body=New%20feedback");
+                  _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
                 },
               ),
               new AboutListTile(
                 icon: new Icon(Icons.info),
                 child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v0.4.4",
+                applicationVersion: "v0.4.5",
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
@@ -267,9 +267,13 @@ class _LinkTextSpan extends TextSpan {
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true);
+    if (url.startsWith('mailto')) {
+      await launch(url);
+    } else {
+      await launch(url, forceWebView: true);
+    }
   } else {
     Fluttertoast.showToast(
-        msg: '您似乎没在手机上安装邮件客户端 ?', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
+        msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
   }
 }

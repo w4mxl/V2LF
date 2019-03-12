@@ -64,7 +64,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     if (items.length > 0) {
       return new RefreshIndicator(
           child: Container(
-            color: const Color(0xFFD8D2D1),
+            color: CupertinoColors.lightBackgroundGray,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,

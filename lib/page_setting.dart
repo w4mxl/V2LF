@@ -59,12 +59,12 @@ class _SettingPageState extends State<SettingPage> {
         title: Text(MyLocalizations.of(context).titleSetting),
       ),
       body: Container(
-        color: CupertinoColors.extraLightBackgroundGray,
+        color: CupertinoColors.lightBackgroundGray,
         child: ListView(
           children: <Widget>[
             Container(
               color: Colors.white,
-              margin: EdgeInsets.only(top: 40.0),
+              margin: EdgeInsets.only(top: 24.0),
               child: Column(
                 children: <Widget>[
                   Divider(

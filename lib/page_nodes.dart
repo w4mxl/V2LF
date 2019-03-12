@@ -39,7 +39,7 @@ class _NodePageState extends State<NodesPage> {
         ],
       ),
       body: new Container(
-          color: const Color(0xFFD8D2D1),
+          color: CupertinoColors.lightBackgroundGray,
           child: new Center(
             child: nodeGroups.length > 0
                 ? new ListView.builder(

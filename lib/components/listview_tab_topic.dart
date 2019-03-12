@@ -41,7 +41,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
           if (snapshot.hasData) {
             return new RefreshIndicator(
                 child: new Container(
-                    color: const Color(0xFFD8D2D1),
+                    color: CupertinoColors.lightBackgroundGray,
                     child: new ListView(
                         physics: ClampingScrollPhysics(),
                         padding: const EdgeInsets.only(bottom: 15.0),
