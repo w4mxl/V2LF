@@ -173,7 +173,7 @@ class TopicItemView extends StatelessWidget {
                     topic.topicContent,
                     /*maxLines: 2,
                     overflow: TextOverflow.ellipsis,*/
-                    style: new TextStyle(fontSize: 15.0, color: Colors.black),
+                    style: new TextStyle(fontSize: 15.5, color: Colors.black),
                   ),
                 ),
               ],

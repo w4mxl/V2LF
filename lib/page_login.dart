@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/bloc/bloc_login.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
@@ -22,11 +21,14 @@ class LoginPage extends StatefulWidget {
 }
 
 LoginFormData loginFormData;
-String fieldAccount;
-String fieldPassword;
-String fieldCaptcha;
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _accountController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
+  TextEditingController _captchaController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
   @override
@@ -47,182 +49,171 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocLogin();
     final logo = Image.asset(
       "assets/images/logo_v2lf.png",
       width: 48.0,
     );
-    final userName = StreamBuilder<String>(
-      stream: bloc.account,
-      builder: (context, snapshot) => TextField(
-            autofocus: true,
-            onChanged: (text) {
-              bloc.accountChanged(text);
-              fieldAccount = text;
-            },
-            onEditingComplete: () {
-              FocusScope.of(context).requestFocus(passwordTextFieldNode);
-            },
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-                labelText: MyLocalizations.of(context).account,
-                hintText: MyLocalizations.of(context).enterAccount,
-                errorText: snapshot.error,
-                border: OutlineInputBorder()),
-          ),
-    );
-
-    final password = StreamBuilder<String>(
-      stream: bloc.password,
-      builder: (context, snapshot) => TextField(
-            onChanged: (text) {
-              bloc.passwordChanged(text);
-              fieldPassword = text;
-            },
-            onEditingComplete: () {
-              //passwordTextFieldNode.unfocus();
-              FocusScope.of(context).requestFocus(captchaTextFieldNode);
-            },
-            textInputAction: TextInputAction.next,
-            focusNode: passwordTextFieldNode,
-            obscureText: true,
-            decoration: InputDecoration(
-                labelText: MyLocalizations.of(context).password,
-                hintText: MyLocalizations.of(context).enterPassword,
-                errorText: snapshot.error, border: OutlineInputBorder()),
-          ),
-    );
-
-    final captcha = Row(
-      children: <Widget>[
-        Flexible(
-            child: StreamBuilder<String>(
-                stream: bloc.captcha,
-                builder: (context, snapshot) => TextField(
-                      onChanged: (text) {
-                        bloc.captchaChanged(text);
-                        fieldCaptcha = text;
-                      },
-                      onEditingComplete: () {
-                        // 收起键盘
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      focusNode: captchaTextFieldNode,
-                      decoration: InputDecoration(
-                          labelText: MyLocalizations.of(context).captcha,
-                          hintText: MyLocalizations.of(context).enterCaptcha,
-                          errorText: snapshot.error,
-                          border: OutlineInputBorder()),
-                    ))),
-        Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: loginFormData != null && loginFormData.bytes.length > 0
-                ? GestureDetector(
-                    child: Image.memory(
-                      loginFormData.bytes,
-                      height: 55.0,
-                      width: 160.0,
-                      fit: BoxFit.fill,
-                    ),
-                    onTap: () {
-                      refreshCaptcha();
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.sync),
-                    onPressed: () {
-                      refreshCaptcha();
-                    })),
-      ],
-    );
-
-    final loginButton = StreamBuilder<bool>(
-      stream: bloc.submitCheck,
-      builder: (context, snapshot) => ButtonTheme(
-            child: RaisedButton(
-              color: Colors.blueGrey,
-              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
-              onPressed: snapshot.hasData
-                  ? () async {
-                      if (loginFormData != null && fieldAccount != null && fieldPassword != null && fieldCaptcha != null) {
-                        loginFormData.usernameInput = fieldAccount;
-                        loginFormData.passwordInput = fieldPassword;
-                        loginFormData.captchaInput = fieldCaptcha;
-                        //var formData = bloc.submit(loginFormData);
-                        print(loginFormData.toString());
-                        bool loginResult = await dioSingleton.loginPost(loginFormData);
-                        if (loginResult) {
-                          Fluttertoast.showToast(
-                              msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
-                          Navigator.of(context).pop();
-                        } else {
-                          refreshCaptcha();
-                        }
-                      }
-                    }
-                  : null,
-              child: Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white)),
-            ),
-            height: 50.0,
-            minWidth: 300.0,
-          ),
-    );
-
-    final forgotLabel = FlatButton(
-      child: Text(
-        MyLocalizations.of(context).forgetPassword,
-        style: TextStyle(color: Colors.black54),
-      ),
-      onPressed: () {
-        // 忘记密码 -> 跳转到重置密码web页面
-        launch("https://www.v2ex.com/forgot", forceWebView: true);
-      },
-    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            logo,
-            Padding(
-              padding: const EdgeInsets.only(left:4.0),
-              child: Text(MyLocalizations.of(context).login),
-            ),
-          ],
-        ),
+        title: logo,
+//        title: Row(
+//          children: <Widget>[
+//            logo,
+//            Padding(
+//              padding: const EdgeInsets.only(left: 4.0),
+//              child: Text(MyLocalizations.of(context).login),
+//            ),
+//          ],
+//        ),
       ),
-      body: Container(
-          color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.only(left: 30.0, right: 30.0),
-          child: ListView(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 15.0,
-              ),
-              userName,
-              SizedBox(
-                height: 15.0,
-              ),
-              password,
-              SizedBox(
-                height: 15.0,
-              ),
-              captcha,
-              SizedBox(
-                height: 30.0,
-              ),
-              loginButton,
-              forgotLabel,
-            ],
-          )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: ScrollConfiguration(
+        child: SingleChildScrollView(
+          child: Form(
+              key: _formKey, //设置globalKey，用于后面获取FormState
+              autovalidate: false, //开启自动校验
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0),
+                child: Column(
+                  children: <Widget>[
+                    // 用户名
+                    TextFormField(
+                        autofocus: true,
+                        controller: _accountController,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
+                        decoration: InputDecoration(
+                          labelText: MyLocalizations.of(context).account,
+                          hintText: MyLocalizations.of(context).enterAccount,
+                          border: OutlineInputBorder(),
+                        ),
+                        // 校验用户名
+                        validator: (v) {
+                          return v.trim().length > 0 ? null : "用户名不能为空";
+                        }),
+                    SizedBox(
+                      height: 12.0,
+                    ),
+                    // 密码
+                    TextFormField(
+                        controller: _pwdController,
+                        focusNode: passwordTextFieldNode,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
+                        decoration: InputDecoration(
+                          labelText: MyLocalizations.of(context).password,
+                          hintText: MyLocalizations.of(context).enterPassword,
+                          border: OutlineInputBorder(),
+                        ),
+                        obscureText: true,
+                        //校验密码
+                        validator: (v) {
+                          return v.trim().length > 0 ? null : "密码不能为空";
+                        }),
+                    SizedBox(
+                      height: 12.0,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: TextFormField(
+                              controller: _captchaController,
+                              focusNode: captchaTextFieldNode,
+                              onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
+                              decoration: InputDecoration(
+                                labelText: MyLocalizations.of(context).captcha,
+                                hintText: MyLocalizations.of(context).enterCaptcha,
+                                border: OutlineInputBorder(),
+                              ),
+                              //校验密码
+                              validator: (v) {
+                                return v.trim().length > 3 ? null : "验证码不能少于4位";
+                              }),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: loginFormData != null && loginFormData.bytes.length > 0
+                                ? GestureDetector(
+                                    child: Image.memory(
+                                      loginFormData.bytes,
+                                      height: 55.0,
+                                      width: 160.0,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    onTap: () {
+                                      refreshCaptcha();
+                                    },
+                                  )
+                                : IconButton(
+                                    icon: Icon(Icons.sync),
+                                    onPressed: () {
+                                      refreshCaptcha();
+                                    })),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    ButtonTheme(
+                      child: RaisedButton(
+//                        color: Colors.blueGrey,
+//                    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            if (loginFormData != null) {
+                              loginFormData.usernameInput = _accountController.text;
+                              loginFormData.passwordInput = _pwdController.text;
+                              loginFormData.captchaInput = _captchaController.text;
+                              //var formData = bloc.submit(loginFormData);
+                              print(loginFormData.toString());
+                              bool loginResult = await dioSingleton.loginPost(loginFormData);
+                              if (loginResult) {
+                                Fluttertoast.showToast(
+                                    msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
+                                Navigator.of(context).pop();
+                              } else {
+                                refreshCaptcha();
+                              }
+                            }
+                          }
+                        },
+                        child: Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white)),
+                      ),
+                      height: 55.0,
+                      minWidth: 400.0,
+                    ),
+                    FlatButton(
+                      child: Text(
+                        MyLocalizations.of(context).forgetPassword,
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                      onPressed: () {
+                        // 忘记密码 -> 跳转到重置密码web页面
+                        launch("https://www.v2ex.com/forgot", forceWebView: true);
+                      },
+                    )
+                  ],
+                ),
+              )),
+        ),
+        behavior: MyBehavior(),
+      ),
     );
   }
 
   @override
   void dispose() {
+    _accountController.dispose();
+    _pwdController.dispose();
+    _captchaController.dispose();
     super.dispose();
+  }
+}
+
+// 去除拖拽时的波纹效果
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
