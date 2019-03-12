@@ -15,6 +15,7 @@ import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -127,7 +128,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                           image: avatar.isNotEmpty
-                              ? new NetworkImage("https:" + avatar)
+                              ? CachedNetworkImageProvider("https:" + avatar,)
                               : new AssetImage("assets/images/ic_person.png"),
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
@@ -239,9 +240,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
   checkLoginState() {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
-        userName = spUsername;
-        avatar = SpHelper.sp.getString(SP_AVATAR);
-        getOnePoem();
+      userName = spUsername;
+      avatar = SpHelper.sp.getString(SP_AVATAR);
+      getOnePoem();
     }
   }
 
@@ -273,7 +274,6 @@ _launchURL(String url) async {
       await launch(url, forceWebView: true);
     }
   } else {
-    Fluttertoast.showToast(
-        msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
   }
 }

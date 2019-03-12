@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -201,6 +202,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     if (!isUpLoading) {
       isUpLoading = true;
       TopicDetailModel topicDetailModel = await dioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
+
+      // 用来判断主题是否需要登录
+      if(topicDetailModel.content.isEmpty){
+        Navigator.pop(context);
+        return;
+      }
+
       setState(() {
         _detailModel = topicDetailModel;
         replyList.addAll(topicDetailModel.replyList);
@@ -500,7 +508,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         shape: BoxShape.circle,
                         image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: new NetworkImage('https:' + _detailModel.avatar),
+                          image: CachedNetworkImageProvider('https:' + _detailModel.avatar),
                         ),
                       ),
                     ),
@@ -670,7 +678,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 } else {
                   ReplyItem reply = replyList[index];
                   return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                      behavior: HitTestBehavior.opaque, // GestureDetector 默认只监听不透明的 widget。当你点击空白的地方的时候，会监听不到。
                       child: new Container(
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                         child: new Row(
@@ -684,7 +692,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 shape: BoxShape.circle,
                                 image: new DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
+                                  image: CachedNetworkImageProvider(
                                     'https:' + reply.avatar,
                                   ),
                                 ),

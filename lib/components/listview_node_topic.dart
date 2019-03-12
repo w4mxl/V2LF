@@ -121,6 +121,7 @@ class TopicItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.push(
           context,

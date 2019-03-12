@@ -376,6 +376,11 @@ class DioSingleton {
     // Use html parser and query selector
     var document = parse(response.data);
 
+    if (document.querySelector('#Main > div.box > div.message') != null) {
+      Fluttertoast.showToast(msg: '查看本主题需要登录 😞', gravity: ToastGravity.CENTER);
+      return detailModel;
+    }
+
     detailModel.avatar =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;

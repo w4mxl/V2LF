@@ -9,6 +9,7 @@ import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -109,7 +110,7 @@ class TopicItemView extends StatelessWidget {
                         shape: BoxShape.circle,
                         image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: new NetworkImage(topic.avatar),
+                          image: CachedNetworkImageProvider(topic.avatar),
                         ),
                       ),
                     ),

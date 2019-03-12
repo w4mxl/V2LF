@@ -1,6 +1,7 @@
 // 收藏 listview
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -219,7 +220,7 @@ class TopicItemView extends StatelessWidget {
                                         width: 20.0,
                                         height: 20.0,
                                         child: CircleAvatar(
-                                          backgroundImage: NetworkImage("https:${topic.avatar}"),
+                                          backgroundImage: CachedNetworkImageProvider("https:${topic.avatar}"),
                                         ),
                                       ),
                                       new Text(

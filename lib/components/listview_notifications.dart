@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
@@ -173,7 +174,7 @@ class TopicItemView extends StatelessWidget {
                         width: 32.0,
                         height: 32.0,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage("https:${notificationItem.avatar}"),
+                          backgroundImage: CachedNetworkImageProvider("https:${notificationItem.avatar}"),
                         ),
                       ),
                       // 20天前
