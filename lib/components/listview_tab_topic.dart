@@ -102,18 +102,17 @@ class TopicItemView extends StatelessWidget {
               children: <Widget>[
                 new Row(
                   children: <Widget>[
-                    new Container(
-                      margin: const EdgeInsets.only(right: 10.0),
-                      width: 32.0,
-                      height: 32.0,
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: CachedNetworkImageProvider(topic.avatar),
-                        ),
+                    // 头像
+                    ClipOval(
+                      child: new CachedNetworkImage(
+                        imageUrl: topic.avatar,
+                        height: 32.0,
+                        width: 32.0,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Icon(Icons.account_circle, size: 32.0, color: Color(0xFFcccccc)),
                       ),
                     ),
+                    SizedBox(width: 10.0),
                     new Expanded(
                         child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

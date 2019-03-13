@@ -203,8 +203,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       isUpLoading = true;
       TopicDetailModel topicDetailModel = await dioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
 
-      // 用来判断主题是否需要登录
-      if(topicDetailModel.content.isEmpty){
+      // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
+      if (topicDetailModel.topicTitle.isEmpty) {
         Navigator.pop(context);
         return;
       }
@@ -500,20 +500,18 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 children: <Widget>[
                   // 头像
                   GestureDetector(
-                    child: new Container(
-                      margin: const EdgeInsets.only(right: 10.0),
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: CachedNetworkImageProvider('https:' + _detailModel.avatar),
-                        ),
+                    child: ClipOval(
+                      child: new CachedNetworkImage(
+                        imageUrl: 'https:' + _detailModel.avatar,
+                        height: 40.0,
+                        width: 40.0,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                       ),
                     ),
                     onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
                   ),
+                  SizedBox(width: 10.0),
                   new Expanded(
                       child: new Column(
                     children: <Widget>[
@@ -684,19 +682,25 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            new Container(
-                              margin: const EdgeInsets.only(right: 10.0),
-                              width: 25.0,
-                              height: 25.0,
-                              decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: CachedNetworkImageProvider(
-                                    'https:' + reply.avatar,
-                                  ),
+                            // 评论item头像
+                            GestureDetector(
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: 'https:' + reply.avatar,
+                                  width: 25.0,
+                                  height: 25.0,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Icon(
+                                        Icons.account_circle,
+                                        size: 25,
+                                        color: Color(0xFFcccccc),
+                                      ),
                                 ),
                               ),
+                              onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + reply.userName),
+                            ),
+                            SizedBox(
+                              width: 10.0,
                             ),
                             new Expanded(
                                 child: new Container(
@@ -887,7 +891,7 @@ class Action {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true); // , statusBarBrightness: Brightness.light
+    await launch(url, forceWebView: true,statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
   } else {
     Fluttertoast.showToast(
         msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);

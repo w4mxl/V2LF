@@ -271,7 +271,7 @@ _launchURL(String url) async {
     if (url.startsWith('mailto')) {
       await launch(url);
     } else {
-      await launch(url, forceWebView: true);
+      await launch(url, forceWebView: true,statusBarBrightness: Brightness.light);
     }
   } else {
     Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);

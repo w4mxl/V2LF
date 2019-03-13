@@ -7,7 +7,7 @@ description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 0.4.5+2
+version: 0.4.5+3
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -24,7 +24,7 @@ dependencies:
   http: ^0.12.0
   flutter_markdown: ^0.2.0
   shared_preferences: ^0.4.3
-  url_launcher: ^5.0.1
+  url_launcher: ^5.0.2
   cached_network_image: ^0.7.0 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.13.3+3 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath     还不支持 ETree.toString(Element) :(
