@@ -6,7 +6,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/model/tab.dart';
 import 'dart:convert';
+
+import 'package:flutter_app/utils/sp_helper.dart';
 
 // Adapted from reorderable list demo in offical flutter gallery:
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/reorderable_list_demo.dart
@@ -44,6 +48,8 @@ class _ListItem {
 //const TabData(title: 'R2', key: 'r2'),
 
 class _ReorderableListTabsState extends State<ReorderableListTabs> {
+
+  //static final List<TabModel> _tabs = SpHelper.getMainTabs();
 //  bool _reverseSort = false;
   static final _items = <TabData>[
     TabData(title: '技术', key: 'tech'),
@@ -81,6 +87,9 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
 
   @override
   Widget build(BuildContext context) {
+    List<TabModel> _tabs = SpHelper.getMainTabs();
+    print(_tabs.length);
+
     final _appbar = AppBar(
       title: Text('自定义主页 TAB'),
       actions: <Widget>[
@@ -92,7 +101,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
               linkMap.add({
                 'title': item.value.title,
                 'key': item.value.key,
-                'checked':item.checked,
+                'isSelected':item.checked,
               });
             }
 
@@ -120,7 +129,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
                   setState(() => item.checked = newValue);
                 },
                 title: Text(item.value.title),
-                isThreeLine: true,
+//                isThreeLine: true,
                 subtitle: Text('Tab ${item.value.title}, checked=${item.checked}'),
                 secondary: Icon(Icons.drag_handle),
               ),

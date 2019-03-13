@@ -67,10 +67,11 @@ class SpHelper {
 
   // 获取自定义的主页Tabs
   static List<TabModel> getMainTabs() {
-    String _mainTabs = sp.getString(KEY_MAIN_TABS);
+//    String _mainTabs = sp.getString(KEY_MAIN_TABS);
+    String _mainTabs = '[{"title":"技术","key":"tech","isSelected":true},{"title":"创意","key":"creative","isSelected":false},{"title":"好玩","key":"play","isSelected":false},{"title":"APPLE","key":"apple","isSelected":false},{"title":"酷工作","key":"jobs","isSelected":false},{"title":"交易","key":"deals","isSelected":false},{"title":"城市","key":"city","isSelected":false},{"title":"问与答","key":"qna","isSelected":false},{"title":"最热","key":"hot","isSelected":false},{"title":"全部","key":"all","isSelected":false},{"title":"R2","key":"r2","isSelected":false}]';
     if (isNotEmpty(_mainTabs)) {
       List<TabModel> list = [];
-      List<Map<String, dynamic>> linkMap = json.decode(_mainTabs);
+      List<dynamic> linkMap = json.decode(_mainTabs);
       for (var map in linkMap) {
         list.add(TabModel.fromJson(map));
       }
