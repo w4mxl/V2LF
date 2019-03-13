@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/page_reorderable_tabs.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -202,28 +203,28 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
             // 主页tab设置
-//            Container(
-//              margin: const EdgeInsets.only(top: 24.0),
-//              color: Colors.white,
-//              child: Column(
-//                children: <Widget>[
-//                  Divider(
-//                    height: 0.0,
-//                  ),
-//                  ListTile(
-//                    leading: Icon(Icons.table_chart),
-//                    title: Text('主页 TAB'),
-//                    trailing: Icon(Icons.arrow_forward_ios),
-//                    onTap: (){
-//                      // todo
-//                    },
-//                  ),
-//                  Divider(
-//                    height: 0.0,
-//                  ),
-//                ],
-//              ),
-//            ),
+            Container(
+              margin: const EdgeInsets.only(top: 24.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.table_chart),
+                    title: Text('自定义主页'),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReorderableListTabs()));
+                    },
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
             // 退出登录
             Offstage(
               offstage: !checkLogin(),

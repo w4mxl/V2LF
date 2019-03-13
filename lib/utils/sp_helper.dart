@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/model/tab.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String KEY_LANGUAGE = 'key_language';
 const String KEY_THEME_COLOR = 'key_theme_color';
+const String KEY_MAIN_TABS = 'key_main_tabs';
 
 // font
 const String SP_FONT_FAMILY = "font_family";
@@ -61,5 +63,19 @@ class SpHelper {
       _colorKey = 'gray';
     }
     return _colorKey;
+  }
+
+  // 获取自定义的主页Tabs
+  static List<TabModel> getMainTabs() {
+    String _mainTabs = sp.getString(KEY_MAIN_TABS);
+    if (isNotEmpty(_mainTabs)) {
+      List<TabModel> list = [];
+      List<Map<String, dynamic>> linkMap = json.decode(_mainTabs);
+      for (var map in linkMap) {
+        list.add(TabModel.fromJson(map));
+      }
+      return list;
+    }
+    return null;
   }
 }
