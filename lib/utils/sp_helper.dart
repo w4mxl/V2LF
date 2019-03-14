@@ -67,8 +67,8 @@ class SpHelper {
 
   // 获取自定义的主页Tabs
   static List<TabModel> getMainTabs() {
-//    String _mainTabs = sp.getString(KEY_MAIN_TABS);
-    String _mainTabs = '[{"title":"技术","key":"tech","isSelected":true},{"title":"创意","key":"creative","isSelected":false},{"title":"好玩","key":"play","isSelected":false},{"title":"APPLE","key":"apple","isSelected":false},{"title":"酷工作","key":"jobs","isSelected":false},{"title":"交易","key":"deals","isSelected":false},{"title":"城市","key":"city","isSelected":false},{"title":"问与答","key":"qna","isSelected":false},{"title":"最热","key":"hot","isSelected":false},{"title":"全部","key":"all","isSelected":false},{"title":"R2","key":"r2","isSelected":false}]';
+    String _mainTabs = sp.getString(KEY_MAIN_TABS);
+//    String _mainTabs = '[{"title":"技术","key":"tech","checked":true},{"title":"创意","key":"creative","checked":false},{"title":"好玩","key":"play","checked":false},{"title":"APPLE","key":"apple","checked":false},{"title":"酷工作","key":"jobs","checked":false},{"title":"交易","key":"deals","checked":false},{"title":"城市","key":"city","checked":false},{"title":"问与答","key":"qna","checked":false},{"title":"最热","key":"hot","checked":false},{"title":"全部","key":"all","checked":false},{"title":"R2","key":"r2","checked":false}]';
     if (isNotEmpty(_mainTabs)) {
       List<TabModel> list = [];
       List<dynamic> linkMap = json.decode(_mainTabs);
