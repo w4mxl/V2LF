@@ -8,6 +8,8 @@ import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:share/share.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -63,6 +65,32 @@ class _SettingPageState extends State<SettingPage> {
         color: CupertinoColors.lightBackgroundGray,
         child: ListView(
           children: <Widget>[
+            // 主页tab设置
+            Container(
+              margin: const EdgeInsets.only(top: 24.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.table_chart),
+                    title: Text('自定义主页'),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16.0,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReorderableListTabs()));
+                    },
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
             Container(
               color: Colors.white,
               margin: EdgeInsets.only(top: 24.0),
@@ -112,9 +140,9 @@ class _SettingPageState extends State<SettingPage> {
                     onChanged: (value) {
                       setState(() {
                         _switchSystemFont = value;
-                        if(value){
+                        if (value) {
                           SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
-                        }else {
+                        } else {
                           SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
                         }
                         eventBus.fire(new MyEventSettingChange());
@@ -202,21 +230,40 @@ class _SettingPageState extends State<SettingPage> {
                 ],
               ),
             ),
-            // 主页tab设置
             Container(
-              margin: const EdgeInsets.only(top: 24.0),
               color: Colors.white,
+              margin: EdgeInsets.only(top: 24.0),
               child: Column(
                 children: <Widget>[
                   Divider(
                     height: 0.0,
                   ),
+                  // 给软件评分
                   ListTile(
-                    leading: Icon(Icons.table_chart),
-                    title: Text('自定义主页'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReorderableListTabs()));
+                    leading: Icon(Icons.star),
+                    title: Text('给软件评分'),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16.0,
+                    ),
+                    onTap: () {
+                      LaunchReview.launch(); // todo 配置信息
+                    },
+                  ),
+                  Divider(
+                    height: 0.0,
+                    indent: 20.0,
+                  ),
+                  // 推荐给朋友
+                  ListTile(
+                    leading: Icon(Icons.share),
+                    title: Text('推荐给朋友'),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16.0,
+                    ),
+                    onTap: () {
+                      Share.share('todo'); // todo 配置信息
                     },
                   ),
                   Divider(

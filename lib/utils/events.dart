@@ -13,3 +13,8 @@ class MyEventFavCounts {
 
   MyEventFavCounts(this.count);
 }
+
+/// Event Tabs. 设置中自定义了主页 tabs
+class MyEventTabsChange {
+  MyEventTabsChange();
+}

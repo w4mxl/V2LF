@@ -4,7 +4,9 @@ import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,29 +19,42 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   DateTime _lastPressedAt; //上次点击时间
   Locale _locale;
   String _fontFamily = 'Whitney';
 
+  List<TabModel> tabs = TABS;
+
+  // 定义底部导航 Tab
+  TabController _tabController;
+
   @override
   void initState() {
     super.initState();
+
+    _tabController = TabController(length: tabs.length, vsync: this);
+    _initAsync();
 
     //监听设置中的变动
     eventBus.on<MyEventSettingChange>().listen((event) {
       _loadLocale();
     });
 
-    _initAsync();
+    //监听自定义主页Tab的变动
+    eventBus.on<MyEventTabsChange>().listen((event) {
+      _loadCustomTabs();
+    });
   }
 
   void _initAsync() async {
     SpHelper.sp = await SharedPreferences.getInstance();
+
     _loadLocale();
+    _loadCustomTabs();
   }
 
-  void _loadLocale() async {
+  void _loadLocale() {
     LanguageModel model = SpHelper.getLanguageModel();
     String _colorKey = SpHelper.getThemeColor();
     String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
@@ -61,28 +76,38 @@ class _MyAppState extends State<MyApp> {
       } else {
         _fontFamily = 'Whitney';
       }
-
     });
+  }
+
+  void _loadCustomTabs() {
+    List<TabModel> allTabs = SpHelper.getMainTabs();
+    List<TabModel> mainTabs = [];
+
+    for (var tab in allTabs) {
+      if (tab.checked) {
+        // 过滤选中的
+        mainTabs.add(tab);
+      }
+    }
+
+    if (mainTabs.isNotEmpty) {
+      setState(() {
+        tabs.clear();
+        tabs.addAll(mainTabs);
+        _tabController = TabController(length: tabs.length, vsync: this);
+      });
+    }
+  }
+
+  //当整个页面dispose时，记得把控制器也dispose掉，释放内存
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const List<TabData> tabs = const <TabData>[
-      const TabData(title: '技术', key: 'tech'),
-      const TabData(title: '创意', key: 'creative'),
-      const TabData(title: '好玩', key: 'play'),
-      const TabData(title: 'APPLE', key: 'apple'),
-      const TabData(title: '酷工作', key: 'jobs'),
-      const TabData(title: '交易', key: 'deals'),
-      const TabData(title: '城市', key: 'city'),
-      const TabData(title: '问与答', key: 'qna'),
-      const TabData(title: '最热', key: 'hot'),
-      const TabData(title: '全部', key: 'all'),
-      const TabData(title: 'R2', key: 'r2'),
-      /*const TabData(title: '关注', key: 'members'),
-  const TabData(title: '最近', key: 'recent'),*/
-    ];
-
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: _locale,
@@ -103,26 +128,26 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily),
       home: WillPopScope(
-        child: new DefaultTabController(
-            length: tabs.length,
-            child: new Scaffold(
-                appBar: AppBar(
-                  title: new TabBar(
-                    isScrollable: true,
-                    tabs: tabs.map((TabData choice) {
-                      return new Tab(
-                        text: choice.title,
-                      );
-                    }).toList(),
-                  ),
-                  elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
-                ),
-                body: new TabBarView(
-                  children: tabs.map((TabData choice) {
-                    return new TopicListView(choice.key);
-                  }).toList(),
-                ),
-                drawer: new DrawerLeft())),
+        child: new Scaffold(
+            appBar: AppBar(
+              title: new TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                tabs: tabs.map((TabModel choice) {
+                  return new Tab(
+                    text: choice.title,
+                  );
+                }).toList(),
+              ),
+              elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+            ),
+            body: new TabBarView(
+              controller: _tabController,
+              children: tabs.map((TabModel choice) {
+                return new TopicListView(choice.key);
+              }).toList(),
+            ),
+            drawer: new DrawerLeft()),
         onWillPop: () async {
           if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
             // 1秒内连续按两次返回键退出
@@ -134,17 +159,5 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
-
-    /*Future<bool> loginState() async {
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      return sharedPreferences.getBool("is_login");
-    }*/
   }
-}
-
-class TabData {
-  const TabData({this.title, this.key});
-
-  final String title;
-  final String key;
 }

@@ -42,6 +42,7 @@ dependencies:
   event_bus: ^1.0.3 # https://pub.dartlang.org/packages/event_bus
   flare_flutter: ^1.3.2 # https://pub.dartlang.org/packages/flare_flutter#-installing-tab-
   share: ^0.6.0+1 # https://pub.dartlang.org/packages/share#-installing-tab-
+  launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
 
 dev_dependencies:
   flutter_test:

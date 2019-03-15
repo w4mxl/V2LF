@@ -1,3 +1,5 @@
+import 'package:flutter_app/model/tab.dart';
+
 const String HOST = 'https://jiasule.v2ex.com/';
 const String API_PATH = 'api/';
 
@@ -60,3 +62,17 @@ const String API_JINRISHICI_ONE = 'https://v2.jinrishici.com/one.json';
 const String EVENT_NAME_LOGIN = 'login';
 const String EVENT_NAME_SETTING = 'setting';
 const String EVENT_NAME_FAV_COUNTS = 'fav_count';
+
+List<TabModel> TABS = <TabModel>[
+  TabModel('最热', 'hot'),
+  TabModel('技术', 'tech'),
+  TabModel('创意', 'creative'),
+  TabModel('好玩', 'play'),
+  TabModel('APPLE', 'apple'),
+  TabModel('酷工作', 'jobs',),
+  TabModel('交易', 'deals'),
+  TabModel('城市', 'city'),
+  TabModel('问与答', 'qna'),
+  TabModel('全部', 'all'),
+  TabModel('R2', 'r2'),
+];
