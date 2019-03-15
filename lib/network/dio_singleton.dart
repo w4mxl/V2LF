@@ -76,7 +76,7 @@ class DioSingleton {
     var response = await _dio.get(v2exHost + '/go/' + tabKey + "?p=" + p.toString());
     var document = parse(response.data);
     if (document.querySelector('#Main > div.box > div.cell > form') != null) {
-      Fluttertoast.showToast(msg: '查看本节点需要登录 😞', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
       return topics;
     }
 
@@ -141,14 +141,14 @@ class DioSingleton {
         // 回复失败
         String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
 
-        Fluttertoast.showToast(msg: '$problem');
+        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2);
         return false;
       }
 
       // 回复成功
       return true;
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '回复失败');
+      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -262,7 +262,7 @@ class DioSingleton {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
         var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: '登录过程中遇到一些问题：$errorInfo');
+        Fluttertoast.showToast(msg: '登录过程中遇到一些问题：$errorInfo', timeInSecForIos: 2);
         return false;
       }
     } on DioError catch (e) {
@@ -436,7 +436,7 @@ class DioSingleton {
     var document = parse(response.data);
 
     if (document.querySelector('#Main > div.box > div.message') != null) {
-      Fluttertoast.showToast(msg: '查看本主题需要登录 😞', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
       return detailModel;
     }
 
