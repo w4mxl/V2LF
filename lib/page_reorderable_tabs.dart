@@ -59,7 +59,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
   @override
   Widget build(BuildContext context) {
     final _appbar = AppBar(
-      title: Text('自定义主页 TAB'),
+      title: Text('个性主页'),
       actions: <Widget>[
         MaterialButton(
           onPressed: () async {

@@ -57,7 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("多语言"),
     "titleSetting" : MessageLookupByLibrary.simpleMessage("设置"),
     "titleSystemFont" : MessageLookupByLibrary.simpleMessage("系统字体"),
-    "titleTheme" : MessageLookupByLibrary.simpleMessage("主题"),
+    "titleTheme" : MessageLookupByLibrary.simpleMessage("主题切换"),
     "toastLoginSuccess" : m1
   };
 }

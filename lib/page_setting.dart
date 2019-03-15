@@ -75,8 +75,10 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
+                    isThreeLine: true,
                     leading: Icon(Icons.table_chart),
-                    title: Text('自定义主页'),
+                    title: Text('个性主页'),
+                    subtitle: Text('对主页显示的节点重新选择及排序',style: TextStyle(fontSize: 14.0),),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -232,7 +234,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Container(
               color: Colors.white,
-              margin: EdgeInsets.only(top: 24.0),
+              margin: EdgeInsets.only(top: 24.0,bottom: 24.0),
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -277,7 +279,7 @@ class _SettingPageState extends State<SettingPage> {
               offstage: !checkLogin(),
               child: GestureDetector(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 60.0, bottom: 20.0),
+                  margin: const EdgeInsets.only(bottom: 40.0),
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
@@ -285,7 +287,7 @@ class _SettingPageState extends State<SettingPage> {
                         height: 0.0,
                       ),
                       Container(
-                          padding: const EdgeInsets.all(14.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Text(
                             MyLocalizations.of(context).logoutLong,
                             style: TextStyle(color: Colors.red, fontSize: 18.0),

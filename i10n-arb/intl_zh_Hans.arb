@@ -23,7 +23,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleTheme": "主题",
+  "titleTheme": "主题切换",
   "@titleTheme": {
     "type": "text",
     "placeholders": {}
