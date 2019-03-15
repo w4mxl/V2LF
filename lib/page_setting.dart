@@ -8,6 +8,7 @@ import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 /*import 'package:flame/animation.dart' as animation;
@@ -248,7 +249,8 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      LaunchReview.launch(); // todo 配置信息
+                      Fluttertoast.showToast(msg: '上架后可用～');
+                      // LaunchReview.launch(); // todo 配置信息
                     },
                   ),
                   Divider(
@@ -264,7 +266,7 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Share.share('todo'); // todo 配置信息
+                      Share.share('V2LF - A new way to explore  https://testflight.apple.com/join/cvx4MQuh'); // todo 配置信息
                     },
                   ),
                   Divider(

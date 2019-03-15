@@ -127,7 +127,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily),
+      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily,platform: TargetPlatform.android,),
       home: WillPopScope(
         child: new Scaffold(
             appBar: AppBar(
