@@ -5,6 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
+import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
@@ -51,6 +52,64 @@ class DioSingleton {
       PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
       _dio.cookieJar = cookieJar;
     }
+  }
+
+  // 节点导航页 -> 获取特定节点下的topics
+  Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
+    String content = '';
+
+    List<NodeTopicItem> topics = new List<NodeTopicItem>();
+
+    // todo 这里">"花了几乎一个下午摸索出解析到数据，但是还是不完全明白原因
+    final String reg4tag = "<div class=\"cell\"> (.*?)</table></div>";
+//    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
+
+    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
+
+    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
+
+    final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
+
+    final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
+    final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
+
+    var response = await _dio.get(v2exHost + '/go/' + tabKey + "?p=" + p.toString());
+    var document = parse(response.data);
+    if (document.querySelector('#Main > div.box > div.cell > form') != null) {
+      Fluttertoast.showToast(msg: '查看本节点需要登录 😞', gravity: ToastGravity.CENTER);
+      return topics;
+    }
+
+    content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+
+    RegExp expInner = new RegExp(reg4inner);
+    Iterable<Match> matchesInner = expInner.allMatches(content);
+    Match match = matchesInner.first;
+    print("当前页/总页数： " + new RegExp(reg4pages).firstMatch(match.group(0)).group(1));
+
+    RegExp exp = new RegExp(reg4tag);
+    Iterable<Match> matches = exp.allMatches(content);
+    for (Match match in matches) {
+      String regString = match.group(0);
+      NodeTopicItem item = new NodeTopicItem();
+      Match match4MidAvatar = new RegExp(reg4MidAvatar).firstMatch(regString);
+      item.memberId = match4MidAvatar.group(1);
+      item.avatar = "https:${match4MidAvatar.group(2)}";
+      Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
+      item.topicId = match4TRC.group(1);
+      item.replyCount = match4TRC.group(2);
+      item.title = match4TRC.group(3);
+      if (regString.contains("个字符")) {
+        Match match4CharactersClickTimes = new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+        item.characters = match4CharactersClickTimes.group(1);
+        item.clickTimes = match4CharactersClickTimes.group(2);
+      }
+      /*item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
+          .list[0]
+          .content;*/
+      topics.add(item);
+    }
+    return topics;
   }
 
   // 回复帖子

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_web.dart';
+import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
@@ -44,7 +45,13 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
         isUpLoading = true;
       });
     }
-    List<NodeTopicItem> newEntries = await v2exApi.getNodeTopicsByTabKey(widget.tabKey, p++);
+    List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.tabKey, p++);
+    // 用来判断节点是否需要登录后查看
+    if(newEntries.isEmpty){
+      Navigator.pop(context);
+      return;
+    }
+
     print(p);
     setState(() {
       items.addAll(newEntries);
@@ -94,7 +101,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<NodeTopicItem> newEntries = await v2exApi.getNodeTopicsByTabKey(widget.tabKey, p);
+    List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.tabKey, p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
