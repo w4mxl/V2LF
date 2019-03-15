@@ -10,6 +10,7 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -18,7 +19,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 
-final key = GlobalKey<_TopicDetailViewState>();
+//final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
 
@@ -55,7 +56,7 @@ class _TopicDetailsState extends State<TopicDetails> {
     //监听登录事件
     print('监听登录事件:' + (isLogin == true ? 'true' : 'false'));
 
-    return new TopicDetailView(key, widget.topicId);
+    return new TopicDetailView(widget.topicId);
   }
 }
 
@@ -141,7 +142,11 @@ class _DialogOfCommentState extends State<DialogOfComment> {
       widget.onValueChange("");
       _isComposing = false;
       Navigator.of(context, rootNavigator: true).pop();
-      key.currentState._onRefresh();
+      eventBus.fire(new MyEventRefreshTopic());
+      //key.currentState._onRefresh();
+    } else {
+      print('帖子详情页面：回复失败');
+      Navigator.of(context, rootNavigator: true).pop();
     }
   }
 }
@@ -149,7 +154,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 class TopicDetailView extends StatefulWidget {
   final String topicId;
 
-  TopicDetailView(Key key, this.topicId) : super(key: key);
+  TopicDetailView(this.topicId);
 
   @override
   _TopicDetailViewState createState() => _TopicDetailViewState();
@@ -195,6 +200,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           print("没有更多...");
         }
       }
+    });
+    //监听自定义主页Tab的变动
+    eventBus.on<MyEventRefreshTopic>().listen((event) {
+      _onRefresh();
+      print("eventBus.on<MyEventRefreshTopic>");
     });
   }
 
@@ -868,15 +878,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     print("刷新数据...");
     p = 1;
     TopicDetailModel topicDetailModel = await dioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
-    setState(() {
-      _detailModel = topicDetailModel;
-      replyList.clear();
-      replyList.addAll(topicDetailModel.replyList);
-      if (p == 2) {
-        maxPage = topicDetailModel.maxPage;
-        print("####详情页-评论的页数：" + maxPage.toString());
-      }
-    });
+    if (mounted) {
+      setState(() {
+        _detailModel = topicDetailModel;
+        replyList.clear();
+        replyList.addAll(topicDetailModel.replyList);
+        if (p == 2) {
+          maxPage = topicDetailModel.maxPage;
+          print("####详情页-评论的页数：" + maxPage.toString());
+        }
+      });
+    } else {
+      print("####详情页-_onRefresh() mounted no !!!!");
+    }
   }
 }
 
@@ -891,7 +905,7 @@ class Action {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true,statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
+    await launch(url, forceWebView: true, statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
   } else {
     Fluttertoast.showToast(
         msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);

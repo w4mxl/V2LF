@@ -18,3 +18,8 @@ class MyEventFavCounts {
 class MyEventTabsChange {
   MyEventTabsChange();
 }
+
+/// Event 帖子详情页刷新
+class MyEventRefreshTopic {
+  MyEventRefreshTopic();
+}

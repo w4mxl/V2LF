@@ -55,29 +55,29 @@ class DioSingleton {
 
   // 回复帖子
   Future<bool> replyTopic(String topicId, String content) async {
-    var response = await _dio.get("/signin");
-    var tree = ETree.fromString(response.data);
-    String once = tree
-        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
-        .first
-        .attributes["value"];
-    print(once);
-
-    if (once == null || once.isEmpty) {
-      return false;
-    }
-
-    _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-
-    FormData formData = new FormData.from({
-      "once": once,
-      "content": content,
-    });
-
     try {
-      var response = await _dio.post("/t/" + topicId, data: formData);
+      var response = await _dio.get("/signin");
+      var tree = ETree.fromString(response.data);
+      String once = tree
+          .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+          .first
+          .attributes["value"];
+      print(once);
+
+      if (once == null || once.isEmpty) {
+        return false;
+      }
+
+      _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+
+      FormData formData = new FormData.from({
+        "once": once,
+        "content": content,
+      });
+
+      var responseReply = await _dio.post("/t/" + topicId, data: formData);
       _dio.options.contentType = ContentType.json; // 还原
-      var document = parse(response.data);
+      var document = parse(responseReply.data);
       if (document.querySelector('#Wrapper > div > div > div.problem') != null) {
         // 回复失败
         String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
@@ -449,7 +449,7 @@ class DioSingleton {
               aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
           replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
           replyItem.replyId = aNode.attributes["id"].substring(2);
-          print(replyItem.replyId);
+          //print(replyItem.replyId);
           replies.add(replyItem);
         }
       }

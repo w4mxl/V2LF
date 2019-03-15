@@ -81,16 +81,17 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void _loadCustomTabs() {
     List<TabModel> allTabs = SpHelper.getMainTabs();
-    List<TabModel> mainTabs = [];
 
-    for (var tab in allTabs) {
-      if (tab.checked) {
-        // 过滤选中的
-        mainTabs.add(tab);
+    if (allTabs != null) {
+      List<TabModel> mainTabs = [];
+
+      for (var tab in allTabs) {
+        if (tab.checked) {
+          // 过滤选中的
+          mainTabs.add(tab);
+        }
       }
-    }
 
-    if (mainTabs.isNotEmpty) {
       setState(() {
         tabs.clear();
         tabs.addAll(mainTabs);
