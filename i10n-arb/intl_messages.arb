@@ -38,6 +38,26 @@
     "type": "text",
     "placeholders": {}
   },
+  "titlePersonalityHome": "Personality Homepage",
+  "@titlePersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "hintPersonalityHome": "Reselect and sort the nodes displayed on the homepage",
+  "@hintPersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleToRate": "Rate",
+  "@titleToRate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleRecommend": "Recommend",
+  "@titleRecommend": {
+    "type": "text",
+    "placeholders": {}
+  },
   "nodes": "Nodes",
   "@nodes": {
     "type": "text",

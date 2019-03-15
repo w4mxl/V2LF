@@ -75,10 +75,9 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    isThreeLine: true,
                     leading: Icon(Icons.table_chart),
-                    title: Text('个性主页'),
-                    subtitle: Text('对主页显示的节点重新选择及排序',style: TextStyle(fontSize: 14.0),),
+                    title: Text(MyLocalizations.of(context).titlePersonalityHome),
+                    subtitle: Text(MyLocalizations.of(context).hintPersonalityHome,style: TextStyle(fontSize: 14.0),),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -243,7 +242,7 @@ class _SettingPageState extends State<SettingPage> {
                   // 给软件评分
                   ListTile(
                     leading: Icon(Icons.star),
-                    title: Text('给软件评分'),
+                    title: Text(MyLocalizations.of(context).titleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -259,7 +258,7 @@ class _SettingPageState extends State<SettingPage> {
                   // 推荐给朋友
                   ListTile(
                     leading: Icon(Icons.share),
-                    title: Text('推荐给朋友'),
+                    title: Text(MyLocalizations.of(context).titleRecommend),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,

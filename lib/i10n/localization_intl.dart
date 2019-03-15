@@ -44,6 +44,11 @@ class MyLocalizations {
 
   String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
 
+  String get titlePersonalityHome => Intl.message('Personality Homepage', name: 'titlePersonalityHome');
+  String get hintPersonalityHome => Intl.message('Reselect and sort the nodes displayed on the homepage', name: 'hintPersonalityHome');
+  String get titleToRate => Intl.message('Rate', name: 'titleToRate');
+  String get titleRecommend => Intl.message('Recommend', name: 'titleRecommend');
+
   // drawer
   String get nodes => Intl.message('Nodes', name: 'nodes');
   String get notifications => Intl.message('Notifications', name: 'notifications');

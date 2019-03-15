@@ -38,6 +38,26 @@
     "type": "text",
     "placeholders": {}
   },
+  "titlePersonalityHome": "主頁定制",
+  "@titlePersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "hintPersonalityHome": "對主頁顯示的節點重新選擇及排序",
+  "@hintPersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleToRate": "給軟件評分",
+  "@titleToRate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleRecommend": "推薦給朋友",
+  "@titleRecommend": {
+    "type": "text",
+    "placeholders": {}
+  },
   "nodes": "節點",
   "@nodes": {
     "type": "text",

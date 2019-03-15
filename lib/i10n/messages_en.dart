@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "favorites" : MessageLookupByLibrary.simpleMessage("Favorites"),
     "feedback" : MessageLookupByLibrary.simpleMessage("Feedback"),
     "forgetPassword" : MessageLookupByLibrary.simpleMessage("Forgot password ?"),
+    "hintPersonalityHome" : MessageLookupByLibrary.simpleMessage("Reselect and sort the nodes displayed on the homepage"),
     "languageAuto" : MessageLookupByLibrary.simpleMessage("Auto"),
     "loadingPage" : m0,
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
@@ -55,9 +56,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "sureLogout" : MessageLookupByLibrary.simpleMessage("Are you sure you want to sign out ?"),
     "thank" : MessageLookupByLibrary.simpleMessage("Thank"),
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("Language"),
+    "titlePersonalityHome" : MessageLookupByLibrary.simpleMessage("Personality Homepage"),
+    "titleRecommend" : MessageLookupByLibrary.simpleMessage("Recommend"),
     "titleSetting" : MessageLookupByLibrary.simpleMessage("Setting"),
     "titleSystemFont" : MessageLookupByLibrary.simpleMessage("System Font"),
     "titleTheme" : MessageLookupByLibrary.simpleMessage("Theme"),
+    "titleToRate" : MessageLookupByLibrary.simpleMessage("Rate"),
     "toastLoginSuccess" : m1
   };
 }
