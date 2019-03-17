@@ -15,11 +15,12 @@ The original intention of developing this app is to learn flutter.Designed with 
 
 ## To-Do
 
-- [ ] Add comment
-- [ ] Reply comment
+
 
 ## Done
 
+- [x] Add comment
+- [x] Reply comment
 - [x] Page My favorites
 - [x] Page Notifications
 - [x] Settings
