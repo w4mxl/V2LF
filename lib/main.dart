@@ -6,6 +6,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -114,6 +115,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       locale: _locale,
       localizationsDelegates: [
         const MyLocalizationsDelegate(),
+        ChineseCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
         GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
       ],
@@ -127,7 +129,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily,platform: TargetPlatform.android,),
+      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily),
       home: WillPopScope(
         child: new Scaffold(
             appBar: AppBar(
