@@ -184,6 +184,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   List<ReplyItem> replyList = List();
 
   ScrollController _scrollController = new ScrollController();
+  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
 
   @override
   void initState() {
@@ -192,6 +193,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     getData();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
+      // print(_scrollController.offset); //打印滚动位置
+      if (_scrollController.offset < 1000 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      } else if (_scrollController.offset >= 1000 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      }
+
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
         if (replyList.length > 0 && p <= maxPage) {
@@ -206,6 +218,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       _onRefresh();
       print("eventBus.on<MyEventRefreshTopic>");
     });
+  }
+
+  @override
+  void dispose() {
+    //为了避免内存泄露
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future getData() async {
@@ -471,15 +490,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             ? RefreshIndicator(
                 child: Scrollbar(
                   child: SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          // 详情view
-                          detailCard(context),
-                          // 评论view
-                          commentCard(_select),
-                        ],
-                      ),
+                    child: Column(
+                      children: <Widget>[
+                        // 详情view
+                        detailCard(context),
+                        // 评论view
+                        commentCard(_select),
+                      ],
                     ),
                     controller: _scrollController,
                   ),
@@ -491,6 +508,24 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   child: new CircularProgressIndicator(),
                 )),
       ),
+      floatingActionButton: Offstage(
+        offstage: !showToTopBtn,
+        child: FloatingActionButton(
+            tooltip: '滑动到顶部',
+            child: Icon(Icons.arrow_upward),
+            mini: true,
+            onPressed: () {
+              _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+            }),
+      ),
+//      这种方式不知道为啥，在iOS上正常，但是在Android上child死活显示不出来，怪！！！
+//      floatingActionButton: !showToTopBtn ? null : FloatingActionButton(
+//          tooltip: '滑动到顶部',
+//          child: Icon(Icons.arrow_upward),
+//          mini: true,
+//          onPressed: () {
+//            _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+//          }),
     );
   }
 
