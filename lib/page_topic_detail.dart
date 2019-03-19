@@ -136,7 +136,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
   Future<Null> _onTextMsgSubmitted(String text) async {
     bool loginResult = await dioSingleton.replyTopic(widget.topicId, text);
     if (loginResult) {
-      Fluttertoast.showToast(msg: '回复成功!');
+      Fluttertoast.showToast(msg: '回复成功!', gravity: ToastGravity.CENTER);
       // Clear input text field.
       _textController.clear();
       widget.onValueChange("");
@@ -261,6 +261,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     });
     bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
+      Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
       setState(() {
         _saving = false;
         _detailModel.isThank = true;
@@ -279,6 +280,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     });
     bool isSuccess = await dioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
+      Fluttertoast.showToast(msg: _detailModel.isFavorite?'已取消收藏！':'收藏成功！', gravity: ToastGravity.CENTER);
       setState(() {
         _saving = false;
         _detailModel.isFavorite = !_detailModel.isFavorite;
@@ -376,7 +378,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           Clipboard.setData(ClipboardData(text: _detailModel.content));
           Fluttertoast.showToast(msg: '已复制好帖子内容', gravity: ToastGravity.CENTER);
         } else {
-          Fluttertoast.showToast(msg: '帖子内容为空', gravity: ToastGravity.CENTER);
+          Fluttertoast.showToast(msg: '帖子内容为空！', gravity: ToastGravity.CENTER);
         }
         break;
       case 'share':
