@@ -171,7 +171,6 @@ class DataSearch extends SearchDelegate<String> {
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.forward),
             title: RichText(
                 text: TextSpan(
                     text: suggestionNodes[index].nodeName.substring(0, query.length),
@@ -181,6 +180,7 @@ class DataSearch extends SearchDelegate<String> {
                       text: suggestionNodes[index].nodeName.substring(query.length),
                       style: DefaultTextStyle.of(context).style)
                 ])),
+            trailing: Icon(Icons.navigate_next),
             onTap: () =>
                 Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
           ),

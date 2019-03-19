@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
@@ -154,6 +155,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
             ),*/
 
               new ListTile(
+                leading: new Icon(Icons.search),
+                title: new Text('Search'),
+                onTap: () {
+                  Navigator.pop(context);
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
+              ),
+              new ListTile(
                 leading: new Icon(Icons.apps),
                 title: new Text(MyLocalizations.of(context).nodes),
                 onTap: () {
@@ -162,7 +171,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               new ListTile(
-                enabled: userName.isNotEmpty, // todo 登录后打开
+                enabled: userName.isNotEmpty, // 登录后打开
                 leading: new Icon(Icons.notifications),
                 title: new Text(MyLocalizations.of(context).notifications),
                 onTap: () {
@@ -171,7 +180,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               new ListTile(
-                enabled: userName.isNotEmpty, // todo 登录后打开
+                enabled: userName.isNotEmpty, // 登录后打开
                 leading: new Icon(Icons.favorite),
                 title: new Text(MyLocalizations.of(context).favorites),
                 onTap: () {
