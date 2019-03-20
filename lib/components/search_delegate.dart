@@ -3,8 +3,10 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -16,13 +18,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 List<NodeItem> allNodes = <NodeItem>[];
 
 class MySearchDelegate extends SearchDelegate<String> {
-  final List<String> _history = ['v2er', 'AirPods'];
+  final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
+      ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
+      : []; // ['v2er', 'AirPods']
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.close),
+        icon: Icon(CupertinoIcons.clear_circled_solid),
         onPressed: () {
           query = "";
           showSuggestions(context);
@@ -44,6 +48,11 @@ class MySearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
 //    return Center(child: Text('┐(´-｀)┌'));
+    if (!_history.contains(query.trim())) {
+      _history.add(query.trim());
+      SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
+    }
+
     return buildSearchFutureBuilder(query.trim());
   }
 
@@ -51,18 +60,20 @@ class MySearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
 //    final suggestionNodes = query.isEmpty ? meLikeNodes : allNodes.where((p) => p.nodeName.startsWith(query)).toList();
 
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.history),
-            title: Text(_history[index]),
-            onTap: () {
-              query = _history[index];
-              showResults(context);
-            },
+    return _history.isNotEmpty
+        ? ListView.builder(
+            itemBuilder: (context, index) => ListTile(
+                  leading: Icon(Icons.history),
+                  title: Text(_history[index]),
+                  onTap: () {
+                    query = _history[index];
+                    showResults(context);
+                  },
 //            Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
-          ),
-      itemCount: _history.length,
-    );
+                ),
+            itemCount: _history.length,
+          )
+        : Container();
   }
 
   FutureBuilder<Sov2ex> buildSearchFutureBuilder(String q) {
