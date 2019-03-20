@@ -55,7 +55,10 @@ class MySearchDelegate extends SearchDelegate<String> {
       itemBuilder: (context, index) => ListTile(
             leading: Icon(Icons.history),
             title: Text(_history[index]),
-            onTap: () {},
+            onTap: () {
+              query = _history[index];
+              showResults(context);
+            },
 //            Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
           ),
       itemCount: _history.length,
