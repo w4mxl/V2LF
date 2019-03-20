@@ -96,7 +96,7 @@ class MySearchDelegate extends SearchDelegate<String> {
       print(response.data);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '搜索失败');
+      Fluttertoast.showToast(msg: '搜索出错了...');
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
@@ -127,37 +127,68 @@ class Sov2exResultItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String title = hitsListBean.highlight.title != null
+        ? hitsListBean.highlight.title[0]
+            .replaceAll('<em>', '')
+            .replaceAll('<\/em>', '')
+            .replaceAll(new RegExp(r"[\r\n]"), '')
+        : hitsListBean.source.title;
+
     String content = hitsListBean.highlight.content != null
-        ? hitsListBean.highlight.content[0].replaceAll('<em>', '<mark>').replaceAll('<\/em>', '<\/mark>')
+        ? hitsListBean.highlight.content[0]
+            .replaceAll('<em>', '')
+            .replaceAll('<\/em>', '')
+            .replaceAll(new RegExp(r"[\r\n]"), '')
         : (hitsListBean.highlight.postscript_list != null
-            ? hitsListBean.highlight.postscript_list[0].replaceAll('<em>', '<mark>').replaceAll('<\/em>', '<\/mark>')
+            ? hitsListBean.highlight.postscript_list[0]
+                .replaceAll('<em>', '')
+                .replaceAll('<\/em>', '')
+                .replaceAll(new RegExp(r"[\r\n]"), '')
             : (hitsListBean.highlight.reply_list != null
-                ? hitsListBean.highlight.reply_list[0].replaceAll('<em>', '<mark>').replaceAll('<\/em>', '<\/mark>')
+                ? hitsListBean.highlight.reply_list[0]
+                    .replaceAll('<em>', '')
+                    .replaceAll('<\/em>', '')
+                    .replaceAll(new RegExp(r"[\r\n]"), '')
                 : hitsListBean.source.content));
 
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Html(
-            data: hitsListBean.highlight.title != null
-                ? hitsListBean.highlight.title[0].replaceAll('<em>', '<mark>').replaceAll('<\/em>', '<\/mark>')
-                : hitsListBean.source.title,
-            defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 18.0),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(color: Colors.black87, fontSize: 18.0),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                content,
+                style: TextStyle(color: Colors.black54, fontSize: 15.0),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                hitsListBean.source.member +
+                    " 于" +
+                    hitsListBean.source.created +
+                    " 发表，共计 " +
+                    hitsListBean.source.replies.toString() +
+                    " 个回复",
+                style: TextStyle(color: Colors.black38, fontSize: 12.0),
+              )
+            ],
           ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Html(
-            data: content,
-            defaultTextStyle: TextStyle(color: Colors.black54, fontSize: 15.0),
-          ),
-          Divider(
-            height: 6.0,
-          )
-        ],
-      ),
+        ),
+        Divider(
+          height: 6.0,
+        )
+      ],
     );
   }
 }
