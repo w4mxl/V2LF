@@ -31,7 +31,7 @@ dependencies:
   dio: ^1.0.13 # https://pub.dartlang.org/packages/dio
   rxdart: ^0.20.0 # https://pub.flutter-io.cn/packages/rxdart
   # flutter_html_view: ^0.5.10 # https://pub.flutter-io.cn/packages/flutter_html_view "Thus, flutter_html_view ^0.5.10 requires url_launcher ^3.0.0."
-  flutter_html: ^0.9.4 # https://github.com/Sub6Resources/flutter_html
+  flutter_html: ^0.9.6 # https://github.com/Sub6Resources/flutter_html
   fluttertoast: ^2.2.3 # https://pub.dartlang.org/packages/fluttertoast
   fluintl: ^0.1.2 # 多语言 国际化 https://pub.dartlang.org/packages/fluintl
   intl: ^0.15.7 # https://pub.dartlang.org/packages/intl
