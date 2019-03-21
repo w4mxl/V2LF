@@ -6,6 +6,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -200,6 +201,11 @@ class TopicItemView extends StatelessWidget {
                                 // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                                 data: notificationItem.title,
                                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 15.0),
+                                linkStyle: TextStyle(
+                                  color: ColorT.appMainColor[400],
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: ColorT.appMainColor[400]
+                                ),
                                 onLinkTap: (url) {
                                   if (UrlHelper.canLaunchInApp(context, url)) {
                                     return;
@@ -210,7 +216,7 @@ class TopicItemView extends StatelessWidget {
                                   }
                                   _launchURL(url);
                                 },
-                                useRichText: true,
+//                                useRichText: true,
                               ),
                             ),
                             // reply
@@ -223,6 +229,11 @@ class TopicItemView extends StatelessWidget {
                                   defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
                                   backgroundColor: Colors.grey[100],
                                   padding: EdgeInsets.all(4.0),
+                                  linkStyle: TextStyle(
+                                    color: ColorT.appMainColor[400],
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: ColorT.appMainColor[400]
+                                  ),
                                   onLinkTap: (url) {
                                     if (UrlHelper.canLaunchInApp(context, url)) {
                                       return;

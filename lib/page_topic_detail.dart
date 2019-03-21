@@ -10,6 +10,7 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/url_helper.dart';
@@ -280,7 +281,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     });
     bool isSuccess = await dioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
-      Fluttertoast.showToast(msg: _detailModel.isFavorite?'已取消收藏！':'收藏成功！', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: _detailModel.isFavorite ? '已取消收藏！' : '收藏成功！', gravity: ToastGravity.CENTER);
       setState(() {
         _saving = false;
         _detailModel.isFavorite = !_detailModel.isFavorite;
@@ -651,6 +652,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               child: Html(
                 data: _detailModel.contentRendered,
                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                linkStyle: TextStyle(
+                    color: ColorT.appMainColor[400],
+                    decoration: TextDecoration.underline,
+                    decorationColor: ColorT.appMainColor[400]),
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
@@ -690,6 +695,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 12.0),
+                linkStyle: TextStyle(
+                    color: ColorT.appMainColor[400],
+                    decoration: TextDecoration.underline,
+                    decorationColor: ColorT.appMainColor[400]),
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
@@ -817,6 +826,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       child: Html(
                                         data: reply.contentRendered,
                                         defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
+                                        linkStyle: TextStyle(
+                                            color: ColorT.appMainColor[400],
+                                            decoration: TextDecoration.underline,
+                                            decorationColor: ColorT.appMainColor[400]),
                                         onLinkTap: (url) {
                                           if (UrlHelper.canLaunchInApp(context, url)) {
                                             return;

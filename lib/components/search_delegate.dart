@@ -50,7 +50,11 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-//    return Center(child: Text('┐(´-｀)┌'));
+
+    if(query.isEmpty){
+      return Center(child: Text('┐(´-｀)┌'));
+    }
+
     if (!_history.contains(query.trim())) {
       _history.insert(0, query.trim());
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
@@ -153,11 +157,13 @@ class Sov2exResultListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: hits.length,
-        itemBuilder: (context, index) {
-          return Sov2exResultItem(hits[index]);
-        });
+    return Scrollbar(
+      child: ListView.builder(
+          itemCount: hits.length,
+          itemBuilder: (context, index) {
+            return Sov2exResultItem(hits[index]);
+          }),
+    );
   }
 }
 
