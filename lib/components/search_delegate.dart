@@ -12,11 +12,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 /// @date  : 2019/3/19 10:10 PM
 /// @email : mxl1989@gmail.com
 /// @desc  : SearchDelegate
+///
+/// 2019/3/21 17:32
+/// 从结果item点击到帖子详情后返回，原结果页面会一直刷新数据，体验不好。
+/// 原因是每次回来会新buildResults -> 原先会再给一个新的请求数据的Future，现在改成如果query不变，用久的Future
 
 class MySearchDelegate extends SearchDelegate<String> {
   final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
       ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
       : []; // ['v2er', 'AirPods']
+
+  String lastQ = ""; // 上一次的搜索关键字
+  Future<Sov2ex> _future; // 搜索数据 Future
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -45,8 +52,13 @@ class MySearchDelegate extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
 //    return Center(child: Text('┐(´-｀)┌'));
     if (!_history.contains(query.trim())) {
-      _history.insert(0,query.trim());
+      _history.insert(0, query.trim());
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
+    }
+
+    if (query.trim() != lastQ) {
+      _future = getSov2exData(query.trim());
+      lastQ = query.trim();
     }
 
     return buildSearchFutureBuilder(query.trim());
@@ -96,7 +108,7 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   FutureBuilder<Sov2ex> buildSearchFutureBuilder(String q) {
     return new FutureBuilder<Sov2ex>(
-      future: getSov2exData(q),
+      future: _future,
       builder: (context, AsyncSnapshot<Sov2ex> async) {
         if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
           return new Center(
@@ -224,6 +236,7 @@ class Sov2exResultItem extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
           ),
+      behavior: HitTestBehavior.opaque,
     );
   }
 }
