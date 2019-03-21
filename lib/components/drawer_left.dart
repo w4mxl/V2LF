@@ -156,7 +156,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
 
               new ListTile(
                 leading: new Icon(Icons.search),
-                title: new Text('Search'),
+                title: new Text(MyLocalizations.of(context).search),
                 onTap: () {
                   Navigator.pop(context);
                   showSearch(context: context, delegate: MySearchDelegate());

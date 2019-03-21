@@ -18,9 +18,9 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
-  static m0(num) => "Loading page $num ...";
+  static m0(num) => "Loading page ${num} ...";
 
-  static m1(name) => "Welcome back, $name!";
+  static m1(name) => "Welcome back, ${name}!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "browser" : MessageLookupByLibrary.simpleMessage("Open from browser"),
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "captcha" : MessageLookupByLibrary.simpleMessage("Captcha"),
+    "clearHistorySearch" : MessageLookupByLibrary.simpleMessage("Clear history"),
     "copyContent" : MessageLookupByLibrary.simpleMessage("Copy content"),
     "copyLink" : MessageLookupByLibrary.simpleMessage("Copy link"),
     "enterAccount" : MessageLookupByLibrary.simpleMessage("Enter account"),
@@ -45,12 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "logout" : MessageLookupByLibrary.simpleMessage("Logout"),
     "logoutLong" : MessageLookupByLibrary.simpleMessage("Log out"),
     "noComment" : MessageLookupByLibrary.simpleMessage("no comment yet"),
+    "noHistorySearch" : MessageLookupByLibrary.simpleMessage("No search history"),
     "nodes" : MessageLookupByLibrary.simpleMessage("Nodes"),
     "notifications" : MessageLookupByLibrary.simpleMessage("Notifications"),
     "password" : MessageLookupByLibrary.simpleMessage("Password"),
     "reply" : MessageLookupByLibrary.simpleMessage("Reply"),
     "replyHint" : MessageLookupByLibrary.simpleMessage("(u_u)  Please try to make the reply helpful to others"),
     "replySuccess" : MessageLookupByLibrary.simpleMessage("Reply Success!"),
+    "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "share" : MessageLookupByLibrary.simpleMessage("Share"),
     "sureLogout" : MessageLookupByLibrary.simpleMessage("Are you sure you want to sign out ?"),

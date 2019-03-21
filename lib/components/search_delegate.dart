@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -89,7 +90,7 @@ class MySearchDelegate extends SearchDelegate<String> {
             itemCount: _history.length + 1, // +1 是清空搜索记录
           )
         : Center(
-            child: Text('没有历史搜索记录'),
+            child: Text(MyLocalizations.of(context).noHistorySearch),
           );
   }
 
@@ -98,7 +99,7 @@ class MySearchDelegate extends SearchDelegate<String> {
       padding: const EdgeInsets.all(10.0),
       child: Center(
         child: InkWell(
-          child: Text('清空历史记录'),
+          child: Text(MyLocalizations.of(context).clearHistorySearch),
           onTap: () {
             _history.clear();
             SpHelper.sp.remove(SP_SEARCH_HISTORY);

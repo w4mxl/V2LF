@@ -50,6 +50,7 @@ class MyLocalizations {
   String get titleRecommend => Intl.message('Recommend', name: 'titleRecommend');
 
   // drawer
+  String get search => Intl.message('Search', name: 'search');
   String get nodes => Intl.message('Nodes', name: 'nodes');
   String get notifications => Intl.message('Notifications', name: 'notifications');
   String get favorites => Intl.message('Favorites', name: 'favorites');
@@ -57,6 +58,8 @@ class MyLocalizations {
   String get feedback => Intl.message('Feedback', name: 'feedback');
   String get about => Intl.message('About', name: 'about');
 
+  String get noHistorySearch => Intl.message('No search history', name: 'noHistorySearch');
+  String get clearHistorySearch => Intl.message('Clear history', name: 'clearHistorySearch');
 
   loadingPage(num) => Intl.message('Loading page $num ...', name: 'loadingPage', args: [num]);
 

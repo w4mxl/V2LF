@@ -58,6 +58,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "search": "Search",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
   "nodes": "Nodes",
   "@nodes": {
     "type": "text",
@@ -85,6 +90,16 @@
   },
   "about": "About",
   "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noHistorySearch": "No search history",
+  "@noHistorySearch": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "clearHistorySearch": "Clear history",
+  "@clearHistorySearch": {
     "type": "text",
     "placeholders": {}
   },

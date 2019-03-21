@@ -18,9 +18,9 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'zh_Hans';
 
-  static m0(num) => "正在加载第$num页...";
+  static m0(num) => "正在加载第${num}页...";
 
-  static m1(name) => "欢迎回来，$name!";
+  static m1(name) => "欢迎回来，${name}!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "browser" : MessageLookupByLibrary.simpleMessage("浏览器打开"),
     "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
     "captcha" : MessageLookupByLibrary.simpleMessage("验证码"),
+    "clearHistorySearch" : MessageLookupByLibrary.simpleMessage("清空历史记录"),
     "copyContent" : MessageLookupByLibrary.simpleMessage("复制内容"),
     "copyLink" : MessageLookupByLibrary.simpleMessage("复制链接"),
     "enterAccount" : MessageLookupByLibrary.simpleMessage("请输入用户名"),
@@ -45,12 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "logout" : MessageLookupByLibrary.simpleMessage("退出"),
     "logoutLong" : MessageLookupByLibrary.simpleMessage("退出登录"),
     "noComment" : MessageLookupByLibrary.simpleMessage("暂无回复"),
+    "noHistorySearch" : MessageLookupByLibrary.simpleMessage("没有搜索记录"),
     "nodes" : MessageLookupByLibrary.simpleMessage("节点"),
     "notifications" : MessageLookupByLibrary.simpleMessage("通知"),
     "password" : MessageLookupByLibrary.simpleMessage("密码"),
     "reply" : MessageLookupByLibrary.simpleMessage("回复"),
     "replyHint" : MessageLookupByLibrary.simpleMessage("(u_u) 请尽量让回复有助于他人"),
     "replySuccess" : MessageLookupByLibrary.simpleMessage("回复成功!"),
+    "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "settings" : MessageLookupByLibrary.simpleMessage("设置"),
     "share" : MessageLookupByLibrary.simpleMessage("分享"),
     "sureLogout" : MessageLookupByLibrary.simpleMessage("您确定要退出登录吗？"),

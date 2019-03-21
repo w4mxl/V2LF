@@ -58,6 +58,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "search": "搜索",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
   "nodes": "节点",
   "@nodes": {
     "type": "text",
@@ -85,6 +90,16 @@
   },
   "about": "关于",
   "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noHistorySearch": "没有搜索记录",
+  "@noHistorySearch": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "clearHistorySearch": "清空历史记录",
+  "@clearHistorySearch": {
     "type": "text",
     "placeholders": {}
   },
