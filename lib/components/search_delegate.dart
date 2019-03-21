@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/sov2ex.dart';
-import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -12,8 +12,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 /// @date  : 2019/3/19 10:10 PM
 /// @email : mxl1989@gmail.com
 /// @desc  : SearchDelegate
-
-List<NodeItem> allNodes = <NodeItem>[];
 
 class MySearchDelegate extends SearchDelegate<String> {
   final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
@@ -47,7 +45,7 @@ class MySearchDelegate extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
 //    return Center(child: Text('┐(´-｀)┌'));
     if (!_history.contains(query.trim())) {
-      _history.add(query.trim());
+      _history.insert(0,query.trim());
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
     }
 
@@ -69,13 +67,14 @@ class MySearchDelegate extends SearchDelegate<String> {
                     query = _history[index];
                     showResults(context);
                   },
-//            Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
                 );
               }
             },
             itemCount: _history.length + 1, // +1 是清空搜索记录
           )
-        : Container();
+        : Center(
+            child: Text('没有历史搜索记录'),
+          );
   }
 
   Widget _buildClearHistory(BuildContext context) {
@@ -86,7 +85,6 @@ class MySearchDelegate extends SearchDelegate<String> {
           child: Text('清空历史记录'),
           onTap: () {
             _history.clear();
-            print(_history.length);
             SpHelper.sp.remove(SP_SEARCH_HISTORY);
             query = "";
             showSuggestions(context);
@@ -182,44 +180,50 @@ class Sov2exResultItem extends StatelessWidget {
                     .replaceAll(new RegExp(r"[\r\n]"), '')
                 : hitsListBean.source.content));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                title,
-                style: TextStyle(color: Colors.black87, fontSize: 18.0),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Text(
-                content,
-                style: TextStyle(color: Colors.black54, fontSize: 15.0),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Text(
-                hitsListBean.source.member +
-                    " 于" +
-                    hitsListBean.source.created +
-                    " 发表，共计 " +
-                    hitsListBean.source.replies.toString() +
-                    " 个回复",
-                style: TextStyle(color: Colors.black38, fontSize: 12.0),
-              )
-            ],
+    return GestureDetector(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  title,
+                  style: TextStyle(color: Colors.black87, fontSize: 18.0),
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  content,
+                  style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  hitsListBean.source.member +
+                      " 于 " +
+                      hitsListBean.source.created.replaceAll('T', '  ') +
+                      " 发表，共计 " +
+                      hitsListBean.source.replies.toString() +
+                      " 个回复",
+                  style: TextStyle(color: Colors.black38, fontSize: 12.0),
+                )
+              ],
+            ),
           ),
-        ),
-        Divider(
-          height: 6.0,
-        )
-      ],
+          Divider(
+            height: 6.0,
+          )
+        ],
+      ),
+      onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
+          ),
     );
   }
 }
