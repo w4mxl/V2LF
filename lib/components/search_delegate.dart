@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// @author: wml
@@ -58,11 +56,13 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-//    final suggestionNodes = query.isEmpty ? meLikeNodes : allNodes.where((p) => p.nodeName.startsWith(query)).toList();
-
     return _history.isNotEmpty
         ? ListView.builder(
-            itemBuilder: (context, index) => ListTile(
+            itemBuilder: (context, index) {
+              if (index == _history.length) {
+                return _buildClearHistory(context);
+              } else {
+                return ListTile(
                   leading: Icon(Icons.history),
                   title: Text(_history[index]),
                   onTap: () {
@@ -70,10 +70,30 @@ class MySearchDelegate extends SearchDelegate<String> {
                     showResults(context);
                   },
 //            Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
-                ),
-            itemCount: _history.length,
+                );
+              }
+            },
+            itemCount: _history.length + 1, // +1 是清空搜索记录
           )
         : Container();
+  }
+
+  Widget _buildClearHistory(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      child: Center(
+        child: InkWell(
+          child: Text('清空历史记录'),
+          onTap: () {
+            _history.clear();
+            print(_history.length);
+            SpHelper.sp.remove(SP_SEARCH_HISTORY);
+            query = "";
+            showSuggestions(context);
+          },
+        ),
+      ),
+    );
   }
 
   FutureBuilder<Sov2ex> buildSearchFutureBuilder(String q) {

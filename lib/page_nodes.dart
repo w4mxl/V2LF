@@ -142,7 +142,7 @@ class DataSearch extends SearchDelegate<String> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.close),
+        icon: Icon(CupertinoIcons.clear_circled_solid),
         onPressed: () {
           query = "";
         },
