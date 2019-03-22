@@ -734,6 +734,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque, // GestureDetector 默认只监听不透明的 widget。当你点击空白的地方的时候，会监听不到。
                       child: new Container(
+                        color: reply.userName == _detailModel.createdId ? Colors.red[100] : null,
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
