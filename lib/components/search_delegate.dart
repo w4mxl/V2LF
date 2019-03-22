@@ -7,6 +7,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// @author: wml
@@ -51,8 +52,7 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-
-    if(query.isEmpty){
+    if (query.isEmpty) {
       return Center(child: Text('┐(´-｀)┌'));
     }
 
@@ -176,27 +176,15 @@ class Sov2exResultItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title = hitsListBean.highlight.title != null
-        ? hitsListBean.highlight.title[0]
-            .replaceAll('<em>', '')
-            .replaceAll('<\/em>', '')
-            .replaceAll(new RegExp(r"[\r\n]"), '')
+        ? hitsListBean.highlight.title[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
         : hitsListBean.source.title;
 
     String content = hitsListBean.highlight.content != null
-        ? hitsListBean.highlight.content[0]
-            .replaceAll('<em>', '')
-            .replaceAll('<\/em>', '')
-            .replaceAll(new RegExp(r"[\r\n]"), '')
+        ? hitsListBean.highlight.content[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
         : (hitsListBean.highlight.postscript_list != null
-            ? hitsListBean.highlight.postscript_list[0]
-                .replaceAll('<em>', '')
-                .replaceAll('<\/em>', '')
-                .replaceAll(new RegExp(r"[\r\n]"), '')
+            ? hitsListBean.highlight.postscript_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
             : (hitsListBean.highlight.reply_list != null
-                ? hitsListBean.highlight.reply_list[0]
-                    .replaceAll('<em>', '')
-                    .replaceAll('<\/em>', '')
-                    .replaceAll(new RegExp(r"[\r\n]"), '')
+                ? hitsListBean.highlight.reply_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
                 : hitsListBean.source.content));
 
     return GestureDetector(
@@ -208,16 +196,26 @@ class Sov2exResultItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(color: Colors.black87, fontSize: 18.0),
+                Html(
+                  data: title,
+                  defaultTextStyle: Theme.of(context).textTheme.subhead,
+                  linkStyle: TextStyle(
+                    color: Colors.red,
+                    decoration: null,
+                  ),
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
-                Text(
-                  content,
-                  style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                Html(
+                  data: content,
+                  renderNewlines: true,
+                  defaultTextStyle: TextStyle(color: Colors.grey[800], fontSize: 14.0),
+                  linkStyle: TextStyle(
+                    color: Colors.red,
+                    decoration: null,
+                  ),
+                  useRichText: true,
                 ),
                 SizedBox(
                   height: 8.0,

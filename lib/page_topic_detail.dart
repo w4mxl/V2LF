@@ -659,6 +659,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
+                useRichText: true,
               ),
             ),
             // 附言
@@ -702,6 +703,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
+                useRichText: true,
               ),
             ],
           ),
@@ -841,6 +843,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           }
                                           _launchURL(url);
                                         },
+                                        useRichText: true,
                                       )),
                                 ],
                               ),
