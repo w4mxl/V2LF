@@ -189,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         // 忘记密码 -> 跳转到重置密码web页面
-                        launch("https://www.v2ex.com/forgot", forceWebView: true);
+                        launch("https://www.v2ex.com/forgot", statusBarBrightness: Brightness.light);
                       },
                     )
                   ],

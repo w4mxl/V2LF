@@ -959,7 +959,7 @@ class Action {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true, statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
+    await launch(url, statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
   } else {
     Fluttertoast.showToast(
         msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
