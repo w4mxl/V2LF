@@ -19,6 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //final key = GlobalKey<_TopicDetailViewState>();
 
@@ -165,9 +166,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   bool _saving = false;
 
   List<Action> actions = <Action>[
-    Action(id: 'reply', title: '回复', icon: Icons.reply),
-    Action(id: 'thank', title: '感谢', icon: Icons.local_florist),
-    Action(id: 'favorite', title: '收藏', icon: Icons.favorite_border),
+    Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),
+    Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
+    Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
     Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
@@ -262,7 +263,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     });
     bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
-      Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '感谢已送达 😁', gravity: ToastGravity.CENTER);
       setState(() {
         _saving = false;
         _detailModel.isThank = true;
@@ -303,7 +304,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       setState(() {
         _saving = false;
         // todo 更新UI：❤️后面的数字
-        Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '感谢已送达 😁', gravity: ToastGravity.CENTER);
       });
     } else {
       Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
@@ -447,17 +448,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             child: Row(
               children: <Widget>[
                 IconButton(
-                    icon: Icon(actions[0].icon),
+                    icon: Icon(_detailModel != null && _detailModel.isThank ? FontAwesomeIcons.solidKissWinkHeart : actions[0].icon),
                     onPressed: () {
                       _select(actions[0]);
                     }),
                 IconButton(
-                    icon: Icon(actions[1].icon),
+                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
                     onPressed: () {
                       _select(actions[1]);
                     }),
                 IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? Icons.favorite : actions[2].icon),
+                    icon: Icon(actions[2].icon),
                     onPressed: () {
                       _select(actions[2]);
                     }),
