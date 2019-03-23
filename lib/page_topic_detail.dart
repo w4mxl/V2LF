@@ -866,7 +866,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     ListTile(
-                                      leading: Icon(Icons.local_florist),
+                                      leading: Icon(FontAwesomeIcons.kissWinkHeart),
                                       title: Text('感谢评论'),
                                       onTap: () {
                                         Navigator.pop(context);
