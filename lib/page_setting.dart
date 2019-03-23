@@ -76,7 +76,7 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    leading: Icon(Icons.table_chart),
+                    leading: Icon(Icons.table_chart, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titlePersonalityHome),
                     subtitle: Text(MyLocalizations.of(context).hintPersonalityHome,style: TextStyle(fontSize: 14.0),),
                     trailing: Icon(
@@ -151,7 +151,7 @@ class _SettingPageState extends State<SettingPage> {
                       });
                     },
                     title: Text(MyLocalizations.of(context).titleSystemFont),
-                    secondary: Icon(Icons.font_download),
+                    secondary: Icon(Icons.font_download, color: ColorT.gray_66),
                     selected: false,
                   ),
                   Divider(
@@ -242,7 +242,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 给软件评分
                   ListTile(
-                    leading: Icon(Icons.star),
+                    leading: Icon(Icons.star_half, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
@@ -259,7 +259,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 推荐给朋友
                   ListTile(
-                    leading: Icon(Icons.share),
+                    leading: Icon(Icons.share, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titleRecommend),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
