@@ -71,6 +71,7 @@ class MyLocalizations {
 
   String get captcha => Intl.message('Captcha', name: 'captcha');
   String get enterCaptcha => Intl.message('Enter right captcha', name: 'enterCaptcha');
+  String get signup => Intl.message('Sign-up', name: 'signup');
   String get forgetPassword => Intl.message('Forgot password ?', name: 'forgetPassword');
 
   String get logoutLong => Intl.message('Log out', name: 'logoutLong');

@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "share" : MessageLookupByLibrary.simpleMessage("Share"),
+    "signup" : MessageLookupByLibrary.simpleMessage("Sign-up"),
     "sureLogout" : MessageLookupByLibrary.simpleMessage("Are you sure you want to sign out ?"),
     "thank" : MessageLookupByLibrary.simpleMessage("Thank"),
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("Language"),

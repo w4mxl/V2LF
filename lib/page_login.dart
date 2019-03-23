@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey, //设置globalKey，用于后面获取FormState
               autovalidate: false, //开启自动校验
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
                 child: Column(
                   children: <Widget>[
                     // 用户名
@@ -182,15 +183,35 @@ class _LoginPageState extends State<LoginPage> {
                       height: 55.0,
                       minWidth: 400.0,
                     ),
-                    FlatButton(
-                      child: Text(
-                        MyLocalizations.of(context).forgetPassword,
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      onPressed: () {
-                        // 忘记密码 -> 跳转到重置密码web页面
-                        launch("https://www.v2ex.com/forgot", statusBarBrightness: Brightness.light);
-                      },
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            '注册',
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          onPressed: () {
+                            // 注册 -> 跳转到注册web页面
+                            launch("https://www.v2ex.com/signup",
+                                statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            MyLocalizations.of(context).forgetPassword,
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          onPressed: () {
+                            // 忘记密码 -> 跳转到重置密码web页面
+                            launch("https://www.v2ex.com/forgot",
+                                statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+                          },
+                        ),
+                      ],
                     )
                   ],
                 ),

@@ -145,6 +145,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "signup": "注册",
+  "@signup": {
+    "type": "text",
+    "placeholders": {}
+  },
   "forgetPassword": "忘记密码 ?",
   "@forgetPassword": {
     "type": "text",

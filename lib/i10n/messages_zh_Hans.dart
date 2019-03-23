@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search" : MessageLookupByLibrary.simpleMessage("搜索"),
     "settings" : MessageLookupByLibrary.simpleMessage("设置"),
     "share" : MessageLookupByLibrary.simpleMessage("分享"),
+    "signup" : MessageLookupByLibrary.simpleMessage("注册"),
     "sureLogout" : MessageLookupByLibrary.simpleMessage("您确定要退出登录吗？"),
     "thank" : MessageLookupByLibrary.simpleMessage("感谢"),
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("多语言"),

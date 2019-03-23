@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -202,10 +203,9 @@ class TopicItemView extends StatelessWidget {
                                 data: notificationItem.title,
                                 defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 15.0),
                                 linkStyle: TextStyle(
-                                  color: ColorT.appMainColor[400],
+                                    color: ColorT.appMainColor[400],
                                     decoration: TextDecoration.underline,
-                                    decorationColor: ColorT.appMainColor[400]
-                                ),
+                                    decorationColor: ColorT.appMainColor[400]),
                                 onLinkTap: (url) {
                                   if (UrlHelper.canLaunchInApp(context, url)) {
                                     return;
@@ -230,10 +230,9 @@ class TopicItemView extends StatelessWidget {
                                   backgroundColor: Colors.grey[100],
                                   padding: EdgeInsets.all(4.0),
                                   linkStyle: TextStyle(
-                                    color: ColorT.appMainColor[400],
+                                      color: ColorT.appMainColor[400],
                                       decoration: TextDecoration.underline,
-                                      decorationColor: ColorT.appMainColor[400]
-                                  ),
+                                      decorationColor: ColorT.appMainColor[400]),
                                   onLinkTap: (url) {
                                     if (UrlHelper.canLaunchInApp(context, url)) {
                                       return;
@@ -266,7 +265,7 @@ class TopicItemView extends StatelessWidget {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url,statusBarBrightness: Brightness.light);
+    await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(
         msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);

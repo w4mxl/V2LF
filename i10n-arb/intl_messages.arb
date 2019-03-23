@@ -145,6 +145,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "signup": "Sign-up",
+  "@signup": {
+    "type": "text",
+    "placeholders": {}
+  },
   "forgetPassword": "Forgot password ?",
   "@forgetPassword": {
     "type": "text",

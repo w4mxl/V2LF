@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -448,12 +449,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             child: Row(
               children: <Widget>[
                 IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isThank ? FontAwesomeIcons.solidKissWinkHeart : actions[0].icon),
+                    icon: Icon(_detailModel != null && _detailModel.isThank
+                        ? FontAwesomeIcons.solidKissWinkHeart
+                        : actions[0].icon),
                     onPressed: () {
                       _select(actions[0]);
                     }),
                 IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
+                    icon: Icon(
+                        _detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
                     onPressed: () {
                       _select(actions[1]);
                     }),
@@ -890,6 +894,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       title: Text('查看对话'),
                                       onTap: () {
                                         Navigator.pop(context);
+                                        Fluttertoast.showToast(msg: 'Developing...');
                                       },
                                     ),
                                   ],
@@ -960,7 +965,7 @@ class Action {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Brightness.light); // , statusBarBrightness: Brightness.light
+    await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(
         msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
