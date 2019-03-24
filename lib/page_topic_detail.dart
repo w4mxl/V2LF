@@ -264,7 +264,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     });
     bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
-      Fluttertoast.showToast(msg: '感谢已送达 😁', gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
       setState(() {
         _saving = false;
         _detailModel.isThank = true;
@@ -305,7 +305,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       setState(() {
         _saving = false;
         // todo 更新UI：❤️后面的数字
-        Fluttertoast.showToast(msg: '感谢已送达 😁', gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
       });
     } else {
       Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
