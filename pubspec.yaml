@@ -44,6 +44,7 @@ dependencies:
   share: ^0.6.0+1 # https://pub.dartlang.org/packages/share#-installing-tab-
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
   font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
+  webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
 
 dev_dependencies:
   flutter_test:

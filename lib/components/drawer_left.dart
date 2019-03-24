@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_delegate.dart';
+import 'package:flutter_app/history_hot.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
@@ -41,7 +42,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     return SizedBox(
-      width: 260.0,
+      width: 270.0,
       child: new Drawer(
         child: SingleChildScrollView(
           child: new Column(
@@ -171,6 +172,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.whatshot),
+                title: new Text('往期'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
                 },
               ),
               new ListTile(

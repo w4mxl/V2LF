@@ -44,7 +44,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 child: new Container(
                     color: CupertinoColors.lightBackgroundGray,
                     child: new ListView(
-                        physics: ClampingScrollPhysics(),
+                        physics: ClampingScrollPhysics(),//正常的滚动效果，没有弹性
                         padding: const EdgeInsets.only(bottom: 15.0),
                         children: snapshot.data.map((TabTopicItem topic) {
                           return new TopicItemView(topic);
