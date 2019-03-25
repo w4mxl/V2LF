@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -78,7 +81,10 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(Icons.table_chart, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titlePersonalityHome),
-                    subtitle: Text(MyLocalizations.of(context).hintPersonalityHome,style: TextStyle(fontSize: 14.0),),
+                    subtitle: Text(
+                      MyLocalizations.of(context).hintPersonalityHome,
+                      style: TextStyle(fontSize: 14.0),
+                    ),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -234,7 +240,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Container(
               color: Colors.white,
-              margin: EdgeInsets.only(top: 24.0,bottom: 24.0),
+              margin: EdgeInsets.only(top: 24.0),
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -242,7 +248,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 给软件评分
                   ListTile(
-                    leading: Icon(Icons.star_half, color: ColorT.gray_66),
+                    leading: Icon(Icons.star, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
@@ -259,7 +265,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 推荐给朋友
                   ListTile(
-                    leading: Icon(Icons.share, color: ColorT.gray_66),
+                    leading: Icon(Icons.favorite, color: ColorT.gray_66),
                     title: Text(MyLocalizations.of(context).titleRecommend),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
@@ -268,6 +274,67 @@ class _SettingPageState extends State<SettingPage> {
                     onTap: () {
                       Share.share('V2LF - A new way to explore  https://testflight.apple.com/join/cvx4MQuh'); // todo 配置信息
                     },
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
+            // 主页tab设置
+            Container(
+              margin: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.rate_review, color: ColorT.gray_66),
+                    title: new Text(MyLocalizations.of(context).feedback),
+                    onTap: () {
+                      if (Platform.isIOS) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => SimpleDialog(
+                                  title: Text('您的反馈我会认真考虑'),
+                                  children: <Widget>[
+                                    SimpleDialogOption(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(Icons.alternate_email),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text('Email'),
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () => _launchURL(
+                                          "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
+                                    ),
+                                    SimpleDialogOption(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(Icons.message),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 8.0),
+                                            child: Text('iMessage'),
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () => _launchURL("sms:745871698@qq.com&body=text%20message"),
+                                    )
+                                  ],
+                                ));
+                      } else if (Platform.isAndroid) {
+                        _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
+                      }
+                    },
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16.0,
+                    ),
                   ),
                   Divider(
                     height: 0.0,
@@ -356,5 +423,13 @@ class _SettingPageState extends State<SettingPage> {
     _updateData();
     SpHelper.putObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
     eventBus.fire(new MyEventSettingChange());
+  }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
   }
 }
