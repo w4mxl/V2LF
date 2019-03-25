@@ -354,7 +354,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.flag, color: ColorT.gray_66),
-                    title: new Text('更新记录'),
+                    title: new Text(MyLocalizations.of(context).versions),
                     onTap: () {
                       Navigator.push(
                         context,

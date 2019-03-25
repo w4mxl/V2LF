@@ -219,5 +219,15 @@
   "@share": {
     "type": "text",
     "placeholders": {}
+  },
+  "history": "往期",
+  "@history": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "versions": "版本记录",
+  "@versions": {
+    "type": "text",
+    "placeholders": {}
   }
 }

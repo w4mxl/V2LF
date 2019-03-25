@@ -94,6 +94,9 @@ class MyLocalizations {
   String get copyContent => Intl.message('Copy content', name: 'copyContent');
   String get share => Intl.message('Share', name: 'share');
 
+  String get history => Intl.message('History', name: 'history');
+  String get versions => Intl.message('Versions', name: 'versions');
+
 }
 
 //Locale代理类

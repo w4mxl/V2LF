@@ -159,7 +159,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
             ),*/
               new ListTile(
                 leading: new Icon(Icons.whatshot),
-                title: new Text('往期'),
+                title: new Text(MyLocalizations.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));

@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "feedback" : MessageLookupByLibrary.simpleMessage("意见反馈"),
     "forgetPassword" : MessageLookupByLibrary.simpleMessage("忘记密码 ?"),
     "hintPersonalityHome" : MessageLookupByLibrary.simpleMessage("对主页显示的节点重新选择及排序"),
+    "history" : MessageLookupByLibrary.simpleMessage("往期"),
     "languageAuto" : MessageLookupByLibrary.simpleMessage("跟随系统"),
     "loadingPage" : m0,
     "login" : MessageLookupByLibrary.simpleMessage("登录"),
@@ -66,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "titleSystemFont" : MessageLookupByLibrary.simpleMessage("系统字体"),
     "titleTheme" : MessageLookupByLibrary.simpleMessage("主题切换"),
     "titleToRate" : MessageLookupByLibrary.simpleMessage("给软件评分"),
-    "toastLoginSuccess" : m1
+    "toastLoginSuccess" : m1,
+    "versions" : MessageLookupByLibrary.simpleMessage("版本记录")
   };
 }

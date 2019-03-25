@@ -219,5 +219,15 @@
   "@share": {
     "type": "text",
     "placeholders": {}
+  },
+  "history": "History",
+  "@history": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "versions": "Versions",
+  "@versions": {
+    "type": "text",
+    "placeholders": {}
   }
 }
