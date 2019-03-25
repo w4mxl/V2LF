@@ -157,23 +157,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 Navigator.pop(context);
               },
             ),*/
-
-              new ListTile(
-                leading: new Icon(Icons.search),
-                title: new Text(MyLocalizations.of(context).search),
-                onTap: () {
-                  Navigator.pop(context);
-                  showSearch(context: context, delegate: MySearchDelegate());
-                },
-              ),
-              new ListTile(
-                leading: new Icon(Icons.apps),
-                title: new Text(MyLocalizations.of(context).nodes),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
-                },
-              ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
                 title: new Text('往期'),
@@ -200,6 +183,22 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics()));
                 },
               ),
+              new ListTile(
+                leading: new Icon(Icons.apps),
+                title: new Text(MyLocalizations.of(context).nodes),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.search),
+                title: new Text(MyLocalizations.of(context).search),
+                onTap: () {
+                  Navigator.pop(context);
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
+              ),
               new Divider(),
               new ListTile(
                 leading: new Icon(Icons.settings),
@@ -207,13 +206,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
-                },
-              ),
-              new ListTile(
-                leading: new Icon(Icons.feedback),
-                title: new Text(MyLocalizations.of(context).feedback),
-                onTap: () {
-                  _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
                 },
               ),
               new AboutListTile(
@@ -289,12 +281,8 @@ class _LinkTextSpan extends TextSpan {
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    if (url.startsWith('mailto')) {
-      await launch(url);
-    } else {
-      await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-    }
+    await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(msg: 'Could not launch $url', gravity: ToastGravity.CENTER);
   }
 }
