@@ -14,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -281,9 +282,9 @@ class _SettingPageState extends State<SettingPage> {
                 ],
               ),
             ),
-            // 主页tab设置
+            // 意见反馈
             Container(
-              margin: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+              margin: const EdgeInsets.only(top: 24.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -323,13 +324,61 @@ class _SettingPageState extends State<SettingPage> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL("sms:745871698@qq.com&body=text%20message"),
+                                      onPressed: () => _launchURL("sms:745871698@qq.com&body=New%20feedback"),
                                     )
                                   ],
                                 ));
                       } else if (Platform.isAndroid) {
                         _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
                       }
+                    },
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16.0,
+                    ),
+                  ),
+                  Divider(
+                    height: 0.0,
+                  ),
+                ],
+              ),
+            ),
+            // 更新记录
+            Container(
+              margin: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    height: 0.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.flag, color: ColorT.gray_66),
+                    title: new Text('更新记录'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WhatsNewPage.changelog(
+                            title: Text(
+                              "What's New",
+                              textScaleFactor: 1.4,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                // Text Style Needed to Look like iOS 11
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            buttonText: Text(
+                              'Continue',
+                              //textScaleFactor: textScaleFactor,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          fullscreenDialog: true,
+                        ),
+                      );
                     },
                     trailing: Icon(
                       Icons.arrow_forward_ios,
