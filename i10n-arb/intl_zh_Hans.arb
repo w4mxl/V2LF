@@ -83,7 +83,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "feedback": "反馈",
+  "feedback": "意见反馈",
   "@feedback": {
     "type": "text",
     "placeholders": {}

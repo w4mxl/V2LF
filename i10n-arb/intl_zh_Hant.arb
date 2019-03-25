@@ -83,7 +83,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "feedback": "反饋",
+  "feedback": "意見回饋",
   "@feedback": {
     "type": "text",
     "placeholders": {}

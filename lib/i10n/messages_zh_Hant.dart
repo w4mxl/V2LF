@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "enterCaptcha" : MessageLookupByLibrary.simpleMessage("輸入右側驗證碼"),
     "enterPassword" : MessageLookupByLibrary.simpleMessage("請輸入密碼"),
     "favorites" : MessageLookupByLibrary.simpleMessage("收藏"),
-    "feedback" : MessageLookupByLibrary.simpleMessage("反饋"),
+    "feedback" : MessageLookupByLibrary.simpleMessage("意見回饋"),
     "forgetPassword" : MessageLookupByLibrary.simpleMessage("忘記密碼 ?"),
     "hintPersonalityHome" : MessageLookupByLibrary.simpleMessage("對主頁顯示的節點重新選擇及排序"),
     "languageAuto" : MessageLookupByLibrary.simpleMessage("與系統同步"),
