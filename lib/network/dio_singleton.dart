@@ -78,7 +78,7 @@ class DioSingleton {
       var responseMission = await _dio.get(v2exHost + "/mission/daily/redeem?once=" + once);
       // Use html parser and query selector
       if (responseMission.statusCode == 302) {
-        Fluttertoast.showToast(msg: '每日奖励已领取', timeInSecForIos: 2);
+        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2);
       }
 
 //      if (responseMission.statusCode == 200 && response.data.toString().isEmpty) {

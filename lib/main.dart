@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
+import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
@@ -53,6 +56,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
     _loadLocale();
     _loadCustomTabs();
+    // 领取每日奖励
+    dailyMission();
   }
 
   void _loadLocale() {
@@ -97,6 +102,19 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         tabs.clear();
         tabs.addAll(mainTabs);
         _tabController = TabController(length: tabs.length, vsync: this);
+      });
+    }
+  }
+
+  Future dailyMission() async {
+    var spUsername = SpHelper.sp.getString(SP_USERNAME);
+    if (spUsername != null && spUsername.length > 0) {
+      dioSingleton.checkDailyAward().then((onValue) {
+        if (!onValue) {
+          dioSingleton.dailyMission();
+        } else {
+          print('已经领过奖励了...');
+        }
       });
     }
   }

@@ -258,8 +258,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
       avatar = SpHelper.sp.getString(SP_AVATAR);
       // 显示诗词
       getOnePoem();
-      // 领取每日奖励
-      dailyMission();
     }
   }
 
@@ -268,14 +266,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
     if (!mounted) return;
     setState(() {
       if (poem != null) poemOne = poem;
-    });
-  }
-
-  Future dailyMission() async {
-    dioSingleton.checkDailyAward().then((onValue) {
-      if (onValue) {
-        dioSingleton.dailyMission();
-      }
     });
   }
 
