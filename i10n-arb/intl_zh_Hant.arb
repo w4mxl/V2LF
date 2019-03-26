@@ -38,7 +38,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "titlePersonalityHome": "主頁定制",
+  "titlePersonalityHome": "主頁管理",
   "@titlePersonalityHome": {
     "type": "text",
     "placeholders": {}
@@ -48,12 +48,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleToRate": "給軟件評分",
+  "titleToRate": "請給「V2LF」評分",
   "@titleToRate": {
     "type": "text",
     "placeholders": {}
   },
-  "titleRecommend": "推薦給朋友",
+  "titleRecommend": "推薦給朋友們",
   "@titleRecommend": {
     "type": "text",
     "placeholders": {}

@@ -38,7 +38,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "titlePersonalityHome": "主页定制",
+  "titlePersonalityHome": "主页管理",
   "@titlePersonalityHome": {
     "type": "text",
     "placeholders": {}
@@ -48,12 +48,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleToRate": "给软件评分",
+  "titleToRate": "请给「V2LF」评分",
   "@titleToRate": {
     "type": "text",
     "placeholders": {}
   },
-  "titleRecommend": "推荐给朋友",
+  "titleRecommend": "推荐给朋友们",
   "@titleRecommend": {
     "type": "text",
     "placeholders": {}

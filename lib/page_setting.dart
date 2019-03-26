@@ -72,7 +72,7 @@ class _SettingPageState extends State<SettingPage> {
           children: <Widget>[
             // 主页tab设置
             Container(
-              margin: const EdgeInsets.only(top: 24.0),
+              margin: const EdgeInsets.only(top: 15.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -102,7 +102,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Container(
               color: Colors.white,
-              margin: EdgeInsets.only(top: 24.0),
+              margin: EdgeInsets.only(top: 15.0),
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -169,7 +169,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             // 多语言设置
             Container(
-              margin: const EdgeInsets.only(top: 24.0),
+              margin: const EdgeInsets.only(top: 15.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -241,7 +241,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             Container(
               color: Colors.white,
-              margin: EdgeInsets.only(top: 24.0),
+              margin: EdgeInsets.only(top: 15.0),
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -284,7 +284,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             // 意见反馈
             Container(
-              margin: const EdgeInsets.only(top: 24.0),
+              margin: const EdgeInsets.only(top: 15.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -345,7 +345,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             // 更新记录
             Container(
-              margin: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+              margin: const EdgeInsets.only(top: 15.0, bottom: 24.0),
               color: Colors.white,
               child: Column(
                 children: <Widget>[
@@ -362,7 +362,7 @@ class _SettingPageState extends State<SettingPage> {
                           builder: (context) => WhatsNewPage.changelog(
                             title: Text(
                               "What's New",
-                              textScaleFactor: 1.4,
+                              textScaleFactor: 1.2,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 // Text Style Needed to Look like iOS 11

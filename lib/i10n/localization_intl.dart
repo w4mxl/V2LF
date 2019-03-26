@@ -44,10 +44,10 @@ class MyLocalizations {
 
   String get titleLanguage => Intl.message('Language', name: 'titleLanguage');
 
-  String get titlePersonalityHome => Intl.message('Personality Homepage', name: 'titlePersonalityHome');
+  String get titlePersonalityHome => Intl.message('Manage Homepage', name: 'titlePersonalityHome');
   String get hintPersonalityHome => Intl.message('Reselect and sort the nodes displayed on the homepage', name: 'hintPersonalityHome');
-  String get titleToRate => Intl.message('Rate', name: 'titleToRate');
-  String get titleRecommend => Intl.message('Recommend', name: 'titleRecommend');
+  String get titleToRate => Intl.message('Please Rate V2LF', name: 'titleToRate');
+  String get titleRecommend => Intl.message('Recommend to friends', name: 'titleRecommend');
 
   // drawer
   String get search => Intl.message('Search', name: 'search');
@@ -55,7 +55,7 @@ class MyLocalizations {
   String get notifications => Intl.message('Notifications', name: 'notifications');
   String get favorites => Intl.message('Favorites', name: 'favorites');
   String get settings => Intl.message('Settings', name: 'settings');
-  String get feedback => Intl.message('Feedback', name: 'feedback');
+  String get feedback => Intl.message('Send Feedback', name: 'feedback');
   String get about => Intl.message('About', name: 'about');
 
   String get noHistorySearch => Intl.message('No search history', name: 'noHistorySearch');

@@ -38,7 +38,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "titlePersonalityHome": "Personality Homepage",
+  "titlePersonalityHome": "Manage Homepage",
   "@titlePersonalityHome": {
     "type": "text",
     "placeholders": {}
@@ -48,12 +48,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleToRate": "Rate",
+  "titleToRate": "Please Rate V2LF",
   "@titleToRate": {
     "type": "text",
     "placeholders": {}
   },
-  "titleRecommend": "Recommend",
+  "titleRecommend": "Recommend to friends",
   "@titleRecommend": {
     "type": "text",
     "placeholders": {}
@@ -83,7 +83,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "feedback": "Feedback",
+  "feedback": "Send Feedback",
   "@feedback": {
     "type": "text",
     "placeholders": {}

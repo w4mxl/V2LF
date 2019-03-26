@@ -61,12 +61,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "sureLogout" : MessageLookupByLibrary.simpleMessage("您確定要退出登錄嗎？"),
     "thank" : MessageLookupByLibrary.simpleMessage("感謝"),
     "titleLanguage" : MessageLookupByLibrary.simpleMessage("多語言"),
-    "titlePersonalityHome" : MessageLookupByLibrary.simpleMessage("主頁定制"),
-    "titleRecommend" : MessageLookupByLibrary.simpleMessage("推薦給朋友"),
+    "titlePersonalityHome" : MessageLookupByLibrary.simpleMessage("主頁管理"),
+    "titleRecommend" : MessageLookupByLibrary.simpleMessage("推薦給朋友們"),
     "titleSetting" : MessageLookupByLibrary.simpleMessage("設置"),
     "titleSystemFont" : MessageLookupByLibrary.simpleMessage("系統字體"),
     "titleTheme" : MessageLookupByLibrary.simpleMessage("主題切換"),
-    "titleToRate" : MessageLookupByLibrary.simpleMessage("給軟件評分"),
+    "titleToRate" : MessageLookupByLibrary.simpleMessage("請給「V2LF」評分"),
     "toastLoginSuccess" : m1,
     "versions" : MessageLookupByLibrary.simpleMessage("版本記錄")
   };
