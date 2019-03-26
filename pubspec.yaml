@@ -75,13 +75,13 @@ flutter:
         - asset: assets/fonts/Whitney-BookItalic.ttf
           style: italic
 
-    - family: Ubuntu
-      fonts:
-        - asset: assets/fonts/Ubuntu-Regular.ttf
-
-    - family: NotoSerifSC
-      fonts:
-        - asset: assets/fonts/NotoSerifSC-Regular.otf
+#    - family: Ubuntu
+#      fonts:
+#        - asset: assets/fonts/Ubuntu-Regular.ttf
+#
+#    - family: NotoSerifSC
+#      fonts:
+#        - asset: assets/fonts/NotoSerifSC-Regular.otf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

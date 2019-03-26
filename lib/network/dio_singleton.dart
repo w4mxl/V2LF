@@ -54,6 +54,44 @@ class DioSingleton {
     }
   }
 
+  // 检查每日登录奖励是否已领取
+  Future<bool> checkDailyAward() async {
+    var response = await _dio.get(v2exHost + "/mission/daily");
+    // Use html parser and query selector
+    if ((response.data as String).contains('每日登录奖励已领取')) {
+      return true;
+    }
+    return false;
+  }
+
+  // 领取每日奖励
+  Future dailyMission() async {
+    try {
+      var response = await _dio.get("/signin");
+      var tree = ETree.fromString(response.data);
+      String once = tree
+          .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+          .first
+          .attributes["value"];
+      print('领取每日奖励:$once');
+
+      var responseMission = await _dio.get(v2exHost + "/mission/daily/redeem?once=" + once);
+      // Use html parser and query selector
+      if (responseMission.statusCode == 302) {
+        Fluttertoast.showToast(msg: '每日奖励已领取', timeInSecForIos: 2);
+      }
+
+//      if (responseMission.statusCode == 200 && response.data.toString().isEmpty) {
+//        return true;
+//      }
+    } on DioError catch (e) {
+      Fluttertoast.showToast(msg: '领取每日奖励失败', timeInSecForIos: 2);
+      print(e.response.data);
+      print(e.response.headers);
+      print(e.response.request);
+    }
+  }
+
   // 节点导航页 -> 获取特定节点下的topics
   Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';

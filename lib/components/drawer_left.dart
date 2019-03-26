@@ -251,11 +251,15 @@ class _DrawerLeftState extends State<DrawerLeft> {
   }
 
   checkLoginState() {
+    print('checkLoginState');
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       userName = spUsername;
       avatar = SpHelper.sp.getString(SP_AVATAR);
+      // 显示诗词
       getOnePoem();
+      // 领取每日奖励
+      dailyMission();
     }
   }
 
@@ -266,6 +270,15 @@ class _DrawerLeftState extends State<DrawerLeft> {
       if (poem != null) poemOne = poem;
     });
   }
+
+  Future dailyMission() async {
+    dioSingleton.checkDailyAward().then((onValue) {
+      if (onValue) {
+        dioSingleton.dailyMission();
+      }
+    });
+  }
+
 }
 
 class _LinkTextSpan extends TextSpan {

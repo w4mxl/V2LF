@@ -38,6 +38,7 @@ class _HistoryHotTopicsState extends State<HistoryHotTopics> with AutomaticKeepA
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             title: TabBar(
                 isScrollable: true,
 //                unselectedLabelColor: Colors.grey,

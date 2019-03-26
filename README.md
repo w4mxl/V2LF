@@ -11,7 +11,7 @@ The original intention of developing this app is to learn flutter.Designed with 
 
 ## ScreenShot
 
-<center><image src="screenshot/V2LF-v0.0.4.gif" width="350"/></center>
+
 
 ## To-Do
 
