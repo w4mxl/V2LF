@@ -38,11 +38,12 @@ class DioSingleton {
     if (_dio == null) {
       Options options = new Options();
       options.baseUrl = v2exHost;
-      options.receiveTimeout = 10 * 1000;
+      options.receiveTimeout = 5 * 1000;
       options.connectTimeout = 5 * 1000;
       options.headers = {
-        'user-agent':
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
       };
       options.validateStatus = (int status) {
         return status >= 200 && status < 300 || status == 304 || status == 302;
@@ -75,20 +76,16 @@ class DioSingleton {
           .attributes["value"];
       print('领取每日奖励:$once');
 
-      var responseMission = await _dio.get(v2exHost + "/mission/daily/redeem?once=" + once);
+      var missionResponse = await _dio.get(v2exHost + "/mission/daily/redeem?once=" + once);
+      print('领取每日奖励:' + v2exHost + "/mission/daily/redeem?once=" + once);
       // Use html parser and query selector
-      if (responseMission.statusCode == 302) {
+      print('领取每日奖励:${missionResponse.statusCode}');
+      if (missionResponse.statusCode == 200) {
+        print('每日奖励已自动领取');
         Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2);
       }
-
-//      if (responseMission.statusCode == 200 && response.data.toString().isEmpty) {
-//        return true;
-//      }
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '领取每日奖励失败', timeInSecForIos: 2);
-      print(e.response.data);
-      print(e.response.headers);
-      print(e.response.request);
     }
   }
 

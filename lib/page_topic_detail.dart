@@ -396,7 +396,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         break;
       case 'reply_comment':
         print(action.title);
-        _lastEditCommentDraft = _lastEditCommentDraft + " @" + action.title + " ";
+        _lastEditCommentDraft = _lastEditCommentDraft + action.title;
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -878,7 +878,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       title: Text('回复评论'),
                                       onTap: () {
                                         Navigator.pop(context);
-                                        select(Action(id: 'reply_comment', title: reply.userName));
+                                        select(
+                                            Action(id: 'reply_comment', title: " @"+reply.userName + " #" + reply.number + " "));
                                       },
                                     ),
                                     ListTile(

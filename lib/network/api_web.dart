@@ -38,7 +38,7 @@ class V2exApi {
     final String reg4LastReply =
         "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
 
-    var uri = new Uri.http('www.v2ex.com', '/', {'tab': tabKey});
+    var uri = new Uri.https('www.v2ex.com', '/', {'tab': tabKey});
     var request = await httpClient.getUrl(uri);
     var response = await request.close();
     var responseBody = await response.transform(utf8.decoder).join();
@@ -85,7 +85,7 @@ class V2exApi {
     final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
     final String reg4NodeItem = "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
 
-    var uri = new Uri.http('www.v2ex.com', '/');
+    var uri = new Uri.https('www.v2ex.com', '/');
     var request = await httpClient.getUrl(uri);
     var response = await request.close();
     var responseBody = await response.transform(utf8.decoder).join();

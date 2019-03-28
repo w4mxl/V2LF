@@ -229,5 +229,15 @@
   "@versions": {
     "type": "text",
     "placeholders": {}
+  },
+  "oops": "糟糕！遇到未知錯誤",
+  "@oops": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "retry": "請重試",
+  "@retry": {
+    "type": "text",
+    "placeholders": {}
   }
 }

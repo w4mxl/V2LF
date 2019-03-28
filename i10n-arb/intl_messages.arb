@@ -229,5 +229,15 @@
   "@versions": {
     "type": "text",
     "placeholders": {}
+  },
+  "oops": "Oops! An unknown error occurred",
+  "@oops": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "retry": "RETRY",
+  "@retry": {
+    "type": "text",
+    "placeholders": {}
   }
 }

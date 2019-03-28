@@ -97,6 +97,9 @@ class MyLocalizations {
   String get history => Intl.message('History', name: 'history');
   String get versions => Intl.message('Versions', name: 'versions');
 
+  String get oops => Intl.message('Oops！An unknown error occurred', name: 'oops');
+  String get retry => Intl.message('RETRY', name: 'retry');
+
 }
 
 //Locale代理类

@@ -44,15 +44,26 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 child: new Container(
                     color: CupertinoColors.lightBackgroundGray,
                     child: new ListView(
-                        physics: ClampingScrollPhysics(),//正常的滚动效果，没有弹性
+                        physics: ClampingScrollPhysics(), //正常的滚动效果，没有弹性
                         padding: const EdgeInsets.only(bottom: 15.0),
                         children: snapshot.data.map((TabTopicItem topic) {
                           return new TopicItemView(topic);
                         }).toList())),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
-            return new Center(
-              child: new Text("${snapshot.error}"),
+            print("${snapshot.error}");
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text(MyLocalizations.of(context).oops),
+                RaisedButton.icon(
+                  onPressed: () {
+                    _onRefresh();
+                  },
+                  icon: Icon(Icons.refresh),
+                  label: Text(MyLocalizations.of(context).retry),
+                )
+              ],
             );
           }
 
@@ -141,7 +152,9 @@ class TopicItemView extends StatelessWidget {
                           ),
                         ),
                         new Text(
-                          topic.lastReplyTime == '' ? MyLocalizations.of(context).noComment : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
+                          topic.lastReplyTime == ''
+                              ? MyLocalizations.of(context).noComment
+                              : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
                           style: new TextStyle(color: Colors.grey, fontSize: 12.0),
                         )
                       ],
