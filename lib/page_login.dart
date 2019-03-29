@@ -56,17 +56,12 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: logo,
-//        title: Row(
-//          children: <Widget>[
-//            logo,
-//            Padding(
-//              padding: const EdgeInsets.only(left: 4.0),
-//              child: Text(MyLocalizations.of(context).login),
-//            ),
-//          ],
-//        ),
+        elevation: 0,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
       ),
       body: ScrollConfiguration(
         child: SingleChildScrollView(
@@ -86,14 +81,13 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           labelText: MyLocalizations.of(context).account,
                           hintText: MyLocalizations.of(context).enterAccount,
-                          border: OutlineInputBorder(),
                         ),
                         // 校验用户名
                         validator: (v) {
                           return v.trim().length > 0 ? null : "用户名不能为空";
                         }),
                     SizedBox(
-                      height: 12.0,
+                      height: 14.0,
                     ),
                     // 密码
                     TextFormField(
@@ -104,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           labelText: MyLocalizations.of(context).password,
                           hintText: MyLocalizations.of(context).enterPassword,
-                          border: OutlineInputBorder(),
                         ),
                         obscureText: true,
                         //校验密码
@@ -112,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           return v.trim().length > 0 ? null : "密码不能为空";
                         }),
                     SizedBox(
-                      height: 12.0,
+                      height: 14.0,
                     ),
                     Row(
                       children: <Widget>[
@@ -124,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                 labelText: MyLocalizations.of(context).captcha,
                                 hintText: MyLocalizations.of(context).enterCaptcha,
-                                border: OutlineInputBorder(),
                               ),
                               //校验密码
                               validator: (v) {
@@ -132,16 +124,25 @@ class _LoginPageState extends State<LoginPage> {
                               }),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                            padding: const EdgeInsets.only(left: 6.0),
                             child: loginFormData != null && loginFormData.bytes.length > 0
                                 ? GestureDetector(
-                                    child: Image.memory(
-                                      loginFormData.bytes,
-                                      height: 55.0,
-                                      width: 160.0,
-                                      fit: BoxFit.fill,
+                                    child: new ClipRRect(
+                                      child: Image.memory(
+                                        loginFormData.bytes,
+                                        height: 55.0,
+                                        width: 160.0,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(4),
+                                        bottomLeft: Radius.circular(4),
+                                        topRight: Radius.circular(4),
+                                        bottomRight: Radius.circular(4),
+                                      ),
                                     ),
                                     onTap: () {
+                                      // 点击刷新验证码
                                       refreshCaptcha();
                                     },
                                   )
@@ -153,12 +154,10 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: 30.0,
                     ),
                     ButtonTheme(
                       child: RaisedButton(
-//                        color: Colors.blueGrey,
-//                    padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 40.0, right: 40.0),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
                             if (loginFormData != null) {
@@ -191,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         FlatButton(
                           child: Text(
-                            '注册',
+                            MyLocalizations.of(context).signup,
                             style: TextStyle(color: Colors.black54),
                           ),
                           onPressed: () {

@@ -51,7 +51,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 accountName: GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
-                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(),fullscreenDialog: true));
                       future.then((value) {
                         setState(() {
                           checkLoginState();
@@ -116,7 +116,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage()));
+                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(),fullscreenDialog: true));
                       future.then((value) {
                         setState(() {
                           checkLoginState();
