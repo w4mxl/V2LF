@@ -498,6 +498,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             ? RefreshIndicator(
                 child: Scrollbar(
                   child: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
                     child: Column(
                       children: <Widget>[
                         // 详情view
