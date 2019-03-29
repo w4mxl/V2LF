@@ -35,8 +35,7 @@ class V2exApi {
 
     final String reg4NodeIdName = "<a class=\"node\" href=\"/go/(.*?)\">(.*?)</a>";
 
-    final String reg4LastReply =
-        "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
+    final String reg4LastReply = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
 
     var uri = new Uri.https('www.v2ex.com', '/', {'tab': tabKey});
     var request = await httpClient.getUrl(uri);
@@ -56,7 +55,12 @@ class V2exApi {
       Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
       item.topicId = match4TRC.group(1);
       item.replyCount = match4TRC.group(2);
-      item.topicContent = match4TRC.group(3);
+      item.topicContent = match4TRC
+          .group(3)
+          .replaceAll('&quot;', '"')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>');
       Match match4NodeIdName = new RegExp(reg4NodeIdName).firstMatch(regString);
       item.nodeId = match4NodeIdName.group(1);
       item.nodeName = match4NodeIdName.group(2);
@@ -129,8 +133,7 @@ class V2exApi {
 
     final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
 
-    final String reg4CharactersClickTimes =
-        "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
+    final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
     final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
@@ -167,8 +170,7 @@ class V2exApi {
       item.replyCount = match4TRC.group(2);
       item.title = match4TRC.group(3);
       if (regString.contains("个字符")) {
-        Match match4CharactersClickTimes =
-            new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+        Match match4CharactersClickTimes = new RegExp(reg4CharactersClickTimes).firstMatch(regString);
         item.characters = match4CharactersClickTimes.group(1);
         item.clickTimes = match4CharactersClickTimes.group(2);
       }
