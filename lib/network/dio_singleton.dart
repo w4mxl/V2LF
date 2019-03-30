@@ -338,7 +338,11 @@ class DioSingleton {
 
         favTopicItem.topicTitle = aNode
             .xpath("/table/tr/td[3]/span[1]/a/text()")[0]
-            .name; //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
+            .name
+            .replaceAll('&quot;', '"')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>'); //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
 
         String topicUrl = aNode.xpath("/table/tr/td[3]/span[1]/a").first.attributes["href"]; // 得到是 /t/522540#reply17
         favTopicItem.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
