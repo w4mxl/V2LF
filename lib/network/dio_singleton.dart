@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
@@ -297,7 +298,7 @@ class DioSingleton {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
         var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2,gravity: ToastGravity.TOP);
+        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.TOP);
         return false;
       }
     } on DioError catch (e) {
@@ -371,6 +372,33 @@ class DioSingleton {
     }
 
     return topics;
+  }
+
+  // 获取「节点收藏」 [xpath 解析的]
+  Future<List<FavNode>> getFavNodes() async {
+    List<FavNode> nodes = new List<FavNode>();
+    var response = await _dio.get(v2exHost + "/my/nodes");
+    var tree = ETree.fromString(response.data);
+
+    var aRootNode = tree.xpath("//*[@class='grid_item']");
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        FavNode favNode = new FavNode();
+        // //*[@id="n_195868"]/div/img
+        favNode.img = "https:" + aNode.xpath("/div/img").first.attributes["src"];
+        favNode.nodeId = aNode.attributes['href'].toString().replaceAll('/go/', '');
+        favNode.nodeName = aNode.xpath("/div/text()")[0].name;
+        //*[@id="n_195868"]/div/span
+        favNode.replyCount = aNode.xpath("/div/span/text()")[0].name;
+        print(favNode.img + "  " + favNode.nodeId + "  " + favNode.nodeName + "  " + favNode.replyCount);
+        nodes.add(favNode);
+      }
+    } else {
+      // todo 可能未登录或者没有
+      // Fluttertoast.showToast(msg: '获取收藏失败');
+    }
+
+    return nodes;
   }
 
   // 获取「通知」下的列表信息 [html 解析的]

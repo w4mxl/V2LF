@@ -8,6 +8,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/page_favourite.dart';
 import 'package:flutter_app/page_favourite_topics.dart';
 import 'package:flutter_app/page_history_hot.dart';
 import 'package:flutter_app/page_login.dart';
@@ -158,11 +159,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
               },
             ),*/
               new ListTile(
-                leading: new Icon(Icons.whatshot),
-                title: new Text(MyLocalizations.of(context).history),
+                leading: new Icon(Icons.apps),
+                title: new Text(MyLocalizations.of(context).nodes),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
                 },
               ),
               new ListTile(
@@ -180,15 +181,15 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(MyLocalizations.of(context).favorites),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavTopics()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
                 },
               ),
               new ListTile(
-                leading: new Icon(Icons.apps),
-                title: new Text(MyLocalizations.of(context).nodes),
+                leading: new Icon(Icons.whatshot),
+                title: new Text(MyLocalizations.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
                 },
               ),
               new ListTile(

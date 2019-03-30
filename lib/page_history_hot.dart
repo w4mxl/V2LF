@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/bubble_tab_indicator.dart';
 import 'package:http/http.dart';
 import 'package:webfeed/webfeed.dart';
@@ -38,15 +39,17 @@ class _HistoryHotTopicsState extends State<HistoryHotTopics> with AutomaticKeepA
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black54),
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-//                unselectedLabelColor: Colors.grey,
+                unselectedLabelColor: Colors.grey,
                 labelColor: Colors.white,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: new BubbleTabIndicator(
                   indicatorHeight: 30.0,
-                  indicatorColor: Colors.blueAccent,
+                  indicatorColor: ColorT.appMainColor,
                   tabBarIndicatorSize: TabBarIndicatorSize.tab,
                 ),
                 tabs: tabs),

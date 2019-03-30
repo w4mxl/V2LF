@@ -799,7 +799,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           children: <Widget>[
                                             Icon(
                                               Icons.favorite,
-                                              color: Color(0xFFcccccc),
+                                              color: Colors.red[100], // Color(0xFFcccccc)
                                               size: 14.0,
                                             ),
                                             SizedBox(width: 2.0),
