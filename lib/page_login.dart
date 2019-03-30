@@ -32,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
 
   FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
+  int _loginState = 0; //登录按钮状态，0 默认初始状态；1 登录中；2 登录结束
+
   @override
   void initState() {
     super.initState();
@@ -161,6 +163,11 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
                             if (loginFormData != null) {
+                              // 让登录按钮有loading效果
+                              setState(() {
+                                _loginState = 1;
+                              });
+
                               loginFormData.usernameInput = _accountController.text;
                               loginFormData.passwordInput = _pwdController.text;
                               loginFormData.captchaInput = _captchaController.text;
@@ -168,16 +175,28 @@ class _LoginPageState extends State<LoginPage> {
                               print(loginFormData.toString());
                               bool loginResult = await dioSingleton.loginPost(loginFormData);
                               if (loginResult) {
+                                // 登录成功
+                                // 让登录按钮有完成✅效果
+                                setState(() {
+                                  _loginState = 2;
+                                });
                                 Fluttertoast.showToast(
                                     msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
-                                Navigator.of(context).pop();
+                                Timer(Duration(milliseconds: 800), () {
+                                  Navigator.of(context).pop();
+                                });
                               } else {
+                                // 登录失败
                                 refreshCaptcha();
+                                // 让登录按钮恢复初始状态
+                                setState(() {
+                                  _loginState = 0;
+                                });
                               }
                             }
                           }
                         },
-                        child: Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white)),
+                        child: buildButtonProgressChild(context),
                       ),
                       height: 55.0,
                       minWidth: 400.0,
@@ -219,6 +238,18 @@ class _LoginPageState extends State<LoginPage> {
         behavior: MyBehavior(),
       ),
     );
+  }
+
+  Widget buildButtonProgressChild(BuildContext context) {
+    if (_loginState == 0) {
+      return Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white));
+    } else if (_loginState == 1) {
+      return CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      );
+    } else {
+      return Icon(Icons.check, color: Colors.white);
+    }
   }
 
   @override

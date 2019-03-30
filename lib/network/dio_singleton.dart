@@ -297,7 +297,7 @@ class DioSingleton {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
         var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: '登录过程中遇到一些问题：$errorInfo', timeInSecForIos: 2);
+        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2,gravity: ToastGravity.TOP);
         return false;
       }
     } on DioError catch (e) {
