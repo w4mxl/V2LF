@@ -84,29 +84,23 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
           ),
           onRefresh: _onRefresh);
     } else if (empty == true) {
-      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                  width: 128.0,
-                  height: 114.0,
-                  margin: EdgeInsets.only(bottom: 30),
-                  child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
-              Container(
-                margin: EdgeInsets.only(bottom: 114),
-                width: 250,
-                child: Text("You don't have any notifications yet.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.black.withOpacity(0.75),
-                      height: 1.2,
-                    )),
-              ),
-            ])
+      // 空视图
+      return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+            width: 128.0,
+            height: 114.0,
+            margin: EdgeInsets.only(bottom: 30),
+            child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+        Container(
+          margin: EdgeInsets.only(bottom: 114),
+          width: 250,
+          child: Text("No Notifications Yet!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black.withOpacity(0.65),
+              )),
+        ),
       ]);
     }
     // By default, show a loading spinner

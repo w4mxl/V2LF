@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flare_flutter/flare_actor.dart';
 /**
  * @author: wml
  * @date  : 2019/3/30 6:20 PM
@@ -45,16 +46,44 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> {
             );
           case ConnectionState.done:
             if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));
-            return GridView.count(
-              crossAxisCount: 4,
-              childAspectRatio: 0.6,
-              mainAxisSpacing: 6,
-              crossAxisSpacing: 4,
-              padding: EdgeInsets.all(8.0),
-              children: snapshot.data.map((FavNode node) {
-                return _gridItem(node);
-              }).toList(),
-            );
+            if (snapshot.data.length > 0) {
+              return GridView.count(
+                crossAxisCount: 4,
+                childAspectRatio: 0.6,
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 4,
+                padding: EdgeInsets.all(8.0),
+                children: snapshot.data.map((FavNode node) {
+                  return _gridItem(node);
+                }).toList(),
+              );
+            } else {
+              // 空视图
+              return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    width: 128.0,
+                    height: 114.0,
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  width: 250,
+                  child: Text("No Favorites Yet!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black.withOpacity(0.65),
+                      )),
+                ),
+                Container(
+                  width: 270,
+                  margin: EdgeInsets.only(bottom: 114),
+                  child: Text("Browse to a node and tap on the star icon to save something in this list.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17, height: 1.1, color: Colors.black.withOpacity(0.65))),
+                ),
+              ]);
+            }
         }
         return null; // unreachable
       },
