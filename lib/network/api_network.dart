@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_app/model/jinrishici.dart';
+import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_site_info.dart';
 import 'package:flutter_app/model/resp_topics.dart';
@@ -39,6 +40,11 @@ class NetworkApi {
 
   static Future<SiteInfoResp> getSiteInfo() async {
     return SiteInfoResp.fromJson(await _get(Constants.API_SITE_INFO));
+  }
+
+  // Node / 获取指定节点信息
+  static Future<Node> getNodeInfo(String nodeName) async {
+    return Node.fromJson(await _get(Constants.API_NODE + '?name=' + nodeName));
   }
 
   /*static Future<Token> getPoemToken() async {

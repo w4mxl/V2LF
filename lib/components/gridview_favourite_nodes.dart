@@ -11,14 +11,16 @@ import 'package:flare_flutter/flare_actor.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_fav_node.dart';
+import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/page_node_topics.dart';
 
 class FavouriteNodesGrid extends StatefulWidget {
   @override
   _FavouriteNodesGridState createState() => _FavouriteNodesGridState();
 }
 
-class _FavouriteNodesGridState extends State<FavouriteNodesGrid> {
+class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticKeepAliveClientMixin {
   Future<List<FavNode>> _future;
 
   Future<List<FavNode>> getFavNodes() async {
@@ -48,8 +50,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> {
             if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));
             if (snapshot.data.length > 0) {
               return GridView.count(
-                crossAxisCount: 4,
-                childAspectRatio: 0.6,
+                crossAxisCount: 3,
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 4,
                 padding: EdgeInsets.all(8.0),
@@ -95,7 +96,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> {
       child: Card(
         elevation: 4,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CachedNetworkImage(
               imageUrl: node.img,
@@ -104,29 +105,39 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> {
               height: 73,
               placeholder: (context, url) => Icon(Icons.photo, size: 32.0, color: Color(0xFFcccccc)),
             ),
+            SizedBox(
+              height: 4,
+            ),
             Column(
               children: <Widget>[
                 Text(node.nodeName),
                 SizedBox(
-                  height: 6,
+                  height: 4,
                 ),
-                Icon(
-                  Icons.forum,
-                  size: 14,
-                  color: Colors.grey,
-                ),
-                Text(
-                  node.replyCount,
-                  style: TextStyle(color: Colors.grey),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.forum,
+                      size: 13,
+                      color: Colors.grey,
+                    ),
+                    Text(
+                      node.replyCount,
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            SizedBox(
-              height: 10,
             ),
           ],
         ),
       ),
+      onTap: () => Navigator.push(
+          context, new MaterialPageRoute(builder: (context) => new NodeTopics(NodeItem(node.nodeId, node.nodeName)))),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

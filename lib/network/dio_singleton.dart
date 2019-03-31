@@ -385,7 +385,13 @@ class DioSingleton {
       for (var aNode in aRootNode) {
         FavNode favNode = new FavNode();
         // //*[@id="n_195868"]/div/img
-        favNode.img = "https:" + aNode.xpath("/div/img").first.attributes["src"];
+        // 这里需要注意，如果解析出来的是 '/static/img/node_large.png' 则拼上前缀 'https://www.v2ex.com'；其它则拼上 https:
+        String imgUrl = aNode.xpath("/div/img").first.attributes["src"];
+        if (imgUrl == '/static/img/node_large.png') {
+          favNode.img = "https://www.v2ex.com" + imgUrl;
+        } else {
+          favNode.img = "https:" + imgUrl;
+        }
         favNode.nodeId = aNode.attributes['href'].toString().replaceAll('/go/', '');
         favNode.nodeName = aNode.xpath("/div/text()")[0].name;
         //*[@id="n_195868"]/div/span
