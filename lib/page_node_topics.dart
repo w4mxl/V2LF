@@ -11,7 +11,9 @@ import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;
@@ -134,6 +136,18 @@ class _NodeTopicsState extends State<NodeTopics> {
                       snapshot.data.header,
                       style: TextStyle(fontSize: 10),
                     ),
+//                    Html(
+//                      data: snapshot.data.header,
+//                      defaultTextStyle: TextStyle(color: Colors.white, fontSize: 10.0,),
+//                      linkStyle: TextStyle(
+//                          color: ColorT.appMainColor[400],
+//                          decoration: TextDecoration.underline,
+//                          decorationColor: ColorT.appMainColor[400]),
+//                      onLinkTap: (url) {
+//                        //_launchURL(url);
+//                      },
+//                      useRichText: true,
+//                    ),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
