@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
@@ -28,7 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _pwdController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState<String>> _passwordFieldKey = GlobalKey<FormFieldState<String>>();
 
   FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
@@ -82,32 +84,34 @@ class _LoginPageState extends State<LoginPage> {
                         onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
                         decoration: InputDecoration(
                           labelText: MyLocalizations.of(context).account,
-                          hintText: MyLocalizations.of(context).enterAccount,
+
+                          // hintText: MyLocalizations.of(context).enterAccount,
                         ),
                         // 校验用户名
                         validator: (v) {
                           return v.trim().length > 0 ? null : "用户名不能为空";
                         }),
                     SizedBox(
-                      height: 14.0,
+                      height: 18.0,
                     ),
                     // 密码
-                    TextFormField(
-                        controller: _pwdController,
-                        focusNode: passwordTextFieldNode,
-                        textInputAction: TextInputAction.next,
-                        onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
-                        decoration: InputDecoration(
-                          labelText: MyLocalizations.of(context).password,
-                          hintText: MyLocalizations.of(context).enterPassword,
-                        ),
-                        obscureText: true,
-                        //校验密码
-                        validator: (v) {
-                          return v.trim().length > 0 ? null : "密码不能为空";
-                        }),
+//                    TextFormField(
+//                        controller: _pwdController,
+//                        focusNode: passwordTextFieldNode,
+//                        textInputAction: TextInputAction.next,
+//                        onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
+//                        decoration: InputDecoration(
+//                          labelText: MyLocalizations.of(context).password,
+//                          // hintText: MyLocalizations.of(context).enterPassword,
+//                        ),
+//                        obscureText: true,
+//                        //校验密码
+//                        validator: (v) {
+//                          return v.trim().length > 0 ? null : "密码不能为空";
+//                        }),
+                    PasswordField(_passwordFieldKey,_pwdController, passwordTextFieldNode, captchaTextFieldNode),
                     SizedBox(
-                      height: 14.0,
+                      height: 18.0,
                     ),
                     Row(
                       children: <Widget>[
@@ -118,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                               decoration: InputDecoration(
                                 labelText: MyLocalizations.of(context).captcha,
-                                hintText: MyLocalizations.of(context).enterCaptcha,
+                                // hintText: MyLocalizations.of(context).enterCaptcha,
                               ),
                               //校验密码
                               validator: (v) {
@@ -156,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 35.0,
                     ),
                     ButtonTheme(
                       child: RaisedButton(
@@ -202,32 +206,28 @@ class _LoginPageState extends State<LoginPage> {
                       minWidth: 400.0,
                     ),
                     SizedBox(
-                      height: 5.0,
+                      height: 12.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        FlatButton(
+                        InkWell(
                           child: Text(
                             MyLocalizations.of(context).signup,
                             style: TextStyle(color: Colors.black54),
                           ),
-                          onPressed: () {
-                            // 注册 -> 跳转到注册web页面
-                            launch("https://www.v2ex.com/signup",
-                                statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-                          },
+                          // 注册 -> 跳转到注册web页面
+                          onTap: () => launch("https://www.v2ex.com/signup",
+                              statusBarBrightness: Platform.isIOS ? Brightness.light : null),
                         ),
-                        FlatButton(
+                        InkWell(
                           child: Text(
                             MyLocalizations.of(context).forgetPassword,
                             style: TextStyle(color: Colors.black54),
                           ),
-                          onPressed: () {
-                            // 忘记密码 -> 跳转到重置密码web页面
-                            launch("https://www.v2ex.com/forgot",
-                                statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-                          },
+                          // 忘记密码 -> 跳转到重置密码web页面
+                          onTap: () => launch("https://www.v2ex.com/forgot",
+                              statusBarBrightness: Platform.isIOS ? Brightness.light : null),
                         ),
                       ],
                     )
@@ -266,5 +266,53 @@ class MyBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
+  }
+}
+
+class PasswordField extends StatefulWidget {
+  final Key fieldKey;
+  final TextEditingController _pwdController;
+  final FocusNode passwordTextFieldNode, captchaTextFieldNode;
+
+  PasswordField(this.fieldKey, this._pwdController, this.passwordTextFieldNode, this.captchaTextFieldNode);
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return TextFormField(
+        key: widget.fieldKey,
+        controller: widget._pwdController,
+        focusNode: widget.passwordTextFieldNode,
+        textInputAction: TextInputAction.next,
+        onEditingComplete: () => FocusScope.of(context).requestFocus(widget.captchaTextFieldNode),
+        decoration: InputDecoration(
+            labelText: MyLocalizations.of(context).password,
+            // hintText: MyLocalizations.of(context).enterPassword,
+            suffixIcon: GestureDetector(
+              dragStartBehavior: DragStartBehavior.down,
+              onTap: () {
+                setState(() {
+                  print('xxxxx');
+                  _obscureText = !_obscureText;
+                });
+              },
+              child: Icon(
+                _obscureText ? Icons.visibility : Icons.visibility_off,
+                semanticLabel: _obscureText ? 'show password' : 'hide password',
+              ),
+            )),
+        obscureText: _obscureText,
+        //校验密码
+        validator: (v) {
+          return v.trim().length > 0 ? null : "密码不能为空";
+        });
   }
 }
