@@ -154,6 +154,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               title: new TabBar(
                 controller: _tabController,
                 isScrollable: true,
+                indicatorColor: Colors.white,
                 tabs: tabs.map((TabModel choice) {
                   return new Tab(
                     text: choice.title,

@@ -300,7 +300,6 @@ class _PasswordFieldState extends State<PasswordField> {
               dragStartBehavior: DragStartBehavior.down,
               onTap: () {
                 setState(() {
-                  print('xxxxx');
                   _obscureText = !_obscureText;
                 });
               },
