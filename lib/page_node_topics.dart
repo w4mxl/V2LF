@@ -92,7 +92,10 @@ class _NodeTopicsState extends State<NodeTopics> {
                   return _buildLoadText();
                 } else {
                   return new Center(
-                    child: new CircularProgressIndicator(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 40.0),
+                      child: new CircularProgressIndicator(),
+                    ),
                   );
                 }
               } else {
@@ -184,16 +187,18 @@ class _NodeTopicsState extends State<NodeTopics> {
                 ],
               ),
               centerTitle: true,
-              background: CachedNetworkImage(
-                imageUrl: (snapshot.data.avatarLarge == '/static/img/node_large.png')
-                    ? Strings.nodeDefaultImag
-                    : "https:" + snapshot.data.avatarLarge.replaceFirst('large', 'xxlarge'),
-                fit: BoxFit.contain,
-                placeholder: (context, url) => new CircularProgressIndicator(),
-                errorWidget: (context, url, error) => CachedNetworkImage(
-                      imageUrl: "https:" + snapshot.data.avatarLarge,
-                      fit: BoxFit.contain,
-                    ),
+              background: SafeArea(
+                child: CachedNetworkImage(
+                  imageUrl: (snapshot.data.avatarLarge == '/static/img/node_large.png')
+                      ? Strings.nodeDefaultImag
+                      : "https:" + snapshot.data.avatarLarge.replaceFirst('large', 'xxlarge'),
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => new CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => CachedNetworkImage(
+                        imageUrl: "https:" + snapshot.data.avatarLarge,
+                        fit: BoxFit.contain,
+                      ),
+                ),
               ),
 //              Image.network(
 //                "https:" + snapshot.data.avatarLarge, //.replaceFirst('large', 'xxlarge')

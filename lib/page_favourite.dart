@@ -32,17 +32,17 @@ class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveCl
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.black54),
+//            backgroundColor: Colors.white,
+//            iconTheme: IconThemeData(color: Colors.black54),
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-                unselectedLabelColor: Colors.grey,
-                labelColor: Colors.white,
+                unselectedLabelColor: ColorT.appMainColor[100],
+                labelColor: ColorT.appMainColor,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: new BubbleTabIndicator(
                   indicatorHeight: 30.0,
-                  indicatorColor: ColorT.appMainColor,
+                  indicatorColor: Colors.white,
                   tabBarIndicatorSize: TabBarIndicatorSize.tab,
                 ),
                 tabs: tabs),

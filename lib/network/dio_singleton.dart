@@ -83,7 +83,7 @@ class DioSingleton {
       print('领取每日奖励:${missionResponse.statusCode}');
       if (missionResponse.statusCode == 200) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2);
+        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2,gravity: ToastGravity.TOP);
       }
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '领取每日奖励失败', timeInSecForIos: 2);
