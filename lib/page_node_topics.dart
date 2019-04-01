@@ -14,6 +14,7 @@ import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;
@@ -55,22 +56,20 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Future getTopics() async {
     if (!isUpLoading) {
+      isUpLoading = true;
+
+      List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.node.nodeId, p++);
+      // 用来判断节点是否需要登录后查看
+      if (newEntries.isEmpty) {
+        Navigator.pop(context);
+        return;
+      }
+
       setState(() {
-        isUpLoading = true;
+        items.addAll(newEntries);
+        isUpLoading = false;
       });
     }
-    List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.node.nodeId, p++);
-    // 用来判断节点是否需要登录后查看
-    if (newEntries.isEmpty) {
-      Navigator.pop(context);
-      return;
-    }
-
-    print(p);
-    setState(() {
-      items.addAll(newEntries);
-      isUpLoading = false;
-    });
   }
 
   @override
@@ -128,29 +127,41 @@ class _NodeTopicsState extends State<NodeTopics> {
 //          👆获取到的节点图片还可以进一步放大-> 将 large 换成 xxlarge。但是有个'坑'，虽然绝大部分是可以这样手动改的，
 //          但是还是存在不能手动放大的情况，所以只能加以判断处理
             if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));
+            print(MediaQuery.of(context).size.width);
             return FlexibleSpaceBar(
               title: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(snapshot.data.title),
                   Offstage(
-                    offstage: snapshot.data.header.isEmpty,
-                    child: Text(
-                      snapshot.data.header,
-                      style: TextStyle(fontSize: 10),
+                    offstage: (snapshot.data.header == null || snapshot.data.header.isEmpty),
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width - 150,
+                      child: InkWell(
+                        child: Text(
+                          snapshot.data.header == null ? '' : snapshot.data.header,
+                          style: TextStyle(fontSize: 12),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onTap: () => Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Html(
+                                  data: snapshot.data.header,
+                                  defaultTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                  ),
+                                  linkStyle: TextStyle(
+                                      color: ColorT.appMainColor[400],
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: ColorT.appMainColor[400]),
+                                ),
+                              ),
+                            ),
+                      ),
                     ),
-//                    Html(
-//                      data: snapshot.data.header,
-//                      defaultTextStyle: TextStyle(color: Colors.white, fontSize: 10.0,),
-//                      linkStyle: TextStyle(
-//                          color: ColorT.appMainColor[400],
-//                          decoration: TextDecoration.underline,
-//                          decorationColor: ColorT.appMainColor[400]),
-//                      onLinkTap: (url) {
-//                        //_launchURL(url);
-//                      },
-//                      useRichText: true,
-//                    ),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -168,7 +179,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                         style: TextStyle(fontSize: 10),
                       ),
                       SizedBox(
-                        width: 4,
+                        width: 6,
                       ),
                       Icon(
                         Icons.star,

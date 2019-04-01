@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_delegate.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_favourite.dart';
-import 'package:flutter_app/page_favourite_topics.dart';
 import 'package:flutter_app/page_history_hot.dart';
 import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
@@ -19,7 +19,6 @@ import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -52,7 +51,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 accountName: GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
-                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(),fullscreenDialog: true));
+                      var future = Navigator.push(
+                          context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
                       future.then((value) {
                         setState(() {
                           checkLoginState();
@@ -79,9 +79,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                   Center(
                                     child: Column(
                                       children: <Widget>[
-                                        Text(
-                                          poemOne.data.origin.title,
-                                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 4, right: 4),
+                                          child: Text(
+                                            poemOne.data.origin.title,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                         SizedBox(height: 10.0),
                                         Text(
@@ -117,7 +121,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(),fullscreenDialog: true));
+                      var future = Navigator.push(
+                          context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
                       future.then((value) {
                         setState(() {
                           checkLoginState();
@@ -159,11 +164,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
               },
             ),*/
               new ListTile(
-                leading: new Icon(Icons.apps),
-                title: new Text(MyLocalizations.of(context).nodes),
+                leading: new Icon(Icons.whatshot),
+                title: new Text(MyLocalizations.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
                 },
               ),
               new ListTile(
@@ -185,11 +190,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               new ListTile(
-                leading: new Icon(Icons.whatshot),
-                title: new Text(MyLocalizations.of(context).history),
+                leading: new Icon(Icons.apps),
+                title: new Text(MyLocalizations.of(context).nodes),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
                 },
               ),
               new ListTile(
@@ -269,7 +274,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
       if (poem != null) poemOne = poem;
     });
   }
-
 }
 
 class _LinkTextSpan extends TextSpan {
