@@ -119,9 +119,8 @@ class DioSingleton {
     // <a href="/favorite/node/17?once=68177">加入收藏</a>
     // <a href="/unfavorite/node/39?once=68177">取消收藏</a>
     // #Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a
-
-    bool isFav = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a').text != '加入收藏';
-    eventBus.fire(new MyEventNodeIsFav(isFav));
+    String isFavWithOnce = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a').attributes["href"];
+    eventBus.fire(new MyEventNodeIsFav(isFavWithOnce));
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
@@ -630,15 +629,15 @@ class DioSingleton {
     return false;
   }
 
-  // 收藏/取消收藏 节点
-  Future<bool> favoriteNode(bool isFavorite, String nodeId, String token) async {
-//    String url =
-//    isFavorite ? ("/unfavorite/topic/" + topicId + "?t=" + token) : ("/favorite/topic/" + topicId + "?t=" + token);
-//    var response = await _dio.get(url);
-//    if (response.statusCode == 200) {
-//      return true;
-//    }
-//    return false;
+  // 收藏/取消收藏 节点 https://www.v2ex.com/favorite/node/39?once=87770
+  Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
+    String url =
+    isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
+    var response = await _dio.get(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   // 感谢某条评论

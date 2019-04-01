@@ -26,7 +26,7 @@ class MyEventRefreshTopic {
 
 /// Event NODE_IS_FAV. 节点是否被收藏
 class MyEventNodeIsFav {
-  bool isFavourite;
+  String  isFavWithOnce;
 
-  MyEventNodeIsFav(this.isFavourite);
+  MyEventNodeIsFav(this.isFavWithOnce);
 }

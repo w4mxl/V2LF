@@ -164,7 +164,7 @@ class TopicDetailView extends StatefulWidget {
 }
 
 class _TopicDetailViewState extends State<TopicDetailView> {
-  bool _saving = false;
+  bool _saving = false;//是否显示转圈
 
   List<Action> actions = <Action>[
     Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),

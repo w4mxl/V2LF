@@ -16,6 +16,8 @@ import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ovprogresshud/progresshud.dart';
+import 'package:flutter/services.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;
@@ -34,6 +36,7 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 
   bool isFavorite = false;
+  String nodeIdWithOnce = '';
   StreamSubscription subscription;
 
   int p = 1;
@@ -44,8 +47,11 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
+
     // 获取数据
     _futureNode = getNodeInfo();
     getTopics();
@@ -76,12 +82,35 @@ class _NodeTopicsState extends State<NodeTopics> {
     }
   }
 
+  Future _favouriteNode() async {
+    if (nodeIdWithOnce.isNotEmpty) {
+      // 显示操作进度
+      Progresshud.show();
+      bool isSuccess = await dioSingleton.favoriteNode(isFavorite, nodeIdWithOnce);
+      if (await Progresshud.isVisible()) {
+        Progresshud.dismiss();
+      }
+      if (isSuccess) {
+        Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      } else {
+        Progresshud.showErrorWithStatus('操作失败');
+      }
+    } else {
+      Progresshud.showInfoWithStatus('未获取到 once');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //监听事件
     subscription = eventBus.on<MyEventNodeIsFav>().listen((event) {
       setState(() {
-        isFavorite = event.isFavourite;
+        //   /favorite/node/39?once=87770
+        isFavorite = event.isFavWithOnce.startsWith('/unfavorite');
+        nodeIdWithOnce = event.isFavWithOnce.split('/node/')[1];
       });
     });
 
@@ -98,7 +127,7 @@ class _NodeTopicsState extends State<NodeTopics> {
               IconButton(
                   icon: Icon(isFavorite ? Icons.star : Icons.star_border),
                   onPressed: () {
-                    // todo
+                    _favouriteNode();
                   })
             ],
           ),
@@ -131,8 +160,11 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     subscription.cancel();
+    if (await Progresshud.isVisible()) {
+      await Progresshud.dismiss();
+    }
     super.dispose();
   }
 
