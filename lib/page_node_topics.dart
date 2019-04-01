@@ -160,11 +160,8 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     subscription.cancel();
-    if (await Progresshud.isVisible()) {
-      await Progresshud.dismiss();
-    }
     super.dispose();
   }
 
