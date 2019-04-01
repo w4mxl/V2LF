@@ -23,3 +23,10 @@ class MyEventTabsChange {
 class MyEventRefreshTopic {
   MyEventRefreshTopic();
 }
+
+/// Event NODE_IS_FAV. 节点是否被收藏
+class MyEventNodeIsFav {
+  bool isFavourite;
+
+  MyEventNodeIsFav(this.isFavourite);
+}

@@ -12,6 +12,7 @@ import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,6 +32,9 @@ class _NodeTopicsState extends State<NodeTopics> {
   Future<Node> getNodeInfo() async {
     return NetworkApi.getNodeInfo(widget.node.nodeId);
   }
+
+  bool isFavorite = false;
+  StreamSubscription subscription;
 
   int p = 1;
   bool isUpLoading = false;
@@ -74,6 +78,13 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   @override
   Widget build(BuildContext context) {
+    //监听事件
+    subscription = eventBus.on<MyEventNodeIsFav>().listen((event) {
+      setState(() {
+        isFavorite = event.isFavourite;
+      });
+    });
+
     return new Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
@@ -82,6 +93,14 @@ class _NodeTopicsState extends State<NodeTopics> {
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: _buildFlexibleSpaceBar(),
+            actions: <Widget>[
+              // 收藏/取消收藏 按钮
+              IconButton(
+                  icon: Icon(isFavorite ? Icons.star : Icons.star_border),
+                  onPressed: () {
+                    // todo
+                  })
+            ],
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
@@ -109,6 +128,12 @@ class _NodeTopicsState extends State<NodeTopics> {
 //      ),
 //      body: new NodeTopicListView(widget.node.nodeId),
     );
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   Widget _buildFlexibleSpaceBar() {

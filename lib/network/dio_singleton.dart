@@ -83,7 +83,7 @@ class DioSingleton {
       print('领取每日奖励:${missionResponse.statusCode}');
       if (missionResponse.statusCode == 200) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2,gravity: ToastGravity.TOP);
+        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2, gravity: ToastGravity.TOP);
       }
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '领取每日奖励失败', timeInSecForIos: 2);
@@ -115,6 +115,13 @@ class DioSingleton {
       Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
       return topics;
     }
+
+    // <a href="/favorite/node/17?once=68177">加入收藏</a>
+    // <a href="/unfavorite/node/39?once=68177">取消收藏</a>
+    // #Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a
+
+    bool isFav = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a').text != '加入收藏';
+    eventBus.fire(new MyEventNodeIsFav(isFav));
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
@@ -621,6 +628,17 @@ class DioSingleton {
       return true;
     }
     return false;
+  }
+
+  // 收藏/取消收藏 节点
+  Future<bool> favoriteNode(bool isFavorite, String nodeId, String token) async {
+//    String url =
+//    isFavorite ? ("/unfavorite/topic/" + topicId + "?t=" + token) : ("/favorite/topic/" + topicId + "?t=" + token);
+//    var response = await _dio.get(url);
+//    if (response.statusCode == 200) {
+//      return true;
+//    }
+//    return false;
   }
 
   // 感谢某条评论

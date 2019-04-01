@@ -119,13 +119,13 @@ class V2exApi {
     return nodeGroups;
   }
 
-  // 节点导航页 -> 获取特定节点下的topics
+  // 节点导航页 -> 获取特定节点下的topics [ 已经移到了 dioSingleton 中 ]
   Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
     List<NodeTopicItem> topics = new List<NodeTopicItem>();
 
-    // todo 这里">"花了几乎一个下午摸索出解析到数据，但是还是不完全明白原因
+    // 这里">"花了几乎一个下午摸索出解析到数据，但是还是不完全明白原因
     final String reg4tag = "<div class=\"cell\"> (.*?)</table></div>";
 //    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
 
@@ -138,9 +138,8 @@ class V2exApi {
     final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
 
-    // todo 这里要 https 才能使下面的user-agent有效
+    // 这里要 https 才能使下面的user-agent有效
     var uri = new Uri.https('www.v2ex.com', '/go/' + tabKey, {'p': p.toString()});
-    print(uri);
     var request = await httpClient.getUrl(uri); // Uri.parse("https://www.v2ex.com/go/share")
     //使用iPhone的UA
     request.headers.add("user-agent",

@@ -14,12 +14,12 @@ class FavTopics extends StatefulWidget {
 
 class _FavTopicsState extends State<FavTopics> {
   int count = 0;
-  StreamSubscription loginSubscription;
+  StreamSubscription subscription;
 
   @override
   Widget build(BuildContext context) {
     //监听事件
-    loginSubscription = eventBus.on<MyEventFavCounts>().listen((event) {
+    subscription = eventBus.on<MyEventFavCounts>().listen((event) {
       setState(() {
         count = int.parse(event.count);
       });
@@ -35,7 +35,7 @@ class _FavTopicsState extends State<FavTopics> {
 
   @override
   void dispose() {
+    subscription.cancel();
     super.dispose();
-    loginSubscription.cancel();
   }
 }
