@@ -402,7 +402,7 @@ class DioSingleton {
         favNode.nodeName = aNode.xpath("/div/text()")[0].name;
         //*[@id="n_195868"]/div/span
         favNode.replyCount = aNode.xpath("/div/span/text()")[0].name;
-        print(favNode.img + "  " + favNode.nodeId + "  " + favNode.nodeName + "  " + favNode.replyCount);
+        // print(favNode.img + "  " + favNode.nodeId + "  " + favNode.nodeName + "  " + favNode.replyCount);
         nodes.add(favNode);
       }
     } else {
@@ -577,7 +577,7 @@ class DioSingleton {
           ReplyItem replyItem = new ReplyItem();
           replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
           replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
-          replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text;
+          replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text.replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
           if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
             replyItem.favorites =
                 aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];

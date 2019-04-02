@@ -53,6 +53,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
                 crossAxisCount: 3,
                 mainAxisSpacing: 6,
                 crossAxisSpacing: 4,
+                childAspectRatio: 0.72,
                 padding: EdgeInsets.all(8.0),
                 children: snapshot.data.map((FavNode node) {
                   return _gridItem(node);
@@ -106,7 +107,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
               placeholder: (context, url) => Icon(Icons.photo, size: 32.0, color: Color(0xFFcccccc)),
             ),
             SizedBox(
-              height: 4,
+              height: 8,
             ),
             Column(
               children: <Widget>[
@@ -133,8 +134,16 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
           ],
         ),
       ),
-      onTap: () => Navigator.push(
-          context, new MaterialPageRoute(builder: (context) => new NodeTopics(NodeItem(node.nodeId, node.nodeName)))),
+      onTap: () {
+        var future = Navigator.push(
+            context, new MaterialPageRoute(builder: (context) => new NodeTopics(NodeItem(node.nodeId, node.nodeName))));
+        future.then((value) {
+          setState(() {
+            print('xxxx');
+            _future = getFavNodes();
+          });
+        });
+      },
     );
   }
 
