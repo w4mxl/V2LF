@@ -16,8 +16,10 @@ import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_notifications.dart';
 import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DrawerLeft extends StatefulWidget {
@@ -48,25 +50,48 @@ class _DrawerLeftState extends State<DrawerLeft> {
           child: new Column(
             children: <Widget>[
               new UserAccountsDrawerHeader(
-                accountName: GestureDetector(
-                  onTap: () {
-                    if (userName.isEmpty) {
-                      var future = Navigator.push(
-                          context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
-                      future.then((value) {
-                        setState(() {
-                          checkLoginState();
-                        });
-                      });
-                    } else {
-                      // todo -> 个人中心页面
-                      _launchURL(DioSingleton.v2exHost + '/member/' + userName);
-                    }
-                  },
-                  child: Text(
-                    userName.isNotEmpty ? userName : "      " + MyLocalizations.of(context).login,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                accountName: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    InkWell(
+                      child: Text(
+                        userName.isNotEmpty ? userName : "      " + MyLocalizations.of(context).login,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onTap: () {
+                        if (userName.isEmpty) {
+                          var future = Navigator.push(context,
+                              new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
+                          future.then((value) {
+                            setState(() {
+                              checkLoginState();
+                            });
+                          });
+                        } else {
+                          // todo -> 个人中心页面
+                          _launchURL(DioSingleton.v2exHost + '/member/' + userName);
+                        }
+                      },
+                    ),
+                    IconButton(
+                        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+                        alignment: Alignment.bottomCenter,
+                        icon: (Icon(
+                          Icons.brightness_4,
+                          color: Colors.white,
+                        )),
+                        onPressed: () {
+                          bool currentIsDark;
+                          if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
+                            currentIsDark = false;
+                          } else {
+                            currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
+                          }
+                          SpHelper.sp.setBool(SP_IS_DARK, !currentIsDark);
+                          eventBus.fire(MyEventSettingChange());
+                        }),
+                  ],
                 ),
                 accountEmail: GestureDetector(
                   onTap: () {

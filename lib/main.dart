@@ -16,7 +16,10 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(new MyApp());
+void main() async {
+  SpHelper.sp = await SharedPreferences.getInstance();
+  runApp(new MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -25,8 +28,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   DateTime _lastPressedAt; //上次点击时间
+
   Locale _locale;
   String _fontFamily = 'Whitney';
+  bool _isDark = false;
 
   List<TabModel> tabs = TABS;
 
@@ -51,9 +56,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
-  void _initAsync() async {
-    SpHelper.sp = await SharedPreferences.getInstance();
-
+  void _initAsync() {
     _loadLocale();
     _loadCustomTabs();
     // 领取每日奖励
@@ -64,6 +67,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     LanguageModel model = SpHelper.getLanguageModel();
     String _colorKey = SpHelper.getThemeColor();
     String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
+    bool _spIsDark = SpHelper.sp.getBool(SP_IS_DARK);
 
     if (!mounted) return;
     setState(() {
@@ -81,6 +85,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         _fontFamily = null;
       } else {
         _fontFamily = 'Whitney';
+      }
+
+      if (_spIsDark != null) {
+        _isDark = _spIsDark;
       }
     });
   }
@@ -147,7 +155,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(primarySwatch: ColorT.appMainColor, fontFamily: _fontFamily),
+      theme: new ThemeData(
+          brightness: _isDark ? Brightness.dark : Brightness.light,
+          primarySwatch: ColorT.appMainColor,
+          fontFamily: _fontFamily),
       home: WillPopScope(
         child: new Scaffold(
             appBar: AppBar(

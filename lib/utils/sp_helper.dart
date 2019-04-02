@@ -18,6 +18,9 @@ const String SP_JINRISHICI_TOKEN = "jinrishici_token";
 const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
 
+// dark light
+const String SP_IS_DARK = "isDark";
+
 // 搜索历史记录
 const String SP_SEARCH_HISTORY = "search_history";
 
