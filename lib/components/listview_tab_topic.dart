@@ -10,6 +10,7 @@ import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -125,20 +126,13 @@ class TopicItemView extends StatelessWidget {
                   ),
                   Row(children: <Widget>[
                     new Text(
-                      topic.memberId,
+                      topic.memberId+" • ",
                       textAlign: TextAlign.left,
                       maxLines: 1,
-                      style: new TextStyle(fontSize: 14.0, color: Colors.black87),
-                    ),
-                    new Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.green,
-                      size: 16.0,
+                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
                     ),
                     new Text(
                       topic.nodeName,
-                      textAlign: TextAlign.left,
-                      maxLines: 1,
                       style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
                     ),
                     new Text(
