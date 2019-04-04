@@ -43,17 +43,13 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
           if (snapshot.hasData) {
             return new RefreshIndicator(
                 child: new Container(
-//                  color: CupertinoColors.lightBackgroundGray,
                     child: ListView.separated(
                         itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                        separatorBuilder: (context, index) => Divider(height: 0,indent: 15,),
+                        separatorBuilder: (context, index) => Divider(
+                              height: 0,
+                              indent: 15,
+                            ),
                         itemCount: snapshot.data.length)
-//                    child: new ListView(
-//                        physics: ClampingScrollPhysics(), //正常的滚动效果，没有弹性
-//                        padding: const EdgeInsets.only(bottom: 15.0),
-//                        children: snapshot.data.map((TabTopicItem topic) {
-//                          return new TopicItemView(topic);
-//                        }).toList())
                     ),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
@@ -113,70 +109,71 @@ class TopicItemView extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: new Text(
-                      topic.topicContent,
-                      /*maxLines: 2,
+                  new Text(
+                    topic.topicContent,
+                    /*maxLines: 2,
                   overflow: TextOverflow.ellipsis,*/
-                      style: new TextStyle(fontSize: 16),
-                    ),
+                    style: new TextStyle(fontSize: 17),
                   ),
-                  Row(children: <Widget>[
-                    new Text(
-                      topic.memberId+" • ",
-                      textAlign: TextAlign.left,
-                      maxLines: 1,
-                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
-                    ),
-                    new Text(
-                      topic.nodeName,
-                      style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
-                    ),
-                    new Text(
-                      topic.lastReplyTime == ''
-                          ? MyLocalizations.of(context).noComment
-                          : '${topic.lastReplyTime} • 最后回复 ${topic.lastReplyMId}',
-                      style: new TextStyle(color: Colors.grey, fontSize: 12.0),
-                    )
-                  ],),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Theme.of(context).dividerColor),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: new Text(
+                          topic.nodeName,
+                          style: new TextStyle(
+                              fontSize: 12.0, color: Theme.of(context).disabledColor, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                        " • " + topic.memberId,
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        style: new TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Offstage(
+                        offstage: topic.lastReplyTime == '',
+                        child: Text(
+                          " • " + topic.lastReplyTime,
+                          style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
-
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                // 头像
-                ClipOval(
-                  child: new CachedNetworkImage(
-                    imageUrl: topic.avatar,
-                    height: 32.0,
-                    width: 32.0,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Icon(Icons.account_circle, size: 32.0, color: Color(0xFFcccccc)),
+            SizedBox(
+              width: 4,
+            ),
+            Offstage(
+              offstage: topic.replyCount == '0',
+              child: Material(
+                color: Color(0xFFf0f0f0),
+                shape: new StadiumBorder(),
+                child: new Container(
+                  width: 35.0,
+                  height: 20.0,
+                  alignment: Alignment.center,
+                  child: new Text(
+                    topic.replyCount,
+                    style: new TextStyle(fontSize: 12.0, color: Color(0xFFa2a2a2)),
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Offstage(
-                  offstage: topic.replyCount == '0',
-                  child: Material(
-                    color: ColorT.appMainColor[400],
-                    shape: new StadiumBorder(),
-                    child: new Container(
-                      width: 35.0,
-                      height: 20.0,
-                      alignment: Alignment.center,
-                      child: new Text(
-                        topic.replyCount,
-                        style: new TextStyle(fontSize: 12.0, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
           ],
         ),
