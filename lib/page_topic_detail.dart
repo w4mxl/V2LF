@@ -25,6 +25,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
+bool isDark = false;
 
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
@@ -42,7 +43,6 @@ class _TopicDetailsState extends State<TopicDetails> {
     super.initState();
     // check login state
     checkLoginState();
-    print('initState');
   }
 
   checkLoginState() {
@@ -56,6 +56,7 @@ class _TopicDetailsState extends State<TopicDetails> {
 
   @override
   Widget build(BuildContext context) {
+    isDark = Theme.of(context).brightness != Brightness.light;
     //监听登录事件
     print('监听登录事件:' + (isLogin == true ? 'true' : 'false'));
 
@@ -164,7 +165,7 @@ class TopicDetailView extends StatefulWidget {
 }
 
 class _TopicDetailViewState extends State<TopicDetailView> {
-  bool _saving = false;//是否显示转圈
+  bool _saving = false; //是否显示转圈
 
   List<Action> actions = <Action>[
     Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),
@@ -442,7 +443,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: CupertinoColors.lightBackgroundGray,
+      backgroundColor: isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
@@ -480,7 +481,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 10.0),
-                        child: IconTheme.merge(data: IconThemeData(color: Colors.black45), child: Icon(action.icon)),
+                        child: Icon(action.icon),
                       ),
                       Text(action.title)
                     ],
@@ -542,7 +543,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     return Card(
       elevation: 0.0,
       margin: const EdgeInsets.all(8.0),
-      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 5.0),
         child: Column(
@@ -579,7 +579,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 _detailModel.createdId,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(fontSize: 14.0, color: Colors.black87, fontWeight: FontWeight.bold),
+                                style: new TextStyle(
+                                    fontSize: 14.0,
+                                    color: isDark ? Colors.white : Colors.black87,
+                                    fontWeight: FontWeight.bold),
                               ),
                               onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
                             ),
@@ -610,13 +613,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           new Icon(
                             Icons.keyboard,
                             size: 16.0,
-                            color: Colors.grey[500],
+                            color: Theme.of(context).disabledColor,
                           ),
                           new Padding(
                             padding: const EdgeInsets.only(left: 4.0),
                             child: Text(
                               _detailModel.smallGray,
-                              style: new TextStyle(fontSize: 12.0, color: Colors.grey[500]),
+                              style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
                             ),
                           )
                         ],
@@ -646,7 +649,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 _detailModel.topicTitle,
                 softWrap: true,
                 style: new TextStyle(
-                  color: Colors.black87,
+                  color: isDark ? Colors.white : Colors.black87,
                   fontSize: 19.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -657,7 +660,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 14.0),
+                defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 14.0),
                 linkStyle: TextStyle(
                     color: ColorT.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -689,19 +692,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: const Color(0xFFfffff9),
+          color: isDark ? Colors.black12 : const Color(0xFFfffff9),
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 subtle.fade,
-                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                style: TextStyle(color: isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
               ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 12.0),
+                defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 12.0),
                 linkStyle: TextStyle(
                     color: ColorT.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -729,7 +732,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         : Card(
             elevation: 0.0,
             margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
-            color: Colors.white,
             child: ListView.separated(
               // +1 是展示 _buildLoadText
               itemCount: replyList.length + 1,
@@ -742,7 +744,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque, // GestureDetector 默认只监听不透明的 widget。当你点击空白的地方的时候，会监听不到。
                       child: new Container(
-                        color: reply.userName == _detailModel.createdId ? Colors.red[50] : null,
+                        color: reply.userName == _detailModel.createdId ? (isDark ? Colors.black26 : Colors.red[50]) : null,
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -834,7 +836,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
-                                        defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
+                                        defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 14.0),
                                         linkStyle: TextStyle(
                                             color: ColorT.appMainColor[400],
                                             decoration: TextDecoration.underline,
@@ -879,8 +881,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       title: Text('回复评论'),
                                       onTap: () {
                                         Navigator.pop(context);
-                                        select(
-                                            Action(id: 'reply_comment', title: " @"+reply.userName + " #" + reply.number + " "));
+                                        select(Action(
+                                            id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
                                       },
                                     ),
                                     ListTile(
