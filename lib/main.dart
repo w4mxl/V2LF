@@ -31,7 +31,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   Locale _locale;
   String _fontFamily = 'Whitney';
-  bool _isDark = false;
 
   List<TabModel> tabs = TABS;
 
@@ -88,7 +87,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       }
 
       if (_spIsDark != null) {
-        _isDark = _spIsDark;
+        ColorT.isDark = _spIsDark;
       }
     });
   }
@@ -156,7 +155,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         const Locale('en', ''),
       ],
       theme: new ThemeData(
-          brightness: _isDark ? Brightness.dark : Brightness.light,
+          brightness: ColorT.isDark ? Brightness.dark : Brightness.light,
           primarySwatch: ColorT.appMainColor,
           fontFamily: _fontFamily),
       home: WillPopScope(

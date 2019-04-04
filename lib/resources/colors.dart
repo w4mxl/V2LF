@@ -3,18 +3,10 @@ import 'package:flutter/material.dart';
 class ColorT {
   static MaterialColor appMainColor = Colors.blueGrey;
 
-  static const Color transparent_80 = Color(0x80000000); //<!--204-->
+  static bool isDark = false; // 用来判断是否 dark mode
 
-  static const Color text_dark = Color(0xFF333333);
-  static const Color text_normal = Color(0xFF666666);
-  static const Color text_gray = Color(0xFF999999);
-
-  static const Color divider = Color(0xffe5e5e5);
-
-  static const Color gray_33 = Color(0xFF333333); //51
   static const Color gray_66 = Color(0xFF666666); //102
   static const Color gray_99 = Color(0xFF999999); //153
-  static const Color gray_ef = Color(0XFFEFEFEF); //153
 }
 
 Map<String, MaterialColor> themeColorMap = {

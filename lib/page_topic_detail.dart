@@ -25,7 +25,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
-bool isDark = false;
 
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
@@ -56,7 +55,6 @@ class _TopicDetailsState extends State<TopicDetails> {
 
   @override
   Widget build(BuildContext context) {
-    isDark = Theme.of(context).brightness != Brightness.light;
     //监听登录事件
     print('监听登录事件:' + (isLogin == true ? 'true' : 'false'));
 
@@ -443,7 +441,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+      backgroundColor: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
@@ -581,7 +579,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 maxLines: 1,
                                 style: new TextStyle(
                                     fontSize: 14.0,
-                                    color: isDark ? Colors.white : Colors.black87,
+                                    color: ColorT.isDark ? Colors.white : Colors.black87,
                                     fontWeight: FontWeight.bold),
                               ),
                               onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
@@ -627,15 +625,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     ],
                   )),
                   new Icon(
-                    Icons.chat_bubble_outline,
-                    size: 18.0,
+                    FontAwesomeIcons.comment,
+                    size: 16.0,
                     color: Colors.grey,
                   ),
                   new Padding(
                     padding: const EdgeInsets.only(left: 4.0),
                     child: new Text(
                       _detailModel.replyCount,
-                      style: new TextStyle(fontSize: 12.0, color: Colors.grey[700]),
+                      style: new TextStyle(fontSize: 14.0, color: Colors.grey[700]),
                     ),
                   )
                 ],
@@ -649,7 +647,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 _detailModel.topicTitle,
                 softWrap: true,
                 style: new TextStyle(
-                  color: isDark ? Colors.white : Colors.black87,
+                  color: ColorT.isDark ? Colors.white : Colors.black87,
                   fontSize: 19.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -660,7 +658,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 14.0),
+                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
                 linkStyle: TextStyle(
                     color: ColorT.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -692,19 +690,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: isDark ? Colors.black12 : const Color(0xFFfffff9),
+          color: ColorT.isDark ? Colors.black12 : const Color(0xFFfffff9),
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 subtle.fade,
-                style: TextStyle(color: isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
+                style: TextStyle(color: ColorT.isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
               ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 12.0),
+                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 12.0),
                 linkStyle: TextStyle(
                     color: ColorT.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -744,7 +742,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque, // GestureDetector 默认只监听不透明的 widget。当你点击空白的地方的时候，会监听不到。
                       child: new Container(
-                        color: reply.userName == _detailModel.createdId ? (isDark ? Colors.black26 : Colors.red[50]) : null,
+                        color: reply.userName == _detailModel.createdId ? (ColorT.isDark ? Colors.black26 : Colors.red[50]) : null,
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -836,7 +834,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
-                                        defaultTextStyle: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                        defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
                                         linkStyle: TextStyle(
                                             color: ColorT.appMainColor[400],
                                             decoration: TextDecoration.underline,

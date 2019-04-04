@@ -105,7 +105,7 @@ class TopicItemView extends StatelessWidget {
         );
       },
       child: new Container(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.only(left:18.0,right: 18.0,top: 15,bottom: 15),
         child: new Row(
           children: <Widget>[
             Expanded(
@@ -119,12 +119,35 @@ class TopicItemView extends StatelessWidget {
                     style: new TextStyle(fontSize: 17),
                   ),
                   SizedBox(
-                    height: 6,
+                    height: 8,
                   ),
                   Row(
                     children: <Widget>[
+                      // 头像
+                      ClipOval(
+                        child: new CachedNetworkImage(
+                          imageUrl: topic.avatar,
+                          height: 22.0,
+                          width: 22.0,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Icon(Icons.account_circle, size: 22.0, color: Color(0xFFcccccc)),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        topic.memberId,
+                        textAlign: TextAlign.left,
+                        maxLines: 1,
+                        style: new TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
                       Container(
-                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                        padding: EdgeInsets.only(top: 2, bottom: 2, left: 4, right: 4),
                         decoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).dividerColor),
                           borderRadius: BorderRadius.circular(4),
@@ -135,13 +158,6 @@ class TopicItemView extends StatelessWidget {
                               fontSize: 12.0, color: Theme.of(context).disabledColor, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text(
-                        " • " + topic.memberId,
-                        textAlign: TextAlign.left,
-                        maxLines: 1,
-                        style: new TextStyle(
-                            fontSize: 14.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
-                      ),
                       SizedBox(
                         width: 4,
                       ),
@@ -151,31 +167,47 @@ class TopicItemView extends StatelessWidget {
                           " • " + topic.lastReplyTime,
                           style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
                         ),
+                      ),
+                      Spacer(),
+                      Row(
+                        children: <Widget>[
+                          new Icon(
+                            FontAwesomeIcons.comment,
+                            size: 16.0,
+                            color: Colors.grey,
+                          ),
+                          new Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: new Text(
+                              topic.replyCount,
+                              style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              width: 4,
-            ),
-            Offstage(
-              offstage: topic.replyCount == '0',
-              child: Material(
-                color: Color(0xFFf0f0f0),
-                shape: new StadiumBorder(),
-                child: new Container(
-                  width: 35.0,
-                  height: 20.0,
-                  alignment: Alignment.center,
-                  child: new Text(
-                    topic.replyCount,
-                    style: new TextStyle(fontSize: 12.0, color: Color(0xFFa2a2a2)),
-                  ),
-                ),
-              ),
-            ),
+
+//            Offstage(
+//              offstage: topic.replyCount == '0',
+//              child: Material(
+//                color: ColorT.appMainColor[200],
+//                shape: new StadiumBorder(),
+//                child: new Container(
+//                  width: 35.0,
+//                  height: 20.0,
+//                  alignment: Alignment.center,
+//                  child: new Text(
+//                    topic.replyCount,
+//                    style: new TextStyle(fontSize: 12.0, color: Theme.of(context).cardColor),
+//                  ),
+//                ),
+//              ),
+//            ),
+
           ],
         ),
       ),
