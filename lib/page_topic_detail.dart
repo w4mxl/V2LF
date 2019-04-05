@@ -742,25 +742,38 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque, // GestureDetector 默认只监听不透明的 widget。当你点击空白的地方的时候，会监听不到。
                       child: new Container(
-                        color: reply.userName == _detailModel.createdId ? (ColorT.isDark ? Colors.black26 : Colors.red[50]) : null,
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             // 评论item头像
                             GestureDetector(
-                              child: ClipOval(
-                                child: CachedNetworkImage(
-                                  imageUrl: 'https:' + reply.avatar,
-                                  width: 25.0,
-                                  height: 25.0,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => Icon(
-                                        Icons.account_circle,
-                                        size: 25,
-                                        color: Color(0xFFcccccc),
-                                      ),
+                              child: Container(
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: 'https:' + reply.avatar,
+                                    width: 25.0,
+                                    height: 25.0,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) => Icon(
+                                          Icons.account_circle,
+                                          size: 25,
+                                          color: Color(0xFFcccccc),
+                                        ),
+                                  ),
                                 ),
+                                decoration: reply.userName == _detailModel.createdId ? BoxDecoration(
+//                                  border: Border.all(color: Colors.redAccent,width: 2),
+                                  borderRadius:BorderRadius.circular(13.5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.redAccent,
+//                                        offset: new Offset(0, 5.0),
+                                        blurRadius: 4.0,
+                                        spreadRadius: 2.0
+                                    )
+                                  ],
+                                ):null,
                               ),
                               onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + reply.userName),
                             ),
@@ -834,7 +847,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
-                                        defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                        defaultTextStyle:
+                                            TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
                                         linkStyle: TextStyle(
                                             color: ColorT.appMainColor[400],
                                             decoration: TextDecoration.underline,

@@ -127,10 +127,10 @@ class TopicItemView extends StatelessWidget {
                       ClipOval(
                         child: new CachedNetworkImage(
                           imageUrl: topic.avatar,
-                          height: 22.0,
-                          width: 22.0,
+                          height: 21.0,
+                          width: 21.0,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Icon(Icons.account_circle, size: 22.0, color: Color(0xFFcccccc)),
+                          placeholder: (context, url) => Icon(Icons.account_circle, size: 21.0, color: Color(0xFFcccccc)),
                         ),
                       ),
                       SizedBox(
@@ -147,7 +147,7 @@ class TopicItemView extends StatelessWidget {
                         width: 8,
                       ),
                       Container(
-                        padding: EdgeInsets.only(top: 2, bottom: 2, left: 4, right: 4),
+                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
                         decoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).dividerColor),
                           borderRadius: BorderRadius.circular(4),
