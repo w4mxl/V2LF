@@ -746,36 +746,44 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            // 评论item头像
-                            GestureDetector(
-                              child: Container(
-                                child: ClipOval(
-                                  child: CachedNetworkImage(
-                                    imageUrl: 'https:' + reply.avatar,
-                                    width: 25.0,
-                                    height: 25.0,
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) => Icon(
-                                          Icons.account_circle,
-                                          size: 25,
-                                          color: Color(0xFFcccccc),
-                                        ),
+                            Column(
+                              children: <Widget>[
+                                // 评论item头像
+                                GestureDetector(
+                                  child: Container(
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: 'https:' + reply.avatar,
+                                        width: 25.0,
+                                        height: 25.0,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => Icon(
+                                              Icons.account_circle,
+                                              size: 25,
+                                              color: Color(0xFFcccccc),
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + reply.userName),
+                                ),
+                                Offstage(
+                                  offstage: reply.userName != _detailModel.createdId,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Container(
+                                      padding: EdgeInsets.all(1),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                        child: Text(
+                                      '楼主',
+                                      style: TextStyle(fontSize: 10,color: Colors.grey),
+                                    )),
                                   ),
                                 ),
-                                decoration: reply.userName == _detailModel.createdId ? BoxDecoration(
-//                                  border: Border.all(color: Colors.redAccent,width: 2),
-                                  borderRadius:BorderRadius.circular(13.5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.redAccent,
-//                                        offset: new Offset(0, 5.0),
-                                        blurRadius: 4.0,
-                                        spreadRadius: 2.0
-                                    )
-                                  ],
-                                ):null,
-                              ),
-                              onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + reply.userName),
+                              ],
                             ),
                             SizedBox(
                               width: 10.0,
