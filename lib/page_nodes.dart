@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,10 @@ class NodeGroupWidget extends StatelessWidget {
       ),
     );
 
-    return new Card(child: _container, margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),);
+    return new Card(
+      child: _container,
+      margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+    );
   }
 
   Widget renderNode(NodeItem node) {
@@ -139,6 +143,21 @@ class DataSearch extends SearchDelegate<String> {
   ];
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    if (ColorT.isDark) {
+      final ThemeData theme = Theme.of(context);
+      return theme.copyWith(
+        primaryColor: theme.primaryColor,
+        primaryIconTheme: theme.primaryIconTheme,
+        primaryColorBrightness: theme.primaryColorBrightness,
+        primaryTextTheme: theme.primaryTextTheme,
+      );
+    } else {
+      return super.appBarTheme(context);
+    }
+  }
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -153,7 +172,7 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios),
+      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
