@@ -46,7 +46,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
     }
     List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.tabKey, p++);
     // 用来判断节点是否需要登录后查看
-    if(newEntries.isEmpty){
+    if (newEntries.isEmpty) {
       Navigator.pop(context);
       return;
     }
@@ -167,7 +167,7 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.title,
-                                style: new TextStyle(fontSize: 16.0, color: Colors.black87),
+                                style: new TextStyle(fontSize: 16.0, color: ColorT.isDark ? Colors.white : Colors.black87),
                               ),
                             ),
                             new Container(
@@ -180,7 +180,7 @@ class TopicItemView extends StatelessWidget {
                                     maxLines: 1,
                                     style: new TextStyle(
                                       fontSize: 12.0,
-                                      color: Colors.black54,
+                                      color: ColorT.isDark ? Colors.white70 : Colors.black87,
                                     ),
                                   ),
                                   new Text(

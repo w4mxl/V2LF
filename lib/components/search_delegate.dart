@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,6 +27,21 @@ class MySearchDelegate extends SearchDelegate<String> {
 
   String lastQ = ""; // 上一次的搜索关键字
   Future<Sov2ex> _future; // 搜索数据 Future
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    if (ColorT.isDark) {
+      final ThemeData theme = Theme.of(context);
+      return theme.copyWith(
+        primaryColor: theme.primaryColor,
+        primaryIconTheme: theme.primaryIconTheme,
+        primaryColorBrightness: theme.primaryColorBrightness,
+        primaryTextTheme: theme.primaryTextTheme,
+      );
+    } else {
+      return super.appBarTheme(context);
+    }
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -210,7 +226,7 @@ class Sov2exResultItem extends StatelessWidget {
                 Html(
                   data: content,
                   renderNewlines: true,
-                  defaultTextStyle: TextStyle(color: Colors.grey[800], fontSize: 14.0),
+                  defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white70 : Colors.grey[800], fontSize: 14.0),
                   linkStyle: TextStyle(
                     color: Colors.red,
                     decoration: null,
@@ -227,7 +243,7 @@ class Sov2exResultItem extends StatelessWidget {
                       " 发表，共计 " +
                       hitsListBean.source.replies.toString() +
                       " 个回复",
-                  style: TextStyle(color: Colors.black38, fontSize: 12.0),
+                  style: TextStyle(color: ColorT.isDark ? Colors.white30 : Colors.black38, fontSize: 12.0),
                 )
               ],
             ),

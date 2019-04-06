@@ -14,6 +14,7 @@ import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/resources/colors.dart';
 
 class FavouriteNodesGrid extends StatefulWidget {
   @override
@@ -113,7 +114,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
               children: <Widget>[
                 Text(node.nodeName),
                 SizedBox(
-                  height: 4,
+                  height: 5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -121,11 +122,11 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
                     Icon(
                       Icons.forum,
                       size: 13,
-                      color: Colors.grey,
+                      color: ColorT.isDark ? Colors.white70 : Colors.grey,
                     ),
                     Text(
                       node.replyCount,
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                      style: TextStyle(color: ColorT.isDark ? Colors.white70 : Colors.grey, fontSize: 12),
                     ),
                   ],
                 ),

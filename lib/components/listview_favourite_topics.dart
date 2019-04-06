@@ -65,7 +65,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     if (items.length > 0) {
       return new RefreshIndicator(
           child: Container(
-            color: CupertinoColors.lightBackgroundGray,
+            color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,
@@ -161,7 +161,6 @@ class TopicItemView extends StatelessWidget {
       },
       child: Card(
         margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
-        color: Colors.white,
         child: new Container(
           child: new Column(
             children: <Widget>[
@@ -180,7 +179,7 @@ class TopicItemView extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: new Text(
                                   topic.topicTitle,
-                                  style: new TextStyle(fontSize: 16.0, color: Colors.black),
+                                  style: new TextStyle(fontSize: 16.0, color: ColorT.isDark ? Colors.white : Colors.black),
                                 ),
                               ),
                               new Container(
@@ -221,7 +220,7 @@ class TopicItemView extends StatelessWidget {
                                         topic.memberId,
                                         style: new TextStyle(
                                           fontSize: 12.0,
-                                          color: Colors.black54,
+                                          color: ColorT.isDark ? Colors.white70 : Colors.black54,
                                         ),
                                       ),
                                       new Text(
@@ -237,7 +236,7 @@ class TopicItemView extends StatelessWidget {
                                         topic.lastReplyMId,
                                         style: new TextStyle(
                                           fontSize: 12.0,
-                                          color: Colors.black54,
+                                          color: ColorT.isDark ? Colors.white70 : Colors.black54,
                                         ),
                                       ),
                                     ],

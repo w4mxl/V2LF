@@ -197,9 +197,8 @@ class TopicItemView extends StatelessWidget {
                                 defaultTextStyle:
                                     TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 15.0),
                                 linkStyle: TextStyle(
-                                    color: ColorT.appMainColor[400],
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: ColorT.appMainColor[400]),
+                                  color: Theme.of(context).accentColor,
+                                ),
                                 onLinkTap: (url) {
                                   if (UrlHelper.canLaunchInApp(context, url)) {
                                     return;

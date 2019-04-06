@@ -6,6 +6,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/resources/colors.dart';
 
 // 节点导航页面
 class NodesPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _NodePageState extends State<NodesPage> {
         ],
       ),
       body: new Container(
-          color: CupertinoColors.lightBackgroundGray,
+          color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
           child: new Center(
             child: nodeGroups.length > 0
                 ? new ListView.builder(
@@ -107,7 +108,7 @@ class NodeGroupWidget extends StatelessWidget {
       ),
     );
 
-    return new Card(child: _container, margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0), color: Colors.white);
+    return new Card(child: _container, margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),);
   }
 
   Widget renderNode(NodeItem node) {
@@ -116,9 +117,8 @@ class NodeGroupWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
         child: new Text(
           node.nodeName,
-          style: new TextStyle(color: Theme.of(context).primaryColor, fontSize: 13.0),
+          style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 13.0),
         ),
-        decoration: new BoxDecoration(borderRadius: new BorderRadius.circular(5.0), color: Colors.white),
       ),
       onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
     );

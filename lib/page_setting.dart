@@ -67,13 +67,13 @@ class _SettingPageState extends State<SettingPage> {
         title: Text(MyLocalizations.of(context).titleSetting),
       ),
       body: Container(
-        color: CupertinoColors.lightBackgroundGray,
+        color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
         child: ListView(
           children: <Widget>[
             // 主页tab设置
             Container(
               margin: const EdgeInsets.only(top: 15.0),
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -101,7 +101,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
             Container(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               margin: EdgeInsets.only(top: 15.0),
               child: Column(
                 children: <Widget>[
@@ -170,7 +170,7 @@ class _SettingPageState extends State<SettingPage> {
             // 多语言设置
             Container(
               margin: const EdgeInsets.only(top: 15.0),
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -240,7 +240,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
             Container(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               margin: EdgeInsets.only(top: 15.0),
               child: Column(
                 children: <Widget>[
@@ -285,7 +285,7 @@ class _SettingPageState extends State<SettingPage> {
             // 意见反馈
             Container(
               margin: const EdgeInsets.only(top: 15.0),
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -346,7 +346,7 @@ class _SettingPageState extends State<SettingPage> {
             // 更新记录
             Container(
               margin: const EdgeInsets.only(top: 15.0, bottom: 24.0),
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               child: Column(
                 children: <Widget>[
                   Divider(
@@ -360,22 +360,22 @@ class _SettingPageState extends State<SettingPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => WhatsNewPage.changelog(
-                            title: Text(
-                              "What's New",
-                              textScaleFactor: 1.2,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                // Text Style Needed to Look like iOS 11
-                                fontSize: 22.0,
-                                fontWeight: FontWeight.bold,
+                                title: Text(
+                                  "What's New",
+                                  textScaleFactor: 1.2,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    // Text Style Needed to Look like iOS 11
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                buttonText: Text(
+                                  'Continue',
+                                  //textScaleFactor: textScaleFactor,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
-                            ),
-                            buttonText: Text(
-                              'Continue',
-                              //textScaleFactor: textScaleFactor,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
                           fullscreenDialog: true,
                         ),
                       );
@@ -397,7 +397,7 @@ class _SettingPageState extends State<SettingPage> {
               child: GestureDetector(
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 40.0),
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   child: Column(
                     children: <Widget>[
                       Divider(
