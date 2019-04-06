@@ -84,12 +84,7 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Future _favouriteNode() async {
     if (nodeIdWithOnce.isNotEmpty) {
-      // 显示操作进度
-      Progresshud.show();
       bool isSuccess = await dioSingleton.favoriteNode(isFavorite, nodeIdWithOnce);
-      if (await Progresshud.isVisible()) {
-        Progresshud.dismiss();
-      }
       if (isSuccess) {
         Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
         setState(() {

@@ -139,7 +139,6 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
             context, new MaterialPageRoute(builder: (context) => new NodeTopics(NodeItem(node.nodeId, node.nodeName))));
         future.then((value) {
           setState(() {
-            print('xxxx');
             _future = getFavNodes();
           });
         });
