@@ -115,7 +115,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                         SizedBox(height: 10.0),
                                         Text(
                                           '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
-                                          style: TextStyle(color: ColorT.appMainColor[700]),
+                                          style: TextStyle(
+                                              color: ColorT.isDark ? ColorT.appMainColor[300] : ColorT.appMainColor[700]),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),

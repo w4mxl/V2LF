@@ -69,7 +69,6 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
     if (items.length > 0) {
       return new RefreshIndicator(
           child: Container(
-            color: Colors.white,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,
@@ -178,7 +177,7 @@ class TopicItemView extends StatelessWidget {
                         notificationItem.date,
                         style: new TextStyle(
                           fontSize: 12.0,
-                          color: Colors.black54,
+                          color: ColorT.isDark ? Colors.white70 : Colors.black54,
                         ),
                       ),
                     ],
@@ -195,7 +194,8 @@ class TopicItemView extends StatelessWidget {
                               child: Html(
                                 // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                                 data: notificationItem.title,
-                                defaultTextStyle: TextStyle(color: Colors.black87, fontSize: 15.0),
+                                defaultTextStyle:
+                                    TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 15.0),
                                 linkStyle: TextStyle(
                                     color: ColorT.appMainColor[400],
                                     decoration: TextDecoration.underline,
@@ -220,8 +220,9 @@ class TopicItemView extends StatelessWidget {
                                 margin: const EdgeInsets.only(top: 8.0),
                                 child: Html(
                                   data: notificationItem.reply,
-                                  defaultTextStyle: TextStyle(color: Colors.black, fontSize: 14.0),
-                                  backgroundColor: Colors.grey[100],
+                                  defaultTextStyle:
+                                      TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                  backgroundColor: ColorT.isDark ? Colors.grey[800] : Colors.grey[200],
                                   padding: EdgeInsets.all(4.0),
                                   linkStyle: TextStyle(
                                       color: ColorT.appMainColor[400],
