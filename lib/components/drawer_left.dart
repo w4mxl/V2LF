@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -294,11 +295,22 @@ class _DrawerLeftState extends State<DrawerLeft> {
   }
 
   Future getOnePoem() async {
-    var poem = await NetworkApi.getPoem();
-    if (!mounted) return;
-    setState(() {
-      if (poem != null) poemOne = poem;
-    });
+    String today = DateTime.now().toString().substring(0, "yyyy-MM-dd".length);
+    print('今天是：' + today);
+    var spPoem = SpHelper.sp.getStringList(SP_TODAY_POEM);
+    if (spPoem != null && spPoem[0] == today) {
+      setState(() {
+        poemOne = Poem.fromMap(json.decode(spPoem[1]));
+      });
+    } else {
+      var poem = await NetworkApi.getPoem();
+      // 存入 sp
+      SpHelper.sp.setStringList(SP_TODAY_POEM, [today, json.encode(poem)]);
+      if (!mounted) return;
+      setState(() {
+        if (poem != null) poemOne = poem;
+      });
+    }
   }
 }
 

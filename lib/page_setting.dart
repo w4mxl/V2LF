@@ -236,7 +236,10 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 给软件评分
                   ListTile(
-                    leading: Icon(Icons.star),
+                    leading: Icon(
+                      Icons.star,
+                      color: Colors.yellow,
+                    ),
                     title: Text(MyLocalizations.of(context).titleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
@@ -253,7 +256,10 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 推荐给朋友
                   ListTile(
-                    leading: Icon(Icons.favorite),
+                    leading: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    ),
                     title: Text(MyLocalizations.of(context).titleRecommend),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
@@ -340,7 +346,10 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    leading: Icon(Icons.flag),
+                    leading: Icon(
+                      Icons.flag,
+                      color: Colors.green,
+                    ),
                     title: new Text(MyLocalizations.of(context).versions),
                     onTap: () {
                       Navigator.push(

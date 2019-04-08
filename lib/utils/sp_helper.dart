@@ -24,6 +24,9 @@ const String SP_IS_DARK = "isDark";
 // 搜索历史记录
 const String SP_SEARCH_HISTORY = "search_history";
 
+// 今日诗词
+const String SP_TODAY_POEM = "today_poem";
+
 class SpHelper {
   // 需要在 main.dart 初始化
   static SharedPreferences sp;
