@@ -913,14 +913,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         select(Action(id: 'reply_copy', title: reply.content));
                                       },
                                     ),
-                                    ListTile(
-                                      leading: Icon(Icons.forum),
-                                      title: Text('查看对话'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: 'Developing...');
-                                      },
-                                    ),
+//                                    ListTile(
+//                                      leading: Icon(Icons.forum),
+//                                      title: Text('查看对话'),
+//                                      onTap: () {
+//                                        Navigator.pop(context);
+//                                        Fluttertoast.showToast(msg: 'Developing...');
+//                                      },
+//                                    ),
                                   ],
                                 );
                               });

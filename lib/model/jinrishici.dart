@@ -4,55 +4,26 @@ class Poem {
   String ipAddress;
   DataBean data;
 
-  static Poem fromMap(Map<String, dynamic> map) {
-    Poem temp = new Poem();
-    temp.status = map['status'];
-    temp.token = map['token'];
-    temp.ipAddress = map['ipAddress'];
-    temp.data = DataBean.fromMap(map['data']);
-    return temp;
+  Poem({this.status, this.token, this.ipAddress, this.data});
+
+  Poem.fromJson(Map<String, dynamic> json) {    
+    this.status = json['status'];
+    this.token = json['token'];
+    this.ipAddress = json['ipAddress'];
+    this.data = json['data'] != null ? DataBean.fromJson(json['data']) : null;
   }
 
-  static List<Poem> fromMapList(dynamic mapList) {
-    List<Poem> list = new List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = fromMap(mapList[i]);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['token'] = this.token;
+    data['ipAddress'] = this.ipAddress;
+    if (this.data != null) {
+      data['data'] = this.data.toJson();
     }
-    return list;
-  }
-}
-
-class OriginBean {
-  String title;
-  String dynasty;
-  String author;
-  List<String> content;
-  List<String> translate;
-
-  static OriginBean fromMap(Map<String, dynamic> map) {
-    OriginBean originBean = new OriginBean();
-    originBean.title = map['title'];
-    originBean.dynasty = map['dynasty'];
-    originBean.author = map['author'];
-
-    List<dynamic> dynamicList0 = map['content'];
-    originBean.content = new List();
-    originBean.content.addAll(dynamicList0.map((o) => o.toString()));
-
-    List<dynamic> dynamicList1 = map['translate'];
-    originBean.translate = new List();
-    if (dynamicList1 != null) originBean.translate.addAll(dynamicList1.map((o) => o.toString()));
-
-    return originBean;
+    return data;
   }
 
-  static List<OriginBean> fromMapList(dynamic mapList) {
-    List<OriginBean> list = new List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = fromMap(mapList[i]);
-    }
-    return list;
-  }
 }
 
 class DataBean {
@@ -64,27 +35,68 @@ class DataBean {
   OriginBean origin;
   List<String> matchTags;
 
-  static DataBean fromMap(Map<String, dynamic> map) {
-    DataBean dataBean = new DataBean();
-    dataBean.id = map['id'];
-    dataBean.content = map['content'];
-    dataBean.recommendedReason = map['recommendedReason'];
-    dataBean.cacheAt = map['cacheAt'];
-    dataBean.popularity = map['popularity'];
-    dataBean.origin = OriginBean.fromMap(map['origin']);
+  DataBean({this.id, this.content, this.recommendedReason, this.cacheAt, this.popularity, this.origin, this.matchTags});
 
-    List<dynamic> dynamicList0 = map['matchTags'];
-    dataBean.matchTags = new List();
-    if (dynamicList0 != null) dataBean.matchTags.addAll(dynamicList0.map((o) => o.toString()));
+  DataBean.fromJson(Map<String, dynamic> json) {    
+    this.id = json['id'];
+    this.content = json['content'];
+    this.recommendedReason = json['recommendedReason'];
+    this.cacheAt = json['cacheAt'];
+    this.popularity = json['popularity'];
+    this.origin = json['origin'] != null ? OriginBean.fromJson(json['origin']) : null;
 
-    return dataBean;
+    List<dynamic> matchTagsList = json['matchTags'];
+    this.matchTags = new List();
+    this.matchTags.addAll(matchTagsList.map((o) => o.toString()));
   }
 
-  static List<DataBean> fromMapList(dynamic mapList) {
-    List<DataBean> list = new List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = fromMap(mapList[i]);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['content'] = this.content;
+    data['recommendedReason'] = this.recommendedReason;
+    data['cacheAt'] = this.cacheAt;
+    data['popularity'] = this.popularity;
+    if (this.origin != null) {
+      data['origin'] = this.origin.toJson();
     }
-    return list;
+    data['matchTags'] = this.matchTags;
+    return data;
+  }
+}
+
+class OriginBean {
+  String title;
+  String dynasty;
+  String author;
+  List<String> content;
+  List<String> translate;
+
+  OriginBean({this.title, this.dynasty, this.author, this.content, this.translate});
+
+  OriginBean.fromJson(Map<String, dynamic> json) {    
+    this.title = json['title'];
+    this.dynasty = json['dynasty'];
+    this.author = json['author'];
+
+    List<dynamic> contentList = json['content'];
+    this.content = new List();
+    this.content.addAll(contentList.map((o) => o.toString()));
+
+    List<dynamic> translateList = json['translate'];
+    if(translateList!=null){
+      this.translate = new List();
+      this.translate.addAll(translateList.map((o) => o.toString()));
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['title'] = this.title;
+    data['dynasty'] = this.dynasty;
+    data['author'] = this.author;
+    data['content'] = this.content;
+    data['translate'] = this.translate;
+    return data;
   }
 }

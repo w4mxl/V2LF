@@ -55,7 +55,7 @@ class NetworkApi {
     var spJinrishiciToken = SpHelper.sp.getString(SP_JINRISHICI_TOKEN);
     Map<String, String> headers = {'X-User-Token': spJinrishiciToken};
     String response = await http.read(Constants.API_JINRISHICI_ONE, headers: spJinrishiciToken != null ? headers : null);
-    var poem = Poem.fromMap(json.decode(response));
+    var poem = Poem.fromJson(json.decode(response));
     if (poem.status == 'success') {
       if (spJinrishiciToken == null) SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);
       return poem;
