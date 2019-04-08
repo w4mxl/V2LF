@@ -110,15 +110,8 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 主题设置
                   ExpansionTile(
-                    title: Row(
-                      children: <Widget>[
-                        Icon(Icons.color_lens),
-                        Padding(
-                          padding: EdgeInsets.only(left: 32.0),
-                          child: Text(MyLocalizations.of(context).titleTheme),
-                        )
-                      ],
-                    ),
+                    leading: Icon(Icons.color_lens),
+                    title: Text(MyLocalizations.of(context).titleTheme),
                     children: <Widget>[
                       Wrap(
                         children: themeColorMap.keys.map((key) {
@@ -177,15 +170,10 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ExpansionTile(
+                    leading: Icon(Icons.language),
                     title: Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.language,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 32.0),
-                          child: Text(MyLocalizations.of(context).titleLanguage),
-                        ),
+                        Text(MyLocalizations.of(context).titleLanguage),
                         Expanded(
                           child: Text(
                             SpHelper.getLanguageModel() == null
