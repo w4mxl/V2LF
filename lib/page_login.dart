@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,12 +61,12 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
+//        brightness: Brightness.light,
+//        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
       ),
       body: ScrollConfiguration(
         child: SingleChildScrollView(
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
 //                        validator: (v) {
 //                          return v.trim().length > 0 ? null : "密码不能为空";
 //                        }),
-                    PasswordField(_passwordFieldKey,_pwdController, passwordTextFieldNode, captchaTextFieldNode),
+                    PasswordField(_passwordFieldKey, _pwdController, passwordTextFieldNode, captchaTextFieldNode),
                     SizedBox(
                       height: 18.0,
                     ),
@@ -214,7 +215,8 @@ class _LoginPageState extends State<LoginPage> {
                         InkWell(
                           child: Text(
                             MyLocalizations.of(context).signup,
-                            style: TextStyle(color: Colors.black54),
+                            style:
+                                TextStyle(color: ColorT.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
                           // 注册 -> 跳转到注册web页面
                           onTap: () => launch("https://www.v2ex.com/signup",
@@ -223,7 +225,8 @@ class _LoginPageState extends State<LoginPage> {
                         InkWell(
                           child: Text(
                             MyLocalizations.of(context).forgetPassword,
-                            style: TextStyle(color: Colors.black54),
+                            style:
+                                TextStyle(color: ColorT.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
                           // 忘记密码 -> 跳转到重置密码web页面
                           onTap: () => launch("https://www.v2ex.com/forgot",
@@ -281,12 +284,10 @@ class PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-
   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
-
     return TextFormField(
         key: widget.fieldKey,
         controller: widget._pwdController,

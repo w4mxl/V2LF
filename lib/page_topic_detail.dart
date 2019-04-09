@@ -725,7 +725,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
-              child: new Text("目前尚无回复", style: new TextStyle(color: const Color.fromRGBO(0, 0, 0, 0.25))),
+              child: new Text("目前尚无回复", style: new TextStyle(color: ColorT.isDark ? Colors.grey[600] : Color(0x00000040))),
             ))
         : Card(
             elevation: 0.0,
@@ -772,15 +772,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
                                     child: Container(
-                                      padding: EdgeInsets.all(1),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
+                                        padding: EdgeInsets.all(1),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
                                         child: Text(
-                                      '楼主',
-                                      style: TextStyle(fontSize: 10,color: Colors.grey),
-                                    )),
+                                          '楼主',
+                                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                                        )),
                                   ),
                                 ),
                               ],

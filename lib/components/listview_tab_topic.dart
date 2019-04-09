@@ -49,8 +49,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                               height: 0,
                               indent: 15,
                             ),
-                        itemCount: snapshot.data.length)
-                    ),
+                        itemCount: snapshot.data.length)),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
             print("${snapshot.error}");
@@ -105,7 +104,7 @@ class TopicItemView extends StatelessWidget {
         );
       },
       child: new Container(
-        padding: const EdgeInsets.only(left:18.0,right: 18.0,top: 15,bottom: 15),
+        padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 15, bottom: 15),
         child: new Row(
           children: <Widget>[
             Expanded(
@@ -169,21 +168,24 @@ class TopicItemView extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      Row(
-                        children: <Widget>[
-                          new Icon(
-                            FontAwesomeIcons.comment,
-                            size: 16.0,
-                            color: Colors.grey,
-                          ),
-                          new Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: new Text(
-                              topic.replyCount,
-                              style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                      Offstage(
+                        offstage: topic.replyCount == '0',
+                        child: Row(
+                          children: <Widget>[
+                            new Icon(
+                              FontAwesomeIcons.comment,
+                              size: 16.0,
+                              color: Colors.grey,
                             ),
-                          ),
-                        ],
+                            new Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: new Text(
+                                topic.replyCount,
+                                style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -207,7 +209,6 @@ class TopicItemView extends StatelessWidget {
 //                ),
 //              ),
 //            ),
-
           ],
         ),
       ),
