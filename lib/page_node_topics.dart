@@ -108,6 +108,7 @@ class _NodeTopicsState extends State<NodeTopics> {
   Widget build(BuildContext context) {
     //监听事件
     subscription = eventBus.on<MyEventNodeIsFav>().listen((event) {
+      if (!mounted) return;
       setState(() {
         //   /favorite/node/39?once=87770
         isFavorite = event.isFavWithOnce.startsWith('/unfavorite');
@@ -188,74 +189,70 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Widget _buildHeader() {
     return Container(
-      color: ColorT.appMainColor,
+      color: Theme.of(context).primaryColor,
       child: _node == null
           ? null
           : Column(
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                SizedBox(
+                  height: 4,
+                ),
                 Offstage(
-                  offstage: (_node.header == null || _node.header.isEmpty),
+                  // 自言自语的是："header": "&nbsp;",
+                  offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
                   child: Container(
                     alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width - 150,
-                    child: InkWell(
-                      child: Text(
-                        _node.header == null ? '' : _node.header,
-                        style: TextStyle(fontSize: 12),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                    child: Html(
+                      // Android
+                      // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
+                      data: _node.header == null ? '' : _node.header,
+                      defaultTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
                       ),
-                      onTap: () => Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Html(
-                                data: _node.header,
-                                defaultTextStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                ),
-                                linkStyle: TextStyle(
-                                    color: ColorT.appMainColor[400],
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: ColorT.appMainColor[400]),
-                              ),
-                            ),
-                          ),
+                      linkStyle: TextStyle(
+                        color: Theme.of(context).accentColor,
+                      ),
+                      useRichText: true,
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: 8,
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Icon(
                       Icons.forum,
-                      size: 12,
-                      color: Colors.white,
+                      size: 14,
                     ),
                     SizedBox(
-                      width: 2,
+                      width: 4,
                     ),
                     Text(
                       _node.topics.toString(),
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(
-                      width: 6,
+                      width: 12,
                     ),
                     Icon(
                       Icons.star,
-                      size: 12,
-                      color: Colors.white,
+                      size: 14,
                     ),
                     SizedBox(
-                      width: 2,
+                      width: 4,
                     ),
                     Text(
                       _node.stars.toString(),
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 14),
                     ),
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 12,
+                ),
               ],
             ),
     );
