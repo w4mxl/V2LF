@@ -30,11 +30,7 @@ class NodeTopics extends StatefulWidget {
 }
 
 class _NodeTopicsState extends State<NodeTopics> {
-  Future<Node> _futureNode;
-
-  Future<Node> getNodeInfo() async {
-    return NetworkApi.getNodeInfo(widget.node.nodeId);
-  }
+  Node _node;
 
   bool isFavorite = false;
   String nodeIdWithOnce = '';
@@ -54,7 +50,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     Progresshud.setDefaultMaskTypeBlack();
 
     // 获取数据
-    _futureNode = getNodeInfo();
+    getNodeInfo();
     getTopics();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
@@ -63,6 +59,15 @@ class _NodeTopicsState extends State<NodeTopics> {
         getTopics();
       }
     });
+  }
+
+  Future getNodeInfo() async {
+    var node = await NetworkApi.getNodeInfo(widget.node.nodeId);
+    if (node != null) {
+      setState(() {
+        _node = node;
+      });
+    }
   }
 
   Future getTopics() async {
@@ -117,7 +122,25 @@ class _NodeTopicsState extends State<NodeTopics> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 200,
-            flexibleSpace: _buildFlexibleSpaceBar(),
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(_node == null ? '' : _node.title),
+              centerTitle: true,
+              background: _node == null
+                  ? Container()
+                  : SafeArea(
+                      child: CachedNetworkImage(
+                        imageUrl: (_node.avatarLarge == '/static/img/node_large.png')
+                            ? Strings.nodeDefaultImag
+                            : "https:" + _node.avatarLarge.replaceFirst('large', 'xxlarge'),
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => new CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => CachedNetworkImage(
+                              imageUrl: "https:" + _node.avatarLarge,
+                              fit: BoxFit.contain,
+                            ),
+                      ),
+                    ),
+            ),
             actions: <Widget>[
               // 收藏/取消收藏 按钮
               Offstage(
@@ -132,8 +155,8 @@ class _NodeTopicsState extends State<NodeTopics> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              if (index == items.length) {
-                if (index != 0) {
+              if (index == items.length + 1) {
+                if (index != 1) {
                   // 滑到了最后一个item
                   return _buildLoadText();
                 } else {
@@ -145,16 +168,15 @@ class _NodeTopicsState extends State<NodeTopics> {
                   );
                 }
               } else {
-                return new TopicItemView(items[index]);
+                if (index == 0) {
+                  return _buildHeader();
+                }
+                return new TopicItemView(items[index - 1]);
               }
-            }, childCount: items.length + 1),
+            }, childCount: items.length + 2),
           ),
         ],
       ),
-//      appBar: new AppBar(
-//        title: new Text(widget.node.nodeName),
-//      ),
-//      body: new NodeTopicListView(widget.node.nodeId),
     );
   }
 
@@ -164,113 +186,78 @@ class _NodeTopicsState extends State<NodeTopics> {
     super.dispose();
   }
 
-  Widget _buildFlexibleSpaceBar() {
-    return FutureBuilder<Node>(
-      future: _futureNode,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return new Center(
-              child: new CircularProgressIndicator(),
-            );
-          case ConnectionState.done:
-//          https://cdn.v2ex.com/navatar/fc49/0ca4/65_large.png?m=1524891806
-//          👆获取到的节点图片还可以进一步放大-> 将 large 换成 xxlarge。但是有个'坑'，虽然绝大部分是可以这样手动改的，
-//          但是还是存在不能手动放大的情况，所以只能加以判断处理
-            if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));
-            print(MediaQuery.of(context).size.width);
-            return FlexibleSpaceBar(
-              title: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(snapshot.data.title),
-                  Offstage(
-                    offstage: (snapshot.data.header == null || snapshot.data.header.isEmpty),
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width - 150,
-                      child: InkWell(
-                        child: Text(
-                          snapshot.data.header == null ? '' : snapshot.data.header,
-                          style: TextStyle(fontSize: 12),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        onTap: () => Scaffold.of(context).showSnackBar(
-                              SnackBar(
-                                content: Html(
-                                  data: snapshot.data.header,
-                                  defaultTextStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                  ),
-                                  linkStyle: TextStyle(
-                                      color: ColorT.appMainColor[400],
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: ColorT.appMainColor[400]),
+  Widget _buildHeader() {
+    return Container(
+      color: ColorT.appMainColor,
+      child: _node == null
+          ? null
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Offstage(
+                  offstage: (_node.header == null || _node.header.isEmpty),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width - 150,
+                    child: InkWell(
+                      child: Text(
+                        _node.header == null ? '' : _node.header,
+                        style: TextStyle(fontSize: 12),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () => Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Html(
+                                data: _node.header,
+                                defaultTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
                                 ),
+                                linkStyle: TextStyle(
+                                    color: ColorT.appMainColor[400],
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: ColorT.appMainColor[400]),
                               ),
                             ),
-                      ),
+                          ),
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Icon(
-                        Icons.forum,
-                        size: 12,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 2,
-                      ),
-                      Text(
-                        snapshot.data.topics.toString(),
-                        style: TextStyle(fontSize: 10),
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Icon(
-                        Icons.star,
-                        size: 12,
-                        color: Colors.white,
-                      ),
-                      SizedBox(
-                        width: 2,
-                      ),
-                      Text(
-                        snapshot.data.stars.toString(),
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              centerTitle: true,
-              background: SafeArea(
-                child: CachedNetworkImage(
-                  imageUrl: (snapshot.data.avatarLarge == '/static/img/node_large.png')
-                      ? Strings.nodeDefaultImag
-                      : "https:" + snapshot.data.avatarLarge.replaceFirst('large', 'xxlarge'),
-                  fit: BoxFit.contain,
-                  placeholder: (context, url) => new CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => CachedNetworkImage(
-                        imageUrl: "https:" + snapshot.data.avatarLarge,
-                        fit: BoxFit.contain,
-                      ),
                 ),
-              ),
-//              Image.network(
-//                "https:" + snapshot.data.avatarLarge, //.replaceFirst('large', 'xxlarge')
-//                fit: BoxFit.contain,
-//              ),
-            );
-        }
-      },
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Icon(
+                      Icons.forum,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    Text(
+                      _node.topics.toString(),
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Icon(
+                      Icons.star,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    Text(
+                      _node.stars.toString(),
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ],
+                )
+              ],
+            ),
     );
   }
 
