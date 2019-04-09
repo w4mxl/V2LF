@@ -13,6 +13,7 @@ import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -119,11 +120,14 @@ class _NodeTopicsState extends State<NodeTopics> {
             flexibleSpace: _buildFlexibleSpaceBar(),
             actions: <Widget>[
               // 收藏/取消收藏 按钮
-              IconButton(
-                  icon: Icon(isFavorite ? Icons.star : Icons.star_border),
-                  onPressed: () {
-                    _favouriteNode();
-                  })
+              Offstage(
+                offstage: SpHelper.sp.getString(SP_USERNAME) == null || SpHelper.sp.getString(SP_USERNAME).length == 0,
+                child: IconButton(
+                    icon: Icon(isFavorite ? Icons.star : Icons.star_border),
+                    onPressed: () {
+                      _favouriteNode();
+                    }),
+              )
             ],
           ),
           SliverList(

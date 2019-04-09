@@ -119,8 +119,11 @@ class DioSingleton {
     // <a href="/favorite/node/17?once=68177">加入收藏</a>
     // <a href="/unfavorite/node/39?once=68177">取消收藏</a>
     // #Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a
-    String isFavWithOnce = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a').attributes["href"];
-    eventBus.fire(new MyEventNodeIsFav(isFavWithOnce));
+    var element = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a');
+    if (element != null) {
+      String isFavWithOnce = element.attributes["href"];
+      eventBus.fire(new MyEventNodeIsFav(isFavWithOnce));
+    }
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
@@ -577,7 +580,10 @@ class DioSingleton {
           ReplyItem replyItem = new ReplyItem();
           replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
           replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
-          replyItem.lastReplyTime = aNode.querySelector('table > tbody > tr > td:nth-child(5) > span').text.replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
+          replyItem.lastReplyTime = aNode
+              .querySelector('table > tbody > tr > td:nth-child(5) > span')
+              .text
+              .replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
           if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
             replyItem.favorites =
                 aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
@@ -631,8 +637,7 @@ class DioSingleton {
 
   // 收藏/取消收藏 节点 https://www.v2ex.com/favorite/node/39?once=87770
   Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
-    String url =
-    isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
+    String url = isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
     var response = await _dio.get(url);
     if (response.statusCode == 200) {
       return true;

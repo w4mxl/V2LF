@@ -725,7 +725,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
-              child: new Text("目前尚无回复", style: new TextStyle(color: ColorT.isDark ? Colors.grey[600] : Color(0x00000040))),
+              child: new Text("目前尚无回复", style: new TextStyle(color: Colors.grey[600])),
             ))
         : Card(
             elevation: 0.0,
