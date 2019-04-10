@@ -202,18 +202,12 @@ class _NodeTopicsState extends State<NodeTopics> {
                   offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
                   child: Container(
                     alignment: Alignment.center,
-                    child: Html(
+                    child: Text(
                       // Android
                       // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
-                      data: _node.header == null ? '' : _node.header,
-                      defaultTextStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
-                      linkStyle: TextStyle(
-                        color: Theme.of(context).accentColor,
-                      ),
-                      useRichText: true,
+                      _node.header == null ? '' : _node.header,
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -225,28 +219,28 @@ class _NodeTopicsState extends State<NodeTopics> {
                   children: <Widget>[
                     Icon(
                       Icons.forum,
-                      size: 14,
+                      size: 16,
                     ),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
                       _node.topics.toString(),
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 16),
                     ),
                     SizedBox(
                       width: 12,
                     ),
                     Icon(
                       Icons.star,
-                      size: 14,
+                      size: 16,
                     ),
                     SizedBox(
                       width: 4,
                     ),
                     Text(
                       _node.stars.toString(),
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
