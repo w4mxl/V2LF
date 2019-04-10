@@ -525,6 +525,7 @@ class DioSingleton {
     detailModel.avatar =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
+    detailModel.nodeId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').attributes["href"].replaceAll('/go/', '');
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
     detailModel.smallGray =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
