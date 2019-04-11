@@ -188,68 +188,69 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 
   Widget _buildHeader() {
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: _node == null
-          ? null
-          : Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 4,
-                ),
-                Offstage(
-                  // 自言自语的是："header": "&nbsp;",
-                  offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      // Android
-                      // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
-                      _node.header == null ? '' : _node.header,
-                      style: TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
+    return _node == null
+        ? null
+        : Column(
+            children: <Widget>[
+              SizedBox(
+                height: 4,
+              ),
+              Offstage(
+                // 自言自语的是："header": "&nbsp;",
+                offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Text(
+                    // Android
+                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
+                    _node.header == null ? '' : _node.header,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(
-                      Icons.forum,
-                      size: 16,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      _node.topics.toString(),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Icon(
-                      Icons.star,
-                      size: 16,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      _node.stars.toString(),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-              ],
-            ),
-    );
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    Icons.forum,
+                    size: 16,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    _node.topics.toString(),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Icon(
+                    Icons.star,
+                    size: 16,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    _node.stars.toString(),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Divider(
+                height: 0,
+              ),
+            ],
+          );
   }
 
   Widget _buildLoadText() {

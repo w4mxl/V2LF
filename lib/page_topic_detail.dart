@@ -55,9 +55,6 @@ class _TopicDetailsState extends State<TopicDetails> {
 
   @override
   Widget build(BuildContext context) {
-    //监听登录事件
-    print('监听登录事件:' + (isLogin == true ? 'true' : 'false'));
-
     return new TopicDetailView(widget.topicId);
   }
 }
@@ -633,7 +630,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     padding: const EdgeInsets.only(left: 4.0),
                     child: new Text(
                       _detailModel.replyCount,
-                      style: new TextStyle(fontSize: 14.0, color: Colors.grey[700]),
+                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
                     ),
                   )
                 ],
