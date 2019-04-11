@@ -360,17 +360,18 @@ class _SettingPageState extends State<SettingPage> {
                                   "What's New",
                                   textScaleFactor: 1.2,
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     // Text Style Needed to Look like iOS 11
                                     fontSize: 22.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 buttonText: Text(
-                                  'Continue',
+                                  'Close',
                                   //textScaleFactor: textScaleFactor,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white),
                                 ),
+                                buttonColor: Theme.of(context).accentColor,
                               ),
                           fullscreenDialog: true,
                         ),

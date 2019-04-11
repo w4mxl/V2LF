@@ -46,7 +46,8 @@ dependencies:
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
   font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
-  flutter_whatsnew: ^0.2.0+3 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
+  flutter_whatsnew: ^0.3.0 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
+  shimmer: ^1.0.0
 
 dev_dependencies:
   flutter_test:
