@@ -65,7 +65,9 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         elevation: 0,
 //        brightness: Brightness.light,
-//        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: ColorT.isDark ? Colors.white : Colors.black,
+        ),
         backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
       ),
       body: ScrollConfiguration(
