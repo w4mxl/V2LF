@@ -183,7 +183,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   List<ReplyItem> replyList = List();
 
   ScrollController _scrollController = new ScrollController();
-  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
+//  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
 
   @override
   void initState() {
@@ -192,7 +192,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     getData();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      // print(_scrollController.offset); //打印滚动位置
+      /*// print(_scrollController.offset); //打印滚动位置
       if (_scrollController.offset < 1000 && showToTopBtn) {
         setState(() {
           showToTopBtn = false;
@@ -201,7 +201,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         setState(() {
           showToTopBtn = true;
         });
-      }
+      }*/
 
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
@@ -513,16 +513,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   child: new CircularProgressIndicator(),
                 )),
       ),
-      floatingActionButton: Offstage(
-        offstage: !showToTopBtn,
-        child: FloatingActionButton(
-            tooltip: '滑动到顶部',
-            child: Icon(Icons.arrow_upward),
-            mini: true,
-            onPressed: () {
-              _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
-            }),
-      ),
+//      floatingActionButton: Offstage(
+//        offstage: !showToTopBtn,
+//        child: FloatingActionButton(
+//            tooltip: '滑动到顶部',
+//            child: Icon(Icons.arrow_upward),
+//            mini: true,
+//            onPressed: () {
+//              _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
+//            }),
+//      ),
 //      这种方式不知道为啥，在iOS上正常，但是在Android上child死活显示不出来，怪！！！
 //      floatingActionButton: !showToTopBtn ? null : FloatingActionButton(
 //          tooltip: '滑动到顶部',
