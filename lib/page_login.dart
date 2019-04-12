@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // 刷新（首次获取）验证码
   Future refreshCaptcha() async {
-    var formData = await DioSingleton.parseLoginForm();
+    var formData = await DioWeb.parseLoginForm();
     setState(() {
       loginFormData = formData;
     });
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                               loginFormData.captchaInput = _captchaController.text;
                               //var formData = bloc.submit(loginFormData);
                               print(loginFormData.toString());
-                              bool loginResult = await DioSingleton.loginPost(loginFormData);
+                              bool loginResult = await DioWeb.loginPost(loginFormData);
                               if (loginResult) {
                                 // 登录成功
                                 // 让登录按钮有完成✅效果

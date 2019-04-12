@@ -11,7 +11,7 @@ import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     _loadLocale();
     _loadCustomTabs();
     // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
-    DioSingleton.verifyLoginStatus();
+    DioWeb.verifyLoginStatus();
   }
 
   void _loadLocale() {

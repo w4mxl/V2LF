@@ -12,7 +12,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/resources/colors.dart';
 
@@ -25,7 +25,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
   Future<List<FavNode>> _future;
 
   Future<List<FavNode>> getFavNodes() async {
-    return await DioSingleton.getFavNodes();
+    return await DioWeb.getFavNodes();
   }
 
   @override

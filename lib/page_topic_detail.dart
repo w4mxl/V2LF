@@ -9,7 +9,7 @@ import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
@@ -135,7 +135,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
-    bool loginResult = await DioSingleton.replyTopic(widget.topicId, text);
+    bool loginResult = await DioWeb.replyTopic(widget.topicId, text);
     if (loginResult) {
       Fluttertoast.showToast(msg: '回复成功!', gravity: ToastGravity.CENTER);
       // Clear input text field.
@@ -232,7 +232,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future getData() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      TopicDetailModel topicDetailModel = await DioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
+      TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
 
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
@@ -261,7 +261,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await DioSingleton.thankTopic(widget.topicId, _detailModel.token);
+    bool isSuccess = await DioWeb.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
       Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
       setState(() {
@@ -280,7 +280,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await DioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
+    bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
       Fluttertoast.showToast(msg: _detailModel.isFavorite ? '已取消收藏！' : '收藏成功！', gravity: ToastGravity.CENTER);
       setState(() {
@@ -299,7 +299,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await DioSingleton.thankTopicReply(replyID, _detailModel.token);
+    bool isSuccess = await DioWeb.thankTopicReply(replyID, _detailModel.token);
     if (isSuccess) {
       setState(() {
         _saving = false;
@@ -959,7 +959,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    TopicDetailModel topicDetailModel = await DioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
+    TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
     if (mounted) {
       setState(() {
         _detailModel = topicDetailModel;

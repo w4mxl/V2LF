@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -52,7 +52,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Future getTopics() async {
     if (!isLoading) {
       isLoading = true;
-      List<NotificationItem> newEntries = await DioSingleton.getNotifications(p++);
+      List<NotificationItem> newEntries = await DioWeb.getNotifications(p++);
       setState(() {
         isLoading = false;
         if (newEntries.length > 0) {
@@ -122,7 +122,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<NotificationItem> newEntries = await DioSingleton.getNotifications(p);
+    List<NotificationItem> newEntries = await DioWeb.getNotifications(p);
     setState(() {
       items.clear();
       items.addAll(newEntries);

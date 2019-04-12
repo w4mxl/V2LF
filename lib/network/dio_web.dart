@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
@@ -23,9 +24,8 @@ import 'package:html/parser.dart'; // Contains HTML parsers to generate a Docume
 import 'package:xpath/xpath.dart';
 import 'package:flutter_app/network/http.dart';
 
-//DioSingleton dioSingleton = new DioSingleton();
-
-class DioSingleton {
+class DioWeb {
+  // App 启动时，检查登录状态，领取签到奖励
   static Future verifyLoginStatus() async {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
@@ -35,6 +35,7 @@ class DioSingleton {
         // 登录已经失效，注销数据
         // todo
         print('登录已经失效，注销数据');
+        await V2exClient.logout();
       } else {
         // 登录状态正常，尝试领取每日奖励
         checkDailyAward().then((onValue) {
@@ -53,7 +54,7 @@ class DioSingleton {
   static Future<bool> checkDailyAward() async {
     var response = await dio.get("/mission/daily");
     String resp = response.data as String;
-    print("wml："+resp);
+    print("wml：" + resp);
     if (resp.contains('每日登录奖励已领取')) {
       print('wml：每日登录奖励已领取过了');
       return true;

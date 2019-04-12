@@ -10,7 +10,7 @@ import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -74,7 +74,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      List<NodeTopicItem> newEntries = await DioSingleton.getNodeTopicsByTabKey(widget.node.nodeId, p++);
+      List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.node.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
         Navigator.pop(context);
@@ -90,7 +90,7 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Future _favouriteNode() async {
     if (nodeIdWithOnce.isNotEmpty) {
-      bool isSuccess = await DioSingleton.favoriteNode(isFavorite, nodeIdWithOnce);
+      bool isSuccess = await DioWeb.favoriteNode(isFavorite, nodeIdWithOnce);
       if (isSuccess) {
         Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
         setState(() {

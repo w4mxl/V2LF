@@ -9,7 +9,7 @@ import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_favourite.dart';
 import 'package:flutter_app/page_history_hot.dart';
 import 'package:flutter_app/page_login.dart';
@@ -295,9 +295,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
   }
 
   void checkDailyAward() {
-    DioSingleton.checkDailyAward().then((onValue) {
+    DioWeb.checkDailyAward().then((onValue) {
       if (!onValue) {
-        DioSingleton.dailyMission();
+        DioWeb.dailyMission();
         print('准备去领取奖励...');
       } else {
         print('已经领过奖励了...');

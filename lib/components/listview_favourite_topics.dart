@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
-import 'package:flutter_app/network/dio_singleton.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 
@@ -47,7 +47,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   Future getTopics() async {
     if (!isLoading) {
       isLoading = true;
-      List<FavTopicItem> newEntries = await DioSingleton.getFavTopics(p++);
+      List<FavTopicItem> newEntries = await DioWeb.getFavTopics(p++);
       setState(() {
         isLoading = false;
         if (newEntries.length > 0) {
@@ -126,7 +126,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<FavTopicItem> newEntries = await DioSingleton.getFavTopics(p);
+    List<FavTopicItem> newEntries = await DioWeb.getFavTopics(p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
