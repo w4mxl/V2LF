@@ -19,6 +19,7 @@ import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -65,13 +66,18 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           var future = Navigator.push(context,
                               new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
                           future.then((value) {
-                            setState(() {
-                              checkLoginState();
-                            });
+                            // 直接close登录页则value为null；登录成功 value 为 true
+                            if (value != null && value) {
+                              setState(() {
+                                checkLoginState();
+                              });
+                              //尝试领取每日奖励
+                              checkDailyAward();
+                            }
                           });
                         } else {
                           // todo -> 个人中心页面
-                          _launchURL(DioSingleton.v2exHost + '/member/' + userName);
+                          _launchURL(Strings.v2exHost + '/member/' + userName);
                         }
                       },
                     ),
@@ -151,13 +157,18 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       var future = Navigator.push(
                           context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
                       future.then((value) {
-                        setState(() {
-                          checkLoginState();
-                        });
+                        // 直接close登录页则value为null；登录成功 value 为 true
+                        if (value != null && value) {
+                          setState(() {
+                            checkLoginState();
+                          });
+                          //尝试领取每日奖励
+                          checkDailyAward();
+                        }
                       });
                     } else {
                       // todo -> 个人中心页面
-                      _launchURL(DioSingleton.v2exHost + '/member/' + userName);
+                      _launchURL(Strings.v2exHost + '/member/' + userName);
                     }
                   },
                   child: Container(
@@ -283,8 +294,19 @@ class _DrawerLeftState extends State<DrawerLeft> {
     );
   }
 
+  void checkDailyAward() {
+    DioSingleton.checkDailyAward().then((onValue) {
+      if (!onValue) {
+        DioSingleton.dailyMission();
+        print('准备去领取奖励...');
+      } else {
+        print('已经领过奖励了...');
+      }
+    });
+  }
+
   checkLoginState() {
-    print('checkLoginState');
+    print('wml：checkLoginState');
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
       userName = spUsername;

@@ -14,6 +14,7 @@ import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -134,7 +135,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
-    bool loginResult = await dioSingleton.replyTopic(widget.topicId, text);
+    bool loginResult = await DioSingleton.replyTopic(widget.topicId, text);
     if (loginResult) {
       Fluttertoast.showToast(msg: '回复成功!', gravity: ToastGravity.CENTER);
       // Clear input text field.
@@ -231,7 +232,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future getData() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      TopicDetailModel topicDetailModel = await dioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
+      TopicDetailModel topicDetailModel = await DioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
 
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
@@ -260,7 +261,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await dioSingleton.thankTopic(widget.topicId, _detailModel.token);
+    bool isSuccess = await DioSingleton.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
       Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
       setState(() {
@@ -279,7 +280,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await dioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
+    bool isSuccess = await DioSingleton.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
       Fluttertoast.showToast(msg: _detailModel.isFavorite ? '已取消收藏！' : '收藏成功！', gravity: ToastGravity.CENTER);
       setState(() {
@@ -298,7 +299,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     setState(() {
       _saving = true;
     });
-    bool isSuccess = await dioSingleton.thankTopicReply(replyID, _detailModel.token);
+    bool isSuccess = await DioSingleton.thankTopicReply(replyID, _detailModel.token);
     if (isSuccess) {
       setState(() {
         _saving = false;
@@ -364,12 +365,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       case 'web':
         print(action.title);
         // 用默认浏览器打开帖子链接
-        launch(DioSingleton.v2exHost + '/t/' + widget.topicId, forceSafariVC: false);
+        launch(Strings.v2exHost + '/t/' + widget.topicId, forceSafariVC: false);
         break;
       case 'link':
         print(action.title);
         // 复制链接到剪贴板
-        Clipboard.setData(ClipboardData(text: DioSingleton.v2exHost + '/t/' + widget.topicId));
+        Clipboard.setData(ClipboardData(text: Strings.v2exHost + '/t/' + widget.topicId));
         Fluttertoast.showToast(msg: '已复制好帖子链接', gravity: ToastGravity.CENTER);
         break;
       case 'copy':
@@ -387,8 +388,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         // 分享: 帖子标题+链接
         if (_detailModel != null) {
           var text = _detailModel.topicTitle.isNotEmpty
-              ? _detailModel.topicTitle + " " + DioSingleton.v2exHost + '/t/' + widget.topicId
-              : _detailModel.content + " " + DioSingleton.v2exHost + '/t/' + widget.topicId;
+              ? _detailModel.topicTitle + " " + Strings.v2exHost + '/t/' + widget.topicId
+              : _detailModel.content + " " + Strings.v2exHost + '/t/' + widget.topicId;
           Share.share(text);
         }
         break;
@@ -558,7 +559,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                       ),
                     ),
-                    onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
+                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                   ),
                   SizedBox(width: 10.0),
                   new Expanded(
@@ -579,7 +580,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     color: ColorT.isDark ? Colors.white : Colors.black87,
                                     fontWeight: FontWeight.bold),
                               ),
-                              onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + _detailModel.createdId),
+                              onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                             ),
                             new Icon(
                               Icons.keyboard_arrow_right,
@@ -762,7 +763,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       ),
                                     ),
                                   ),
-                                  onTap: () => _launchURL(DioSingleton.v2exHost + '/member/' + reply.userName),
+                                  onTap: () => _launchURL(Strings.v2exHost + '/member/' + reply.userName),
                                 ),
                                 Offstage(
                                   offstage: reply.userName != _detailModel.createdId,
@@ -863,7 +864,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             return;
                                           } else if (url.contains("/member/")) {
                                             // @xxx 需要补齐 base url
-                                            url = DioSingleton.v2exHost + url;
+                                            url = Strings.v2exHost + url;
                                             print(url);
                                           }
                                           _launchURL(url);
@@ -958,7 +959,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    TopicDetailModel topicDetailModel = await dioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
+    TopicDetailModel topicDetailModel = await DioSingleton.getTopicDetailAndReplies(widget.topicId, p++);
     if (mounted) {
       setState(() {
         _detailModel = topicDetailModel;

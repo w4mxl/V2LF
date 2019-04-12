@@ -74,7 +74,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.node.nodeId, p++);
+      List<NodeTopicItem> newEntries = await DioSingleton.getNodeTopicsByTabKey(widget.node.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
         Navigator.pop(context);
@@ -90,7 +90,7 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Future _favouriteNode() async {
     if (nodeIdWithOnce.isNotEmpty) {
-      bool isSuccess = await dioSingleton.favoriteNode(isFavorite, nodeIdWithOnce);
+      bool isSuccess = await DioSingleton.favoriteNode(isFavorite, nodeIdWithOnce);
       if (isSuccess) {
         Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
         setState(() {

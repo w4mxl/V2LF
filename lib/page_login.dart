@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // 刷新（首次获取）验证码
   Future refreshCaptcha() async {
-    var formData = await dioSingleton.parseLoginForm();
+    var formData = await DioSingleton.parseLoginForm();
     setState(() {
       loginFormData = formData;
     });
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                               loginFormData.captchaInput = _captchaController.text;
                               //var formData = bloc.submit(loginFormData);
                               print(loginFormData.toString());
-                              bool loginResult = await dioSingleton.loginPost(loginFormData);
+                              bool loginResult = await DioSingleton.loginPost(loginFormData);
                               if (loginResult) {
                                 // 登录成功
                                 // 让登录按钮有完成✅效果
@@ -188,9 +188,11 @@ class _LoginPageState extends State<LoginPage> {
                                   _loginState = 2;
                                 });
                                 Fluttertoast.showToast(
-                                    msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)));
+                                    msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                    timeInSecForIos: 2,
+                                    gravity: ToastGravity.TOP);
                                 Timer(Duration(milliseconds: 800), () {
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop(true);
                                 });
                               } else {
                                 // 登录失败

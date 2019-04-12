@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
@@ -13,11 +17,43 @@ import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_app/network/http.dart'; // make dio as global top-level variable
+
+// Must be top-level function
+_parseAndDecode(String response) {
+  return jsonDecode(response);
+}
+
+parseJson(String text) {
+  return compute(_parseAndDecode, text);
+}
 
 void main() async {
+  // 配置 dio
+  // add interceptors
+  String cookiePath = await Utils.getCookiePath();
+  PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
+  dio.interceptors..add(CookieManager(cookieJar))..add(LogInterceptor());
+  (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
+  dio.options.connectTimeout = 15000;
+  dio.options.receiveTimeout = 15000;
+  dio.options.baseUrl = Strings.v2exHost;
+  dio.options.headers = {
+    'user-agent': Platform.isIOS
+        ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+        : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+  };
+  dio.options.validateStatus = (int status) {
+    return status >= 200 && status < 300 || status == 304 || status == 302;
+  };
+
+  // 实例 sp
   SpHelper.sp = await SharedPreferences.getInstance();
+
   runApp(new MyApp());
 }
 
@@ -58,8 +94,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   void _initAsync() {
     _loadLocale();
     _loadCustomTabs();
-    // 领取每日奖励
-    dailyMission();
+    // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
+    DioSingleton.verifyLoginStatus();
   }
 
   void _loadLocale() {
@@ -109,19 +145,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         tabs.clear();
         tabs.addAll(mainTabs);
         _tabController = TabController(length: tabs.length, vsync: this);
-      });
-    }
-  }
-
-  Future dailyMission() async {
-    var spUsername = SpHelper.sp.getString(SP_USERNAME);
-    if (spUsername != null && spUsername.length > 0) {
-      dioSingleton.checkDailyAward().then((onValue) {
-        if (!onValue) {
-          dioSingleton.dailyMission();
-        } else {
-          print('已经领过奖励了...');
-        }
       });
     }
   }

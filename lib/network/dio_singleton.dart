@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -14,62 +15,60 @@ import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
+import 'package:flutter_app/network/http.dart';
 
-DioSingleton dioSingleton = new DioSingleton();
+//DioSingleton dioSingleton = new DioSingleton();
 
 class DioSingleton {
-  static final v2exHost = "https://www.v2ex.com";
-
-  Dio _dio;
-
-  static final DioSingleton _dioSingleton = DioSingleton._internal();
-
-  factory DioSingleton() => _dioSingleton;
-
-  DioSingleton._internal() {
-    setDio();
-  }
-
-  void setDio() async {
-    if (_dio == null) {
-      Options options = new Options();
-      options.baseUrl = v2exHost;
-      options.receiveTimeout = 5 * 1000;
-      options.connectTimeout = 5 * 1000;
-      options.headers = {
-        'user-agent': Platform.isIOS
-            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
-      };
-      options.validateStatus = (int status) {
-        return status >= 200 && status < 300 || status == 304 || status == 302;
-      };
-      _dio = new Dio(options);
-      String cookiePath = await Utils.getCookiePath();
-      PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
-      _dio.cookieJar = cookieJar;
+  static Future verifyLoginStatus() async {
+    var spUsername = SpHelper.sp.getString(SP_USERNAME);
+    if (spUsername != null && spUsername.length > 0) {
+      // 验证登录状态：尝试请求发帖，根据是否跳转到登录页判断
+      var response = await dio.get("/new");
+      if (response.isRedirect) {
+        // 登录已经失效，注销数据
+        // todo
+        print('登录已经失效，注销数据');
+      } else {
+        // 登录状态正常，尝试领取每日奖励
+        checkDailyAward().then((onValue) {
+          if (!onValue) {
+            dailyMission();
+            print('准备去领取奖励...');
+          } else {
+            print('已经领过奖励了...');
+          }
+        });
+      }
     }
   }
 
   // 检查每日登录奖励是否已领取
-  Future<bool> checkDailyAward() async {
-    var response = await _dio.get(v2exHost + "/mission/daily");
-    // Use html parser and query selector
-    if ((response.data as String).contains('每日登录奖励已领取')) {
+  static Future<bool> checkDailyAward() async {
+    var response = await dio.get("/mission/daily");
+    String resp = response.data as String;
+    print("wml："+resp);
+    if (resp.contains('每日登录奖励已领取')) {
+      print('wml：每日登录奖励已领取过了');
       return true;
     }
+//    else if (resp.contains('你要查看的页面需要先登录')) {
+//      // 表明本地登录状态失效了
+//    }
+    print('wml：每日登录奖励还没有领取');
     return false;
   }
 
   // 领取每日奖励
-  Future dailyMission() async {
+  static Future dailyMission() async {
     try {
-      var response = await _dio.get("/signin");
+      var response = await dio.get("/signin");
       var tree = ETree.fromString(response.data);
       String once = tree
           .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
@@ -77,21 +76,20 @@ class DioSingleton {
           .attributes["value"];
       print('领取每日奖励:$once');
 
-      var missionResponse = await _dio.get(v2exHost + "/mission/daily/redeem?once=" + once);
-      print('领取每日奖励:' + v2exHost + "/mission/daily/redeem?once=" + once);
-      // Use html parser and query selector
+      var missionResponse = await dio.get("/mission/daily/redeem?once=" + once);
+      print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
       print('领取每日奖励:${missionResponse.statusCode}');
-      if (missionResponse.statusCode == 200) {
+      if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '每日奖励已自动领取', timeInSecForIos: 2, gravity: ToastGravity.TOP);
+        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.TOP);
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '领取每日奖励失败', timeInSecForIos: 2);
+      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2);
     }
   }
 
   // 节点导航页 -> 获取特定节点下的topics
-  Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
+  static Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
     List<NodeTopicItem> topics = new List<NodeTopicItem>();
@@ -109,7 +107,7 @@ class DioSingleton {
     final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
 
-    var response = await _dio.get(v2exHost + '/go/' + tabKey + "?p=" + p.toString());
+    var response = await dio.get('/go/' + tabKey + "?p=" + p.toString());
     var document = parse(response.data);
     if (document.querySelector('#Main > div.box > div.cell > form') != null) {
       Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
@@ -158,9 +156,9 @@ class DioSingleton {
   }
 
   // 回复帖子
-  Future<bool> replyTopic(String topicId, String content) async {
+  static Future<bool> replyTopic(String topicId, String content) async {
     try {
-      var response = await _dio.get("/signin");
+      var response = await dio.get("/signin");
       var tree = ETree.fromString(response.data);
       String once = tree
           .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
@@ -172,15 +170,15 @@ class DioSingleton {
         return false;
       }
 
-      _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+      dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
 
       FormData formData = new FormData.from({
         "once": once,
         "content": content,
       });
 
-      var responseReply = await _dio.post("/t/" + topicId, data: formData);
-      _dio.options.contentType = ContentType.json; // 还原
+      var responseReply = await dio.post("/t/" + topicId, data: formData);
+      dio.options.contentType = ContentType.json; // 还原
       var document = parse(responseReply.data);
       if (document.querySelector('#Wrapper > div > div > div.problem') != null) {
         // 回复失败
@@ -203,16 +201,16 @@ class DioSingleton {
   }
 
   // 获取登录信息
-  Future<LoginFormData> parseLoginForm() async {
+  static Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
     LoginFormData loginFormData = new LoginFormData();
-    //_dio.options.contentType = ContentType.json;
-    //_dio.options.responseType = ResponseType.JSON;
-    _dio.options.headers = {
+    //dio.options.contentType = ContentType.json;
+    //dio.options.responseType = ResponseType.JSON;
+    dio.options.headers = {
       'user-agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
     };
-    var response = await _dio.get("/signin");
+    var response = await dio.get("/signin");
     var tree = ETree.fromString(response.data);
     loginFormData.username = tree
         .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
@@ -240,26 +238,24 @@ class DioSingleton {
         "\n" +
         loginFormData.once);
 
-    _dio.options.responseType = ResponseType.STREAM;
-    response = await _dio.get("/_captcha?once=" + loginFormData.once);
-    _dio.options.responseType = ResponseType.JSON; // 还原
-    var uint8list = await consolidateHttpClientResponseBytes(response.data);
-    if (uint8list.lengthInBytes == 0) throw new Exception('NetworkImage is an empty file');
-    loginFormData.bytes = uint8list;
-
+    dio.options.responseType = ResponseType.bytes;
+    response = await dio.get("/_captcha?once=" + loginFormData.once);
+    dio.options.responseType = ResponseType.json; // 还原
+    if ((response.data as List<int>).length == 0) throw new Exception('NetworkImage is an empty file');
+    loginFormData.bytes = Uint8List.fromList(response.data);
     return loginFormData;
   }
 
   // 登录 POST -> 获取用户信息
-  Future<bool> loginPost(LoginFormData loginFormData) async {
-    _dio.options.headers = {
-      "Origin": v2exHost,
-      "Referer": v2exHost + "/signin",
+  static Future<bool> loginPost(LoginFormData loginFormData) async {
+    dio.options.headers = {
+      "Origin": 'https://jiasule.v2ex.com',
+      "Referer": "https://jiasule.v2ex.com/signin",
       'user-agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
     };
-    _dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    //_dio.options.responseType = ResponseType.JSON;
+    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+    //dio.options.responseType = ResponseType.JSON;
 
     FormData formData = new FormData.from({
       "once": loginFormData.once,
@@ -270,15 +266,15 @@ class DioSingleton {
     });
 
     try {
-      var response = await _dio.post("/signin", data: formData);
-      _dio.options.contentType = ContentType.json; // 还原
+      var response = await dio.post("/signin", data: formData);
+      dio.options.contentType = ContentType.json; // 还原
       if (response.statusCode == 302) {
         // 这里实际已经登录成功了
-        _dio.options.headers = {
+        dio.options.headers = {
           'user-agent':
               'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
         };
-        response = await _dio.get(v2exHost);
+        response = await dio.get(Strings.v2exHost);
       }
       var tree = ETree.fromString(response.data);
       var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
@@ -322,10 +318,10 @@ class DioSingleton {
   }
 
   // 获取「主题收藏」下的topics [xpath 解析的]
-  Future<List<FavTopicItem>> getFavTopics(int p) async {
+  static Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
-    // 调用 _dio 之前检查登录时保存的cookie是否带上了
-    var response = await _dio.get(v2exHost + "/my/topics" + "?p=" + p.toString()); // todo 可能多页
+    // 调用 dio 之前检查登录时保存的cookie是否带上了
+    var response = await dio.get("/my/topics" + "?p=" + p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
@@ -384,9 +380,9 @@ class DioSingleton {
   }
 
   // 获取「节点收藏」 [xpath 解析的]
-  Future<List<FavNode>> getFavNodes() async {
+  static Future<List<FavNode>> getFavNodes() async {
     List<FavNode> nodes = new List<FavNode>();
-    var response = await _dio.get(v2exHost + "/my/nodes");
+    var response = await dio.get("/my/nodes");
     var tree = ETree.fromString(response.data);
 
     var aRootNode = tree.xpath("//*[@class='grid_item']");
@@ -417,10 +413,10 @@ class DioSingleton {
   }
 
   // 获取「通知」下的列表信息 [html 解析的]
-  Future<List<NotificationItem>> getNotifications(int p) async {
+  static Future<List<NotificationItem>> getNotifications(int p) async {
     List<NotificationItem> notifications = new List<NotificationItem>();
-    // 调用 _dio 之前检查登录时保存的cookie是否带上了
-    var response = await _dio.get(v2exHost + "/notifications" + "?p=" + p.toString()); // todo 可能多页
+    // 调用 dio 之前检查登录时保存的cookie是否带上了
+    var response = await dio.get("/notifications" + "?p=" + p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
@@ -507,13 +503,13 @@ class DioSingleton {
   }
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
-  Future<TopicDetailModel> getTopicDetailAndReplies(String topicId, int p) async {
+  static Future<TopicDetailModel> getTopicDetailAndReplies(String topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
     List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
-    var response = await _dio.get(v2exHost + "/t/" + topicId + "?p=" + p.toString()); // todo 可能多页
+    var response = await dio.get("/t/" + topicId + "?p=" + p.toString()); // todo 可能多页
     // Use html parser and query selector
     var document = parse(response.data);
 
@@ -525,7 +521,10 @@ class DioSingleton {
     detailModel.avatar =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
-    detailModel.nodeId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').attributes["href"].replaceAll('/go/', '');
+    detailModel.nodeId = document
+        .querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)')
+        .attributes["href"]
+        .replaceAll('/go/', '');
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
     //  at 9 小时 26 分钟前，1608 次点击
     detailModel.smallGray =
@@ -618,8 +617,8 @@ class DioSingleton {
   }
 
   // 感谢主题
-  Future<bool> thankTopic(String topicId, String token) async {
-    var response = await _dio.post("/thank/topic/" + topicId + "?t=" + token);
+  static Future<bool> thankTopic(String topicId, String token) async {
+    var response = await dio.post("/thank/topic/" + topicId + "?t=" + token);
     if (response.statusCode == 200 && response.data.toString().isEmpty) {
       return true;
     }
@@ -627,10 +626,10 @@ class DioSingleton {
   }
 
   // 收藏/取消收藏 主题 todo 发现操作过其中一次后，再次请求虽然也返回200，但是并没有实际成功！！
-  Future<bool> favoriteTopic(bool isFavorite, String topicId, String token) async {
+  static Future<bool> favoriteTopic(bool isFavorite, String topicId, String token) async {
     String url =
         isFavorite ? ("/unfavorite/topic/" + topicId + "?t=" + token) : ("/favorite/topic/" + topicId + "?t=" + token);
-    var response = await _dio.get(url);
+    var response = await dio.get(url);
     if (response.statusCode == 200) {
       return true;
     }
@@ -638,9 +637,9 @@ class DioSingleton {
   }
 
   // 收藏/取消收藏 节点 https://www.v2ex.com/favorite/node/39?once=87770
-  Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
+  static Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
     String url = isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
-    var response = await _dio.get(url);
+    var response = await dio.get(url);
     if (response.statusCode == 200) {
       return true;
     }
@@ -648,8 +647,8 @@ class DioSingleton {
   }
 
   // 感谢某条评论
-  Future<bool> thankTopicReply(String replyID, String token) async {
-    var response = await _dio.post("/thank/reply/" + replyID + "?t=" + token);
+  static Future<bool> thankTopicReply(String replyID, String token) async {
+    var response = await dio.post("/thank/reply/" + replyID + "?t=" + token);
     if (response.statusCode == 200 && response.data.toString().isEmpty) {
       return true;
     }

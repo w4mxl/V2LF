@@ -25,7 +25,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
   Future<List<FavNode>> _future;
 
   Future<List<FavNode>> getFavNodes() async {
-    return await dioSingleton.getFavNodes();
+    return await DioSingleton.getFavNodes();
   }
 
   @override

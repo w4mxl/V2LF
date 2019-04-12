@@ -8,6 +8,7 @@ import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_singleton.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,7 +52,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Future getTopics() async {
     if (!isLoading) {
       isLoading = true;
-      List<NotificationItem> newEntries = await dioSingleton.getNotifications(p++);
+      List<NotificationItem> newEntries = await DioSingleton.getNotifications(p++);
       setState(() {
         isLoading = false;
         if (newEntries.length > 0) {
@@ -121,7 +122,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<NotificationItem> newEntries = await dioSingleton.getNotifications(p);
+    List<NotificationItem> newEntries = await DioSingleton.getNotifications(p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
@@ -204,7 +205,7 @@ class TopicItemView extends StatelessWidget {
                                     return;
                                   } else if (url.contains("/member/")) {
                                     // @xxx 需要补齐 base url
-                                    url = DioSingleton.v2exHost + url;
+                                    url = Strings.v2exHost + url;
                                     print(url);
                                   }
                                   _launchURL(url);
@@ -230,7 +231,7 @@ class TopicItemView extends StatelessWidget {
                                       return;
                                     } else if (url.contains("/member/")) {
                                       // @xxx 需要补齐 base url
-                                      url = DioSingleton.v2exHost + url;
+                                      url = Strings.v2exHost + url;
                                       print(url);
                                     }
                                     _launchURL(url);

@@ -44,7 +44,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
         isUpLoading = true;
       });
     }
-    List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.tabKey, p++);
+    List<NodeTopicItem> newEntries = await DioSingleton.getNodeTopicsByTabKey(widget.tabKey, p++);
     // 用来判断节点是否需要登录后查看
     if (newEntries.isEmpty) {
       Navigator.pop(context);
@@ -100,7 +100,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<NodeTopicItem> newEntries = await dioSingleton.getNodeTopicsByTabKey(widget.tabKey, p);
+    List<NodeTopicItem> newEntries = await DioSingleton.getNodeTopicsByTabKey(widget.tabKey, p);
     setState(() {
       items.clear();
       items.addAll(newEntries);
