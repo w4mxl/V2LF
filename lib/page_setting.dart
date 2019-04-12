@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -15,6 +16,8 @@ import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_whatsnew/flutter_whatsnew.dart';
+
+import 'common/v2ex_client.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
@@ -424,9 +427,10 @@ class _SettingPageState extends State<SettingPage> {
                                 onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                               ),
                               FlatButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     Navigator.of(context, rootNavigator: true).pop();
-                                    logout();
+                                    await V2exClient.logout();
+                                    Navigator.pop(context);
                                   },
                                   child: Text(MyLocalizations.of(context).logout)),
                             ],
@@ -452,17 +456,7 @@ class _SettingPageState extends State<SettingPage> {
     return false;
   }
 
-  void logout() async {
-    // 清除 cookie
-    String cookiePath = await Utils.getCookiePath();
-    PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
-    cookieJar.deleteAll();
-    // 清除用户信息
-    SpHelper.sp.remove(SP_USERNAME);
-    SpHelper.sp.remove(SP_AVATAR);
 
-    Navigator.pop(context);
-  }
 
   void updateLanguage(LanguageModel model) {
     _currentLanguage = model;
