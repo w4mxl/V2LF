@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
@@ -17,12 +17,11 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
+import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:share/share.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //final key = GlobalKey<_TopicDetailViewState>();
 
@@ -141,7 +140,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
   Future<Null> _onTextMsgSubmitted(String text) async {
     bool loginResult = await DioWeb.replyTopic(widget.topicId, text);
     if (loginResult) {
-      Fluttertoast.showToast(msg: '回复成功!', gravity: ToastGravity.CENTER);
+      Progresshud.showSuccessWithStatus('回复成功!');
       // Clear input text field.
       _textController.clear();
       widget.onValueChange("");
@@ -304,7 +303,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       case 'thank':
         print(action.title);
         if (_detailModel.isThank) {
-          Fluttertoast.showToast(msg: '已经发送过感谢了 😉', gravity: ToastGravity.CENTER);
+          Progresshud.showInfoWithStatus('已发送过感谢!');
         } else {
           if (_detailModel.token.isNotEmpty) {
             // ⏏ 确认对话框
@@ -327,7 +326,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       ],
                     ));
           } else {
-            Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
+            Progresshud.showErrorWithStatus('无法获取 token');
           }
         }
         break;
@@ -337,7 +336,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           // 收藏 / 取消收藏
           _favoriteTopic();
         } else {
-          Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
+          Progresshud.showErrorWithStatus('无法获取 token');
         }
         break;
       case 'web':
@@ -349,16 +348,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         print(action.title);
         // 复制链接到剪贴板
         Clipboard.setData(ClipboardData(text: Strings.v2exHost + '/t/' + widget.topicId));
-        Fluttertoast.showToast(msg: '已复制好帖子链接', gravity: ToastGravity.CENTER);
+        Progresshud.showSuccessWithStatus('已复制好帖子链接');
+
         break;
       case 'copy':
         print(action.title);
         // 复制帖子内容到剪贴板
         if (_detailModel != null && _detailModel.content.isNotEmpty) {
           Clipboard.setData(ClipboardData(text: _detailModel.content));
-          Fluttertoast.showToast(msg: '已复制好帖子内容', gravity: ToastGravity.CENTER);
+          Progresshud.showSuccessWithStatus('已复制好帖子内容');
         } else {
-          Fluttertoast.showToast(msg: '帖子内容为空！', gravity: ToastGravity.CENTER);
+          Progresshud.showInfoWithStatus('帖子内容为空！');
         }
         break;
       case 'share':
@@ -402,14 +402,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     ],
                   ));
         } else {
-          Fluttertoast.showToast(msg: '操作失败,无法获取 token 😞', gravity: ToastGravity.CENTER);
+          Progresshud.showErrorWithStatus('无法获取 token');
         }
         break;
       case 'reply_copy':
         print(action.title);
         // 复制评论内容到剪贴板
         Clipboard.setData(ClipboardData(text: action.title));
-        Fluttertoast.showToast(msg: '已复制好评论内容', gravity: ToastGravity.CENTER);
+        Progresshud.showSuccessWithStatus('已复制好评论内容');
         break;
       default:
         break;
@@ -898,11 +898,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 );
                               });
                         } else {
-                          Fluttertoast.showToast(
-                              msg: '登录后有更多操作 😬',
-                              toastLength: Toast.LENGTH_SHORT,
-                              timeInSecForIos: 1,
-                              gravity: ToastGravity.CENTER);
+                          Progresshud.showInfoWithStatus('登录后有更多操作 ¯\_(ツ)_/¯');
                         }
                       });
                 }
@@ -964,8 +960,7 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Fluttertoast.showToast(
-        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+    Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }
 
