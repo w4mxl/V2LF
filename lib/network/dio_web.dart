@@ -24,8 +24,14 @@ import 'package:html/parser.dart'; // Contains HTML parsers to generate a Docume
 import 'package:xpath/xpath.dart';
 import 'package:flutter_app/network/http.dart';
 
+///
+///  经过对网址仔细测试发现：
+///     对话题进行「收藏/取消收藏」、「感谢」操作过一次后，token 就会失效，再次进行操作（包括对下面的评论发送感谢）需要刷新获取新token
+///     而，如果是先对下面的评论发送感谢，token 是不会失效的
+///
+
 class DioWeb {
-  // App 启动时，检查登录状态，领取签到奖励
+  // App 启动时，检查登录状态，若登录的则帮领取签到奖励
   static Future verifyLoginStatus() async {
     var spUsername = SpHelper.sp.getString(SP_USERNAME);
     if (spUsername != null && spUsername.length > 0) {
@@ -42,8 +48,6 @@ class DioWeb {
           if (!onValue) {
             dailyMission();
             print('准备去领取奖励...');
-          } else {
-            print('已经领过奖励了...');
           }
         });
       }
@@ -54,7 +58,6 @@ class DioWeb {
   static Future<bool> checkDailyAward() async {
     var response = await dio.get("/mission/daily");
     String resp = response.data as String;
-    print("wml：" + resp);
     if (resp.contains('每日登录奖励已领取')) {
       print('wml：每日登录奖励已领取过了');
       return true;
@@ -79,10 +82,11 @@ class DioWeb {
 
       var missionResponse = await dio.get("/mission/daily/redeem?once=" + once);
       print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
-      print('领取每日奖励:${missionResponse.statusCode}');
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
         Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.TOP);
+      }else{
+        print(missionResponse.data);
       }
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2);
@@ -159,15 +163,9 @@ class DioWeb {
   // 回复帖子
   static Future<bool> replyTopic(String topicId, String content) async {
     try {
-      var response = await dio.get("/signin");
-      var tree = ETree.fromString(response.data);
-      String once = tree
-          .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
-          .first
-          .attributes["value"];
-      print(once);
-
+      String once = await getOnce();
       if (once == null || once.isEmpty) {
+        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2);
         return false;
       }
 
@@ -199,6 +197,18 @@ class DioWeb {
       print(e.response.request);
       return false;
     }
+  }
+
+  // 获取 once
+  static Future<String> getOnce() async {
+    var response = await dio.get("/signin");
+    var tree = ETree.fromString(response.data);
+    String once = tree
+        .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
+    print(once);
+    return once;
   }
 
   // 获取登录信息
@@ -637,7 +647,17 @@ class DioWeb {
     return false;
   }
 
+  // 感谢某条评论
+  static Future<bool> thankTopicReply(String replyID, String token) async {
+    var response = await dio.post("/thank/reply/" + replyID + "?t=" + token);
+    if (response.statusCode == 200 && response.data.toString().isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
   // 收藏/取消收藏 节点 https://www.v2ex.com/favorite/node/39?once=87770
+  // 测试发现 [ 这里操作收藏节点和取消收藏用同一个 token 却是可以的 ]
   static Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
     String url = isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
     var response = await dio.get(url);
@@ -647,12 +667,4 @@ class DioWeb {
     return false;
   }
 
-  // 感谢某条评论
-  static Future<bool> thankTopicReply(String replyID, String token) async {
-    var response = await dio.post("/thank/reply/" + replyID + "?t=" + token);
-    if (response.statusCode == 200 && response.data.toString().isEmpty) {
-      return true;
-    }
-    return false;
-  }
 }

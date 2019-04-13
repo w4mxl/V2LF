@@ -18,7 +18,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:ovprogresshud/progresshud.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
@@ -42,6 +42,10 @@ class _TopicDetailsState extends State<TopicDetails> {
   @override
   void initState() {
     super.initState();
+
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
+
     // check login state
     checkLoginState();
   }
@@ -162,7 +166,7 @@ class TopicDetailView extends StatefulWidget {
 }
 
 class _TopicDetailViewState extends State<TopicDetailView> {
-  bool _saving = false; //是否显示转圈
+//  bool _saving = false; //是否显示转圈
 
   List<Action> actions = <Action>[
     Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),
@@ -215,7 +219,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         }
       }
     });
-    //监听自定义主页Tab的变动
+
     eventBus.on<MyEventRefreshTopic>().listen((event) {
       _onRefresh();
       print("eventBus.on<MyEventRefreshTopic>");
@@ -258,59 +262,33 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _thankTopic() async {
-    setState(() {
-      _saving = true;
-    });
     bool isSuccess = await DioWeb.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
-      Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
-      setState(() {
-        _saving = false;
-        _detailModel.isThank = true;
-      });
+      Progresshud.showSuccessWithStatus('感谢已发送');
+      eventBus.fire(new MyEventRefreshTopic());
     } else {
-      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
-      setState(() {
-        _saving = false;
-      });
+      Progresshud.showErrorWithStatus('操作失败');
     }
   }
 
   Future _favoriteTopic() async {
-    setState(() {
-      _saving = true;
-    });
     bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
-      Fluttertoast.showToast(msg: _detailModel.isFavorite ? '已取消收藏！' : '收藏成功！', gravity: ToastGravity.CENTER);
-      setState(() {
-        _saving = false;
-        _detailModel.isFavorite = !_detailModel.isFavorite;
-      });
+      Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
+      eventBus.fire(new MyEventRefreshTopic());
     } else {
-      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
-      setState(() {
-        _saving = false;
-      });
+      Progresshud.showErrorWithStatus('操作失败');
     }
   }
 
   Future _thankReply(String replyID) async {
-    setState(() {
-      _saving = true;
-    });
     bool isSuccess = await DioWeb.thankTopicReply(replyID, _detailModel.token);
     if (isSuccess) {
-      setState(() {
-        _saving = false;
-        // todo 更新UI：❤️后面的数字
-        Fluttertoast.showToast(msg: '感谢已发送 😁', gravity: ToastGravity.CENTER);
-      });
+      Progresshud.showSuccessWithStatus('感谢已发送');
+      // todo 更新UI：❤️后面的数字
+      eventBus.fire(new MyEventRefreshTopic());
     } else {
-      Fluttertoast.showToast(msg: '操作失败 😞', gravity: ToastGravity.CENTER);
-      setState(() {
-        _saving = false;
-      });
+      Progresshud.showErrorWithStatus('操作失败');
     }
   }
 
@@ -491,29 +469,26 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         ],
       ),
       //body: new TopicDetailView(key, widget.topicId,_select),
-      body: ModalProgressHUD(
-        inAsyncCall: _saving,
-        child: _detailModel != null
-            ? RefreshIndicator(
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    physics: ClampingScrollPhysics(),
-                    child: Column(
-                      children: <Widget>[
-                        // 详情view
-                        detailCard(context),
-                        // 评论view
-                        commentCard(_select),
-                      ],
-                    ),
-                    controller: _scrollController,
+      body: _detailModel != null
+          ? RefreshIndicator(
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      // 详情view
+                      detailCard(context),
+                      // 评论view
+                      commentCard(_select),
+                    ],
                   ),
+                  controller: _scrollController,
                 ),
-                onRefresh: _onRefresh)
-            : new Center(
-                child: new CircularProgressIndicator(),
               ),
-      ),
+              onRefresh: _onRefresh)
+          : new Center(
+              child: new CircularProgressIndicator(),
+            ),
 //      floatingActionButton: Offstage(
 //        offstage: !showToTopBtn,
 //        child: FloatingActionButton(

@@ -113,6 +113,7 @@ class _NodeTopicsState extends State<NodeTopics> {
         //   /favorite/node/39?once=87770
         isFavorite = event.isFavWithOnce.startsWith('/unfavorite');
         nodeIdWithOnce = event.isFavWithOnce.split('/node/')[1];
+        print('wml：$nodeIdWithOnce');
       });
     });
 
