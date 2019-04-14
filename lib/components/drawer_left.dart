@@ -24,6 +24,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../page_new_topic.dart';
+
 class DrawerLeft extends StatefulWidget {
   @override
   _DrawerLeftState createState() => _DrawerLeftState();
@@ -194,13 +196,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
 
               // todo 目前没必要，这里后面考虑要不要有
-              /*new ListTile(
+              new ListTile(
               leading: new Icon(Icons.explore),
-              title: new Text("浏览"),
+              title: new Text("发帖"),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage()));
               },
-            ),*/
+            ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
                 title: new Text(MyLocalizations.of(context).history),
