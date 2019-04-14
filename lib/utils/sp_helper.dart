@@ -27,6 +27,9 @@ const String SP_SEARCH_HISTORY = "search_history";
 // 今日诗词
 const String SP_TODAY_POEM = "today_poem";
 
+// 首次进入「新建主题页」
+const String SP_FIRST_TIME_NEW_TOPCI = "first_time_new_topic";
+
 class SpHelper {
   // 需要在 main.dart 初始化
   static SharedPreferences sp;

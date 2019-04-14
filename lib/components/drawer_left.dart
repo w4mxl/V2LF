@@ -243,7 +243,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(MyLocalizations.of(context).search),
                 onTap: () {
                   Navigator.pop(context);
-                  showSearch(context: context, delegate: MySearchDelegate());
+                  showSearch(context: context, delegate: SearchSov2exDelegate());
                 },
               ),
               new Divider(),

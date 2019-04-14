@@ -12,15 +12,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// @author: wml
-/// @date  : 2019/3/19 10:10 PM
+/// @date  : 2019/4/14 10:57 PM
 /// @email : mxl1989@gmail.com
-/// @desc  : SearchDelegate
-///
-/// 2019/3/21 17:32
-/// 从结果item点击到帖子详情后返回，原结果页面会一直刷新数据，体验不好。
-/// 原因是每次回来会新buildResults -> 原先会再给一个新的请求数据的Future，现在改成如果query不变，用久的Future
+/// @desc  : 搜索节点
 
-class SearchSov2exDelegate extends SearchDelegate<String> {
+class SearchNodeDelegate extends SearchDelegate<String> {
   final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
       ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
       : []; // ['v2er', 'AirPods']
