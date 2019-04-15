@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/sov2ex.dart';
+import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/page_topic_detail.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -16,13 +20,26 @@ import 'package:fluttertoast/fluttertoast.dart';
 /// @email : mxl1989@gmail.com
 /// @desc  : 搜索节点
 
-class SearchNodeDelegate extends SearchDelegate<String> {
-  final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
-      ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
-      : []; // ['v2er', 'AirPods']
+class SearchNodeDelegate extends SearchDelegate<NodeItem> {
+  final List<NodeItem> hotNodes = <NodeItem>[
+    NodeItem('qna', '问与答'),
+    NodeItem('jobs', '酷工作'),
+    NodeItem('share', '分享发现'),
+    NodeItem('programmer', '程序员'),
+    NodeItem('macos', 'macOS'),
+    NodeItem('create', '分享创造'),
+    NodeItem('python', 'Python'),
+    NodeItem('apple', 'Apple'),
+    NodeItem('android', 'Android'),
+    NodeItem('iphone', 'iPhone'),
+    NodeItem('career', '职场话题'),
+    NodeItem('bb', '宽带症候群'),
+    NodeItem('gts', '全球工单系统'),
+    NodeItem('cv', '求职'),
+    NodeItem('linux', 'Linux'),
+  ];
 
-  String lastQ = ""; // 上一次的搜索关键字
-  Future<Sov2ex> _future; // 搜索数据 Future
+  Future<List<NodeItem>> _future;
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -46,7 +63,6 @@ class SearchNodeDelegate extends SearchDelegate<String> {
         icon: Icon(CupertinoIcons.clear_circled_solid),
         onPressed: () {
           query = "";
-          showSuggestions(context);
         },
       )
     ];
@@ -55,7 +71,7 @@ class SearchNodeDelegate extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -64,69 +80,18 @@ class SearchNodeDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isEmpty) {
-      return Center(child: Text('┐(´-｀)┌'));
-    }
 
-    if (!_history.contains(query.trim())) {
-      _history.insert(0, query.trim());
-      SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
-    }
+    if(query.isEmpty){
+    return Center(child: Text('┐(´-｀)┌'));}
 
-    if (query.trim() != lastQ) {
-      _future = getSov2exData(query.trim());
-      lastQ = query.trim();
-    }
-
+    _future = NetworkApi.getAllNodes();
     return buildSearchFutureBuilder(query.trim());
   }
 
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return _history.isNotEmpty
-        ? ListView.builder(
-            itemBuilder: (context, index) {
-              if (index == _history.length) {
-                return _buildClearHistory(context);
-              } else {
-                return ListTile(
-                  leading: Icon(Icons.history),
-                  title: Text(_history[index]),
-                  onTap: () {
-                    query = _history[index];
-                    showResults(context);
-                  },
-                );
-              }
-            },
-            itemCount: _history.length + 1, // +1 是清空搜索记录
-          )
-        : Center(
-            child: Text(MyLocalizations.of(context).noHistorySearch),
-          );
-  }
-
-  Widget _buildClearHistory(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: InkWell(
-          child: Text(MyLocalizations.of(context).clearHistorySearch),
-          onTap: () {
-            _history.clear();
-            SpHelper.sp.remove(SP_SEARCH_HISTORY);
-            query = "";
-            showSuggestions(context);
-          },
-        ),
-      ),
-    );
-  }
-
-  FutureBuilder<Sov2ex> buildSearchFutureBuilder(String q) {
-    return new FutureBuilder<Sov2ex>(
+  FutureBuilder<List<NodeItem>> buildSearchFutureBuilder(String q) {
+    return new FutureBuilder<List<NodeItem>>(
       future: _future,
-      builder: (context, AsyncSnapshot<Sov2ex> async) {
+      builder: (context, AsyncSnapshot<List<NodeItem>> async) {
         if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
           return new Center(
             child: new CircularProgressIndicator(),
@@ -139,121 +104,50 @@ class SearchNodeDelegate extends SearchDelegate<String> {
               child: new Text('${async.error}'),
             );
           } else if (async.hasData) {
-            Sov2ex sov2ex = async.data;
-            return Sov2exResultListView(sov2ex.hits);
+            List<NodeItem> allNodes = async.data;
+            var resultNodes = allNodes.where((p) => p.nodeName.startsWith(query)).toList();
+
+            return ListView.builder(
+              itemBuilder: (context, index) => ListTile(
+                title: RichText(
+                    text: TextSpan(
+                        text: resultNodes[index].nodeName.substring(0, query.length),
+                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                              text: resultNodes[index].nodeName.substring(query.length),
+                              style: DefaultTextStyle.of(context).style)
+                        ])),
+                trailing: Icon(Icons.navigate_next),
+                onTap: () => close(context, resultNodes[index]),
+              ),
+              itemCount: resultNodes.length,
+            );
           }
         }
       },
     );
   }
 
-  Future<Sov2ex> getSov2exData(String q) async {
-    var dio = Dio();
-    try {
-      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q);
-      print(response.data);
-      return Sov2ex.fromMap(response.data);
-    } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '搜索出错了...');
-      print(e.response.data);
-      print(e.response.headers);
-      print(e.response.request);
-      return null;
-    }
-  }
-}
-
-class Sov2exResultListView extends StatelessWidget {
-  final List<HitsListBean> hits;
-
-  Sov2exResultListView(this.hits);
-
   @override
-  Widget build(BuildContext context) {
-    return Scrollbar(
-      child: ListView.builder(
-          itemCount: hits.length,
-          itemBuilder: (context, index) {
-            return Sov2exResultItem(hits[index]);
-          }),
-    );
-  }
-}
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionNodes = query.isEmpty ? hotNodes : hotNodes.where((p) => p.nodeName.startsWith(query)).toList();
 
-class Sov2exResultItem extends StatelessWidget {
-  final HitsListBean hitsListBean;
-
-  Sov2exResultItem(this.hitsListBean);
-
-  @override
-  Widget build(BuildContext context) {
-    String title = hitsListBean.highlight.title != null
-        ? hitsListBean.highlight.title[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
-        : hitsListBean.source.title;
-
-    String content = hitsListBean.highlight.content != null
-        ? hitsListBean.highlight.content[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
-        : (hitsListBean.highlight.postscript_list != null
-            ? hitsListBean.highlight.postscript_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
-            : (hitsListBean.highlight.reply_list != null
-                ? hitsListBean.highlight.reply_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
-                : hitsListBean.source.content));
-
-    return GestureDetector(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Html(
-                  data: title,
-                  defaultTextStyle: Theme.of(context).textTheme.subhead,
-                  linkStyle: TextStyle(
-                    color: Colors.red,
-                    decoration: null,
-                  ),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Html(
-                  data: content,
-                  renderNewlines: true,
-                  defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white70 : Colors.grey[800], fontSize: 14.0),
-                  linkStyle: TextStyle(
-                    color: Colors.red,
-                    decoration: null,
-                  ),
-                  useRichText: true,
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  hitsListBean.source.member +
-                      " 于 " +
-                      hitsListBean.source.created.replaceAll('T', '  ') +
-                      " 发表，共计 " +
-                      hitsListBean.source.replies.toString() +
-                      " 个回复",
-                  style: TextStyle(color: ColorT.isDark ? Colors.white30 : Colors.black38, fontSize: 12.0),
-                )
-              ],
-            ),
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+            title: RichText(
+                text: TextSpan(
+                    text: suggestionNodes[index].nodeName.substring(0, query.length),
+                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                    children: [
+                  TextSpan(
+                      text: suggestionNodes[index].nodeName.substring(query.length),
+                      style: DefaultTextStyle.of(context).style)
+                ])),
+            trailing: Icon(Icons.navigate_next),
+            onTap: () => close(context, suggestionNodes[index]),
           ),
-          Divider(
-            height: 6.0,
-          )
-        ],
-      ),
-      onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
-          ),
-      behavior: HitTestBehavior.opaque,
+      itemCount: suggestionNodes.length,
     );
   }
 }

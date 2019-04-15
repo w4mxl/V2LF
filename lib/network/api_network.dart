@@ -6,6 +6,7 @@ import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/resp_replies.dart';
 import 'package:flutter_app/model/resp_site_info.dart';
 import 'package:flutter_app/model/resp_topics.dart';
+import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/utils/constants.dart' as Constants;
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:http/http.dart' as http;
@@ -45,6 +46,12 @@ class NetworkApi {
   // Node / 获取指定节点信息
   static Future<Node> getNodeInfo(String nodeName) async {
     return Node.fromJson(await _get(Constants.API_NODE + '?name=' + nodeName));
+  }
+
+  // Nodes / 获取所有节点列表
+  static Future<List<NodeItem>> getAllNodes() async {
+    List<dynamic> list = await _get(Constants.API_ALL_NODES);
+    return list.map((e) => NodeItem(e['name'], e['title'])).toList();
   }
 
   /*static Future<Token> getPoemToken() async {

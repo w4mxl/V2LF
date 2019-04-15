@@ -48,10 +48,15 @@ const String API_TOPIC_REPLY = API_HOST + 'replies/show.json';
 /// @param username
 const String API_MEMBER = API_HOST + 'members/show.json';
 
-/// 取j节点信息
+/// 取节点信息
 /// @GET
 /// @param name
 const String API_NODE = API_HOST + 'nodes/show.json';
+
+/// 取所有节点列表
+/// @GET
+/// @param name
+const String API_ALL_NODES = API_HOST + 'nodes/all.json';
 
 // 获取今日诗词token
 // {

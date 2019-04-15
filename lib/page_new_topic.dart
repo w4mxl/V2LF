@@ -6,6 +6,7 @@ import 'package:notus/convert.dart';
 
 import 'components/search_delegate.dart';
 import 'components/search_node_delegate.dart';
+import 'model/web/node.dart';
 import 'utils/sp_helper.dart';
 
 /// @author: wml
@@ -43,21 +44,21 @@ class _NewTopicPageState extends State<NewTopicPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
-                            height: 4,
+                            height: 6,
                           ),
                           Text(
                             '请不要在 V2EX 发布任何盗版下载链接，包括软件、音乐、电影等等。V2EX 是创意工作者的社区，我们尊重原创。',
                             style: TextStyle(fontSize: 14),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: 12,
                           ),
                           Text(
                             '友好互助',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
-                            height: 4,
+                            height: 6,
                           ),
                           Text(
                             '保持对陌生人的友善。用知识去帮助别人。',
@@ -100,9 +101,18 @@ class _NewTopicPageState extends State<NewTopicPage> {
         buildEditor(),
         Row(
           children: <Widget>[
-            FlatButton(onPressed: () {
-              showSearch(context: context, delegate: SearchNodeDelegate());
-            }, child: Text('请选择一个节点')),
+            FlatButton(
+                onPressed: () {
+                  Future<NodeItem> future = showSearch(context: context, delegate: SearchNodeDelegate());
+                  future.then((nodeItem) {
+                    if (nodeItem != null) {
+                      setState(() {
+                        print("wml：" + nodeItem.nodeName);
+                      });
+                    }
+                  });
+                },
+                child: Text('请选择一个节点')),
           ],
         ),
       ],
