@@ -80,9 +80,9 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
   @override
   Widget buildResults(BuildContext context) {
-
-    if(query.isEmpty){
-    return Center(child: Text('┐(´-｀)┌'));}
+    if (query.isEmpty) {
+      return Center(child: Text('┐(´-｀)┌'));
+    }
 
     _future = NetworkApi.getAllNodes();
     return buildSearchFutureBuilder(query.trim());
@@ -105,22 +105,14 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
             );
           } else if (async.hasData) {
             List<NodeItem> allNodes = async.data;
-            var resultNodes = allNodes.where((p) => p.nodeName.startsWith(query)).toList();
+            var resultNodes = allNodes.where((p) => p.nodeName.toLowerCase().contains(query.toLowerCase())).toList();
 
             return ListView.builder(
               itemBuilder: (context, index) => ListTile(
-                title: RichText(
-                    text: TextSpan(
-                        text: resultNodes[index].nodeName.substring(0, query.length),
-                        style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
-                        children: [
-                          TextSpan(
-                              text: resultNodes[index].nodeName.substring(query.length),
-                              style: DefaultTextStyle.of(context).style)
-                        ])),
-                trailing: Icon(Icons.navigate_next),
-                onTap: () => close(context, resultNodes[index]),
-              ),
+                    title: Text(resultNodes[index].nodeName),
+                    trailing: Icon(Icons.navigate_next),
+                    onTap: () => close(context, resultNodes[index]),
+                  ),
               itemCount: resultNodes.length,
             );
           }
@@ -131,23 +123,17 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionNodes = query.isEmpty ? hotNodes : hotNodes.where((p) => p.nodeName.startsWith(query)).toList();
+    final suggestionNodes =
+        query.isEmpty ? hotNodes : hotNodes.where((p) => p.nodeName.toLowerCase().contains(query.toLowerCase())).toList();
 
-    return ListView.builder(
+    return ListView.separated(
       itemBuilder: (context, index) => ListTile(
-            title: RichText(
-                text: TextSpan(
-                    text: suggestionNodes[index].nodeName.substring(0, query.length),
-                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
-                    children: [
-                  TextSpan(
-                      text: suggestionNodes[index].nodeName.substring(query.length),
-                      style: DefaultTextStyle.of(context).style)
-                ])),
-            trailing: Icon(Icons.navigate_next),
+            title: Text(suggestionNodes[index].nodeName),
+            trailing: Icon(Icons.whatshot),
             onTap: () => close(context, suggestionNodes[index]),
           ),
       itemCount: suggestionNodes.length,
+      separatorBuilder: (context, index) => Divider(height: 0),
     );
   }
 }

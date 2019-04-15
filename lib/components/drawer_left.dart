@@ -84,8 +84,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       },
                     ),
                     IconButton(
-                        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                        alignment: Alignment.bottomCenter,
                         icon: (Icon(
                           Icons.brightness_4,
                           color: Colors.white,
@@ -194,16 +192,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   image: new DecorationImage(
                       fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),*/
               ),
-
-              // todo 目前没必要，这里后面考虑要不要有
-              new ListTile(
-              leading: new Icon(Icons.explore),
-              title: new Text("发帖"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage()));
-              },
-            ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
                 title: new Text(MyLocalizations.of(context).history),
@@ -244,6 +232,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   showSearch(context: context, delegate: SearchSov2exDelegate());
+                },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.add),
+                title: new Text("发帖"),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage()));
                 },
               ),
               new Divider(),
