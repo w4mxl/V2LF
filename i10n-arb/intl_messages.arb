@@ -230,13 +230,23 @@
     "type": "text",
     "placeholders": {}
   },
-  "oops": "Oops! An unknown error occurred",
+  "oops": "Oops！An unknown error occurred",
   "@oops": {
     "type": "text",
     "placeholders": {}
   },
   "retry": "RETRY",
   "@retry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "New Topic",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "createTitle": "Create New Topic",
+  "@createTitle": {
     "type": "text",
     "placeholders": {}
   }

@@ -100,6 +100,13 @@ class MyLocalizations {
   String get oops => Intl.message('Oops！An unknown error occurred', name: 'oops');
   String get retry => Intl.message('RETRY', name: 'retry');
 
+  String get create => Intl.message('New Topic', name: 'create');
+  String get createTitle => Intl.message('Create New Topic', name: 'createTitle');
+//  String get createTitleHint => Intl.message('Title', name: 'createTitleHint');
+//  String get createTitleHelp => Intl.message('If the title can express the full content, the body can be empty', name: 'createTitleHelp');
+//  String get createTextHint => Intl.message('Content', name: 'createTextHint');
+//  String get createTextHelp => Intl.message('Title', name: 'createTextHelp');
+
 }
 
 //Locale代理类

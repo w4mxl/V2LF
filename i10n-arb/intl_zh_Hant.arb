@@ -239,5 +239,15 @@
   "@retry": {
     "type": "text",
     "placeholders": {}
+  },
+  "create": "發帖",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "createTitle": "創建新主題",
+  "@createTitle": {
+    "type": "text",
+    "placeholders": {}
   }
 }

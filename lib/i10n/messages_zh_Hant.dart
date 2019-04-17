@@ -33,6 +33,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "clearHistorySearch" : MessageLookupByLibrary.simpleMessage("清空歷史記錄"),
     "copyContent" : MessageLookupByLibrary.simpleMessage("復制內容"),
     "copyLink" : MessageLookupByLibrary.simpleMessage("復制鏈接"),
+    "create" : MessageLookupByLibrary.simpleMessage("發帖"),
+    "createTitle" : MessageLookupByLibrary.simpleMessage("創建新主題"),
     "enterAccount" : MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
     "enterCaptcha" : MessageLookupByLibrary.simpleMessage("輸入右側驗證碼"),
     "enterPassword" : MessageLookupByLibrary.simpleMessage("請輸入密碼"),
