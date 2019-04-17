@@ -351,7 +351,6 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.flag,
-                      color: Colors.green,
                     ),
                     title: new Text(MyLocalizations.of(context).versions),
                     onTap: () {
@@ -455,8 +454,6 @@ class _SettingPageState extends State<SettingPage> {
     }
     return false;
   }
-
-
 
   void updateLanguage(LanguageModel model) {
     _currentLanguage = model;
