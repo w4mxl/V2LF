@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
@@ -14,15 +12,14 @@ import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
+import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
-import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
-import 'package:flutter_app/network/http.dart';
 
 ///
 ///  经过对网址仔细测试发现：
@@ -85,7 +82,7 @@ class DioWeb {
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
         Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.TOP);
-      }else{
+      } else {
         print(missionResponse.data);
       }
     } on DioError catch (e) {
@@ -199,10 +196,55 @@ class DioWeb {
     }
   }
 
+  // 创建主题：先用节点ID去获取 once，然后组装字段 POST 发帖
+  static Future<String> createTopic(String nodeId, String title, String content) async {
+    try {
+      var response = await dio.get('/new/' + nodeId);
+      String resp = response.data as String;
+      if (resp.contains('你的帐号刚刚注册')) {
+        return '你的帐号刚刚注册，暂时无法发帖。';
+      }
+
+      var tree = ETree.fromString(resp);
+      String once = tree
+          .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td/input[@name='once']")
+          .first
+          .attributes["value"];
+      if (once == null || once.isEmpty) {
+        return '操作失败,无法获取到 once!';
+      }
+
+      print('wml：' + once);
+
+      dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+      FormData formData = new FormData.from({
+        "once": once,
+        "title": title,
+        "content": content,
+        "syntax": "1", // 文本标记语法，0: 默认 1: Markdown
+      });
+      var responsePostTopic = await dio.post("/new/" + nodeId, data: formData);
+      dio.options.contentType = ContentType.json; // 还原
+      var document = parse(responsePostTopic.data);
+      if (document.querySelector('#Wrapper > div > div > div.problem > ul') != null) {
+        // 发布话题失败: 可能有多条错误，这里只取第一条提示用户
+        String problem = document.querySelector('#Wrapper > div > div > div.problem > ul > li').text;
+        return problem;
+      }
+      // 发布话题成功
+      return '主题发布成功';
+    } on DioError catch (e) {
+      print(e.response.data);
+      print(e.response.headers);
+      print(e.response.request);
+      return '主题发布失败';
+    }
+  }
+
   // 获取 once
   static Future<String> getOnce() async {
     var response = await dio.get("/signin");
-    var tree = ETree.fromString(response.data);
+    var tree = ETree.fromString(response.data); //*[@id="Wrapper"]/div/div/div[2]/form/table/tbody/tr[3]/td/input[1]
     String once = tree
         .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
         .first
@@ -666,5 +708,4 @@ class DioWeb {
     }
     return false;
   }
-
 }

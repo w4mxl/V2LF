@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:ovprogresshud/progresshud.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:notus/convert.dart';
 
 import 'components/search_delegate.dart';
 import 'components/search_node_delegate.dart';
 import 'model/web/node.dart';
+import 'network/dio_web.dart';
 import 'utils/sp_helper.dart';
 
 /// @author: wml
@@ -23,12 +27,31 @@ class _NewTopicPageState extends State<NewTopicPage> {
   // 是否第一次进入该页面
   bool isFirst = SpHelper.sp.containsKey(SP_FIRST_TIME_NEW_TOPCI);
 
+  final TextEditingController _titleEditingController = TextEditingController();
+  String _titleError;
   final ZefyrController _controller = ZefyrController(NotusDocument());
   final FocusNode _focusNode = new FocusNode();
+
+  NodeItem selectedNode;
+
+  Future _createTopic(String nodeId, String title, String content) async {
+    String result = await DioWeb.createTopic(nodeId, '', content);
+    if (result.contains('成功')) {
+      Progresshud.showSuccessWithStatus(result);
+      Navigator.of(context).pop();
+    } else {
+      print('创建主题页面：$result');
+      Progresshud.showErrorWithStatus(result);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
+
     if (!isFirst) {
       Future.delayed(
           Duration(seconds: 1),
@@ -76,6 +99,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
                       ),
                     ],
                   )));
+      SpHelper.sp.setBool(SP_FIRST_TIME_NEW_TOPCI, false);
     }
   }
 
@@ -87,34 +111,38 @@ class _NewTopicPageState extends State<NewTopicPage> {
           height: 4,
         ),
         TextField(
+          controller: _titleEditingController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: '主题标题',
             helperText: '如果标题能够表达完整内容，则正文可以为空',
-//            errorText: '主题标题不能为空',
+            errorText: _titleError,
           ),
+          autocorrect: true,
           maxLength: 120,
         ),
         SizedBox(
           height: 20,
         ),
         buildEditor(),
-        Row(
-          children: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  Future<NodeItem> future = showSearch(context: context, delegate: SearchNodeDelegate());
-                  future.then((nodeItem) {
-                    if (nodeItem != null) {
-                      setState(() {
-                        print("wml：" + nodeItem.nodeName);
-                      });
-                    }
-                  });
-                },
-                child: Text('请选择一个节点')),
-          ],
+        SizedBox(
+          height: 20,
         ),
+        GestureDetector(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Icon(Icons.image),
+              SizedBox(
+                width: 10,
+              ),
+              Text('上传图片获得图片链接'),
+            ],
+          ),
+          onTap: () {
+            launch('https://sm.ms/', forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+          },
+        )
       ],
     );
 
@@ -127,7 +155,22 @@ class _NewTopicPageState extends State<NewTopicPage> {
               icon: Icon(Icons.send),
               tooltip: 'Publish new topic',
               onPressed: () {
-                print(notusMarkdown.encode(_controller.document.toDelta()));
+                if (_titleEditingController.text.trim().isEmpty) {
+                  setState(() {
+                    _titleError = '标题不能为空';
+                  });
+                } else if (selectedNode == null) {
+                  Progresshud.showErrorWithStatus('请选择节点');
+                  setState(() {
+                    _titleError = null;
+                  });
+                } else {
+                  print(selectedNode.nodeId);
+                  print(_titleEditingController.text.trim());
+                  print(notusMarkdown.encode(_controller.document.toDelta()));
+                  _createTopic(selectedNode.nodeId, _titleEditingController.text.trim(),
+                      notusMarkdown.encode(_controller.document.toDelta()));
+                }
               })
         ],
       ),
@@ -135,6 +178,24 @@ class _NewTopicPageState extends State<NewTopicPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: form,
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            Future<NodeItem> future = showSearch(context: context, delegate: SearchNodeDelegate());
+            future.then((nodeItem) {
+              if (nodeItem != null) {
+                setState(() {
+                  selectedNode = nodeItem;
+                  print("wml：" + nodeItem.nodeName);
+                });
+              }
+            });
+          },
+          icon: Icon(Icons.bubble_chart),
+          label: Text(selectedNode != null ? selectedNode.nodeName : '节点'),
         ),
       ),
     );
@@ -153,10 +214,11 @@ class _NewTopicPageState extends State<NewTopicPage> {
     return ZefyrTheme(
       data: theme,
       child: ZefyrField(
-        height: 200.0,
+        height: 280,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: '正文',
+          helperText: '可以在正文中为你要发布的主题添加更多细节。\n如果需要插入图片，请通过图床上传后粘贴图片链接。',
           alignLabelWithHint: true,
         ),
         controller: _controller,
