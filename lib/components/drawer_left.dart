@@ -83,21 +83,27 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         }
                       },
                     ),
-                    IconButton(
-                        icon: (Icon(
+                    InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right:14.0),
+                        child: Icon(
                           Icons.brightness_4,
                           color: Colors.white,
-                        )),
-                        onPressed: () {
-                          bool currentIsDark;
-                          if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
-                            currentIsDark = false;
-                          } else {
-                            currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
-                          }
-                          SpHelper.sp.setBool(SP_IS_DARK, !currentIsDark);
-                          eventBus.fire(MyEventSettingChange());
-                        }),
+                          size: 24,
+                        ),
+                      ),
+                      onTap: (){
+                        bool currentIsDark;
+                        if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
+                          currentIsDark = false;
+                        } else {
+                          currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
+                        }
+                        SpHelper.sp.setBool(SP_IS_DARK, !currentIsDark);
+                        eventBus.fire(MyEventSettingChange());
+                        print('wml');
+                      },
+                    ),
                   ],
                 ),
                 accountEmail: GestureDetector(
@@ -234,6 +240,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   showSearch(context: context, delegate: SearchSov2exDelegate());
                 },
               ),
+              new Divider(height: 0,),
               new ListTile(
                 leading: new Icon(Icons.add),
                 title: new Text("发帖"),
@@ -242,7 +249,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage()));
                 },
               ),
-              new Divider(),
+              new Divider(height: 0,),
               new ListTile(
                 leading: new Icon(Icons.settings),
                 title: new Text(MyLocalizations.of(context).settings),
