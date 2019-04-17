@@ -9,6 +9,7 @@ import 'package:notus/convert.dart';
 
 import 'components/search_delegate.dart';
 import 'components/search_node_delegate.dart';
+import 'i10n/localization_intl.dart';
 import 'model/web/node.dart';
 import 'network/dio_web.dart';
 import 'utils/sp_helper.dart';
@@ -108,7 +109,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
     final form = ListView(
       children: <Widget>[
         SizedBox(
-          height: 4,
+          height: 20,
         ),
         TextField(
           controller: _titleEditingController,
@@ -149,7 +150,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(
-        title: Text('创建新主题'),
+        title: Text(MyLocalizations.of(context).createTitle),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.send),
@@ -214,10 +215,11 @@ class _NewTopicPageState extends State<NewTopicPage> {
     return ZefyrTheme(
       data: theme,
       child: ZefyrField(
-        height: 280,
+        height: 300,
         decoration: InputDecoration(
+
           border: OutlineInputBorder(),
-          labelText: '正文',
+
           helperText: '可以在正文中为你要发布的主题添加更多细节。\n如果需要插入图片，请通过图床上传后粘贴图片链接。',
           alignLabelWithHint: true,
         ),

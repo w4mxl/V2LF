@@ -243,10 +243,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new Divider(height: 0,),
               new ListTile(
                 leading: new Icon(Icons.add),
-                title: new Text("发帖"),
+                title: new Text(MyLocalizations.of(context).create),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage(),fullscreenDialog: true));
                 },
               ),
               new Divider(height: 0,),
