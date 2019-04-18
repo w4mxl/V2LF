@@ -36,7 +36,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
   NodeItem selectedNode;
 
   Future _createTopic(String nodeId, String title, String content) async {
-    String result = await DioWeb.createTopic(nodeId, '', content);
+    String result = await DioWeb.createTopic(nodeId, title, content);
     if (result.contains('成功')) {
       Progresshud.showSuccessWithStatus(result);
       Navigator.of(context).pop();
@@ -217,9 +217,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
       child: ZefyrField(
         height: 300,
         decoration: InputDecoration(
-
           border: OutlineInputBorder(),
-
           helperText: '可以在正文中为你要发布的主题添加更多细节。\n如果需要插入图片，请通过图床上传后粘贴图片链接。',
           alignLabelWithHint: true,
         ),
