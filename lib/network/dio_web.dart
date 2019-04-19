@@ -109,9 +109,13 @@ class DioWeb {
 
     var response = await dio.get('/?tab=' + tabKey);
 
-//    var request = await httpClient.getUrl(uri);
-//    var response = await request.close();
-//    var responseBody = await response.transform(utf8.decoder).join();
+    var tree = ETree.fromString(response.data);
+
+    // 未读提醒
+    if (tabKey == 'hot' && tree.xpath("//*[@class='gray']") != null) {
+      String notificationInfo = tree.xpath("//*[@class='gray']/text()")[0].name;
+      print('未读数：' + notificationInfo.split(' ')[0]);
+    }
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
