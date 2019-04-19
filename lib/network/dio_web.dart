@@ -97,7 +97,7 @@ class DioWeb {
 
     List<TabTopicItem> topics = new List<TabTopicItem>();
 
-    final String reg4tag = "<div class=\"cell item\" (.*?)</table></div>";
+    final String reg4tag = "<div class=\"cell item\"> (.*?)</table></div>";
 
     final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
 
