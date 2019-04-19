@@ -20,6 +20,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
+import 'package:flutter_app/model/web/item_tab_topic.dart';
 
 ///
 ///  经过对网址仔细测试发现：
@@ -88,6 +89,63 @@ class DioWeb {
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2);
     }
+  }
+
+  // 主页获取特定节点下的topics
+  static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey) async {
+    String content = '';
+
+    List<TabTopicItem> topics = new List<TabTopicItem>();
+
+    final String reg4tag = "<div class=\"cell item\" (.*?)</table></div>";
+
+    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
+
+    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
+
+    final String reg4NodeIdName = "<a class=\"node\" href=\"/go/(.*?)\">(.*?)</a>";
+
+    final String reg4LastReply = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
+
+    var response = await dio.get('/?tab=' + tabKey);
+
+//    var request = await httpClient.getUrl(uri);
+//    var response = await request.close();
+//    var responseBody = await response.transform(utf8.decoder).join();
+
+    content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+
+    RegExp exp = new RegExp(reg4tag);
+    Iterable<Match> matches = exp.allMatches(content);
+    for (Match match in matches) {
+      String regString = match.group(0);
+      TabTopicItem item = new TabTopicItem();
+      Match match4MidAvatar = new RegExp(reg4MidAvatar).firstMatch(regString);
+      item.memberId = match4MidAvatar.group(1);
+      item.avatar = "https:${match4MidAvatar.group(2)}";
+      Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
+      item.topicId = match4TRC.group(1);
+      item.replyCount = match4TRC.group(2);
+      item.topicContent = match4TRC
+          .group(3)
+          .replaceAll('&quot;', '"')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>');
+      Match match4NodeIdName = new RegExp(reg4NodeIdName).firstMatch(regString);
+      item.nodeId = match4NodeIdName.group(1);
+      item.nodeName = match4NodeIdName.group(2);
+      if (regString.contains("最后回复来自")) {
+        Match match4LastReply = new RegExp(reg4LastReply).firstMatch(regString);
+        item.lastReplyTime = match4LastReply.group(1);
+        item.lastReplyMId = match4LastReply.group(2);
+      }
+      /*item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
+          .list[0]
+          .content;*/
+      topics.add(item);
+    }
+    return topics;
   }
 
   // 节点导航页 -> 获取特定节点下的topics

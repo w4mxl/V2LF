@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     super.initState();
 
     _tabController = TabController(length: tabs.length, vsync: this);
-    _initAsync();
+    _init();
 
     //监听设置中的变动
     eventBus.on<MyEventSettingChange>().listen((event) {
@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
-  void _initAsync() {
+  void _init() {
     _loadLocale();
     _loadCustomTabs();
     // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
