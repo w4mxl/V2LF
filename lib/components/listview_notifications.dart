@@ -160,15 +160,15 @@ class TopicItemView extends StatelessWidget {
           children: <Widget>[
             new Container(
               padding: const EdgeInsets.all(12.0),
-              child: new Row(
+              child: new Column(
                 children: <Widget>[
-                  Column(
+                  Row(
                     children: <Widget>[
                       // 圆形头像
                       new Container(
-                        margin: const EdgeInsets.only(bottom: 4.0),
-                        width: 32.0,
-                        height: 32.0,
+                        margin: const EdgeInsets.only(right: 4.0),
+                        width: 20.0,
+                        height: 20.0,
                         child: CircleAvatar(
                           backgroundImage: CachedNetworkImageProvider("https:${notificationItem.avatar}"),
                         ),
@@ -183,20 +183,46 @@ class TopicItemView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  new Expanded(
-                    child: new Container(
-                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // title
-                            new Container(
-                              alignment: Alignment.centerLeft,
+                  new Container(
+                      margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          // title
+                          new Container(
+                            alignment: Alignment.centerLeft,
+                            child: Html(
+                              // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
+                              data: notificationItem.title,
+                              defaultTextStyle:
+                                  TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 15.0),
+                              linkStyle: TextStyle(
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onLinkTap: (url) {
+                                if (UrlHelper.canLaunchInApp(context, url)) {
+                                  return;
+                                } else if (url.contains("/member/")) {
+                                  // @xxx 需要补齐 base url
+                                  url = Strings.v2exHost + url;
+                                  print(url);
+                                }
+                                _launchURL(url);
+                              },
+//                                useRichText: true,
+                            ),
+                          ),
+                          // reply
+                          Offstage(
+                            offstage: notificationItem.reply.isEmpty,
+                            child: new Container(
+                              margin: const EdgeInsets.only(top: 8.0),
                               child: Html(
-                                // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
-                                data: notificationItem.title,
+                                data: notificationItem.reply,
                                 defaultTextStyle:
-                                    TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 15.0),
+                                    TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                backgroundColor: ColorT.isDark ? Colors.grey[800] : Colors.grey[200],
+                                padding: EdgeInsets.all(4.0),
                                 linkStyle: TextStyle(
                                   color: Theme.of(context).accentColor,
                                 ),
@@ -210,38 +236,11 @@ class TopicItemView extends StatelessWidget {
                                   }
                                   _launchURL(url);
                                 },
-//                                useRichText: true,
                               ),
                             ),
-                            // reply
-                            Offstage(
-                              offstage: notificationItem.reply.isEmpty,
-                              child: new Container(
-                                margin: const EdgeInsets.only(top: 8.0),
-                                child: Html(
-                                  data: notificationItem.reply,
-                                  defaultTextStyle:
-                                      TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
-                                  backgroundColor: ColorT.isDark ? Colors.grey[800] : Colors.grey[200],
-                                  padding: EdgeInsets.all(4.0),
-                                  linkStyle: TextStyle(
-                                    color: Theme.of(context).accentColor,),
-                                  onLinkTap: (url) {
-                                    if (UrlHelper.canLaunchInApp(context, url)) {
-                                      return;
-                                    } else if (url.contains("/member/")) {
-                                      // @xxx 需要补齐 base url
-                                      url = Strings.v2exHost + url;
-                                      print(url);
-                                    }
-                                    _launchURL(url);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),

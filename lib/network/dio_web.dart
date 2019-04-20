@@ -556,9 +556,9 @@ class DioWeb {
         // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.snow
         // 可能得到 '44 天前' 或者 '2017-06-14 16:33:13 +08:00  '
         String date = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.snow').text;
-        if (!date.contains('天')) {
-          date = date.split(' ')[0];
-        }
+//        if (!date.contains('天')) {
+//          date = date.split(' ')[0];
+//        }
         item.date = date;
 
         // document.querySelector('#n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade')
