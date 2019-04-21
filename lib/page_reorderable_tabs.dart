@@ -32,7 +32,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
     // TODO: implement initState
     super.initState();
 
-    _tabs = _tabsp.sublist(2); // 排除固定的'最热'和'技术'，保存的时候再加上
+    _tabs = _tabsp.sublist(1); // 排除固定的'全部'，保存的时候再加上
   }
 
   // Handler called by ReorderableListView onReorder after a list child is
@@ -66,14 +66,8 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
             List<Map<String, dynamic>> linkMap = [];
 
             linkMap.add({
-              'title': '最热',
-              'key': 'hot',
-              'checked': true,
-            });
-
-            linkMap.add({
-              'title': '技术',
-              'key': 'tech',
+              'title': '全部',
+              'key': 'all',
               'checked': true,
             });
 
@@ -103,24 +97,6 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
       ],
     );
 
-    // 不可取消不可移动的 tab
-    final unchangeableList = Column(
-      children: <Widget>[
-        CheckboxListTile(
-          value: true,
-          onChanged: null,
-          title: Text('最热'),
-          secondary: Icon(Icons.lock_outline),
-        ),
-        CheckboxListTile(
-          value: true,
-          onChanged: null,
-          title: Text('技术'),
-          secondary: Icon(Icons.lock_outline),
-        ),
-      ],
-    );
-
     final _listTiles = _tabs
         .map(
           (item) => CheckboxListTile(
@@ -137,7 +113,12 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
     return Scaffold(
       appBar: _appbar,
       body: ReorderableListView(
-        header: unchangeableList,
+        header: CheckboxListTile(
+          value: true,
+          onChanged: null,
+          title: Text('全部'),
+          secondary: Icon(Icons.lock_outline),
+        ),
         onReorder: _onReorder,
         children: _listTiles,
       ),

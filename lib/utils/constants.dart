@@ -74,6 +74,7 @@ const String EVENT_NAME_SETTING = 'setting';
 const String EVENT_NAME_FAV_COUNTS = 'fav_count';
 
 List<TabModel> TABS = <TabModel>[
+  TabModel('全部', 'all'),
   TabModel('最热', 'hot'),
   TabModel('技术', 'tech'),
   TabModel('创意', 'creative'),
@@ -83,6 +84,5 @@ List<TabModel> TABS = <TabModel>[
   TabModel('交易', 'deals'),
   TabModel('城市', 'city'),
   TabModel('问与答', 'qna'),
-  TabModel('全部', 'all'),
   TabModel('R2', 'r2'),
 ];
