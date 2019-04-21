@@ -1,7 +1,7 @@
 // node 下的item
 class NotificationItem {
   String avatar = '';
-//  String userName = '';
+  String userName = '';
   String title = '';
   String date = '';
   String reply = '';

@@ -561,9 +561,13 @@ class DioWeb {
 //        }
         item.date = date;
 
+        item.userName = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade > a > strong').text;
+
         // document.querySelector('#n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade')
         // 明明是 td:nth-child(2) ，可是取出来是 null，而 td:nth-child(3) 才对
-        item.title = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml;
+        // <span class="fade"><a href="/member/jokyme"><strong>jokyme</strong></a> 在回复 <a href="/t/556167#reply64">千呼万唤使出来， V2EX 非官方小程序发布啦！</a> 时提到了你</span>
+        // #n_10262034 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(1) > strong
+        item.title = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml.split('</strong></a>')[1];
 
         // document.querySelector('#n_9472572 > table > tbody > tr > td:nth-child(2) > div.payload')
         if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload') != null) {
