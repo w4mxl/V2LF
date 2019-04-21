@@ -123,7 +123,8 @@ class TabBarViewChild extends StatelessWidget {
                 tiles: dayTopicList.map((AtomItem item) {
                   return ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-                    title: Text(item.title.split(']')[1]),
+                    // <title>[Apple] 有带 Apple Watch 过敏的小伙伴吗？</title>
+                    title: Text(item.title.replaceFirst(']', '4444').split('4444')[1]), // 这样处理能保证通过 ']' 分割的准确性
                     subtitle: Text('${item.title.split(']')[0].replaceFirst('[', '')} · ${item.authors[0].name}'),
                     onTap: () => Navigator.push(
                           context,
