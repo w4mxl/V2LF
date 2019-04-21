@@ -111,10 +111,14 @@ class DioWeb {
 
     var tree = ETree.fromString(response.data);
 
-    // 未读提醒
-    if (tabKey == 'hot' && tree.xpath("//*[@class='gray']") != null) {
-      String notificationInfo = tree.xpath("//*[@class='gray']/text()")[0].name;
+    // 首页tab请求数据的时候 check 是否有未读提醒
+    // 没有未读提醒  //*[@class='gray']
+    // 有未读提醒    //*[@id="Wrapper"]/div/div[1]/div[1]/table/tr/td[1]/input
+    var elements = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[1]/table/tr/td[1]/input");
+    if (elements!= null) {
+      String notificationInfo = elements.first.attributes["value"]; // value="1 条未读提醒"
       print('未读数：' + notificationInfo.split(' ')[0]);
+      SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');

@@ -32,7 +32,7 @@ class DrawerLeft extends StatefulWidget {
 }
 
 class _DrawerLeftState extends State<DrawerLeft> {
-  String userName = "", avatar = "";
+  String userName = "", avatar = "", notificationCount = "";
   Poem poemOne;
 
   @override
@@ -85,14 +85,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     ),
                     InkWell(
                       child: Padding(
-                        padding: const EdgeInsets.only(right:14.0),
+                        padding: const EdgeInsets.only(right: 14.0),
                         child: Icon(
                           Icons.brightness_4,
                           color: Colors.white,
                           size: 24,
                         ),
                       ),
-                      onTap: (){
+                      onTap: () {
                         bool currentIsDark;
                         if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
                           currentIsDark = false;
@@ -207,10 +207,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               new ListTile(
-                enabled: userName.isNotEmpty, // 登录后打开
+                enabled: userName.isNotEmpty,
+                // 登录后打开
                 leading: new Icon(Icons.notifications),
                 title: new Text(MyLocalizations.of(context).notifications),
+                trailing: Text(notificationCount),
                 onTap: () {
+                  SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationTopics()));
                 },
@@ -240,16 +243,21 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   showSearch(context: context, delegate: SearchSov2exDelegate());
                 },
               ),
-              new Divider(height: 0,),
+              new Divider(
+                height: 0,
+              ),
               new ListTile(
                 leading: new Icon(Icons.add),
                 title: new Text(MyLocalizations.of(context).create),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage(),fullscreenDialog: true));
+                  Navigator.push(
+                      context, new MaterialPageRoute(builder: (context) => new NewTopicPage(), fullscreenDialog: true));
                 },
               ),
-              new Divider(height: 0,),
+              new Divider(
+                height: 0,
+              ),
               new ListTile(
                 leading: new Icon(Icons.settings),
                 title: new Text(MyLocalizations.of(context).settings),
@@ -319,6 +327,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
       avatar = SpHelper.sp.getString(SP_AVATAR);
       // 显示诗词
       getOnePoem();
+      // 显示未读通知数目
+      if (SpHelper.sp.getString(SP_NOTIFICATION_COUNT) != null) {
+        notificationCount = SpHelper.sp.getString(SP_NOTIFICATION_COUNT);
+      }
     }
   }
 

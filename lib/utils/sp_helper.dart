@@ -30,6 +30,9 @@ const String SP_TODAY_POEM = "today_poem";
 // 首次进入「新建主题页」
 const String SP_FIRST_TIME_NEW_TOPCI = "first_time_new_topic";
 
+// 有未读提醒，存一下数目
+const String SP_NOTIFICATION_COUNT = "sp_notification_cout";
+
 class SpHelper {
   // 需要在 main.dart 初始化
   static SharedPreferences sp;
