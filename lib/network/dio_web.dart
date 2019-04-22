@@ -93,7 +93,7 @@ class DioWeb {
   }
 
   // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]
-  // p!=null 则通过 recent 获取数据
+  // p > 0 则通过 recent 获取数据
   static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
