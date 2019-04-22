@@ -40,22 +40,20 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
 
   Future getTopics() async {
     if (!isUpLoading) {
+      isUpLoading = true;
+      List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.tabKey, p++);
+      // 用来判断节点是否需要登录后查看
+      if (newEntries.isEmpty) {
+        Navigator.pop(context);
+        return;
+      }
+
+      print(p);
       setState(() {
-        isUpLoading = true;
+        items.addAll(newEntries);
+        isUpLoading = false;
       });
     }
-    List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.tabKey, p++);
-    // 用来判断节点是否需要登录后查看
-    if (newEntries.isEmpty) {
-      Navigator.pop(context);
-      return;
-    }
-
-    print(p);
-    setState(() {
-      items.addAll(newEntries);
-      isUpLoading = false;
-    });
   }
 
   @override

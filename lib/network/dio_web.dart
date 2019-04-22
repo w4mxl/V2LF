@@ -92,8 +92,9 @@ class DioWeb {
     }
   }
 
-  // 主页获取特定节点下的topics
-  static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey) async {
+  // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]
+  // p!=null 则通过 recent 获取数据
+  static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey, int p) async {
     String content = '';
 
     List<TabTopicItem> topics = new List<TabTopicItem>();
@@ -108,7 +109,22 @@ class DioWeb {
 
     final String reg4LastReply = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
 
-    var response = await dio.get('/?tab=' + tabKey);
+    var response;
+    if (tabKey == 'all') {
+      try {
+        if (p == 0) {
+          response = await dio.get('/?tab=' + tabKey);
+        } else {
+          response = await dio.get('/recent?p=' + p.toString());
+        }
+      }
+      on DioError catch (e) {
+        return topics;
+      }
+    } else {
+      response = await dio.get('/?tab=' + tabKey);
+    }
+
 
     var tree = ETree.fromString(response.data);
 
@@ -116,7 +132,7 @@ class DioWeb {
     // 没有未读提醒  //*[@class='gray']
     // 有未读提醒    //*[@id="Wrapper"]/div/div[1]/div[1]/table/tr/td[1]/input
     var elements = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[1]/table/tr/td[1]/input");
-    if (elements!= null) {
+    if (elements != null) {
       String notificationInfo = elements.first.attributes["value"]; // value="1 条未读提醒"
       print('未读数：' + notificationInfo.split(' ')[0]);
       SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
@@ -154,6 +170,7 @@ class DioWeb {
           .content;*/
       topics.add(item);
     }
+
     return topics;
   }
 
@@ -610,7 +627,8 @@ class DioWeb {
         // 明明是 td:nth-child(2) ，可是取出来是 null，而 td:nth-child(3) 才对
         // <span class="fade"><a href="/member/jokyme"><strong>jokyme</strong></a> 在回复 <a href="/t/556167#reply64">千呼万唤使出来， V2EX 非官方小程序发布啦！</a> 时提到了你</span>
         // #n_10262034 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(1) > strong
-        item.title = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml.split('</strong></a>')[1];
+        item.title =
+            aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml.split('</strong></a>')[1];
 
         // document.querySelector('#n_9472572 > table > tbody > tr > td:nth-child(2) > div.payload')
         if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload') != null) {

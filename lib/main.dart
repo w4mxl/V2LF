@@ -21,7 +21,9 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_app/network/http.dart'; // make dio as global top-level variable
+import 'package:flutter_app/network/http.dart';
+
+import 'components/listview_tab_all.dart'; // make dio as global top-level variable
 
 // Must be top-level function
 _parseAndDecode(String response) {
@@ -199,7 +201,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             body: new TabBarView(
               controller: _tabController,
               children: tabs.map((TabModel choice) {
-                return new TopicListView(choice.key);
+                return choice.key == 'all' ? TabAllListView('all') : TopicListView(choice.key);
               }).toList(),
             ),
             drawer: new DrawerLeft()),

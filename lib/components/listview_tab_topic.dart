@@ -32,7 +32,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
   }
 
   Future<List<TabTopicItem>> getTopics() async {
-    return await DioWeb.getTopicsByTabKey(widget.tabKey);
+    return await DioWeb.getTopicsByTabKey(widget.tabKey,0);
   }
 
   @override
@@ -52,7 +52,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                         itemCount: snapshot.data.length)),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
-            print("${snapshot.error}");
+            print("wmllll:${snapshot.error}");
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
