@@ -18,13 +18,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 ///
 /// 2019/3/21 17:32
 /// 从结果item点击到帖子详情后返回，原结果页面会一直刷新数据，体验不好。
-/// 原因是每次回来会新buildResults -> 原先会再给一个新的请求数据的Future，现在改成如果query不变，用久的Future
+/// 原因是每次回来会新buildResults -> 原先会再给一个新的请求数据的Future，现在改成如果query不变，用旧的Future
 
 class SearchSov2exDelegate extends SearchDelegate<String> {
   final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
       ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
       : []; // ['v2er', 'AirPods']
 
+  String sortSelected = 'sumup';
+  final _sorts = ['sumup', 'created']; // sumup（权重）, created（发帖时间）
   String lastQ = ""; // 上一次的搜索关键字
   Future<Sov2ex> _future; // 搜索数据 Future
 
@@ -46,13 +48,22 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
+      DropdownButton(
+        items: _sorts.map((String sort) {
+          return DropdownMenuItem<String>(value: sort, child: Text(sort));
+        }).toList(),
+        onChanged: (String newSortSelected) {
+          sortSelected = newSortSelected;
+        },
+        value: sortSelected,
+      ),
       IconButton(
         icon: Icon(CupertinoIcons.clear_circled_solid),
         onPressed: () {
           query = "";
           showSuggestions(context);
         },
-      )
+      ),
     ];
   }
 
@@ -154,8 +165,8 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
   Future<Sov2ex> getSov2exData(String q) async {
     var dio = Dio();
     try {
-      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q);
-      print(response.data);
+      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + '&sort=' + sortSelected);
+      print('https://www.sov2ex.com/api/search?size=50&q=' + q + '&sort=' + sortSelected);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '搜索出错了...');
