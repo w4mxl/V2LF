@@ -21,6 +21,7 @@ import 'package:html/dom.dart' as dom; // Contains DOM related classes for extra
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/model/web/node.dart';
 
 ///
 ///  经过对网址仔细测试发现：
@@ -154,6 +155,44 @@ class DioWeb {
       topics.add(item);
     }
     return topics;
+  }
+
+  // 节点导航
+  static Future<List<NodeGroup>> getNodes() async {
+    List<NodeGroup> nodeGroups = <NodeGroup>[];
+
+    String content = '';
+
+    final String reg4Node =
+        "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"right\" width=\"60\"><span class=\"fade\">(.*?)</td></tr></table>";
+
+    final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
+    final String reg4NodeItem = "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
+
+    var response = await dio.get('/');
+    content = response.data..replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+
+    RegExp exp = new RegExp(reg4Node);
+    Iterable<Match> matches = exp.allMatches(content);
+
+    for (Match match in matches) {
+      NodeGroup nodeGroup = new NodeGroup();
+      RegExp exp4GroupName = new RegExp(reg4NodeGroup);
+      Match matchGroup = exp4GroupName.firstMatch(match.group(0));
+      nodeGroup.nodeGroupName = matchGroup.group(1);
+
+      RegExp exp4Node = new RegExp(reg4NodeItem);
+      Iterable<Match> matchNodes = exp4Node.allMatches(match.group(0));
+      for (Match matchNode in matchNodes) {
+        NodeItem nodeItem = new NodeItem(matchNode.group(1), matchNode.group(2));
+        /*nodeItem.nodeId = matchNode.group(1);
+        nodeItem.nodeName = matchNode.group(2);*/
+        nodeGroup.nodes.add(nodeItem);
+      }
+      nodeGroups.add(nodeGroup);
+    }
+
+    return nodeGroups;
   }
 
   // 节点导航页 -> 获取特定节点下的topics

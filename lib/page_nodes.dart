@@ -5,9 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/network/api_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/resources/colors.dart';
+
+import 'network/dio_web.dart';
 
 // 节点导航页面
 class NodesPage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _NodePageState extends State<NodesPage> {
   }
 
   Future getAllNodes() async {
-    List<NodeGroup> tmpGroups = await v2exApi.getNodes();
+    List<NodeGroup> tmpGroups = await DioWeb.getNodes();
     if (mounted) {
       this.setState(() {
         nodeGroups.clear();
