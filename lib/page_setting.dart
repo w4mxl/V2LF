@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
@@ -11,11 +9,10 @@ import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 
 import 'common/v2ex_client.dart';
 /*import 'package:flame/animation.dart' as animation;

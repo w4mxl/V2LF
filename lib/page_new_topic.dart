@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:notus/convert.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zefyr/zefyr.dart';
-import 'package:notus/convert.dart';
 
-import 'components/search_delegate.dart';
 import 'components/search_node_delegate.dart';
 import 'i10n/localization_intl.dart';
 import 'model/web/node.dart';

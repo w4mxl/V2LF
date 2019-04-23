@@ -8,10 +8,12 @@ import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
+import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
+import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -20,8 +22,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
-import 'package:flutter_app/model/web/item_tab_topic.dart';
-import 'package:flutter_app/model/web/node.dart';
 
 ///
 ///  经过对网址仔细测试发现：
@@ -117,14 +117,12 @@ class DioWeb {
         } else {
           response = await dio.get('/recent?p=' + p.toString());
         }
-      }
-      on DioError catch (e) {
+      } on DioError {
         return topics;
       }
     } else {
       response = await dio.get('/?tab=' + tabKey);
     }
-
 
     var tree = ETree.fromString(response.data);
 
