@@ -25,9 +25,14 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
       : []; // ['v2er', 'AirPods']
 
-  String sortSelected = 'sumup';
-  final _sorts = ['sumup', 'created']; // sumup（权重）, created（发帖时间）
+  String _sortSelected = '权重';
+  final _sorts = ['权重', '发帖时间']; // sumup（权重）, created（发帖时间）
+
+  String _sortSelectedCreated = '降序';
+  final _sortOfCreated = ['降序', '升序']; // created（发帖时间）0（降序）, 1（升序）
+
   String lastQ = ""; // 上一次的搜索关键字
+  String lastFiter = ""; // 上一次的搜索过滤条件
   Future<Sov2ex> _future; // 搜索数据 Future
 
   @override
@@ -48,14 +53,26 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
+      Offstage(
+        offstage: _sortSelected == '权重',
+        child: DropdownButton(
+          items: _sortOfCreated.map((String sort) {
+            return DropdownMenuItem<String>(value: sort, child: Text(sort));
+          }).toList(),
+          onChanged: (String newSortSelected) {
+            _sortSelectedCreated = newSortSelected;
+          },
+          value: _sortSelectedCreated,
+        ),
+      ),
       DropdownButton(
         items: _sorts.map((String sort) {
           return DropdownMenuItem<String>(value: sort, child: Text(sort));
         }).toList(),
         onChanged: (String newSortSelected) {
-          sortSelected = newSortSelected;
+          _sortSelected = newSortSelected;
         },
-        value: sortSelected,
+        value: _sortSelected,
       ),
       IconButton(
         icon: Icon(CupertinoIcons.clear_circled_solid),
@@ -88,7 +105,9 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
     }
 
-    if (query.trim() != lastQ) {
+    var currentFilter =
+        _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
+    if (query.trim() != lastQ || currentFilter != lastFiter) {
       _future = getSov2exData(query.trim());
       lastQ = query.trim();
     }
@@ -164,9 +183,10 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
 
   Future<Sov2ex> getSov2exData(String q) async {
     var dio = Dio();
+    dio.interceptors..add(LogInterceptor());
     try {
-      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + '&sort=' + sortSelected);
-      print('https://www.sov2ex.com/api/search?size=50&q=' + q + '&sort=' + sortSelected);
+      lastFiter = _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
+      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + lastFiter);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '搜索出错了...');
