@@ -38,7 +38,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
         if (SpHelper.sp.containsKey(SP_USERNAME)) {
           print('加载recent');
           getTopics();
-        }else{
+        } else {
           print('recent no');
         }
       }
@@ -70,7 +70,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     if (items.length > 0) {
       return new RefreshIndicator(
-          child: ListView.builder(
+          child: ListView.separated(
               controller: _scrollController,
               itemCount: items.length + 1,
               itemBuilder: (context, index) {
@@ -80,7 +80,13 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
                 } else {
                   return TopicItemView(items[index]);
                 }
-              }),
+              },
+              separatorBuilder: (BuildContext context, int index) => Container(
+                    margin: EdgeInsets.only(left: 16, right: 16),
+                    child: Divider(
+                      height: 0,
+                    ),
+                  )),
           onRefresh: _onRefresh);
     } else if (hasError) {
       return Column(
@@ -105,8 +111,9 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child:
-            Text(SpHelper.sp.containsKey(SP_USERNAME) ? MyLocalizations.of(context).loadingPage((p+1).toString()) : "请登录后查看更多"),
+        child: Text(SpHelper.sp.containsKey(SP_USERNAME)
+            ? MyLocalizations.of(context).loadingPage((p + 1).toString())
+            : "请登录后查看更多"),
       ),
     );
   }

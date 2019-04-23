@@ -65,6 +65,40 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(MyLocalizations.of(context).titleSetting),
+        actions: <Widget>[
+          // 退出登录
+          Offstage(
+            offstage: !SpHelper.sp.containsKey(SP_USERNAME),
+            child: FlatButton(
+              onPressed: () {
+                // ⏏ 确认对话框
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          content: Text(MyLocalizations.of(context).sureLogout),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text(MyLocalizations.of(context).cancel),
+                              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                            ),
+                            FlatButton(
+                                onPressed: () async {
+                                  Navigator.of(context, rootNavigator: true).pop();
+                                  await V2exClient.logout();
+                                  Navigator.pop(context);
+                                },
+                                child: Text(MyLocalizations.of(context).logout)),
+                          ],
+                        ));
+              },
+              child: Text(
+                '登出',
+                semanticsLabel: 'logout',
+                style: Theme.of(context).primaryTextTheme.title.copyWith(fontSize: 18),
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
@@ -385,53 +419,6 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                 ],
-              ),
-            ),
-            // 退出登录
-            Offstage(
-              offstage: !SpHelper.sp.containsKey(SP_USERNAME),
-              child: GestureDetector(
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 40.0),
-                  color: Theme.of(context).cardColor,
-                  child: Column(
-                    children: <Widget>[
-                      Divider(
-                        height: 0.0,
-                      ),
-                      Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            MyLocalizations.of(context).logoutLong,
-                            style: TextStyle(color: Colors.red, fontSize: 18.0),
-                          )),
-                      Divider(
-                        height: 0.0,
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  // ⏏ 确认对话框
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                            content: Text(MyLocalizations.of(context).sureLogout),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(MyLocalizations.of(context).cancel),
-                                onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-                              ),
-                              FlatButton(
-                                  onPressed: () async {
-                                    Navigator.of(context, rootNavigator: true).pop();
-                                    await V2exClient.logout();
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(MyLocalizations.of(context).logout)),
-                            ],
-                          ));
-                },
               ),
             ),
             /*Center(

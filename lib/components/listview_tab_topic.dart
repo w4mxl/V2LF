@@ -32,7 +32,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
   }
 
   Future<List<TabTopicItem>> getTopics() async {
-    return await DioWeb.getTopicsByTabKey(widget.tabKey,0);
+    return await DioWeb.getTopicsByTabKey(widget.tabKey, 0);
   }
 
   @override
@@ -45,9 +45,11 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 child: new Container(
                     child: ListView.separated(
                         itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                        separatorBuilder: (context, index) => Divider(
-                              height: 0,
-                              indent: 15,
+                        separatorBuilder: (context, index) => Container(
+                              margin: EdgeInsets.only(left: 16, right: 16),
+                              child: Divider(
+                                height: 0,
+                              ),
                             ),
                         itemCount: snapshot.data.length)),
                 onRefresh: _onRefresh);

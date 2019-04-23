@@ -90,7 +90,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
           },
           child: Text(
             '保存',
-            style: TextStyle(fontSize: 18.0, color: Colors.white),
+            style: Theme.of(context).primaryTextTheme.title.copyWith(fontSize: 18),
             semanticsLabel: 'Save',
           ),
         )
