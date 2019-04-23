@@ -142,7 +142,7 @@ class _NodeTopicsState extends State<NodeTopics> {
             actions: <Widget>[
               // 收藏/取消收藏 按钮
               Offstage(
-                offstage: SpHelper.sp.getString(SP_USERNAME) == null || SpHelper.sp.getString(SP_USERNAME).length == 0,
+                offstage: !SpHelper.sp.containsKey(SP_USERNAME),
                 child: IconButton(
                     icon: Icon(isFavorite ? Icons.star : Icons.star_border),
                     onPressed: () {

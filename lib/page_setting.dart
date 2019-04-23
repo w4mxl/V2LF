@@ -389,7 +389,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             // 退出登录
             Offstage(
-              offstage: !checkLogin(),
+              offstage: !SpHelper.sp.containsKey(SP_USERNAME),
               child: GestureDetector(
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 40.0),
@@ -442,14 +442,6 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
     );
-  }
-
-  bool checkLogin() {
-    var spUsername = SpHelper.sp.getString(SP_USERNAME);
-    if (spUsername != null && spUsername.length > 0) {
-      return true;
-    }
-    return false;
   }
 
   void updateLanguage(LanguageModel model) {

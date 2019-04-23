@@ -46,16 +46,7 @@ class _TopicDetailsState extends State<TopicDetails> {
     Progresshud.setDefaultMaskTypeBlack();
 
     // check login state
-    checkLoginState();
-  }
-
-  checkLoginState() {
-    var spUsername = SpHelper.sp.getString(SP_USERNAME);
-    if (spUsername != null && spUsername.length > 0) {
-      isLogin = true;
-    } else {
-      isLogin = false;
-    }
+    isLogin = SpHelper.sp.containsKey(SP_USERNAME);
   }
 
   @override

@@ -32,8 +32,7 @@ import 'package:xpath/xpath.dart';
 class DioWeb {
   // App 启动时，检查登录状态，若登录的则帮领取签到奖励
   static Future verifyLoginStatus() async {
-    var spUsername = SpHelper.sp.getString(SP_USERNAME);
-    if (spUsername != null && spUsername.length > 0) {
+    if (SpHelper.sp.containsKey(SP_USERNAME)) {
       // 验证登录状态：尝试请求发帖，根据是否跳转到登录页判断
       var response = await dio.get("/new");
       if (response.isRedirect) {

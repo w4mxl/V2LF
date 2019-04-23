@@ -320,9 +320,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
 
   checkLoginState() {
     print('wml：checkLoginState');
-    var spUsername = SpHelper.sp.getString(SP_USERNAME);
-    if (spUsername != null && spUsername.length > 0) {
-      userName = spUsername;
+    if (SpHelper.sp.containsKey(SP_USERNAME)) {
+      userName = SpHelper.sp.getString(SP_USERNAME);
       avatar = SpHelper.sp.getString(SP_AVATAR);
       // 显示诗词
       getOnePoem();
