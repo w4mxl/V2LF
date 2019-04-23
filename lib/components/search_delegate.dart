@@ -234,7 +234,7 @@ class Sov2exResultItem extends StatelessWidget {
                 ? hitsListBean.highlight.reply_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
                 : hitsListBean.source.content));
 
-    return GestureDetector(
+    return InkWell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -288,7 +288,6 @@ class Sov2exResultItem extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
           ),
-      behavior: HitTestBehavior.opaque,
     );
   }
 }

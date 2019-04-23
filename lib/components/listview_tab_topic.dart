@@ -93,8 +93,7 @@ class TopicItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       onTap: () {
         // todo 跳转详情页面
         Navigator.push(
