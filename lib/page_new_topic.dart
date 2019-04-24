@@ -126,17 +126,17 @@ class _NewTopicPageState extends State<NewTopicPage> {
         ),
         buildEditor(),
         SizedBox(
-          height: 20,
+          height: 24,
         ),
         GestureDetector(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Icon(Icons.image),
               SizedBox(
-                width: 10,
+                width: 4,
               ),
-              Text('上传图片获得图片链接'),
+              Text('上传图片获得链接'),
             ],
           ),
           onTap: () {
@@ -217,7 +217,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
         height: 300,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          helperText: '可以在正文中为你要发布的主题添加更多细节。\n如果需要插入图片，请通过图床上传后粘贴图片链接。',
+          helperText: '可以在正文中为你要发布的主题添加更多细节',
           alignLabelWithHint: true,
         ),
         controller: _controller,

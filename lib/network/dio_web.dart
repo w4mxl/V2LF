@@ -13,6 +13,7 @@ import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
+import 'package:flutter_app/model/web/model_topic_replies.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/utils/events.dart';
@@ -670,14 +671,61 @@ class DioWeb {
     return notifications;
   }
 
-  // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
-  static Future<TopicDetailModel> getTopicDetailAndReplies(String topicId, int p) async {
+  // // 获取帖子详情下面的评论 [html 解析的]
+  static Future<TopicRepliesModel> getTopicReplies(String topicId, int p) async {
     print('在请求第$p页面数据');
-    TopicDetailModel detailModel = TopicDetailModel();
-    List<TopicSubtleItem> subtleList = List(); // 附言
+    TopicRepliesModel repliesModel = TopicRepliesModel();
     List<ReplyItem> replies = List();
 
     var response = await dio.get("/t/" + topicId + "?p=" + p.toString()); // todo 可能多页
+    // Use html parser and query selector
+    var document = parse(response.data);
+
+    // 判断是否有评论
+    if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
+      // 表示有评论
+      if (p == 1) {
+        // 只有第一页这样的解析才对
+        if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
+          repliesModel.maxPage =
+              int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
+        }
+      }
+      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
+      if (rootNode != null) {
+        for (var aNode in rootNode) {
+          ReplyItem replyItem = new ReplyItem();
+          replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
+          replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
+          replyItem.lastReplyTime = aNode
+              .querySelector('table > tbody > tr > td:nth-child(5) > span')
+              .text
+              .replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
+          if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
+            replyItem.favorites =
+                aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
+          }
+          replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
+          replyItem.contentRendered =
+              aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
+          replyItem.replyId = aNode.attributes["id"].substring(2);
+          //print(replyItem.replyId);
+          replies.add(replyItem);
+        }
+      }
+    }
+    repliesModel.replyList = replies;
+    return repliesModel;
+  }
+
+  // 获取帖子详情 [html 解析的]
+  // todo 关注 html 库 nth-child
+  static Future<TopicDetailModel> getTopicDetail(String topicId) async {
+    TopicDetailModel detailModel = TopicDetailModel();
+    List<TopicSubtleItem> subtleList = List(); // 附言
+
+    var response = await dio.get("/t/" + topicId);
     // Use html parser and query selector
     var document = parse(response.data);
 
@@ -735,51 +783,7 @@ class DioWeb {
       // 表示有评论
       detailModel.replyCount =
           document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0];
-
-      if (p == 1) {
-        // 只有第一页这样的解析才对
-        if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
-          detailModel.maxPage =
-              int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
-        }
-      }
-      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
-      if (rootNode != null) {
-        for (var aNode in rootNode) {
-          ReplyItem replyItem = new ReplyItem();
-          replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
-          replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
-          replyItem.lastReplyTime = aNode
-              .querySelector('table > tbody > tr > td:nth-child(5) > span')
-              .text
-              .replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
-          if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
-            replyItem.favorites =
-                aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
-          }
-          replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
-          replyItem.contentRendered =
-              aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
-          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
-          replyItem.replyId = aNode.attributes["id"].substring(2);
-          //print(replyItem.replyId);
-          replies.add(replyItem);
-        }
-      }
     }
-    detailModel.replyList = replies;
-
-//    var tree = ETree.fromString(response.data);
-//
-//    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
-//    for (var aNode in aRootNode) {
-//      ReplyItem replyItem = new ReplyItem();
-//      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
-//      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
-//      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
-//      //replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
-//      replies.add(replyItem);
-//    }
 
     return detailModel;
   }
