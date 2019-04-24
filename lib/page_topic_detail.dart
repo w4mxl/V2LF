@@ -700,191 +700,194 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             child: Center(
               child: new Text("目前尚无回复", style: new TextStyle(color: Colors.grey[600])),
             ))
-        : Card(
-            elevation: 0.0,
-            margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
-            child: ListView.separated(
-              // +1 是展示 _buildLoadText
-              itemCount: replyList.length + 1,
-              itemBuilder: (context, index) {
-                if (index == replyList.length) {
-                  // 渲染到了最后一个item
-                  return _buildLoadText();
-                } else {
-                  ReplyItem reply = replyList[index];
-                  return InkWell(
-                      child: new Container(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
+        : (replyList.isEmpty
+            ? LoadingRepliesSkeleton()
+            : Card(
+                elevation: 0.0,
+                margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
+                child: ListView.separated(
+                  // +1 是展示 _buildLoadText
+                  itemCount: replyList.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == replyList.length) {
+                      // 渲染到了最后一个item
+                      return _buildLoadText();
+                    } else {
+                      ReplyItem reply = replyList[index];
+                      return InkWell(
+                          child: new Container(
+                            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                            child: new Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                // 评论item头像
-                                GestureDetector(
-                                  child: Container(
-                                    child: ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: 'https:' + reply.avatar,
-                                        width: 25.0,
-                                        height: 25.0,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) => Icon(
-                                              Icons.account_circle,
-                                              size: 25,
-                                              color: Color(0xFFcccccc),
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                  onTap: () => _launchURL(Strings.v2exHost + '/member/' + reply.userName),
-                                ),
-                                Offstage(
-                                  offstage: reply.userName != _detailModel.createdId,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 4.0),
-                                    child: Container(
-                                        padding: EdgeInsets.all(1),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Text(
-                                          '楼主',
-                                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            new Expanded(
-                                child: new Container(
-                              margin: const EdgeInsets.only(top: 2.0),
-                              child: new Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Row(
-                                    children: <Widget>[
-                                      // 评论用户ID
-                                      new Text(
-                                        reply.userName,
-                                        style:
-                                            new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
-                                      ),
-                                      // 评论时间和平台
-                                      new Padding(
-                                        padding: const EdgeInsets.only(left: 6.0, right: 4.0),
-                                        child: new Text(
-                                          reply.lastReplyTime,
-                                          style: new TextStyle(
-                                            color: const Color(0xFFcccccc),
-                                            fontSize: 12.0,
+                                Column(
+                                  children: <Widget>[
+                                    // 评论item头像
+                                    GestureDetector(
+                                      child: Container(
+                                        child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: 'https:' + reply.avatar,
+                                            width: 25.0,
+                                            height: 25.0,
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) => Icon(
+                                                  Icons.account_circle,
+                                                  size: 25,
+                                                  color: Color(0xFFcccccc),
+                                                ),
                                           ),
                                         ),
                                       ),
-                                      // 获得感谢数
-                                      Offstage(
-                                        offstage: reply.favorites.isEmpty,
-                                        child: Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.favorite,
-                                              color: Colors.red[100], // Color(0xFFcccccc)
-                                              size: 14.0,
+                                      onTap: () => _launchURL(Strings.v2exHost + '/member/' + reply.userName),
+                                    ),
+                                    Offstage(
+                                      offstage: reply.userName != _detailModel.createdId,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 4.0),
+                                        child: Container(
+                                            padding: EdgeInsets.all(1),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Colors.grey),
+                                              borderRadius: BorderRadius.circular(4),
                                             ),
-                                            SizedBox(width: 2.0),
-                                            Text(
-                                              reply.favorites,
-                                              style: TextStyle(
+                                            child: Text(
+                                              '楼主',
+                                              style: TextStyle(fontSize: 10, color: Colors.grey),
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                new Expanded(
+                                    child: new Container(
+                                  margin: const EdgeInsets.only(top: 2.0),
+                                  child: new Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      new Row(
+                                        children: <Widget>[
+                                          // 评论用户ID
+                                          new Text(
+                                            reply.userName,
+                                            style: new TextStyle(
+                                                fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                          ),
+                                          // 评论时间和平台
+                                          new Padding(
+                                            padding: const EdgeInsets.only(left: 6.0, right: 4.0),
+                                            child: new Text(
+                                              reply.lastReplyTime,
+                                              style: new TextStyle(
                                                 color: const Color(0xFFcccccc),
                                                 fontSize: 12.0,
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Material(
-                                        color: Color(0xFFf0f0f0),
-                                        shape: new StadiumBorder(),
-                                        child: new Container(
-                                          width: 20.0,
-                                          height: 14.0,
-                                          alignment: Alignment.center,
-                                          child: new Text(
-                                            reply.number,
-                                            style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                            ),
                                           ),
-                                        ),
+                                          // 获得感谢数
+                                          Offstage(
+                                            offstage: reply.favorites.isEmpty,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.red[100], // Color(0xFFcccccc)
+                                                  size: 14.0,
+                                                ),
+                                                SizedBox(width: 2.0),
+                                                Text(
+                                                  reply.favorites,
+                                                  style: TextStyle(
+                                                    color: const Color(0xFFcccccc),
+                                                    fontSize: 12.0,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Material(
+                                            color: Color(0xFFf0f0f0),
+                                            shape: new StadiumBorder(),
+                                            child: new Container(
+                                              width: 20.0,
+                                              height: 14.0,
+                                              alignment: Alignment.center,
+                                              child: new Text(
+                                                reply.number,
+                                                style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      new Container(
+                                          padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                                          // 评论内容
+                                          child: Html(
+                                            data: reply.contentRendered,
+                                            defaultTextStyle: TextStyle(
+                                                color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                            linkStyle: TextStyle(
+                                                color: ColorT.appMainColor[400],
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: ColorT.appMainColor[400]),
+                                            onLinkTap: (url) {
+                                              if (UrlHelper.canLaunchInApp(context, url)) {
+                                                return;
+                                              } else if (url.contains("/member/")) {
+                                                // @xxx 需要补齐 base url
+                                                url = Strings.v2exHost + url;
+                                                print(url);
+                                              }
+                                              _launchURL(url);
+                                            },
+                                            useRichText: true,
+                                          )),
                                     ],
                                   ),
-                                  new Container(
-                                      padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                                      // 评论内容
-                                      child: Html(
-                                        data: reply.contentRendered,
-                                        defaultTextStyle:
-                                            TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
-                                        linkStyle: TextStyle(
-                                            color: ColorT.appMainColor[400],
-                                            decoration: TextDecoration.underline,
-                                            decorationColor: ColorT.appMainColor[400]),
-                                        onLinkTap: (url) {
-                                          if (UrlHelper.canLaunchInApp(context, url)) {
-                                            return;
-                                          } else if (url.contains("/member/")) {
-                                            // @xxx 需要补齐 base url
-                                            url = Strings.v2exHost + url;
-                                            print(url);
-                                          }
-                                          _launchURL(url);
-                                        },
-                                        useRichText: true,
-                                      )),
-                                ],
-                              ),
-                            )),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        if (isLogin) {
-                          // 点击评论列表item，弹出操作 bottom sheet
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading: Icon(FontAwesomeIcons.kissWinkHeart),
-                                      title: Text('感谢评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(id: 'thank_reply', title: reply.replyId));
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(Icons.reply),
-                                      title: Text('回复评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(
-                                            id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(Icons.content_copy),
-                                      title: Text('拷贝评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(id: 'reply_copy', title: reply.content));
-                                      },
-                                    ),
+                                )),
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            if (isLogin) {
+                              // 点击评论列表item，弹出操作 bottom sheet
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: Icon(FontAwesomeIcons.kissWinkHeart),
+                                          title: Text('感谢评论'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            select(Action(id: 'thank_reply', title: reply.replyId));
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.reply),
+                                          title: Text('回复评论'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            select(Action(
+                                                id: 'reply_comment',
+                                                title: " @" + reply.userName + " #" + reply.number + " "));
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: Icon(Icons.content_copy),
+                                          title: Text('拷贝评论'),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            select(Action(id: 'reply_copy', title: reply.content));
+                                          },
+                                        ),
 //                                    ListTile(
 //                                      leading: Icon(Icons.forum),
 //                                      title: Text('查看对话'),
@@ -893,27 +896,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 //                                        Fluttertoast.showToast(msg: 'Developing...');
 //                                      },
 //                                    ),
-                                  ],
-                                );
-                              });
-                        } else {
-                          Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
-                        }
-                      });
-                }
-              },
-              separatorBuilder: (context, index) {
-                return new Container(
-                  margin: const EdgeInsets.only(left: 45.0),
-                  width: 300.0,
-                  height: 1,
-                  color: Theme.of(context).dividerColor,
-                );
-              },
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(), // 禁用滚动事件
-            ),
-          );
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
+                            }
+                          });
+                    }
+                  },
+                  separatorBuilder: (context, index) {
+                    return new Container(
+                      margin: const EdgeInsets.only(left: 45.0),
+                      width: 300.0,
+                      height: 1,
+                      color: Theme.of(context).dividerColor,
+                    );
+                  },
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), // 禁用滚动事件
+                ),
+              ));
   }
 
   Widget _buildLoadText() {
@@ -959,7 +962,7 @@ _launchURL(String url) async {
   }
 }
 
-class LoadingSkeleton extends StatelessWidget {
+class LoadingRepliesSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -1041,7 +1044,7 @@ class LoadingSkeleton extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  children: [0, 1, 2, 3, 4, 5, 6]
+                  children: [0, 1, 2, 3, 4]
                       .map((_) => Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Row(
