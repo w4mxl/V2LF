@@ -94,19 +94,7 @@ class DioWeb {
   // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]
   // p > 0 则通过 recent 获取数据
   static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey, int p) async {
-    String content = '';
-
     List<TabTopicItem> topics = new List<TabTopicItem>();
-
-    final String reg4tag = "<div class=\"cell item\"> (.*?)</table></div>";
-
-    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
-
-    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
-
-    final String reg4NodeIdName = "<a class=\"node\" href=\"/go/(.*?)\">(.*?)</a>";
-
-    final String reg4LastReply = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; 最后回复来自 <strong><a href=\"/member/(.*?)\">";
 
     var response;
     if (tabKey == 'all') {
@@ -135,39 +123,43 @@ class DioWeb {
       SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 
-    content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+    var aRootNode = tree.xpath("//*[@class='cell item']");
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        TabTopicItem item = new TabTopicItem();
+        // //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/strong/a
+        item.memberId = aNode.xpath("/table/tr/td[3]/span[1]/strong/a/text()")[0].name;
+        //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[1]/a/img
+        item.avatar = aNode.xpath("/table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
+        //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[2]/a
+        String topicUrl = aNode.xpath("/table/tr/td[3]/span[2]/a").first.attributes["href"]; // 得到是 /t/522540#reply17
+        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
+        //*[@id="Wrapper"]/div/div[3]/div[23]/table/tbody/tr/td[4]
+        if (aNode.xpath("/table/tr/td[4]/a/text()") != null) {
+          // 有评论数
+          //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[4]/a
+          item.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
 
-    RegExp exp = new RegExp(reg4tag);
-    Iterable<Match> matches = exp.allMatches(content);
-    for (Match match in matches) {
-      String regString = match.group(0);
-      TabTopicItem item = new TabTopicItem();
-      Match match4MidAvatar = new RegExp(reg4MidAvatar).firstMatch(regString);
-      item.memberId = match4MidAvatar.group(1);
-      item.avatar = "https:${match4MidAvatar.group(2)}";
-      Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
-      item.topicId = match4TRC.group(1);
-      item.replyCount = match4TRC.group(2);
-      item.topicContent = match4TRC
-          .group(3)
-          .replaceAll('&quot;', '"')
-          .replaceAll('&amp;', '&')
-          .replaceAll('&lt;', '<')
-          .replaceAll('&gt;', '>');
-      Match match4NodeIdName = new RegExp(reg4NodeIdName).firstMatch(regString);
-      item.nodeId = match4NodeIdName.group(1);
-      item.nodeName = match4NodeIdName.group(2);
-      if (regString.contains("最后回复来自")) {
-        Match match4LastReply = new RegExp(reg4LastReply).firstMatch(regString);
-        item.lastReplyTime = match4LastReply.group(1);
-        item.lastReplyMId = match4LastReply.group(2);
+          //*[@id="Wrapper"]/div/div[3]/div[22]/table/tbody/tr/td[3]/span[3]
+          item.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[3]/text()[1]")[0].name.split(' &nbsp;')[0];
+
+          //*[@id="Wrapper"]/div/div[3]/div[22]/table/tbody/tr/td[3]/span[3]/strong/a
+          item.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()")[0].name;
+        }
+        //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[2]/a
+        item.topicContent = aNode
+            .xpath("/table/tr/td[3]/span[2]/a/text()")[0]
+            .name
+            .replaceAll('&quot;', '"')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>');
+
+        //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/a
+        item.nodeName = aNode.xpath("/table/tr/td[3]/span[1]/a/text()")[0].name;
+        topics.add(item);
       }
-      /*item.content = (await NetworkApi.getTopicDetails(int.parse(item.topicId)))
-          .list[0]
-          .content;*/
-      topics.add(item);
     }
-
     return topics;
   }
 
@@ -492,7 +484,6 @@ class DioWeb {
   // 获取「主题收藏」下的topics [xpath 解析的]
   static Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
-    // 调用 dio 之前检查登录时保存的cookie是否带上了
     var response = await dio.get("/my/topics" + "?p=" + p.toString()); // todo 可能多页
     var tree = ETree.fromString(response.data);
 

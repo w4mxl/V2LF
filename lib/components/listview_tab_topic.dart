@@ -120,7 +120,7 @@ class TopicItemView extends StatelessWidget {
                 // 头像
                 ClipOval(
                   child: new CachedNetworkImage(
-                    imageUrl: topic.avatar,
+                    imageUrl: "https:" + topic.avatar,
                     height: 21.0,
                     width: 21.0,
                     fit: BoxFit.cover,
@@ -138,7 +138,7 @@ class TopicItemView extends StatelessWidget {
                       fontSize: 14.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
                 ),
                 SizedBox(
-                  width: 8,
+                  width: 6,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
@@ -153,18 +153,18 @@ class TopicItemView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 4,
+                  width: 6,
                 ),
                 Offstage(
                   offstage: topic.lastReplyTime == '',
                   child: Text(
-                    " • " + topic.lastReplyTime,
+                    topic.lastReplyTime,
                     style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
                   ),
                 ),
                 Spacer(),
                 Offstage(
-                  offstage: topic.replyCount == '0',
+                  offstage: topic.replyCount == '',
                   child: Row(
                     children: <Widget>[
                       new Icon(
@@ -181,7 +181,7 @@ class TopicItemView extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],
