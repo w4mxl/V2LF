@@ -469,191 +469,173 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         ],
       ),
       //body: new TopicDetailView(key, widget.topicId,_select),
-      body: _detailModel != null
-          ? RefreshIndicator(
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[
-                      // 详情view
-                      detailCard(context),
-                      // 评论view
-                      commentCard(_select),
-                    ],
-                  ),
-                  controller: _scrollController,
-                ),
+      body: RefreshIndicator(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  // 详情view
+                  detailCard(context),
+                  // 评论view
+                  commentCard(_select),
+                ],
               ),
-              onRefresh: _onRefresh)
-          : new Center(
-              child: new CircularProgressIndicator(),
+              controller: _scrollController,
             ),
-//      floatingActionButton: Offstage(
-//        offstage: !showToTopBtn,
-//        child: FloatingActionButton(
-//            tooltip: '滑动到顶部',
-//            child: Icon(Icons.arrow_upward),
-//            mini: true,
-//            onPressed: () {
-//              _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
-//            }),
-//      ),
-//      这种方式不知道为啥，在iOS上正常，但是在Android上child死活显示不出来，怪！！！
-//      floatingActionButton: !showToTopBtn ? null : FloatingActionButton(
-//          tooltip: '滑动到顶部',
-//          child: Icon(Icons.arrow_upward),
-//          mini: true,
-//          onPressed: () {
-//            _scrollController.animateTo(0, duration: Duration(milliseconds: 200), curve: Curves.ease);
-//          }),
+          ),
+          onRefresh: _onRefresh),
     );
   }
 
-  Card detailCard(BuildContext context) {
-    return Card(
-      elevation: 0.0,
-      margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Container(
-              padding: const EdgeInsets.all(10.0),
-              child: new Row(
+  StatelessWidget detailCard(BuildContext context) {
+    return _detailModel == null
+        ? LoadingDetailSkeleton()
+        : Card(
+            elevation: 0.0,
+            margin: const EdgeInsets.all(8.0),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // 头像
-                  GestureDetector(
-                    child: ClipOval(
-                      child: new CachedNetworkImage(
-                        imageUrl: 'https:' + _detailModel.avatar,
-                        height: 40.0,
-                        width: 40.0,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
-                      ),
-                    ),
-                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
-                  ),
-                  SizedBox(width: 10.0),
-                  new Expanded(
-                      child: new Column(
-                    children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 2.0),
-                        child: new Row(
-                          children: <Widget>[
-                            // 用户ID
-                            GestureDetector(
-                              child: new Text(
-                                _detailModel.createdId,
-                                textAlign: TextAlign.left,
-                                maxLines: 1,
-                                style: new TextStyle(
-                                    fontSize: 14.0,
-                                    color: ColorT.isDark ? Colors.white : Colors.black87,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                  new Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: new Row(
+                      children: <Widget>[
+                        // 头像
+                        GestureDetector(
+                          child: ClipOval(
+                            child: new CachedNetworkImage(
+                              imageUrl: 'https:' + _detailModel.avatar,
+                              height: 40.0,
+                              width: 40.0,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                             ),
-                            new Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.green,
-                              size: 16.0,
-                            ),
-                            // 节点名称
-                            GestureDetector(
-                              child: new Text(
-                                _detailModel.nodeName,
-                                textAlign: TextAlign.left,
-                                maxLines: 1,
-                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
-                              ),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                          NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          new Icon(
-                            Icons.keyboard,
-                            size: 16.0,
-                            color: Theme.of(context).disabledColor,
                           ),
-                          new Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
-                              _detailModel.smallGray,
-                              style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
+                          onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                        ),
+                        SizedBox(width: 10.0),
+                        new Expanded(
+                            child: new Column(
+                          children: <Widget>[
+                            new Container(
+                              padding: const EdgeInsets.only(bottom: 2.0),
+                              child: new Row(
+                                children: <Widget>[
+                                  // 用户ID
+                                  GestureDetector(
+                                    child: new Text(
+                                      _detailModel.createdId,
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      style: new TextStyle(
+                                          fontSize: 14.0,
+                                          color: ColorT.isDark ? Colors.white : Colors.black87,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                                  ),
+                                  new Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: Colors.green,
+                                    size: 16.0,
+                                  ),
+                                  // 节点名称
+                                  GestureDetector(
+                                    child: new Text(
+                                      _detailModel.nodeName,
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      style:
+                                          new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                                    ),
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
-                        ],
-                      )
-                    ],
-                  )),
-                  new Icon(
-                    FontAwesomeIcons.comment,
-                    size: 16.0,
-                    color: Colors.grey,
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: new Text(
-                      _detailModel.replyCount,
-                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                            Row(
+                              children: <Widget>[
+                                new Icon(
+                                  Icons.keyboard,
+                                  size: 16.0,
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                                new Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text(
+                                    _detailModel.smallGray,
+                                    style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        )),
+                        new Icon(
+                          FontAwesomeIcons.comment,
+                          size: 16.0,
+                          color: Colors.grey,
+                        ),
+                        new Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: new Text(
+                            _detailModel.replyCount,
+                            style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                          ),
+                        )
+                      ],
                     ),
-                  )
+                  ),
+                  // topic title
+                  new Container(
+                    padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+                    width: 500.0,
+                    child: new Text(
+                      _detailModel.topicTitle,
+                      softWrap: true,
+                      style: new TextStyle(
+                        color: ColorT.isDark ? Colors.white : Colors.black87,
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  // topic content
+                  new Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Html(
+                      data: _detailModel.contentRendered,
+                      defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
+                      linkStyle: TextStyle(
+                          color: ColorT.appMainColor[400],
+                          decoration: TextDecoration.underline,
+                          decorationColor: ColorT.appMainColor[400]),
+                      onLinkTap: (url) {
+                        _launchURL(url);
+                      },
+                      useRichText: true,
+                    ),
+                  ),
+                  // 附言
+                  Offstage(
+                    offstage: _detailModel.subtleList.length == 0,
+                    child: Column(
+                        children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                      return _buildSubtle(subtle);
+                    }).toList()),
+                  ),
                 ],
               ),
             ),
-            // topic title
-            new Container(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-              width: 500.0,
-              child: new Text(
-                _detailModel.topicTitle,
-                softWrap: true,
-                style: new TextStyle(
-                  color: ColorT.isDark ? Colors.white : Colors.black87,
-                  fontSize: 19.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            // topic content
-            new Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Html(
-                data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
-                linkStyle: TextStyle(
-                    color: ColorT.appMainColor[400],
-                    decoration: TextDecoration.underline,
-                    decorationColor: ColorT.appMainColor[400]),
-                onLinkTap: (url) {
-                  _launchURL(url);
-                },
-                useRichText: true,
-              ),
-            ),
-            // 附言
-            Offstage(
-              offstage: _detailModel.subtleList.length == 0,
-              child: Column(
-                  children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
-                return _buildSubtle(subtle);
-              }).toList()),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget _buildSubtle(TopicSubtleItem subtle) {
@@ -693,7 +675,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   StatelessWidget commentCard(void Function(Action action) select) {
-    return _detailModel.replyCount == '0'
+    return _detailModel != null && _detailModel.replyCount == '0'
         ? Container(
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
@@ -965,131 +947,177 @@ _launchURL(String url) async {
 class LoadingRepliesSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
       child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300],
+            highlightColor: Colors.grey[100],
+            child: Column(
+              children: [0, 1, 2, 3, 4]
+                  .map((_) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                width: 25.0,
+                                height: 25.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 40.0,
+                                        height: 10.0,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 6,
+                                      ),
+                                      Container(
+                                        width: 40.0,
+                                        height: 10.0,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Container(
+                                    width: 180,
+                                    height: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Divider(
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ))
+                  .toList(),
+            ),
+          )),
+    );
+  }
+}
+
+class LoadingDetailSkeleton extends StatelessWidget {
+  @override
+  Card build(BuildContext context) {
+    return Card(
+      elevation: 0.0,
+      margin: const EdgeInsets.all(8.0),
+      child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10.0),
           child: Shimmer.fromColors(
             baseColor: Colors.grey[300],
             highlightColor: Colors.grey[100],
             child: Column(
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 48.0,
-                            height: 48.0,
-                            color: Colors.white,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: 40.0,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          width: 40.0,
+                          height: 40.0,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 8.0,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 8.0,
-                      color: Colors.white,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2.0),
-                    ),
-                    Container(
-                      width: 40.0,
-                      height: 8.0,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [0, 1, 2, 3, 4]
-                      .map((_) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: <Widget>[
                                 Container(
-                                  width: 48.0,
-                                  height: 48.0,
+                                  width: 50,
+                                  height: 12.0,
                                   color: Colors.white,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                SizedBox(
+                                  width: 4,
                                 ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 8.0,
-                                        color: Colors.white,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 8.0,
-                                        color: Colors.white,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                      ),
-                                      Container(
-                                        width: 40.0,
-                                        height: 8.0,
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                Container(
+                                  width: 44,
+                                  height: 12.0,
+                                  color: Colors.white,
+                                ),
                               ],
                             ),
-                          ))
-                      .toList(),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Container(
+                              width: 180.0,
+                              height: 12.0,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 30,
+                        height: 12.0,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 14.0,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 8.0,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 8.0,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  height: 12,
                 ),
               ],
             ),

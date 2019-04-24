@@ -734,7 +734,6 @@ class DioWeb {
       return detailModel;
     }
 
-    print("#### " + document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a').innerHtml);
     detailModel.avatar =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
     detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
