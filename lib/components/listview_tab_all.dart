@@ -70,23 +70,18 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     if (items.length > 0) {
       return new RefreshIndicator(
-          child: ListView.separated(
-              controller: _scrollController,
-              itemCount: items.length + 1,
-              itemBuilder: (context, index) {
-                if (index == items.length) {
-                  // 滑到了最后一个item
-                  return _buildLoadText();
-                } else {
-                  return TopicItemView(items[index]);
-                }
-              },
-              separatorBuilder: (BuildContext context, int index) => Container(
-                    margin: EdgeInsets.only(left: 16, right: 16),
-                    child: Divider(
-                      height: 0,
-                    ),
-                  )),
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: items.length + 1,
+            itemBuilder: (context, index) {
+              if (index == items.length) {
+                // 滑到了最后一个item
+                return _buildLoadText();
+              } else {
+                return TopicItemView(items[index]);
+              }
+            },
+          ),
           onRefresh: _onRefresh);
     } else if (hasError) {
       return Column(

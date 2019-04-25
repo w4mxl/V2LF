@@ -203,7 +203,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
         if (replyList.length > 0 && p <= maxPage) {
-          getDetail();
+          getReplies();
         } else {
           print("没有更多...");
         }
@@ -469,22 +469,26 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         ],
       ),
       //body: new TopicDetailView(key, widget.topicId,_select),
-      body: RefreshIndicator(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
-              child: Column(
-                children: <Widget>[
-                  // 详情view
-                  detailCard(context),
-                  // 评论view
-                  commentCard(_select),
-                ],
+      body: _detailModel != null
+          ? RefreshIndicator(
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      // 详情view
+                      detailCard(context),
+                      // 评论view
+                      commentCard(_select),
+                    ],
+                  ),
+                  controller: _scrollController,
+                ),
               ),
-              controller: _scrollController,
+              onRefresh: _onRefresh)
+          : Center(
+              child: new CircularProgressIndicator(),
             ),
-          ),
-          onRefresh: _onRefresh),
     );
   }
 
@@ -675,7 +679,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   StatelessWidget commentCard(void Function(Action action) select) {
-    return _detailModel != null && _detailModel.replyCount == '0'
+    return _detailModel.replyCount == '0'
         ? Container(
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
@@ -687,7 +691,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             : Card(
                 elevation: 0.0,
                 margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
-                child: ListView.separated(
+                child: ListView.builder(
                   // +1 是展示 _buildLoadText
                   itemCount: replyList.length + 1,
                   itemBuilder: (context, index) {
@@ -829,6 +833,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             },
                                             useRichText: true,
                                           )),
+                                      Divider(
+                                        height: 0,
+                                      ),
                                     ],
                                   ),
                                 )),
@@ -886,14 +893,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             }
                           });
                     }
-                  },
-                  separatorBuilder: (context, index) {
-                    return new Container(
-                      margin: const EdgeInsets.only(left: 45.0),
-                      width: 300.0,
-                      height: 1,
-                      color: Theme.of(context).dividerColor,
-                    );
                   },
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(), // 禁用滚动事件

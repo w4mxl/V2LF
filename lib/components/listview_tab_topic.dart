@@ -43,14 +43,8 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
           if (snapshot.hasData) {
             return new RefreshIndicator(
                 child: new Container(
-                    child: ListView.separated(
+                    child: ListView.builder(
                         itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                        separatorBuilder: (context, index) => Container(
-                              margin: EdgeInsets.only(left: 16, right: 16),
-                              child: Divider(
-                                height: 0,
-                              ),
-                            ),
                         itemCount: snapshot.data.length)),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
@@ -102,7 +96,7 @@ class TopicItemView extends StatelessWidget {
         );
       },
       child: new Container(
-        padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 15, bottom: 15),
+        padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -183,6 +177,12 @@ class TopicItemView extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Divider(
+              height: 0,
             ),
           ],
         ),
