@@ -23,8 +23,6 @@ import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'model/web/model_topic_replies.dart';
-
 //final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
@@ -186,7 +184,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   void initState() {
     super.initState();
     // 获取数据
-    getDetail();
+    getData();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
       /*// print(_scrollController.offset); //打印滚动位置
@@ -203,7 +201,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
         if (replyList.length > 0 && p <= maxPage) {
-          getReplies();
+          getData();
         } else {
           print("没有更多...");
         }
@@ -223,10 +221,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     super.dispose();
   }
 
-  Future getDetail() async {
+  Future getData() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      TopicDetailModel topicDetailModel = await DioWeb.getTopicDetail(widget.topicId);
+      TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
 
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
@@ -236,24 +234,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
       setState(() {
         _detailModel = topicDetailModel;
+        replyList.addAll(topicDetailModel.replyList);
+        isUpLoading = false;
+        if ((p - 1) == 1) {
+          // 其实是表示第一页的请求时
+          maxPage = topicDetailModel.maxPage;
+          print("####详情页-评论的页数：" + maxPage.toString());
+        }
       });
-
-      // 获取评论数据
-      getReplies();
     }
-  }
-
-  Future getReplies() async {
-    TopicRepliesModel topicRepliesModel = await DioWeb.getTopicReplies(widget.topicId, p++);
-    setState(() {
-      replyList.addAll(topicRepliesModel.replyList);
-      isUpLoading = false;
-      if ((p - 1) == 1) {
-        // 其实是表示第一页的请求时
-        maxPage = topicRepliesModel.maxPage;
-        print("####详情页-评论的页数：" + maxPage.toString());
-      }
-    });
   }
 
   void _onValueChange(String value) {
@@ -492,7 +481,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     );
   }
 
-  StatelessWidget detailCard(BuildContext context) {
+  Card detailCard(BuildContext context) {
     return Card(
       elevation: 0.0,
       margin: const EdgeInsets.all(8.0),
@@ -675,16 +664,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   StatelessWidget commentCard(void Function(Action action) select) {
-    return _detailModel.replyCount == '0'
+    return replyList.length == 0
         ? Container(
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
               child: new Text("目前尚无回复", style: new TextStyle(color: Colors.grey[600])),
             ))
-        : (replyList.isEmpty
-            ? LoadingRepliesSkeleton()
-            : Card(
+        : Card(
                 elevation: 0.0,
                 margin: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
                 child: ListView.builder(
@@ -1045,7 +1032,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(), // 禁用滚动事件
                 ),
-              ));
+              );
   }
 
   Widget _buildLoadText() {
@@ -1061,13 +1048,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    TopicDetailModel topicDetailModel = await DioWeb.getTopicDetail(widget.topicId);
+    TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
     if (mounted) {
       setState(() {
         _detailModel = topicDetailModel;
         replyList.clear();
+        replyList.addAll(topicDetailModel.replyList);
+        if (p == 2) {
+          maxPage = topicDetailModel.maxPage;
+          print("####详情页-评论的页数：" + maxPage.toString());
+        }
       });
-      getReplies();
     } else {
       print("####详情页-_onRefresh() mounted no !!!!");
     }

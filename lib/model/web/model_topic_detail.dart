@@ -1,9 +1,10 @@
+import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 
 /// @author: wml
 /// @date  : 2019/2/27 12:45
 /// @email : mxl1989@gmail.com
-/// @desc  : 帖子详情数据
+/// @desc  : 帖子详情（含评论）数据
 
 class TopicDetailModel {
   String topicId = '';
@@ -23,4 +24,7 @@ class TopicDetailModel {
   bool isFavorite = false; // 是否已收藏
   bool isThank = false; // 是否已感谢
 
+  int maxPage = 1; // 共有多少页数评论
+
+  List<ReplyItem> replyList;
 }
