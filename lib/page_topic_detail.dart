@@ -493,153 +493,149 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   StatelessWidget detailCard(BuildContext context) {
-    return _detailModel == null
-        ? LoadingDetailSkeleton()
-        : Card(
-            elevation: 0.0,
-            margin: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      elevation: 0.0,
+      margin: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              padding: const EdgeInsets.all(10.0),
+              child: new Row(
                 children: <Widget>[
-                  new Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: new Row(
-                      children: <Widget>[
-                        // 头像
-                        GestureDetector(
-                          child: ClipOval(
-                            child: new CachedNetworkImage(
-                              imageUrl: 'https:' + _detailModel.avatar,
-                              height: 40.0,
-                              width: 40.0,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
-                            ),
-                          ),
-                          onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
-                        ),
-                        SizedBox(width: 10.0),
-                        new Expanded(
-                            child: new Column(
-                          children: <Widget>[
-                            new Container(
-                              padding: const EdgeInsets.only(bottom: 2.0),
-                              child: new Row(
-                                children: <Widget>[
-                                  // 用户ID
-                                  GestureDetector(
-                                    child: new Text(
-                                      _detailModel.createdId,
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style: new TextStyle(
-                                          fontSize: 14.0,
-                                          color: ColorT.isDark ? Colors.white : Colors.black87,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
-                                  ),
-                                  new Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: Colors.green,
-                                    size: 16.0,
-                                  ),
-                                  // 节点名称
-                                  GestureDetector(
-                                    child: new Text(
-                                      _detailModel.nodeName,
-                                      textAlign: TextAlign.left,
-                                      maxLines: 1,
-                                      style:
-                                          new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
-                                    ),
-                                    onTap: () => Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                new Icon(
-                                  Icons.keyboard,
-                                  size: 16.0,
-                                  color: Theme.of(context).disabledColor,
-                                ),
-                                new Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: Text(
-                                    _detailModel.smallGray,
-                                    style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        )),
-                        new Icon(
-                          FontAwesomeIcons.comment,
-                          size: 16.0,
-                          color: Colors.grey,
-                        ),
-                        new Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: new Text(
-                            _detailModel.replyCount,
-                            style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  // topic title
-                  new Container(
-                    padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-                    width: 500.0,
-                    child: new Text(
-                      _detailModel.topicTitle,
-                      softWrap: true,
-                      style: new TextStyle(
-                        color: ColorT.isDark ? Colors.white : Colors.black87,
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.bold,
+                  // 头像
+                  GestureDetector(
+                    child: ClipOval(
+                      child: new CachedNetworkImage(
+                        imageUrl: 'https:' + _detailModel.avatar,
+                        height: 40.0,
+                        width: 40.0,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                       ),
                     ),
+                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                   ),
-                  // topic content
-                  new Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Html(
-                      data: _detailModel.contentRendered,
-                      defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
-                      linkStyle: TextStyle(
-                          color: ColorT.appMainColor[400],
-                          decoration: TextDecoration.underline,
-                          decorationColor: ColorT.appMainColor[400]),
-                      onLinkTap: (url) {
-                        _launchURL(url);
-                      },
-                      useRichText: true,
+                  SizedBox(width: 10.0),
+                  new Expanded(
+                      child: new Column(
+                    children: <Widget>[
+                      new Container(
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        child: new Row(
+                          children: <Widget>[
+                            // 用户ID
+                            GestureDetector(
+                              child: new Text(
+                                _detailModel.createdId,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(
+                                    fontSize: 14.0,
+                                    color: ColorT.isDark ? Colors.white : Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                            ),
+                            new Icon(
+                              Icons.keyboard_arrow_right,
+                              color: Colors.green,
+                              size: 16.0,
+                            ),
+                            // 节点名称
+                            GestureDetector(
+                              child: new Text(
+                                _detailModel.nodeName,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) =>
+                                          NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          new Icon(
+                            Icons.keyboard,
+                            size: 16.0,
+                            color: Theme.of(context).disabledColor,
+                          ),
+                          new Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Text(
+                              _detailModel.smallGray,
+                              style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  )),
+                  new Icon(
+                    FontAwesomeIcons.comment,
+                    size: 16.0,
+                    color: Colors.grey,
+                  ),
+                  new Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: new Text(
+                      _detailModel.replyCount,
+                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
                     ),
-                  ),
-                  // 附言
-                  Offstage(
-                    offstage: _detailModel.subtleList.length == 0,
-                    child: Column(
-                        children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
-                      return _buildSubtle(subtle);
-                    }).toList()),
-                  ),
+                  )
                 ],
               ),
             ),
-          );
+            // topic title
+            new Container(
+              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+              width: 500.0,
+              child: new Text(
+                _detailModel.topicTitle,
+                softWrap: true,
+                style: new TextStyle(
+                  color: ColorT.isDark ? Colors.white : Colors.black87,
+                  fontSize: 19.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            // topic content
+            new Container(
+              padding: const EdgeInsets.all(10.0),
+              child: Html(
+                data: _detailModel.contentRendered,
+                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
+                linkStyle: TextStyle(
+                    color: ColorT.appMainColor[400],
+                    decoration: TextDecoration.underline,
+                    decorationColor: ColorT.appMainColor[400]),
+                onLinkTap: (url) {
+                  _launchURL(url);
+                },
+                useRichText: true,
+              ),
+            ),
+            // 附言
+            Offstage(
+              offstage: _detailModel.subtleList.length == 0,
+              child: Column(
+                  children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                return _buildSubtle(subtle);
+              }).toList()),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSubtle(TopicSubtleItem subtle) {
@@ -825,9 +821,161 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               if (UrlHelper.canLaunchInApp(context, url)) {
                                                 return;
                                               } else if (url.contains("/member/")) {
-                                                // @xxx 需要补齐 base url
-                                                url = Strings.v2exHost + url;
-                                                print(url);
+                                                print(url.split("/member/")[1] + " $index");
+                                                // 找出这个用户的最近一条评论，也可能没有
+                                                var list = replyList.sublist(0, index);
+                                                var item = list.lastWhere(
+                                                    (item) => item.userName == url.split("/member/")[1],
+                                                    orElse: null);
+                                                print(item.number + " " + item.userName);
+                                                if (item != null) {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext context) {
+                                                        return SimpleDialog(
+                                                          contentPadding: EdgeInsets.all(10),
+                                                          children: <Widget>[
+                                                            Row(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: <Widget>[
+                                                                Column(
+                                                                  children: <Widget>[
+                                                                    // 评论item头像
+                                                                    GestureDetector(
+                                                                      child: Container(
+                                                                        child: ClipOval(
+                                                                          child: CachedNetworkImage(
+                                                                            imageUrl: 'https:' + item.avatar,
+                                                                            width: 25.0,
+                                                                            height: 25.0,
+                                                                            fit: BoxFit.cover,
+                                                                            placeholder: (context, url) => Icon(
+                                                                                  Icons.account_circle,
+                                                                                  size: 25,
+                                                                                  color: Color(0xFFcccccc),
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      onTap: () => _launchURL(
+                                                                          Strings.v2exHost + '/member/' + item.userName),
+                                                                    ),
+                                                                    Offstage(
+                                                                      offstage: item.userName != _detailModel.createdId,
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.only(top: 4.0),
+                                                                        child: Container(
+                                                                            padding: EdgeInsets.all(1),
+                                                                            decoration: BoxDecoration(
+                                                                              border: Border.all(color: Colors.grey),
+                                                                              borderRadius: BorderRadius.circular(4),
+                                                                            ),
+                                                                            child: Text(
+                                                                              '楼主',
+                                                                              style: TextStyle(
+                                                                                  fontSize: 10, color: Colors.grey),
+                                                                            )),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10.0,
+                                                                ),
+                                                                Expanded(
+                                                                    child: new Container(
+                                                                  margin: const EdgeInsets.only(top: 2.0),
+                                                                  child: new Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      new Row(
+                                                                        children: <Widget>[
+                                                                          // 评论用户ID
+                                                                          new Text(
+                                                                            item.userName,
+                                                                            style: new TextStyle(
+                                                                                fontSize: 14.0,
+                                                                                color: Colors.grey,
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                          // 评论时间和平台
+                                                                          new Padding(
+                                                                            padding: const EdgeInsets.only(
+                                                                                left: 6.0, right: 4.0),
+                                                                            child: new Text(
+                                                                              item.lastReplyTime,
+                                                                              style: new TextStyle(
+                                                                                color: const Color(0xFFcccccc),
+                                                                                fontSize: 12.0,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          // 获得感谢数
+                                                                          Offstage(
+                                                                            offstage: item.favorites.isEmpty,
+                                                                            child: Row(
+                                                                              children: <Widget>[
+                                                                                Icon(
+                                                                                  Icons.favorite,
+                                                                                  color:
+                                                                                      Colors.red[100], // Color(0xFFcccccc)
+                                                                                  size: 14.0,
+                                                                                ),
+                                                                                SizedBox(width: 2.0),
+                                                                                Text(
+                                                                                  item.favorites,
+                                                                                  style: TextStyle(
+                                                                                    color: const Color(0xFFcccccc),
+                                                                                    fontSize: 12.0,
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          Spacer(),
+                                                                          Material(
+                                                                            color: Color(0xFFf0f0f0),
+                                                                            shape: new StadiumBorder(),
+                                                                            child: new Container(
+                                                                              width: 20.0,
+                                                                              height: 14.0,
+                                                                              alignment: Alignment.center,
+                                                                              child: new Text(
+                                                                                item.number,
+                                                                                style: new TextStyle(
+                                                                                    fontSize: 9.0,
+                                                                                    color: Color(0xFFa2a2a2)),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      new Container(
+                                                                          padding: EdgeInsets.only(top: 5.0),
+                                                                          // 评论内容
+                                                                          child: Html(
+                                                                            data: item.contentRendered,
+                                                                            defaultTextStyle: TextStyle(
+                                                                                color: ColorT.isDark
+                                                                                    ? Colors.white
+                                                                                    : Colors.black,
+                                                                                fontSize: 14.0),
+                                                                            linkStyle: TextStyle(
+                                                                                color: ColorT.appMainColor[400],
+                                                                                decoration: TextDecoration.underline,
+                                                                                decorationColor: ColorT.appMainColor[400]),
+                                                                            useRichText: true,
+                                                                          )),
+                                                                    ],
+                                                                  ),
+                                                                )),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        );
+                                                      });
+                                                }
+                                                return;
                                               }
                                               _launchURL(url);
                                             },
@@ -1022,103 +1170,6 @@ class LoadingRepliesSkeleton extends StatelessWidget {
                         ),
                       ))
                   .toList(),
-            ),
-          )),
-    );
-  }
-}
-
-class LoadingDetailSkeleton extends StatelessWidget {
-  @override
-  Card build(BuildContext context) {
-    return Card(
-      elevation: 0.0,
-      margin: const EdgeInsets.all(8.0),
-      child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(10.0),
-          child: Shimmer.fromColors(
-            baseColor: Colors.grey[300],
-            highlightColor: Colors.grey[100],
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                    children: [
-                      ClipOval(
-                        child: Container(
-                          width: 40.0,
-                          height: 40.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 10.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 50,
-                                  height: 12.0,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Container(
-                                  width: 44,
-                                  height: 12.0,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Container(
-                              width: 180.0,
-                              height: 12.0,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 30,
-                        height: 12.0,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 14.0,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 8.0,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 8.0,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-              ],
             ),
           )),
     );
