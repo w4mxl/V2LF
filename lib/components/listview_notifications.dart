@@ -271,6 +271,6 @@ _launchURL(String url) async {
     await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(
-        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
   }
 }

@@ -189,7 +189,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + lastFiter);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '搜索出错了...');
+      Fluttertoast.showToast(msg: '搜索出错了...', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);

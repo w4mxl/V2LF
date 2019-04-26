@@ -82,12 +82,12 @@ class DioWeb {
       print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.TOP);
+        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
       } else {
         print(missionResponse.data);
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2);
+      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
     }
   }
 
@@ -273,7 +273,7 @@ class DioWeb {
     try {
       String once = await getOnce();
       if (once == null || once.isEmpty) {
-        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2);
+        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
         return false;
       }
 
@@ -291,14 +291,14 @@ class DioWeb {
         // 回复失败
         String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
 
-        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2);
+        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
         return false;
       }
 
       // 回复成功
       return true;
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2);
+      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -467,12 +467,12 @@ class DioWeb {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
         var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.TOP);
+        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2,gravity: ToastGravity.CENTER);
         return false;
       }
     } on DioError catch (e) {
       // todo
-      Fluttertoast.showToast(msg: '登录失败');
+      Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
