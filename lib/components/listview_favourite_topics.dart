@@ -1,5 +1,6 @@
 // 收藏 listview
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -109,7 +110,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     }
     // By default, show a loading spinner
     return new Center(
-      child: new CircularProgressIndicator(),
+      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
   }
 

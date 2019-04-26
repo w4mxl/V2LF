@@ -86,7 +86,7 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
       builder: (context, AsyncSnapshot<List<NodeItem>> async) {
         if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
           return new Center(
-            child: new CircularProgressIndicator(),
+            child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
           );
         }
 
