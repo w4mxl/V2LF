@@ -280,7 +280,7 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Fluttertoast.showToast(msg: '上架后可用～');
+                      Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
                       // LaunchReview.launch(); // todo 配置信息
                     },
                   ),

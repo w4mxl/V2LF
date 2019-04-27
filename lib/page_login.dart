@@ -174,8 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 Fluttertoast.showToast(
                                     msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                    timeInSecForIos: 2,
-                                    gravity: ToastGravity.TOP);
+                                    timeInSecForIos: 2,gravity: ToastGravity.CENTER);
                                 Timer(Duration(milliseconds: 800), () {
                                   Navigator.of(context).pop(true);
                                 });

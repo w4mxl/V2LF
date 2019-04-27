@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
@@ -13,7 +15,6 @@ import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 // 通知列表页面
 class NotificationsListView extends StatefulWidget {
@@ -105,7 +106,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
     }
     // By default, show a loading spinner
     return new Center(
-      child: new CircularProgressIndicator(),
+      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
   }
 
@@ -271,6 +272,6 @@ _launchURL(String url) async {
     await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(
-        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.BOTTOM);
+        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
   }
 }

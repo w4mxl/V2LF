@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 /**
  * @author: wml
  * @date  : 2019/3/30 6:20 PM
@@ -45,7 +47,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
           case ConnectionState.active:
           case ConnectionState.waiting:
             return new Center(
-              child: new CircularProgressIndicator(),
+              child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
             );
           case ConnectionState.done:
             if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));

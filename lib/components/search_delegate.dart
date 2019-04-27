@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -163,7 +164,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       builder: (context, AsyncSnapshot<Sov2ex> async) {
         if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
           return new Center(
-            child: new CircularProgressIndicator(),
+            child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
           );
         }
 
@@ -189,7 +190,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + lastFiter);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '搜索出错了...');
+      Fluttertoast.showToast(msg: '搜索出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
