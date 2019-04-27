@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
       appBar: AppBar(
         elevation: 0,
-//        brightness: Brightness.light,
+        brightness: ColorT.isDark ? Brightness.dark : Brightness.light,
         iconTheme: IconThemeData(
           color: ColorT.isDark ? Colors.white : Colors.black,
         ),
@@ -97,21 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 18.0,
                     ),
-                    // 密码
-//                    TextFormField(
-//                        controller: _pwdController,
-//                        focusNode: passwordTextFieldNode,
-//                        textInputAction: TextInputAction.next,
-//                        onEditingComplete: () => FocusScope.of(context).requestFocus(captchaTextFieldNode),
-//                        decoration: InputDecoration(
-//                          labelText: MyLocalizations.of(context).password,
-//                          // hintText: MyLocalizations.of(context).enterPassword,
-//                        ),
-//                        obscureText: true,
-//                        //校验密码
-//                        validator: (v) {
-//                          return v.trim().length > 0 ? null : "密码不能为空";
-//                        }),
                     PasswordField(_passwordFieldKey, _pwdController, passwordTextFieldNode, captchaTextFieldNode),
                     SizedBox(
                       height: 18.0,
@@ -163,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 35.0,
+                      height: 40.0,
                     ),
                     ButtonTheme(
                       child: RaisedButton(
