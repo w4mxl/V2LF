@@ -602,7 +602,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.0),
+                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
                 linkStyle: TextStyle(
                     color: ColorT.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -799,7 +799,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       child: Html(
                                         data: reply.contentRendered,
                                         defaultTextStyle:
-                                            TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                            TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.5),
                                         linkStyle: TextStyle(
                                             color: ColorT.appMainColor[400],
                                             decoration: TextDecoration.underline,
@@ -942,7 +942,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         defaultTextStyle: TextStyle(
                                                                             color:
                                                                                 ColorT.isDark ? Colors.white : Colors.black,
-                                                                            fontSize: 14.0),
+                                                                            fontSize: 14.5),
                                                                         linkStyle: TextStyle(
                                                                             color: ColorT.appMainColor[400],
                                                                             decoration: TextDecoration.underline,
