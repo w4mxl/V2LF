@@ -192,10 +192,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         )),
                   ),
                 ),
-                // todo 这里可以根据一天的不同时间显示不同的background，增加美观
-                /*decoration: new BoxDecoration(
+                // 这里可以根据一天的不同时间显示不同的background，增加美观
+                decoration: new BoxDecoration(
                   image: new DecorationImage(
-                      fit: BoxFit.cover, image: new NetworkImage("https://i.loli.net/2018/12/06/5c08c7b804e89.png"))),*/
+                      fit: BoxFit.cover, image: new NetworkImage("https://api.dujin.org/bing/1366.php")),
+                ),
               ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
