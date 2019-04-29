@@ -49,6 +49,7 @@ dependencies:
   flutter_whatsnew: ^0.3.0 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
   shimmer: ^1.0.0
   zefyr: ^0.5.0 # https://pub.dartlang.org/packages/zefyr#-installing-tab-
+  photo_view: ^0.3.1
 
 dev_dependencies:
   flutter_test:

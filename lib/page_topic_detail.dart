@@ -611,6 +611,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   _launchURL(url);
                 },
                 useRichText: true,
+                // 0.9.6 版本使用 customRender 就不能使用 useRichText 解析了，暂时先这样 todo
+//                customRender: (node, children) {
+//                  if (node is dom.Element) {
+//                    switch (node.localName) {
+//                      case "img":
+//                        return GestureDetector(
+//                          child: Image.network(node.attributes['src']),
+//                          onTap: () {
+//                            Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                builder: (context) => FullScreenWrapper(
+//                                      imageProvider: NetworkImage(node.attributes['src']),
+//                                    ),
+//                              ),
+//                            );
+//                          },
+//                        );
+//                    }
+//                  }
+//                },
               ),
             ),
             // 附言
