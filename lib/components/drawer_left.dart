@@ -47,7 +47,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     return SizedBox(
-      width: 270.0,
+      width: 280.0,
       child: new Drawer(
         child: SingleChildScrollView(
           child: new Column(
@@ -270,7 +270,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v0.8.6",
+                applicationVersion: "v2019.1",
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
