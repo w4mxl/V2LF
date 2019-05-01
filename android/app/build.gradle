@@ -41,7 +41,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "io.github.w4mxl.v2lf"
         minSdkVersion 16
         targetSdkVersion 28

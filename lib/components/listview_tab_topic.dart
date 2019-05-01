@@ -89,7 +89,6 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // todo 跳转详情页面
         Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),

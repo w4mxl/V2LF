@@ -110,7 +110,6 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }

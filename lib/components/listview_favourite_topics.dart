@@ -139,7 +139,6 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }

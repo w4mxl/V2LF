@@ -130,7 +130,6 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }

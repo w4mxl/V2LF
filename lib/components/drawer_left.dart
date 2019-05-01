@@ -196,7 +196,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 decoration: new BoxDecoration(
                   color: ColorT.appMainColor,
                   image: new DecorationImage(
-                      fit: BoxFit.cover, image: new NetworkImage("https://api.dujin.org/bing/1366.php")),
+                      fit: BoxFit.cover, image: new NetworkImage("http://bing.getlove.cn/bingImage")),
                 ),
               ),
               new ListTile(
@@ -271,7 +271,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.1",
+                applicationVersion: "v2019.1",// todo
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",

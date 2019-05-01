@@ -8,6 +8,7 @@ import 'package:flutter_app/page_reorderable_tabs.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,6 +19,7 @@ import 'common/v2ex_client.dart';
 /*import 'package:flame/animation.dart' as animation;
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
+import 'package:launch_review/launch_review.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
@@ -280,8 +282,8 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
-                      // LaunchReview.launch(); // todo 配置信息
+                      // Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+                       LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf'); // todo 配置信息
                     },
                   ),
                   Divider(
@@ -300,7 +302,7 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Share.share('V2LF - A new way to explore  https://testflight.apple.com/join/cvx4MQuh'); // todo 配置信息
+                      Share.share('V2LF - A new way to explore v2ex!  ${Strings.storeUrl}'); // todo 配置信息
                     },
                   ),
                   Divider(

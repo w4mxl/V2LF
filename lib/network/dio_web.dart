@@ -37,7 +37,6 @@ class DioWeb {
       var response = await dio.get("/new");
       if (response.isRedirect) {
         // 登录已经失效，注销数据
-        // todo
         print('登录已经失效，注销数据');
         await V2exClient.logout();
       } else {
@@ -471,7 +470,6 @@ class DioWeb {
         return false;
       }
     } on DioError catch (e) {
-      // todo
       Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
@@ -484,7 +482,7 @@ class DioWeb {
   // 获取「主题收藏」下的topics [xpath 解析的]
   static Future<List<FavTopicItem>> getFavTopics(int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
-    var response = await dio.get("/my/topics" + "?p=" + p.toString()); // todo 可能多页
+    var response = await dio.get("/my/topics" + "?p=" + p.toString());
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
@@ -579,7 +577,7 @@ class DioWeb {
   static Future<List<NotificationItem>> getNotifications(int p) async {
     List<NotificationItem> notifications = new List<NotificationItem>();
     // 调用 dio 之前检查登录时保存的cookie是否带上了
-    var response = await dio.get("/notifications" + "?p=" + p.toString()); // todo 可能多页
+    var response = await dio.get("/notifications" + "?p=" + p.toString());
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
@@ -663,7 +661,6 @@ class DioWeb {
 //        notifications.add(item);
 //      }
 //    } else {
-//      // todo 可能未登录
 //      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
 //    }
 
@@ -677,7 +674,7 @@ class DioWeb {
     List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
-    var response = await dio.get("/t/" + topicId + "?p=" + p.toString()); // todo 可能多页
+    var response = await dio.get("/t/" + topicId + "?p=" + p.toString());
     // Use html parser and query selector
     var document = parse(response.data);
 

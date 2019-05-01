@@ -29,7 +29,6 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _tabs = _tabsp.sublist(1); // 排除固定的'全部'，保存的时候再加上

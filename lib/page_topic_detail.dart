@@ -273,7 +273,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     bool isSuccess = await DioWeb.thankTopicReply(replyID, _detailModel.token);
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
-      // todo 更新UI：❤️后面的数字
+      // 更新UI：红心️后面的数字
       eventBus.fire(new MyEventRefreshTopic());
     } else {
       Progresshud.showErrorWithStatus('操作失败');
