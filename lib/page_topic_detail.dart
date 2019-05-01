@@ -499,8 +499,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     child: ClipOval(
                       child: new CachedNetworkImage(
                         imageUrl: 'https:' + _detailModel.avatar,
-                        height: 40.0,
-                        width: 40.0,
+                        height: 44.0,
+                        width: 44.0,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                       ),
@@ -511,12 +511,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   new Expanded(
                       child: new Column(
                     children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 2.0),
-                        child: new Row(
-                          children: <Widget>[
-                            // 用户ID
-                            GestureDetector(
+                      new Row(
+                        children: <Widget>[
+                          // 用户ID
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
                               child: new Text(
                                 _detailModel.createdId,
                                 textAlign: TextAlign.left,
@@ -526,29 +527,33 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     color: ColorT.isDark ? Colors.white : Colors.black87,
                                     fontWeight: FontWeight.bold),
                               ),
-                              onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                             ),
-                            new Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.green,
-                              size: 16.0,
-                            ),
-                            // 节点名称
-                            GestureDetector(
+                            onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                          ),
+                          new Icon(
+                            Icons.keyboard_arrow_right,
+                            color: Colors.green,
+                            size: 16.0,
+                          ),
+                          // 节点名称
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
                               child: new Text(
                                 _detailModel.nodeName,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
                                 style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
                               ),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (context) =>
-                                          NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
                             ),
-                          ],
-                        ),
+                            onTap: () => Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) =>
+                                        NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                          ),
+                        ],
                       ),
                       Row(
                         children: <Widget>[

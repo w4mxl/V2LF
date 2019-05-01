@@ -194,6 +194,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ),
                 // 这里可以根据一天的不同时间显示不同的background，增加美观
                 decoration: new BoxDecoration(
+                  color: ColorT.appMainColor,
                   image: new DecorationImage(
                       fit: BoxFit.cover, image: new NetworkImage("https://api.dujin.org/bing/1366.php")),
                 ),
