@@ -10,9 +10,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'utils/event_bus.dart';
+import 'utils/strings.dart';
 
 // Adapted from reorderable list demo in offical flutter gallery:
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/reorderable_list_demo.dart
@@ -81,7 +83,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
             print(json.encode(linkMap));
             bool isSuccess = await SpHelper.sp.setString(KEY_MAIN_TABS, json.encode(linkMap));
             if (isSuccess) {
-              eventBus.fire(new MyEventTabsChange());
+              eventBus.emit(MyEventTabsChange);
               Navigator.of(context).pop();
             } else {
               Fluttertoast.showToast(msg: '保存出错了...', timeInSecForIos: 2,gravity: ToastGravity.CENTER);

@@ -15,7 +15,7 @@ import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/http.dart';
-import 'package:flutter_app/utils/events.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -232,7 +232,7 @@ class DioWeb {
     var element = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a');
     if (element != null) {
       String isFavWithOnce = element.attributes["href"];
-      eventBus.fire(new MyEventNodeIsFav(isFavWithOnce));
+      eventBus.emit(MyEventNodeIsFav,isFavWithOnce);
     }
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
@@ -486,10 +486,10 @@ class DioWeb {
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
-    if (tree.xpath("//*[@class='gray']") != null) {
-      var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
-      eventBus.fire(new MyEventFavCounts(count));
-    }
+//    if (tree.xpath("//*[@class='gray']") != null) {
+//      var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
+//      eventBus.emit(MyEventFavCounts,count);
+//    }
     var page = tree.xpath("//*[@class='page_normal']") != null
         ? tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name
         : '1';

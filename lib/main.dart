@@ -15,14 +15,14 @@ import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
-import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/listview_tab_all.dart'; // make dio as global top-level variable
+import 'components/listview_tab_all.dart';
+import 'utils/event_bus.dart';
 
 // Must be top-level function
 _parseAndDecode(String response) {
@@ -82,12 +82,12 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     _init();
 
     //监听设置中的变动
-    eventBus.on<MyEventSettingChange>().listen((event) {
+    eventBus.on(MyEventSettingChange, (arg) {
       _loadLocale();
     });
 
     //监听自定义主页Tab的变动
-    eventBus.on<MyEventTabsChange>().listen((event) {
+    eventBus.on(MyEventTabsChange, (arg) {
       _loadCustomTabs();
     });
   }
@@ -154,6 +154,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
+    eventBus.off(MyEventSettingChange);
+    eventBus.off(MyEventTabsChange);
     super.dispose();
   }
 

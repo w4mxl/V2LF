@@ -17,7 +17,7 @@ import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_notifications.dart';
 import 'package:flutter_app/page_setting.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/events.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -99,7 +99,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
                         }
                         SpHelper.sp.setBool(SP_IS_DARK, !currentIsDark);
-                        eventBus.fire(MyEventSettingChange());
+                        eventBus.emit(MyEventSettingChange);
                         print('wml');
                       },
                     ),

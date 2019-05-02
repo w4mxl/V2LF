@@ -12,7 +12,6 @@ import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
@@ -22,6 +21,8 @@ import 'package:ovprogresshud/progresshud.dart';
 import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'utils/event_bus.dart';
 
 //final key = GlobalKey<_TopicDetailViewState>();
 
@@ -137,7 +138,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
       widget.onValueChange("");
       _isComposing = false;
       Navigator.of(context, rootNavigator: true).pop();
-      eventBus.fire(new MyEventRefreshTopic());
+      eventBus.emit(MyEventRefreshTopic);
       //key.currentState._onRefresh();
     } else {
       print('帖子详情页面：回复失败');
@@ -183,6 +184,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   void initState() {
     super.initState();
+
+    eventBus.on(MyEventRefreshTopic,(event) {
+      _onRefresh();
+      print("eventBus.on<MyEventRefreshTopic>");
+    });
+
     // 获取数据
     getData();
     // 监听是否滑到了页面底部
@@ -208,14 +215,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       }
     });
 
-    eventBus.on<MyEventRefreshTopic>().listen((event) {
-      _onRefresh();
-      print("eventBus.on<MyEventRefreshTopic>");
-    });
   }
 
   @override
   void dispose() {
+    eventBus.off(MyEventRefreshTopic);
     //为了避免内存泄露
     _scrollController.dispose();
     super.dispose();
@@ -253,7 +257,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     bool isSuccess = await DioWeb.thankTopic(widget.topicId, _detailModel.token);
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
-      eventBus.fire(new MyEventRefreshTopic());
+      eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
     }
@@ -263,7 +267,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     if (isSuccess) {
       Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
-      eventBus.fire(new MyEventRefreshTopic());
+      eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
     }
@@ -274,7 +278,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
       // 更新UI：红心️后面的数字
-      eventBus.fire(new MyEventRefreshTopic());
+      eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
     }

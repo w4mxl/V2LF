@@ -6,7 +6,6 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/page_reorderable_tabs.dart';
 import 'package:flutter_app/resources/colors.dart';
-import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -20,6 +19,8 @@ import 'common/v2ex_client.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/position.dart';*/
 import 'package:launch_review/launch_review.dart';
+
+import 'utils/event_bus.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
@@ -155,7 +156,7 @@ class _SettingPageState extends State<SettingPage> {
                           return new InkWell(
                             onTap: () {
                               SpHelper.sp.setString(KEY_THEME_COLOR, key);
-                              eventBus.fire(new MyEventSettingChange());
+                              eventBus.emit(MyEventSettingChange);
                             },
                             child: new Container(
                               margin: EdgeInsets.all(5.0),
@@ -183,7 +184,7 @@ class _SettingPageState extends State<SettingPage> {
                         } else {
                           SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
                         }
-                        eventBus.fire(new MyEventSettingChange());
+                        eventBus.emit(MyEventSettingChange);
                       });
                     },
                     title: Text(MyLocalizations.of(context).titleSystemFont),
@@ -437,7 +438,7 @@ class _SettingPageState extends State<SettingPage> {
     _currentLanguage = model;
     _updateData();
     SpHelper.putObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
-    eventBus.fire(new MyEventSettingChange());
+    eventBus.emit(MyEventSettingChange);
   }
 }
 

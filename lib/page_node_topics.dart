@@ -11,10 +11,11 @@ import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/utils/events.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:ovprogresshud/progresshud.dart';
+
+import 'utils/event_bus.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;
@@ -30,7 +31,6 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   bool isFavorite = false;
   String nodeIdWithOnce = '';
-  StreamSubscription subscription;
 
   int p = 1;
   bool isUpLoading = false;
@@ -103,12 +103,12 @@ class _NodeTopicsState extends State<NodeTopics> {
   @override
   Widget build(BuildContext context) {
     //监听事件
-    subscription = eventBus.on<MyEventNodeIsFav>().listen((event) {
+    eventBus.on(MyEventNodeIsFav, (isFavWithOnce) {
       if (!mounted) return;
       setState(() {
         //   /favorite/node/39?once=87770
-        isFavorite = event.isFavWithOnce.startsWith('/unfavorite');
-        nodeIdWithOnce = event.isFavWithOnce.split('/node/')[1];
+        isFavorite = isFavWithOnce.startsWith('/unfavorite');
+        nodeIdWithOnce = isFavWithOnce.split('/node/')[1];
         print('wml：$nodeIdWithOnce');
       });
     });
@@ -180,7 +180,7 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   @override
   void dispose() {
-    subscription.cancel();
+    eventBus.off(MyEventNodeIsFav);
     super.dispose();
   }
 
