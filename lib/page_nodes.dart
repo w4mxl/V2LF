@@ -50,7 +50,7 @@ class _NodePageState extends State<NodesPage> {
                     itemBuilder: itemBuilder,
                     itemCount: nodeGroups.length,
                   )
-                : CircularProgressIndicator(),
+                : Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
           )),
     );
   }
