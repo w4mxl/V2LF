@@ -283,7 +283,7 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     onTap: () {
                       // Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
-                       LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf'); // todo 配置信息
+                       LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf',iOSAppId: '1455778208'); // todo 配置信息
                     },
                   ),
                   Divider(
