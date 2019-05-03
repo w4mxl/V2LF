@@ -54,10 +54,6 @@ class NetworkApi {
     return list.map((e) => NodeItem(e['name'], e['title'])).toList();
   }
 
-  /*static Future<Token> getPoemToken() async {
-    return Token.fromMap(await _get(httpConstants.API_JINRISHICI_TOKEN));
-  }*/
-
   static Future<Poem> getPoem() async {
     var spJinrishiciToken = SpHelper.sp.getString(SP_JINRISHICI_TOKEN);
     Map<String, String> headers = {'X-User-Token': spJinrishiciToken};

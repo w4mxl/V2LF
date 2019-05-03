@@ -631,38 +631,6 @@ class DioWeb {
         notifications.add(item);
       }
     }
-//    这种方式有点问题，就是，解析 title reply 等时解析不全。是xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath 还不完善
-//    var aRootNode = tree.xpath("//*[@class='cell']");
-//    if (aRootNode != null) {
-//      for (var aNode in aRootNode) {
-//        NotificationItem item = new NotificationItem();
-//
-//        item.maxPage = int.parse(page.split('/')[1]);
-//
-//        //*[@id="n_9690800"]/table/tbody/tr/td[1]/a/img
-//        item.avatar = aNode
-//            .xpath("/table/tr/td[1]/a/img[@class='avatar']")
-//            .first
-//            .attributes["src"];
-//        item.date = aNode.xpath("/table/tr/td[2]/span[2]/text()")[0].name.replaceAll('&nbsp;', "");
-//
-//        //*[@id="n_9690800"]/table/tbody/tr/td[2]/span[1]
-//        item.title = aNode
-//            .xpath("/table/tr/td[2]/span[1]/text()")[0]
-//            .name;
-//
-//        if(aNode.xpath("/table/tr/td[2]/div[@class='payload']")!=null){
-//          item.reply = aNode.xpath("/table/tr/td[2]/div[@class='payload']").first.xpath("/text()")[0].name;
-//        }
-//
-//        String topicUrl = aNode.xpath("/table/tr/td[2]/span[1]/a[2]").first.attributes["href"]; // 得到是 /t/522540#reply17
-//        item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
-//
-//        notifications.add(item);
-//      }
-//    } else {
-//      Fluttertoast.showToast(msg: '登录过程中遇到一些问题：获取收藏失败');
-//    }
 
     return notifications;
   }
@@ -765,18 +733,6 @@ class DioWeb {
       }
     }
     detailModel.replyList = replies;
-
-//    var tree = ETree.fromString(response.data);
-//
-//    var aRootNode = tree.xpath("//*[@id='Wrapper']/div/div[3]/div[@id]");
-//    for (var aNode in aRootNode) {
-//      ReplyItem replyItem = new ReplyItem();
-//      replyItem.avatar = aNode.xpath("/table/tr/td[1]/img").first.attributes["src"];
-//      replyItem.userName = aNode.xpath('/table/tr/td[3]/strong/a/text()')[0].name;
-//      replyItem.lastReplyTime = aNode.xpath('/table/tr/td[3]/span/text()')[0].name;
-//      //replyItem.content = aNode.xpath("/table/tr/td[3]/div[@class='reply_content']/text()")[0].name;
-//      replies.add(replyItem);
-//    }
 
     return detailModel;
   }
