@@ -11,15 +11,11 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/v2ex_client.dart';
-/*import 'package:flame/animation.dart' as animation;
-import 'package:flame/flame.dart';
-import 'package:flame/position.dart';*/
-import 'package:launch_review/launch_review.dart';
-
 import 'utils/event_bus.dart';
 
 // 设置页面
@@ -284,7 +280,7 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     onTap: () {
                       // Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
-                       LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf',iOSAppId: '1455778208'); // todo 配置信息
+                      LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf', iOSAppId: '1455778208'); // todo 配置信息
                     },
                   ),
                   Divider(

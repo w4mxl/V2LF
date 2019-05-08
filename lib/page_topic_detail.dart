@@ -16,6 +16,7 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:share/share.dart';
@@ -185,7 +186,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   void initState() {
     super.initState();
 
-    eventBus.on(MyEventRefreshTopic,(event) {
+    eventBus.on(MyEventRefreshTopic, (event) {
       _onRefresh();
       print("eventBus.on<MyEventRefreshTopic>");
     });
@@ -214,7 +215,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         }
       }
     });
-
   }
 
   @override
@@ -842,9 +842,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             // 找出这个用户的最近一条评论，也可能没有
                                             var list = replyList.sublist(0, index);
                                             var item = list.lastWhere((item) => item.userName == url.split("/member/")[1],
-                                                orElse: null);
-                                            print(item.number + " " + item.userName);
-                                            if (item != null) {
+                                                orElse: () => null);
+                                            if (item == null) {
+                                              Fluttertoast.showToast(
+                                                  msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
+                                            } else {
                                               showDialog(
                                                   context: context,
                                                   builder: (BuildContext context) {
