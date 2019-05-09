@@ -4,12 +4,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/pages/page_topic_detail.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/bubble_tab_indicator.dart';
 import 'package:http/http.dart';
 import 'package:webfeed/webfeed.dart';
-
-import 'theme/theme_data.dart';
 
 /// @author: wml
 /// @date  : 2019/3/24 2:47 PM

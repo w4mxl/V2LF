@@ -10,7 +10,9 @@ import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/page_node_topics.dart';
+import 'package:flutter_app/pages/page_node_topics.dart';
+import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
@@ -21,9 +23,6 @@ import 'package:ovprogresshud/progresshud.dart';
 import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'theme/theme_data.dart';
-import 'utils/event_bus.dart';
 
 //final key = GlobalKey<_TopicDetailViewState>();
 

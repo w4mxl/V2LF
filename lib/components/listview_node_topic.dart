@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/page_topic_detail.dart';
+import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 
 class NodeTopicListView extends StatefulWidget {

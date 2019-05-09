@@ -11,11 +11,11 @@ import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:ovprogresshud/progresshud.dart';
 
-import 'utils/event_bus.dart';
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;

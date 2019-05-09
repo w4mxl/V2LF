@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/gridview_favourite_nodes.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/bubble_tab_indicator.dart';
-
-import 'theme/theme_data.dart';
 
 /// @author: wml
 /// @date  : 2019/3/30 4:09 PM

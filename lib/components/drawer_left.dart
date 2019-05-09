@@ -10,12 +10,12 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/page_favourite.dart';
-import 'package:flutter_app/page_history_hot.dart';
-import 'package:flutter_app/page_login.dart';
-import 'package:flutter_app/page_nodes.dart';
-import 'package:flutter_app/page_notifications.dart';
-import 'package:flutter_app/page_setting.dart';
+import 'package:flutter_app/pages/page_favourite.dart';
+import 'package:flutter_app/pages/page_history_hot.dart';
+import 'package:flutter_app/pages/page_login.dart';
+import 'package:flutter_app/pages/page_nodes.dart';
+import 'package:flutter_app/pages/page_notifications.dart';
+import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -23,7 +23,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../page_new_topic.dart';
+import 'package:flutter_app/pages/page_new_topic.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override

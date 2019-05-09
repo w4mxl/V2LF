@@ -10,11 +10,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/utils/constants.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'utils/event_bus.dart';
-import 'utils/strings.dart';
 
 // Adapted from reorderable list demo in offical flutter gallery:
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/reorderable_list_demo.dart

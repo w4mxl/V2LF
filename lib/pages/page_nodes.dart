@@ -5,10 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/node.dart';
-import 'package:flutter_app/page_node_topics.dart';
-
-import 'network/dio_web.dart';
-import 'theme/theme_data.dart';
+import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_node_topics.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 
 // 节点导航页面
 class NodesPage extends StatefulWidget {

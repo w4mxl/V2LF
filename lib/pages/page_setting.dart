@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
-import 'package:flutter_app/page_reorderable_tabs.dart';
+import 'package:flutter_app/pages/page_reorderable_tabs.dart';
+import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -13,10 +16,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'common/v2ex_client.dart';
-import 'theme/theme_data.dart';
-import 'utils/event_bus.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
