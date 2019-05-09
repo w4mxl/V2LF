@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/page_reorderable_tabs.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -16,6 +15,7 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/v2ex_client.dart';
+import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 
 // 设置页面
@@ -100,7 +100,7 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
       body: Container(
-        color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+        color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
         child: ListView(
           children: <Widget>[
             // 主页tab设置
@@ -215,7 +215,7 @@ class _SettingPageState extends State<SettingPage> {
                                     SpHelper.getLanguageModel().scriptCode),
                             style: TextStyle(
                               fontSize: 14.0,
-                              color: ColorT.gray_99,
+                              color: MyTheme.gray_99,
                             ),
                             textAlign: TextAlign.right,
                           ),

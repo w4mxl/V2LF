@@ -10,7 +10,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 
 class FavTopicListView extends StatefulWidget {
   @override
@@ -66,7 +66,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     if (items.length > 0) {
       return new RefreshIndicator(
           child: Container(
-            color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+            color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,
@@ -179,7 +179,7 @@ class TopicItemView extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: new Text(
                                   topic.topicTitle,
-                                  style: new TextStyle(fontSize: 16.0, color: ColorT.isDark ? Colors.white : Colors.black),
+                                  style: new TextStyle(fontSize: 16.0, color: MyTheme.isDark ? Colors.white : Colors.black),
                                 ),
                               ),
                               new Container(
@@ -189,7 +189,7 @@ class TopicItemView extends StatelessWidget {
                                   child: new Row(
                                     children: <Widget>[
                                       Material(
-                                        color: ColorT.appMainColor[200],
+                                        color: MyTheme.appMainColor[200],
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
                                         child: new Container(
                                           padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 1.0, bottom: 1.0),
@@ -220,7 +220,7 @@ class TopicItemView extends StatelessWidget {
                                         topic.memberId,
                                         style: new TextStyle(
                                           fontSize: 12.0,
-                                          color: ColorT.isDark ? Colors.white70 : Colors.black54,
+                                          color: MyTheme.isDark ? Colors.white70 : Colors.black54,
                                         ),
                                       ),
                                       new Text(
@@ -236,7 +236,7 @@ class TopicItemView extends StatelessWidget {
                                         topic.lastReplyMId,
                                         style: new TextStyle(
                                           fontSize: 12.0,
-                                          color: ColorT.isDark ? Colors.white70 : Colors.black54,
+                                          color: MyTheme.isDark ? Colors.white70 : Colors.black54,
                                         ),
                                       ),
                                     ],
@@ -249,7 +249,7 @@ class TopicItemView extends StatelessWidget {
                     Offstage(
                       offstage: topic.replyCount == '0',
                       child: Material(
-                        color: ColorT.appMainColor[400],
+                        color: MyTheme.appMainColor[400],
                         shape: new StadiumBorder(),
                         child: new Container(
                           width: 35.0,

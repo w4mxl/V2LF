@@ -6,7 +6,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 
 class NodeTopicListView extends StatefulWidget {
   final String tabKey;
@@ -164,7 +164,7 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.title,
-                                style: new TextStyle(fontSize: 16.0, color: ColorT.isDark ? Colors.white : Colors.black87),
+                                style: new TextStyle(fontSize: 16.0, color: MyTheme.isDark ? Colors.white : Colors.black87),
                               ),
                             ),
                             new Container(
@@ -177,7 +177,7 @@ class TopicItemView extends StatelessWidget {
                                     maxLines: 1,
                                     style: new TextStyle(
                                       fontSize: 12.0,
-                                      color: ColorT.isDark ? Colors.white70 : Colors.black87,
+                                      color: MyTheme.isDark ? Colors.white70 : Colors.black87,
                                     ),
                                   ),
                                   new Text(
@@ -198,7 +198,7 @@ class TopicItemView extends StatelessWidget {
                   Offstage(
                     offstage: topic.replyCount == '0',
                     child: Material(
-                      color: ColorT.appMainColor[400],
+                      color: MyTheme.appMainColor[400],
                       shape: new StadiumBorder(),
                       child: new Container(
                         width: 35.0,

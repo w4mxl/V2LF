@@ -9,7 +9,7 @@ import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -188,7 +188,7 @@ class TopicItemView extends StatelessWidget {
                           notificationItem.date,
                           style: new TextStyle(
                             fontSize: 12.0,
-                            color: ColorT.isDark ? Colors.white70 : Colors.black54,
+                            color: MyTheme.isDark ? Colors.white70 : Colors.black54,
                           ),
                         ),
                       ],
@@ -207,7 +207,7 @@ class TopicItemView extends StatelessWidget {
                         child: Html(
                           // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                           data: notificationItem.title,
-                          defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black54, fontSize: 15.0),
+                          defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 15.0),
                           linkStyle: TextStyle(
                             color: Theme.of(context).accentColor,
                           ),
@@ -231,8 +231,8 @@ class TopicItemView extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 8.0),
                           child: Html(
                             data: notificationItem.reply,
-                            defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.0),
-                            backgroundColor: ColorT.isDark ? Colors.grey[800] : Colors.grey[200],
+                            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Colors.grey[200],
                             padding: EdgeInsets.all(4.0),
                             linkStyle: TextStyle(
                               color: Theme.of(context).accentColor,

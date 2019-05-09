@@ -16,7 +16,7 @@ import 'package:flutter_app/page_login.dart';
 import 'package:flutter_app/page_nodes.dart';
 import 'package:flutter_app/page_notifications.dart';
 import 'package:flutter_app/page_setting.dart';
-import 'package:flutter_app/resources/colors.dart';
+import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -128,7 +128,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                         Text(
                                           '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
                                           style: TextStyle(
-                                              color: ColorT.isDark ? ColorT.appMainColor[300] : ColorT.appMainColor[700]),
+                                              color: MyTheme.isDark ? MyTheme.appMainColor[300] : MyTheme.appMainColor[700]),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
@@ -194,7 +194,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ),
                 // 这里可以根据一天的不同时间显示不同的background，增加美观
                 decoration: new BoxDecoration(
-                  color: ColorT.appMainColor,
+                  color: MyTheme.appMainColor,
                   image: new DecorationImage(
                       fit: BoxFit.cover, image: new NetworkImage("http://bing.getlove.cn/bingImage")),
                 ),

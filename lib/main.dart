@@ -12,7 +12,6 @@ import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/network/http.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -22,6 +21,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
+import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 
 // Must be top-level function
@@ -114,17 +114,17 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       }
 
       if (themeColorMap[_colorKey] != null) {
-        ColorT.appMainColor = themeColorMap[_colorKey];
+        MyTheme.appMainColor = themeColorMap[_colorKey];
       }
 
       if (_spFont != null && _spFont == 'System') {
-        _fontFamily = null;
+        MyTheme.fontFamily = null;
       } else {
-        _fontFamily = 'Whitney';
+        MyTheme.fontFamily = 'Whitney';
       }
 
       if (_spIsDark != null) {
-        ColorT.isDark = _spIsDark;
+        MyTheme.isDark = _spIsDark;
       }
     });
   }
@@ -180,10 +180,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
         const Locale('en', ''),
       ],
-      theme: new ThemeData(
-          brightness: ColorT.isDark ? Brightness.dark : Brightness.light,
-          primarySwatch: ColorT.appMainColor,
-          fontFamily: _fontFamily),
+      theme: appTheme(),
       home: WillPopScope(
         child: new Scaffold(
             appBar: AppBar(

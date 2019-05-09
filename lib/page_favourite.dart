@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/gridview_favourite_nodes.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/bubble_tab_indicator.dart';
+
+import 'theme/theme_data.dart';
 
 /// @author: wml
 /// @date  : 2019/3/30 4:09 PM
@@ -36,8 +37,8 @@ class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveCl
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-                unselectedLabelColor: ColorT.appMainColor[100],
-                labelColor: ColorT.appMainColor,
+                unselectedLabelColor: MyTheme.appMainColor[100],
+                labelColor: MyTheme.appMainColor,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: new BubbleTabIndicator(
                   indicatorHeight: 30.0,

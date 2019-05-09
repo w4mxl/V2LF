@@ -11,7 +11,6 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/page_node_topics.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
@@ -23,6 +22,7 @@ import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 
 //final key = GlobalKey<_TopicDetailViewState>();
@@ -412,7 +412,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+      backgroundColor: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
@@ -528,7 +528,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 maxLines: 1,
                                 style: new TextStyle(
                                     fontSize: 14.0,
-                                    color: ColorT.isDark ? Colors.white : Colors.black87,
+                                    color: MyTheme.isDark ? Colors.white : Colors.black87,
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -600,7 +600,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 _detailModel.topicTitle,
                 softWrap: true,
                 style: new TextStyle(
-                  color: ColorT.isDark ? Colors.white : Colors.black87,
+                  color: MyTheme.isDark ? Colors.white : Colors.black87,
                   fontSize: 19.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -611,11 +611,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
+                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
                 linkStyle: TextStyle(
-                    color: ColorT.appMainColor[400],
+                    color: MyTheme.appMainColor[400],
                     decoration: TextDecoration.underline,
-                    decorationColor: ColorT.appMainColor[400]),
+                    decorationColor: MyTheme.appMainColor[400]),
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
@@ -664,23 +664,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: ColorT.isDark ? Colors.black12 : const Color(0xFFfffff9),
+          color: MyTheme.isDark ? Colors.black12 : const Color(0xFFfffff9),
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 subtle.fade,
-                style: TextStyle(color: ColorT.isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
+                style: TextStyle(color: MyTheme.isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
               ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(color: ColorT.isDark ? Colors.white : Colors.black87, fontSize: 12.0),
+                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 12.0),
                 linkStyle: TextStyle(
-                    color: ColorT.appMainColor[400],
+                    color: MyTheme.appMainColor[400],
                     decoration: TextDecoration.underline,
-                    decorationColor: ColorT.appMainColor[400]),
+                    decorationColor: MyTheme.appMainColor[400]),
                 onLinkTap: (url) {
                   _launchURL(url);
                 },
@@ -829,11 +829,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       child: Html(
                                         data: reply.contentRendered,
                                         defaultTextStyle:
-                                            TextStyle(color: ColorT.isDark ? Colors.white : Colors.black, fontSize: 14.5),
+                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.5),
                                         linkStyle: TextStyle(
-                                            color: ColorT.appMainColor[400],
+                                            color: MyTheme.appMainColor[400],
                                             decoration: TextDecoration.underline,
-                                            decorationColor: ColorT.appMainColor[400]),
+                                            decorationColor: MyTheme.appMainColor[400]),
                                         onLinkTap: (url) {
                                           if (UrlHelper.canLaunchInApp(context, url)) {
                                             return;
@@ -973,12 +973,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         data: item.contentRendered,
                                                                         defaultTextStyle: TextStyle(
                                                                             color:
-                                                                                ColorT.isDark ? Colors.white : Colors.black,
+                                                                                MyTheme.isDark ? Colors.white : Colors.black,
                                                                             fontSize: 14.5),
                                                                         linkStyle: TextStyle(
-                                                                            color: ColorT.appMainColor[400],
+                                                                            color: MyTheme.appMainColor[400],
                                                                             decoration: TextDecoration.underline,
-                                                                            decorationColor: ColorT.appMainColor[400]),
+                                                                            decorationColor: MyTheme.appMainColor[400]),
                                                                         useRichText: true,
                                                                       )),
                                                                 ],

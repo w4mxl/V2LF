@@ -5,10 +5,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/page_topic_detail.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/bubble_tab_indicator.dart';
 import 'package:http/http.dart';
 import 'package:webfeed/webfeed.dart';
+
+import 'theme/theme_data.dart';
 
 /// @author: wml
 /// @date  : 2019/3/24 2:47 PM
@@ -46,8 +47,8 @@ class _HistoryHotTopicsState extends State<HistoryHotTopics> with AutomaticKeepA
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-                unselectedLabelColor: ColorT.appMainColor[100],
-                labelColor: ColorT.appMainColor,
+                unselectedLabelColor: MyTheme.appMainColor[100],
+                labelColor: MyTheme.appMainColor,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicator: new BubbleTabIndicator(
                   indicatorHeight: 30.0,

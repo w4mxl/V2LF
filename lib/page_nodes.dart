@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/page_node_topics.dart';
-import 'package:flutter_app/resources/colors.dart';
 
 import 'network/dio_web.dart';
+import 'theme/theme_data.dart';
 
 // 节点导航页面
 class NodesPage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _NodePageState extends State<NodesPage> {
         ],
       ),
       body: new Container(
-          color: ColorT.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+          color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
           child: new Center(
             child: nodeGroups.length > 0
                 ? new ListView.builder(
@@ -145,7 +145,7 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    if (ColorT.isDark) {
+    if (MyTheme.isDark) {
       final ThemeData theme = Theme.of(context);
       return theme.copyWith(
         primaryColor: theme.primaryColor,

@@ -8,10 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/resources/colors.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'theme/theme_data.dart';
 
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
@@ -61,14 +62,14 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
+      backgroundColor: MyTheme.isDark ? Colors.grey[850] : Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: ColorT.isDark ? Brightness.dark : Brightness.light,
+        brightness: MyTheme.isDark ? Brightness.dark : Brightness.light,
         iconTheme: IconThemeData(
-          color: ColorT.isDark ? Colors.white : Colors.black,
+          color: MyTheme.isDark ? Colors.white : Colors.black,
         ),
-        backgroundColor: ColorT.isDark ? Colors.grey[850] : Colors.white,
+        backgroundColor: MyTheme.isDark ? Colors.grey[850] : Colors.white,
       ),
       body: ScrollConfiguration(
         child: SingleChildScrollView(
@@ -204,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             MyLocalizations.of(context).signup,
                             style:
-                                TextStyle(color: ColorT.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
+                                TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
                           // 注册 -> 跳转到注册web页面
                           onTap: () => launch("https://www.v2ex.com/signup",
@@ -214,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             MyLocalizations.of(context).forgetPassword,
                             style:
-                                TextStyle(color: ColorT.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
+                                TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
                           // 忘记密码 -> 跳转到重置密码web页面
                           onTap: () => launch("https://www.v2ex.com/forgot",
