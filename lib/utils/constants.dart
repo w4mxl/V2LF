@@ -69,10 +69,6 @@ const String API_JINRISHICI_TOKEN = 'https://v2.jinrishici.com/token';
 // X-User-Token： RgU1rBKtLym/MhhYIXs42WNoqLyZeXY3EkAcDNrcfKkzj8ILIsAP1Hx0NGhdOO1I
 const String API_JINRISHICI_ONE = 'https://v2.jinrishici.com/one.json';
 
-const String EVENT_NAME_LOGIN = 'login';
-const String EVENT_NAME_SETTING = 'setting';
-const String EVENT_NAME_FAV_COUNTS = 'fav_count';
-
 List<TabModel> TABS = <TabModel>[
   TabModel('全部', 'all'),
   TabModel('最热', 'hot'),
@@ -80,7 +76,10 @@ List<TabModel> TABS = <TabModel>[
   TabModel('创意', 'creative'),
   TabModel('好玩', 'play'),
   TabModel('APPLE', 'apple'),
-  TabModel('酷工作', 'jobs',),
+  TabModel(
+    '酷工作',
+    'jobs',
+  ),
   TabModel('交易', 'deals'),
   TabModel('城市', 'city'),
   TabModel('问与答', 'qna'),

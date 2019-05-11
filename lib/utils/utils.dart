@@ -5,21 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:path_provider/path_provider.dart';
 
-const List<String> poems = [
-  '晚食以当肉，安步以当车',
-  '月上柳梢头，人约黄昏后',
-  '春悄悄，夜迢迢',
-  '露从今夜白，月是故乡明',
-  '君不见走马川行雪海边',
-  '问君何能尔，心远地自偏',
-  '白发催年老，青阳逼岁除',
-  '风不定，人初静',
-  '朝而往，暮而归',
-  '夕阳无限好，只是近黄昏',
-  '一竿风月，一蓑烟雨',
-  '潮生理棹，潮平系缆'
-];
-
 class Utils {
   static String getLanguageName(BuildContext context, String languageCode, String scriptCode) {
     if (languageCode.isEmpty && scriptCode.isEmpty) {
@@ -43,5 +28,4 @@ class Utils {
     }
     return tempPath;
   }
-
 }
