@@ -60,12 +60,6 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
   Widget build(BuildContext context) {
     if (items.length > 0) {
       return new RefreshIndicator(
-          /*child: new ListView(
-              controller: _scrollController,
-              padding: const EdgeInsets.only(bottom: 15.0),
-              children: items.map((NodeTopicItem topic) {
-                return new TopicItemView(topic);
-              }).toList()),*/
           child: ListView.builder(
               controller: _scrollController,
               itemCount: items.length + 1,

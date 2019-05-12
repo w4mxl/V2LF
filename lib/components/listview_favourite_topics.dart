@@ -200,13 +200,6 @@ class TopicItemView extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      /*new Text(
-                                        " • ",
-                                        style: new TextStyle(
-                                          fontSize: 12.0,
-                                          color: const Color(0xffcccccc),
-                                        ),
-                                      ),*/
                                       // 圆形头像
                                       new Container(
                                         margin: const EdgeInsets.only(left: 6.0, right: 4.0),

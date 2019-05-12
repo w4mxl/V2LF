@@ -59,9 +59,6 @@ class DioWeb {
       print('wml：每日登录奖励已领取过了');
       return true;
     }
-//    else if (resp.contains('你要查看的页面需要先登录')) {
-//      // 表明本地登录状态失效了
-//    }
     print('wml：每日登录奖励还没有领取');
     return false;
   }

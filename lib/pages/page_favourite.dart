@@ -31,8 +31,6 @@ class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveCl
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-//            backgroundColor: Colors.white,
-//            iconTheme: IconThemeData(color: Colors.black54),
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
