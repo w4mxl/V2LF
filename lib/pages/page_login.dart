@@ -14,6 +14,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'page_web.dart';
+
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
 // 通过模拟网站登录的过程，实现登录。登录后保存cookie，为了后面实现评论和回复作准备
@@ -235,6 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                       ),
                       onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => WebviewPage()));
                         print('click google signin...');
                       },
                     ),
