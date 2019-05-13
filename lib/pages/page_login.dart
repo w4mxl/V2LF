@@ -12,6 +12,7 @@ import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // 2018/12/30 21:23
 // 用 Charles 分析了一下 V2ex 网站登录的过程
@@ -174,7 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                                 Fluttertoast.showToast(
                                     msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                    timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+                                    timeInSecForIos: 2,
+                                    gravity: ToastGravity.CENTER);
                                 Timer(Duration(milliseconds: 800), () {
                                   Navigator.of(context).pop(true);
                                 });
@@ -221,7 +223,21 @@ class _LoginPageState extends State<LoginPage> {
                               statusBarBrightness: Platform.isIOS ? Brightness.light : null),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(
+                      height: 12.0,
+                    ),
+                    InkWell(
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/btn_google_signin.png',
+                        ),
+                        height: 40,
+                      ),
+                      onTap: () {
+                        print('click google signin...');
+                      },
+                    ),
                   ],
                 ),
               )),

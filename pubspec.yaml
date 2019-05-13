@@ -103,6 +103,7 @@ flutter:
      - assets/images/logo_v2lf.png
      - assets/images/ic_sync_white_24dp.png
      - assets/images/minotaur.png
+     - assets/images/btn_google_signin.png
      - CHANGELOG.md
 
   # An image asset can refer to one or more resolution-specific "variants", see
