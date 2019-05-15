@@ -12,7 +12,6 @@ import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'page_web.dart';
 
@@ -237,8 +236,12 @@ class _LoginPageState extends State<LoginPage> {
                         height: 40,
                       ),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => WebviewPage()));
-                        print('click google signin...');
+                        if (loginFormData != null) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                WebviewPage('https://www.v2ex.com/auth/google?once=' + loginFormData.once),
+                          ));
+                        }
                       },
                     ),
                   ],
