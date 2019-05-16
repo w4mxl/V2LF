@@ -237,10 +237,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onTap: () {
                         if (loginFormData != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          var future = Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
                                 WebviewPage('https://www.v2ex.com/auth/google?once=' + loginFormData.once),
                           ));
+                          future.then((value) {
+                            // 直接close登录页则value为null；登录成功 value 为 true
+                            if (value != null && value) {
+                              Navigator.of(context).pop(true);
+                            }
+                          });
+                        } else {
+                          Fluttertoast.showToast(msg: '登录遇到一些问题...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
                         }
                       },
                     ),
