@@ -78,12 +78,12 @@ class DioWeb {
       print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       } else {
         print(missionResponse.data);
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
     }
   }
 
@@ -229,7 +229,7 @@ class DioWeb {
     var element = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a');
     if (element != null) {
       String isFavWithOnce = element.attributes["href"];
-      eventBus.emit(MyEventNodeIsFav,isFavWithOnce);
+      eventBus.emit(MyEventNodeIsFav, isFavWithOnce);
     }
 
     content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
@@ -269,7 +269,7 @@ class DioWeb {
     try {
       String once = await getOnce();
       if (once == null || once.isEmpty) {
-        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
         return false;
       }
 
@@ -287,14 +287,14 @@ class DioWeb {
         // 回复失败
         String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
 
-        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
         return false;
       }
 
       // 回复成功
       return true;
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -366,10 +366,6 @@ class DioWeb {
     LoginFormData loginFormData = new LoginFormData();
     //dio.options.contentType = ContentType.json;
     //dio.options.responseType = ResponseType.JSON;
-    dio.options.headers = {
-      'user-agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-    };
     var response = await dio.get("/signin");
     var tree = ETree.fromString(response.data);
     loginFormData.username = tree
@@ -408,12 +404,6 @@ class DioWeb {
 
   // 登录 POST -> 获取用户信息
   static Future<bool> loginPost(LoginFormData loginFormData) async {
-    dio.options.headers = {
-      "Origin": 'https://jiasule.v2ex.com',
-      "Referer": "https://jiasule.v2ex.com/signin",
-      'user-agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-    };
     dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
     //dio.options.responseType = ResponseType.JSON;
 
@@ -430,48 +420,51 @@ class DioWeb {
       dio.options.contentType = ContentType.json; // 还原
       if (response.statusCode == 302) {
         // 这里实际已经登录成功了
-        dio.options.headers = {
-          'user-agent':
-              'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-        };
-        response = await dio.get(Strings.v2exHost);
-      }
-      var tree = ETree.fromString(response.data);
-      var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
-      if (elementOfAvatarImg != null) {
-        // 获取用户头像
-        String avatar = elementOfAvatarImg.attributes["src"];
-        // 获取到的是24*24大小，改成73*73
-        //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
-        //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
-        var regExp1 = RegExp(r's=24');
-        var regExp2 = RegExp(r'normal');
-        if (avatar.contains(regExp1)) {
-          avatar = avatar.replaceFirst(regExp1, 's=73');
-        } else if (avatar.contains(regExp2)) {
-          avatar = avatar.replaceFirst(regExp2, 'large');
-        }
-
-        String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
-        var username = href.substring('/member/'.length);
-        // 保存 username avatar
-        SpHelper.sp.setString(SP_AVATAR, avatar);
-        SpHelper.sp.setString(SP_USERNAME, username);
-        // todo 判断用户是否开启了两步验证
-        return true;
+        return await getUserInfo();
       } else {
-        // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li
-        var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
-        print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2,gravity: ToastGravity.CENTER);
         return false;
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
+      return false;
+    }
+  }
+
+  static Future<bool> getUserInfo() async {
+    var response = await dio.get(Strings.v2exHost);
+    var tree = ETree.fromString(response.data);
+    var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
+    if (elementOfAvatarImg != null) {
+      // 获取用户头像
+      String avatar = elementOfAvatarImg.attributes["src"];
+      // 获取到的是24*24大小，改成73*73
+      //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
+      //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
+      var regExp1 = RegExp(r's=24');
+      var regExp2 = RegExp(r'normal');
+      if (avatar.contains(regExp1)) {
+        avatar = avatar.replaceFirst(regExp1, 's=73');
+      } else if (avatar.contains(regExp2)) {
+        avatar = avatar.replaceFirst(regExp2, 'large');
+      }
+
+      String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
+      var username = href.substring('/member/'.length);
+      // 保存 username avatar
+      SpHelper.sp.setString(SP_AVATAR, avatar);
+      SpHelper.sp.setString(SP_USERNAME, username);
+      // todo 判断用户是否开启了两步验证
+      return true;
+    } else {
+      // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li "输入的验证码不正确"
+      // //*[@id="Wrapper"]/div/div[1]/div[2]/ul/li todo
+      var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
+      print("wml error!!!!：$errorInfo");
+      Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       return false;
     }
   }
