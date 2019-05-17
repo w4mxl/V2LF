@@ -616,6 +616,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     decoration: TextDecoration.underline,
                     decorationColor: MyTheme.appMainColor[400]),
                 onLinkTap: (url) {
+                  if (UrlHelper.canLaunchInApp(context, url)) {
+                    return;
+                  }
                   _launchURL(url);
                 },
                 useRichText: true,
@@ -681,6 +684,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     decoration: TextDecoration.underline,
                     decorationColor: MyTheme.appMainColor[400]),
                 onLinkTap: (url) {
+                  if (UrlHelper.canLaunchInApp(context, url)) {
+                    return;
+                  }
                   _launchURL(url);
                 },
                 useRichText: true,
@@ -971,8 +977,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       child: Html(
                                                                         data: item.contentRendered,
                                                                         defaultTextStyle: TextStyle(
-                                                                            color:
-                                                                                MyTheme.isDark ? Colors.white : Colors.black,
+                                                                            color: MyTheme.isDark
+                                                                                ? Colors.white
+                                                                                : Colors.black,
                                                                             fontSize: 14.5),
                                                                         linkStyle: TextStyle(
                                                                             color: MyTheme.appMainColor[400],
