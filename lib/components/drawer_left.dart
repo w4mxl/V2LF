@@ -271,7 +271,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.1",// todo
+                applicationVersion: "v2019.2",// todo
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
