@@ -13,17 +13,17 @@ import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
 import 'package:flutter_app/pages/page_history_hot.dart';
 import 'package:flutter_app/pages/page_login.dart';
+import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
+import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:flutter_app/pages/page_new_topic.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -47,7 +47,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
     final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     return SizedBox(
-      width: 280.0,
       child: new Drawer(
         child: SingleChildScrollView(
           child: new Column(
@@ -128,7 +127,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                         Text(
                                           '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
                                           style: TextStyle(
-                                              color: MyTheme.isDark ? MyTheme.appMainColor[300] : MyTheme.appMainColor[700]),
+                                              color:
+                                                  MyTheme.isDark ? MyTheme.appMainColor[300] : MyTheme.appMainColor[700]),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
@@ -196,7 +196,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 decoration: new BoxDecoration(
                   color: MyTheme.appMainColor,
                   image: new DecorationImage(
-                      fit: BoxFit.cover, image: new NetworkImage("http://bing.getlove.cn/bingImage")),
+                      fit: BoxFit.cover,
+                      image: new NetworkImage(GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()]
+                          [GoogleNowImg.getCurrentTimeIndex()])),
                 ),
               ),
               new ListTile(
@@ -271,7 +273,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(MyLocalizations.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.2",// todo
+                applicationVersion: "v2019.2",
+                // todo
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
