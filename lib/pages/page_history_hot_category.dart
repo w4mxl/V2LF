@@ -24,10 +24,10 @@ class HistoryHotCategory extends StatefulWidget {
 
 class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
-    new Tab(text: ""),
-    new Tab(text: ""),
-    new Tab(text: ""),
-    new Tab(text: ""),
+    new Tab(text: "最热"),
+    new Tab(text: "最热"),
+    new Tab(text: "最热"),
+    new Tab(text: "最热"),
   ];
 
   Future<AtomFeed> _future;

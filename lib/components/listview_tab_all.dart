@@ -23,26 +23,13 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   bool isUpLoading = false;
   bool hasError = false;
   List<TabTopicItem> items = new List();
-
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     // 获取数据
     getTopics();
-    // 监听是否滑到了页面底部
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        print("加载更多...");
-        if (SpHelper.sp.containsKey(SP_USERNAME)) {
-          print('加载recent');
-          getTopics();
-        } else {
-          print('recent no');
-        }
-      }
-    });
   }
 
   Future getTopics() async {
@@ -64,6 +51,24 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
         isUpLoading = false;
       });
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scrollController = PrimaryScrollController.of(context);
+    // 监听是否滑到了页面底部
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        print("加载更多...");
+        if (SpHelper.sp.containsKey(SP_USERNAME)) {
+          print('加载recent');
+          getTopics();
+        } else {
+          print('recent no');
+        }
+      }
+    });
   }
 
   @override
