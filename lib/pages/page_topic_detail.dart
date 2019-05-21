@@ -621,7 +621,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   }
                   _launchURL(url);
                 },
-                useRichText: true,
+                onImageTap: () {
+                  // todo
+                },
                 // 0.9.6 版本使用 customRender 就不能使用 useRichText 解析了，暂时先这样 todo
 //                customRender: (node, children) {
 //                  if (node is dom.Element) {
@@ -689,7 +691,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   }
                   _launchURL(url);
                 },
-                useRichText: true,
               ),
             ],
           ),
@@ -985,7 +986,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                             color: MyTheme.appMainColor[400],
                                                                             decoration: TextDecoration.underline,
                                                                             decorationColor: MyTheme.appMainColor[400]),
-                                                                        useRichText: true,
                                                                       )),
                                                                 ],
                                                               ),
@@ -1000,7 +1000,6 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           }
                                           _launchURL(url);
                                         },
-                                        useRichText: true,
                                       )),
                                   Divider(
                                     height: 0,

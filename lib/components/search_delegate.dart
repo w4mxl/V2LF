@@ -263,7 +263,6 @@ class Sov2exResultItem extends StatelessWidget {
                     color: Colors.red,
                     decoration: null,
                   ),
-                  useRichText: true,
                 ),
                 SizedBox(
                   height: 8.0,
