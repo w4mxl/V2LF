@@ -11,7 +11,7 @@ import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
-import 'package:flutter_app/pages/page_history_hot.dart';
+import 'package:flutter_app/pages/page_history_hot_category.dart';
 import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_nodes.dart';
@@ -206,7 +206,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(MyLocalizations.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotTopics()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotCategory()));
                 },
               ),
               new ListTile(

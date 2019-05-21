@@ -14,6 +14,8 @@ import 'package:webfeed/webfeed.dart';
 /// @date  : 2019/3/24 2:47 PM
 /// @email : mxl1989@gmail.com
 /// @desc  : 历史热门主题
+///
+/// 2019-05-21 18:21：被 page_history_hot_category 取代
 
 class HistoryHotTopics extends StatefulWidget {
   @override
