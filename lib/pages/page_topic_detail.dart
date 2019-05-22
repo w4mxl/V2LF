@@ -52,7 +52,9 @@ class _TopicDetailsState extends State<TopicDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return new TopicDetailView(widget.topicId);
+    return Scaffold(
+      body: TopicDetailView(widget.topicId),
+    );
   }
 }
 
@@ -177,7 +179,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   TopicDetailModel _detailModel;
   List<ReplyItem> replyList = List();
 
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController;
 
 //  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
 
@@ -192,19 +194,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
     // 获取数据
     getData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      /*// print(_scrollController.offset); //打印滚动位置
-      if (_scrollController.offset < 1000 && showToTopBtn) {
-        setState(() {
-          showToTopBtn = false;
-        });
-      } else if (_scrollController.offset >= 1000 && showToTopBtn == false) {
-        setState(() {
-          showToTopBtn = true;
-        });
-      }*/
-
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
         if (replyList.length > 0 && p <= maxPage) {
@@ -214,6 +210,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         }
       }
     });
+    super.didChangeDependencies();
   }
 
   @override
