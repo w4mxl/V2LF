@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
@@ -31,7 +31,7 @@ class _NodePageState extends State<NodesPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: Text(MyLocalizations.of(context).nodes),
+        title: Text(S.of(context).nodes),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search),

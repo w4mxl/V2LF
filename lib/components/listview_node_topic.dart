@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
@@ -83,7 +83,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(MyLocalizations.of(context).loadingPage(p.toString())),
+        child: Text(S.of(context).loadingPage(p.toString())),
       ),
     );
   }

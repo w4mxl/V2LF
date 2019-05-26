@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/sov2ex.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
@@ -137,7 +137,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
             itemCount: _history.length + 1, // +1 是清空搜索记录
           )
         : Center(
-            child: Text(MyLocalizations.of(context).noHistorySearch),
+            child: Text(S.of(context).noHistorySearch),
           );
   }
 
@@ -146,7 +146,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       padding: const EdgeInsets.all(10.0),
       child: Center(
         child: InkWell(
-          child: Text(MyLocalizations.of(context).clearHistorySearch),
+          child: Text(S.of(context).clearHistorySearch),
           onTap: () {
             _history.clear();
             SpHelper.sp.remove(SP_SEARCH_HISTORY);

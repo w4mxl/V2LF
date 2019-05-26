@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/theme/theme_data.dart';
@@ -33,9 +33,8 @@ class _SettingPageState extends State<SettingPage> {
     super.initState();
 
     _list.add(LanguageModel('', ''));
-    _list.add(LanguageModel('zh', 'Hans'));
-    _list.add(LanguageModel('zh', 'Hant'));
-    _list.add(LanguageModel('en', 'US'));
+    _list.add(LanguageModel('zh', 'CN'));
+    _list.add(LanguageModel('en', ''));
 
     _currentLanguage = SpHelper.getLanguageModel();
     if (_currentLanguage == null) {
@@ -52,9 +51,9 @@ class _SettingPageState extends State<SettingPage> {
 
   void _updateData() {
     print(_currentLanguage.toString());
-    String language = _currentLanguage.scriptCode;
+    String language = _currentLanguage.languageCode;
     for (int i = 0, length = _list.length; i < length; i++) {
-      _list[i].isSelected = (_list[i].scriptCode == language);
+      _list[i].isSelected = (_list[i].languageCode == language);
     }
   }
 
@@ -62,7 +61,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(MyLocalizations.of(context).titleSetting),
+        title: Text(S.of(context).titleSetting),
         actions: <Widget>[
           // 退出登录
           Offstage(
@@ -73,10 +72,10 @@ class _SettingPageState extends State<SettingPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          content: Text(MyLocalizations.of(context).sureLogout),
+                          content: Text(S.of(context).sureLogout),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text(MyLocalizations.of(context).cancel),
+                              child: Text(S.of(context).cancel),
                               onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                             ),
                             FlatButton(
@@ -85,7 +84,7 @@ class _SettingPageState extends State<SettingPage> {
                                   await V2exClient.logout();
                                   Navigator.pop(context);
                                 },
-                                child: Text(MyLocalizations.of(context).logout)),
+                                child: Text(S.of(context).logout)),
                           ],
                         ));
               },
@@ -113,9 +112,9 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.table_chart),
-                    title: Text(MyLocalizations.of(context).titlePersonalityHome),
+                    title: Text(S.of(context).titlePersonalityHome),
                     subtitle: Text(
-                      MyLocalizations.of(context).hintPersonalityHome,
+                      S.of(context).hintPersonalityHome,
                       style: TextStyle(fontSize: 14.0),
                     ),
                     trailing: Icon(
@@ -143,7 +142,7 @@ class _SettingPageState extends State<SettingPage> {
                   // 主题设置
                   ExpansionTile(
                     leading: Icon(Icons.color_lens),
-                    title: Text(MyLocalizations.of(context).titleTheme),
+                    title: Text(S.of(context).titleTheme),
                     children: <Widget>[
                       Wrap(
                         children: themeColorMap.keys.map((key) {
@@ -182,7 +181,7 @@ class _SettingPageState extends State<SettingPage> {
                         eventBus.emit(MyEventSettingChange);
                       });
                     },
-                    title: Text(MyLocalizations.of(context).titleSystemFont),
+                    title: Text(S.of(context).titleSystemFont),
                     secondary: Icon(Icons.font_download),
                     selected: false,
                   ),
@@ -205,13 +204,12 @@ class _SettingPageState extends State<SettingPage> {
                     leading: Icon(Icons.language),
                     title: Row(
                       children: <Widget>[
-                        Text(MyLocalizations.of(context).titleLanguage),
+                        Text(S.of(context).titleLanguage),
                         Expanded(
                           child: Text(
                             SpHelper.getLanguageModel() == null
-                                ? MyLocalizations.of(context).languageAuto
-                                : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode,
-                                    SpHelper.getLanguageModel().scriptCode),
+                                ? S.of(context).languageAuto
+                                : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode),
                             style: TextStyle(
                               fontSize: 14.0,
                               color: MyTheme.gray_99,
@@ -230,8 +228,8 @@ class _SettingPageState extends State<SettingPage> {
                             return new ListTile(
                               title: new Text(
                                 (model.languageCode.isEmpty
-                                    ? MyLocalizations.of(context).languageAuto
-                                    : Utils.getLanguageName(context, model.languageCode, model.scriptCode)),
+                                    ? S.of(context).languageAuto
+                                    : Utils.getLanguageName(context, model.languageCode)),
                                 style: new TextStyle(fontSize: 13.0),
                               ),
                               trailing: new Radio(
@@ -272,7 +270,7 @@ class _SettingPageState extends State<SettingPage> {
                       Icons.star,
                       color: Colors.yellow,
                     ),
-                    title: Text(MyLocalizations.of(context).titleToRate),
+                    title: Text(S.of(context).titleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -292,7 +290,7 @@ class _SettingPageState extends State<SettingPage> {
                       Icons.favorite,
                       color: Colors.red,
                     ),
-                    title: Text(MyLocalizations.of(context).titleRecommend),
+                    title: Text(S.of(context).titleRecommend),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
@@ -318,7 +316,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.rate_review),
-                    title: new Text(MyLocalizations.of(context).feedback),
+                    title: new Text(S.of(context).feedback),
                     onTap: () {
                       if (Platform.isIOS) {
                         showDialog(
@@ -381,7 +379,7 @@ class _SettingPageState extends State<SettingPage> {
                     leading: Icon(
                       Icons.flag,
                     ),
-                    title: new Text(MyLocalizations.of(context).versions),
+                    title: new Text(S.of(context).versions),
                     onTap: () {
                       Navigator.push(
                         context,

@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_delegate.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -58,7 +58,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   children: <Widget>[
                     InkWell(
                       child: Text(
-                        userName.isNotEmpty ? userName : "      " + MyLocalizations.of(context).login,
+                        userName.isNotEmpty ? userName : "      " + S.of(context).login,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       onTap: () {
@@ -203,7 +203,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
-                title: new Text(MyLocalizations.of(context).history),
+                title: new Text(S.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotCategory()));
@@ -213,7 +213,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 enabled: userName.isNotEmpty,
                 // 登录后打开
                 leading: new Icon(Icons.notifications),
-                title: new Text(MyLocalizations.of(context).notifications),
+                title: new Text(S.of(context).notifications),
                 trailing: Text(notificationCount),
                 onTap: () {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
@@ -224,7 +224,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               new ListTile(
                 enabled: userName.isNotEmpty, // 登录后打开
                 leading: new Icon(Icons.star),
-                title: new Text(MyLocalizations.of(context).favorites),
+                title: new Text(S.of(context).favorites),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
@@ -232,7 +232,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.apps),
-                title: new Text(MyLocalizations.of(context).nodes),
+                title: new Text(S.of(context).nodes),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
@@ -240,7 +240,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.search),
-                title: new Text(MyLocalizations.of(context).search),
+                title: new Text(S.of(context).search),
                 onTap: () {
                   Navigator.pop(context);
                   showSearch(context: context, delegate: SearchSov2exDelegate());
@@ -251,7 +251,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.add),
-                title: new Text(MyLocalizations.of(context).create),
+                title: new Text(S.of(context).create),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -263,7 +263,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new ListTile(
                 leading: new Icon(Icons.settings),
-                title: new Text(MyLocalizations.of(context).settings),
+                title: new Text(S.of(context).settings),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
@@ -271,7 +271,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               new AboutListTile(
                 icon: new Icon(Icons.info),
-                child: new Text(MyLocalizations.of(context).about),
+                child: new Text(S.of(context).about),
                 applicationName: "V2LF",
                 applicationVersion: "v2019.2",
                 // todo

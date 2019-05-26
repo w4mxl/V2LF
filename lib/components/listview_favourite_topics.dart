@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
@@ -118,7 +118,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(p <= maxPage ? MyLocalizations.of(context).loadingPage(p.toString()) : "---- 🙄 ----"),
+        child: Text(p <= maxPage ? S.of(context).loadingPage(p.toString()) : "---- 🙄 ----"),
       ),
     );
   }

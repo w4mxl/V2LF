@@ -9,7 +9,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 /// @desc  : Web 页面
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -74,7 +74,7 @@ class _WebviewPageState extends State<WebviewPage> {
             bool result = await DioWeb.getUserInfo();
             if (result) {
               Fluttertoast.showToast(
-                  msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                  msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
                   timeInSecForIos: 2,
                   gravity: ToastGravity.CENTER);
               Navigator.of(context).pop(true);

@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/listview_tab_topic.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -21,6 +20,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
+import 'generated/i18n.dart';
 import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 
@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     if (!mounted) return;
     setState(() {
       if (model != null) {
-        _locale = Locale.fromSubtags(languageCode: model.languageCode, scriptCode: model.scriptCode);
+        _locale = Locale(model.languageCode, model.countryCode);
       } else {
         _locale = null;
       }
@@ -165,21 +165,12 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: [
-        const MyLocalizationsDelegate(),
+        S.delegate,
         ChineseCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
         GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
       ],
-      // Full Chinese support for CN, TW, and HK
-      supportedLocales: [
-        const Locale.fromSubtags(languageCode: 'zh'), // generic Chinese 'zh'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'), // generic simplified Chinese 'zh_Hans'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), // generic traditional Chinese 'zh_Hant'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'), // 'zh_Hans_CN'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'TW'), // 'zh_Hant_TW'
-        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant', countryCode: 'HK'), // 'zh_Hant_HK'
-        const Locale('en', ''),
-      ],
+      supportedLocales: S.delegate.supportedLocales,
       theme: appTheme(),
       home: WillPopScope(
         child: new Scaffold(

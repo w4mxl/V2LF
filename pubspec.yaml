@@ -34,7 +34,6 @@ dependencies:
   flutter_html: ^0.10.1 # https://github.com/Sub6Resources/flutter_html
   fluttertoast: ^3.0.4 # https://pub.dartlang.org/packages/fluttertoast
   fluintl: ^0.1.2 # 多语言 国际化 https://pub.dartlang.org/packages/fluintl
-  intl: ^0.15.8 # https://pub.dartlang.org/packages/intl
   # flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
   # flame: ^0.10.2
   path_provider: ^0.5.0+1 # https://pub.dartlang.org/packages/path_provider#-installing-tab-
@@ -58,7 +57,6 @@ dev_dependencies:
     sdk: flutter
 
   flutter_launcher_icons: "^0.7.0"
-  intl_translation: ^0.17.4 # https://pub.dartlang.org/packages/intl_translation
 
 flutter_icons:
   android: true

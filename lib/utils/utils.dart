@@ -2,19 +2,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Utils {
-  static String getLanguageName(BuildContext context, String languageCode, String scriptCode) {
-    if (languageCode.isEmpty && scriptCode.isEmpty) {
-      return MyLocalizations.of(context).languageAuto;
+  static String getLanguageName(BuildContext context, String languageCode) {
+    if (languageCode.isEmpty) {
+      return S.of(context).languageAuto;
     } else if (languageCode == 'en') {
       return 'English';
-    } else if (scriptCode == 'Hans') {
+    } else if (languageCode == 'zh') {
       return '简体中文';
-    } else {
-      return '繁體中文';
     }
   }
 

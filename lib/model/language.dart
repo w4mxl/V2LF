@@ -1,18 +1,18 @@
 class LanguageModel {
   String languageCode;
-  String scriptCode;
+  String countryCode;
   bool isSelected;
 
-  LanguageModel(this.languageCode, this.scriptCode, {this.isSelected: false});
+  LanguageModel(this.languageCode, this.countryCode, {this.isSelected: false});
 
   LanguageModel.fromJson(Map<String, dynamic> json)
       : languageCode = json['languageCode'],
-        scriptCode = json['scriptCode'],
+        countryCode = json['countryCode'],
         isSelected = json['isSelected'];
 
   Map<String, dynamic> toJson() => {
         'languageCode': languageCode,
-        'scriptCode': scriptCode,
+        'countryCode': countryCode,
         'isSelected': isSelected,
       };
 
@@ -20,7 +20,7 @@ class LanguageModel {
   String toString() {
     StringBuffer sb = new StringBuffer('{');
     sb.write("\"languageCode\":\"$languageCode\"");
-    sb.write(",\"scriptCode\":\"$scriptCode\"");
+    sb.write(",\"countryCode\":\"$countryCode\"");
     sb.write('}');
     return sb.toString();
   }

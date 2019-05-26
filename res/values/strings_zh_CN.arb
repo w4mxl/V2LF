@@ -1,1 +1,253 @@
-{}
+{
+  "@@last_modified": "2019-01-26T11:27:30.905630",
+  "@@locale":"zh_Hans",
+  "login": "登录",
+  "@login": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "toastLoginSuccess": "欢迎回来，$name!",
+  "@toastLoginSuccess": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "languageAuto": "跟随系统",
+  "@languageAuto": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleSetting": "设置",
+  "@titleSetting": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleTheme": "主题切换",
+  "@titleTheme": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleSystemFont": "系统字体",
+  "@titleSystemFont": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleLanguage": "多语言",
+  "@titleLanguage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titlePersonalityHome": "主页管理",
+  "@titlePersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "hintPersonalityHome": "对主页显示的节点重新选择及排序",
+  "@hintPersonalityHome": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleToRate": "请给「V2LF」评分",
+  "@titleToRate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "titleRecommend": "推荐给朋友们",
+  "@titleRecommend": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search": "搜索",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "nodes": "节点",
+  "@nodes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "notifications": "通知",
+  "@notifications": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "收藏",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings": "设置",
+  "@settings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback": "意见反馈",
+  "@feedback": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "about": "关于",
+  "@about": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noHistorySearch": "没有搜索记录",
+  "@noHistorySearch": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "clearHistorySearch": "清空历史记录",
+  "@clearHistorySearch": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "loadingPage": "正在加载第${num}页...",
+  "@loadingPage": {
+    "type": "text",
+    "placeholders": {
+      "num": {}
+    }
+  },
+  "noComment": "暂无回复",
+  "@noComment": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "account": "用户名",
+  "@account": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterAccount": "请输入用户名",
+  "@enterAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "password": "密码",
+  "@password": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterPassword": "请输入密码",
+  "@enterPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "captcha": "验证码",
+  "@captcha": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "enterCaptcha": "输入右侧验证码",
+  "@enterCaptcha": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signup": "注册",
+  "@signup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "forgetPassword": "忘记密码 ?",
+  "@forgetPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logoutLong": "退出登录",
+  "@logoutLong": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sureLogout": "您确定要退出登录吗？",
+  "@sureLogout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logout": "退出",
+  "@logout": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "reply": "回复",
+  "@reply": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "replyHint": "(u_u) 请尽量让回复有助于他人",
+  "@replyHint": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "replySuccess": "回复成功!",
+  "@replySuccess": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "thank": "感谢",
+  "@thank": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "actionFav": "收藏",
+  "@actionFav": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "browser": "浏览器打开",
+  "@browser": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyLink": "复制链接",
+  "@copyLink": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "copyContent": "复制内容",
+  "@copyContent": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "share": "分享",
+  "@share": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "history": "往期",
+  "@history": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "versions": "版本记录",
+  "@versions": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "oops": "糟糕！遇到未知错误",
+  "@oops": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "retry": "请重试",
+  "@retry": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "create": "发帖",
+  "@create": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "createTitle": "创建新主题",
+  "@createTitle": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

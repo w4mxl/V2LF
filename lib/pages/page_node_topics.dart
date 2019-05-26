@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_node_topic.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/node.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:ovprogresshud/progresshud.dart';
-
 
 class NodeTopics extends StatefulWidget {
   final NodeItem node;
@@ -254,7 +253,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(MyLocalizations.of(context).loadingPage(p.toString())),
+        child: Text(S.of(context).loadingPage(p.toString())),
       ),
     );
   }

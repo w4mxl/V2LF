@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
@@ -52,13 +52,13 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Text(MyLocalizations.of(context).oops),
+                new Text(S.of(context).oops),
                 RaisedButton.icon(
                   onPressed: () {
                     _onRefresh();
                   },
                   icon: Icon(Icons.refresh),
-                  label: Text(MyLocalizations.of(context).retry),
+                  label: Text(S.of(context).retry),
                 )
               ],
             );

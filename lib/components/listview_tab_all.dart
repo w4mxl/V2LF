@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -92,13 +92,13 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(MyLocalizations.of(context).oops),
+          new Text(S.of(context).oops),
           RaisedButton.icon(
             onPressed: () {
               _onRefresh();
             },
             icon: Icon(Icons.refresh),
-            label: Text(MyLocalizations.of(context).retry),
+            label: Text(S.of(context).retry),
           )
         ],
       );
@@ -111,9 +111,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(SpHelper.sp.containsKey(SP_USERNAME)
-            ? MyLocalizations.of(context).loadingPage((p + 1).toString())
-            : "请登录后查看更多"),
+        child: Text(SpHelper.sp.containsKey(SP_USERNAME) ? S.of(context).loadingPage((p + 1).toString()) : "请登录后查看更多"),
       ),
     );
   }

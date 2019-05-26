@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_node_delegate.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -148,7 +148,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(
-        title: Text(MyLocalizations.of(context).createTitle),
+        title: Text(S.of(context).createTitle),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.send),

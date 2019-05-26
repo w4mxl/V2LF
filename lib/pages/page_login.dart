@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/i10n/localization_intl.dart';
+import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
@@ -88,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                         textInputAction: TextInputAction.next,
                         onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
                         decoration: InputDecoration(
-                          labelText: MyLocalizations.of(context).account,
+                          labelText: S.of(context).account,
 
-                          // hintText: MyLocalizations.of(context).enterAccount,
+                          // hintText: S.of(context).enterAccount,
                         ),
                         // 校验用户名
                         validator: (v) {
@@ -111,8 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                               focusNode: captchaTextFieldNode,
                               onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                               decoration: InputDecoration(
-                                labelText: MyLocalizations.of(context).captcha,
-                                // hintText: MyLocalizations.of(context).enterCaptcha,
+                                labelText: S.of(context).captcha,
+                                // hintText: S.of(context).enterCaptcha,
                               ),
                               //校验密码
                               validator: (v) {
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                                   _loginState = 2;
                                 });
                                 Fluttertoast.showToast(
-                                    msg: MyLocalizations.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                    msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
                                     timeInSecForIos: 2,
                                     gravity: ToastGravity.CENTER);
                                 Timer(Duration(milliseconds: 800), () {
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         InkWell(
                           child: Text(
-                            MyLocalizations.of(context).signup,
+                            S.of(context).signup,
                             style:
                                 TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         InkWell(
                           child: Text(
-                            MyLocalizations.of(context).forgetPassword,
+                            S.of(context).forgetPassword,
                             style:
                                 TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
                           ),
@@ -263,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildButtonProgressChild(BuildContext context) {
     if (_loginState == 0) {
-      return Text(MyLocalizations.of(context).login, style: TextStyle(color: Colors.white));
+      return Text(S.of(context).login, style: TextStyle(color: Colors.white));
     } else if (_loginState == 1) {
       return CircularProgressIndicator(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -313,8 +313,8 @@ class _PasswordFieldState extends State<PasswordField> {
         textInputAction: TextInputAction.next,
         onEditingComplete: () => FocusScope.of(context).requestFocus(widget.captchaTextFieldNode),
         decoration: InputDecoration(
-            labelText: MyLocalizations.of(context).password,
-            // hintText: MyLocalizations.of(context).enterPassword,
+            labelText: S.of(context).password,
+            // hintText: S.of(context).enterPassword,
             suffixIcon: GestureDetector(
               dragStartBehavior: DragStartBehavior.down,
               onTap: () {
