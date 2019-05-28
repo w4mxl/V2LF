@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/theme/theme_data.dart';
-import 'package:flutter_app/utils/bubble_tab_indicator.dart';
+import 'package:flutter_app/components/bubble_tab_indicator.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart';
