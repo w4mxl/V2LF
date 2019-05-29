@@ -140,7 +140,10 @@ class DioWeb {
           item.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[3]/text()[1]")[0].name.split(' &nbsp;')[0];
 
           //*[@id="Wrapper"]/div/div[3]/div[22]/table/tbody/tr/td[3]/span[3]/strong/a
-          item.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()")[0].name;
+          if (aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()") != null) {
+            // 遇到有评论数，但是没有最后回复id的情况，这里多加一个判断
+            item.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()")[0].name;
+          }
         }
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[2]/a
         item.topicContent = aNode
