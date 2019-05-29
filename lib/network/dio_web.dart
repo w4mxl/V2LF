@@ -404,6 +404,13 @@ class DioWeb {
 
   // 登录 POST -> 获取用户信息
   static Future<bool> loginPost(LoginFormData loginFormData) async {
+    // 此处 Origin 和 Referer 是必要的
+    dio.options.headers = {
+      "Origin": 'https://jiasule.v2ex.com',
+      "Referer": "https://jiasule.v2ex.com/signin",
+      'user-agent':
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+    };
     dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
     //dio.options.responseType = ResponseType.JSON;
 
@@ -419,9 +426,27 @@ class DioWeb {
       var response = await dio.post("/signin", data: formData);
       dio.options.contentType = ContentType.json; // 还原
       if (response.statusCode == 302) {
-        // 这里实际已经登录成功了
+        // 这里实际已经登录成功了，去获取用户信息
+        // 还原
+        dio.options.headers = {
+          'user-agent': Platform.isIOS
+              ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+              : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+        };
         return await getUserInfo();
       } else {
+        // 登录失败，去获取错误提示信息
+        var tree = ETree.fromString(response.data);
+        // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li "输入的验证码不正确"
+        // //*[@id="Wrapper"]/div/div[1]/div[2]/ul/li "用户名和密码无法匹配" 等
+        var errorInfo;
+        if (tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()') != null) {
+          errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
+        } else {
+          errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[2]/ul/li/text()')[0].name;
+        }
+        print("wml error!!!!：$errorInfo");
+        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.CENTER);
         return false;
       }
     } on DioError catch (e) {
@@ -459,14 +484,8 @@ class DioWeb {
       SpHelper.sp.setString(SP_USERNAME, username);
       // todo 判断用户是否开启了两步验证
       return true;
-    } else {
-      // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li "输入的验证码不正确"
-      // //*[@id="Wrapper"]/div/div[1]/div[2]/ul/li todo
-      var errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
-      print("wml error!!!!：$errorInfo");
-      Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.CENTER);
-      return false;
     }
+    return false;
   }
 
   // 获取「主题收藏」下的topics [xpath 解析的]
