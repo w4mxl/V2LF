@@ -111,7 +111,7 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    leading: Icon(Icons.table_chart),
+                    leading: Icon(Icons.table_chart, color: MyTheme.appMainColor),
                     title: Text(S.of(context).titlePersonalityHome),
                     subtitle: Text(
                       S.of(context).hintPersonalityHome,
@@ -141,7 +141,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 主题设置
                   ExpansionTile(
-                    leading: Icon(Icons.color_lens),
+                    leading: Icon(Icons.color_lens, color: Colors.deepPurpleAccent),
                     title: Text(S.of(context).titleTheme),
                     children: <Widget>[
                       Wrap(
@@ -182,7 +182,10 @@ class _SettingPageState extends State<SettingPage> {
                       });
                     },
                     title: Text(S.of(context).titleSystemFont),
-                    secondary: Icon(Icons.font_download),
+                    secondary: Icon(
+                      Icons.font_download,
+                      color: Colors.tealAccent,
+                    ),
                     selected: false,
                   ),
                   Divider(
@@ -201,7 +204,10 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ExpansionTile(
-                    leading: Icon(Icons.language),
+                    leading: Icon(
+                      Icons.language,
+                      color: Colors.lightBlueAccent,
+                    ),
                     title: Row(
                       children: <Widget>[
                         Text(S.of(context).titleLanguage),
@@ -315,7 +321,10 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    leading: Icon(Icons.rate_review),
+                    leading: Icon(
+                      Icons.alternate_email,
+                      color: Colors.black,
+                    ),
                     title: new Text(S.of(context).feedback),
                     onTap: () {
                       if (Platform.isIOS) {
@@ -378,6 +387,7 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.flag,
+                      color: Colors.greenAccent,
                     ),
                     title: new Text(S.of(context).versions),
                     onTap: () {
