@@ -54,25 +54,14 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _scrollController = PrimaryScrollController.of(context);
-    // 监听是否滑到了页面底部
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        print("加载更多...");
-        if (SpHelper.sp.containsKey(SP_USERNAME)) {
-          print('加载recent');
-          getTopics();
-        } else {
-          print('recent no');
-        }
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (_scrollController != PrimaryScrollController.of(context)) {
+      // 监听是否滑到了页面底部
+      _scrollController = PrimaryScrollController.of(context)
+        ..addListener(() {
+          _checkScrollToButtom();
+        });
+    }
     if (items.length > 0) {
       return new RefreshIndicator(
           child: ListView.builder(
@@ -107,6 +96,18 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     return LoadingList();
   }
 
+  void _checkScrollToButtom() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      print("加载更多...");
+      if (SpHelper.sp.containsKey(SP_USERNAME)) {
+        print('加载recent');
+        getTopics();
+      } else {
+        print('recent no');
+      }
+    }
+  }
+
   Widget _buildLoadText() {
     return Container(
       padding: const EdgeInsets.all(18.0),
@@ -133,7 +134,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
 
   @override
   void dispose() {
+    _scrollController.removeListener(_checkScrollToButtom);
     super.dispose();
-    _scrollController.dispose();
   }
 }
