@@ -25,7 +25,7 @@ dependencies:
   flutter_markdown: ^0.2.0
   shared_preferences: ^0.5.2
   url_launcher: ^5.0.2
-  cached_network_image: ^0.7.0 # https://pub.dartlang.org/packages/cached_network_image
+  cached_network_image: ^0.8.0 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.14.0+2 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath     还不支持 ETree.toString(Element) :(
   dio: ^2.1.2 # https://pub.dartlang.org/packages/dio
@@ -37,6 +37,7 @@ dependencies:
   # flutter_inappbrowser: ^0.5.51 #https://pub.dartlang.org/packages/flutter_inappbrowser
   # flame: ^0.10.2
   path_provider: ^0.5.0+1 # https://pub.dartlang.org/packages/path_provider#-installing-tab-
+  sqflite: ^1.1.5 # https://pub.dev/packages/sqflite#-installing-tab-
   # modal_progress_hud: ^0.1.3 # https://github.com/mmcc007/modal_progress_hud
   ovprogresshud: ^0.2.1 # https://github.com/mjl0602/OVProgressHUD
   # event_bus: ^1.0.3 # https://pub.dartlang.org/packages/event_bus
