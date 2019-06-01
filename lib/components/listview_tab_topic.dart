@@ -89,6 +89,7 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        // 保存到数据库（新增或者修改之前记录到最前面）todo
         Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),
@@ -101,8 +102,7 @@ class TopicItemView extends StatelessWidget {
           children: <Widget>[
             new Text(
               topic.topicContent,
-              /*maxLines: 2,
-            overflow: TextOverflow.ellipsis,*/
+              // 区分：已读 or 未读 todo
               style: new TextStyle(fontSize: 17),
             ),
             SizedBox(

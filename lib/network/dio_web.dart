@@ -156,6 +156,7 @@ class DioWeb {
 
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/a
         item.nodeName = aNode.xpath("/table/tr/td[3]/span[1]/a/text()")[0].name;
+        // 去数据库比对，判断是否为已读状态 todo
         topics.add(item);
       }
     }
