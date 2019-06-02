@@ -30,6 +30,7 @@ class S implements WidgetsLocalizations {
   String get copyLink => "Copy link";
   String get create => "New Topic";
   String get createTitle => "Create New Topic";
+  String get darkMode => "Dark Mode";
   String get enterAccount => "Enter account";
   String get enterCaptcha => "Enter right captcha";
   String get enterPassword => "Enter password";
@@ -37,7 +38,7 @@ class S implements WidgetsLocalizations {
   String get feedback => "Send Feedback";
   String get forgetPassword => "Forgot password ?";
   String get hintPersonalityHome => "Reselect and sort the nodes displayed on the homepage";
-  String get history => "History";
+  String get history => "History Hottest";
   String get languageAuto => "Auto";
   String get login => "Login";
   String get logout => "Logout";
@@ -48,6 +49,7 @@ class S implements WidgetsLocalizations {
   String get notifications => "Notifications";
   String get oops => "Oops！An unknown error occurred";
   String get password => "Password";
+  String get recentRead => "Recent Read";
   String get reply => "Reply";
   String get replyHint => "(u_u)  Please try to make the reply helpful to others";
   String get replySuccess => "Reply Success!";
@@ -109,7 +111,7 @@ class $zh_CN extends S {
   @override
   String get sureLogout => "您确定要退出登录吗？";
   @override
-  String get history => "往期";
+  String get history => "往期最热";
   @override
   String get signup => "注册";
   @override
@@ -134,6 +136,8 @@ class $zh_CN extends S {
   String get hintPersonalityHome => "对主页显示的节点重新选择及排序";
   @override
   String get login => "登录";
+  @override
+  String get recentRead => "近期已读";
   @override
   String get search => "搜索";
   @override
@@ -170,6 +174,8 @@ class $zh_CN extends S {
   String get nodes => "节点";
   @override
   String get thank => "感谢";
+  @override
+  String get darkMode => "夜间模式";
   @override
   String get titleTheme => "主题切换";
   @override

@@ -220,7 +220,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "history": "History",
+  "history": "History Hottest",
   "@history": {
     "type": "text",
     "placeholders": {}
@@ -249,5 +249,7 @@
   "@createTitle": {
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "recentRead": "Recent Read",
+  "darkMode": "Dark Mode"
 }

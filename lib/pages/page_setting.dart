@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
+import 'package:flutter_app/components/switch_list_tile_cupertino.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
@@ -27,6 +28,7 @@ class _SettingPageState extends State<SettingPage> {
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
   bool _switchSystemFont = false;
+  bool _currentIsDark = false;
 
   @override
   void initState() {
@@ -46,6 +48,12 @@ class _SettingPageState extends State<SettingPage> {
     String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
     if (_spFont != null && _spFont == 'System') {
       _switchSystemFont = true;
+    }
+
+    if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
+      _currentIsDark = false;
+    } else {
+      _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
     }
   }
 
@@ -111,7 +119,7 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                   ),
                   ListTile(
-                    leading: Icon(Icons.table_chart, color: MyTheme.appMainColor),
+                    leading: Icon(Icons.table_chart),
                     title: Text(S.of(context).titlePersonalityHome),
                     subtitle: Text(
                       S.of(context).hintPersonalityHome,
@@ -141,7 +149,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 主题设置
                   ExpansionTile(
-                    leading: Icon(Icons.color_lens, color: Colors.deepPurpleAccent),
+                    leading: Icon(Icons.color_lens, color: ListTileTheme.of(context).iconColor),
                     title: Text(S.of(context).titleTheme),
                     children: <Widget>[
                       Wrap(
@@ -167,27 +175,84 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                     indent: 20.0,
                   ),
-                  // 字体切换
-                  SwitchListTile(
-                    value: _switchSystemFont,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchSystemFont = value;
-                        if (value) {
-                          SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
-                        } else {
-                          SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
-                        }
-                        eventBus.emit(MyEventSettingChange);
-                      });
-                    },
-                    title: Text(S.of(context).titleSystemFont),
-                    secondary: Icon(
-                      Icons.font_download,
-                      color: Colors.tealAccent,
-                    ),
-                    selected: false,
+                  // Dark mode
+                  Platform.isIOS
+                      ? CupertinoSwitchListTile(
+                          value: _currentIsDark,
+                          onChanged: (value) {
+                            setState(() {
+                              _currentIsDark = value;
+                              SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
+                              eventBus.emit(MyEventSettingChange);
+                            });
+                          },
+                          title: Text(S.of(context).darkMode),
+                          secondary: Icon(
+                            Icons.brightness_4,
+                          ),
+                          selected: false,
+                          activeColor: MyTheme.appMainColor,
+                        )
+                      : SwitchListTile(
+                          value: _currentIsDark,
+                          onChanged: (value) {
+                            setState(() {
+                              _currentIsDark = value;
+                              SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
+                              eventBus.emit(MyEventSettingChange);
+                            });
+                          },
+                          title: Text(S.of(context).darkMode),
+                          secondary: Icon(
+                            Icons.brightness_4,
+                          ),
+                          selected: false,
+                        ),
+                  Divider(
+                    height: 0.0,
+                    indent: 20.0,
                   ),
+                  // 字体切换
+                  Platform.isIOS
+                      ? CupertinoSwitchListTile(
+                          value: _switchSystemFont,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchSystemFont = value;
+                              if (value) {
+                                SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
+                              } else {
+                                SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
+                              }
+                              eventBus.emit(MyEventSettingChange);
+                            });
+                          },
+                          title: Text(S.of(context).titleSystemFont),
+                          secondary: Icon(
+                            Icons.font_download,
+                          ),
+                          selected: false,
+                          activeColor: MyTheme.appMainColor,
+                        )
+                      : SwitchListTile(
+                          value: _switchSystemFont,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchSystemFont = value;
+                              if (value) {
+                                SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
+                              } else {
+                                SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
+                              }
+                              eventBus.emit(MyEventSettingChange);
+                            });
+                          },
+                          title: Text(S.of(context).titleSystemFont),
+                          secondary: Icon(
+                            Icons.font_download,
+                          ),
+                          selected: false,
+                        ),
                   Divider(
                     height: 0.0,
                   ),
@@ -206,7 +271,6 @@ class _SettingPageState extends State<SettingPage> {
                   ExpansionTile(
                     leading: Icon(
                       Icons.language,
-                      color: Colors.lightBlueAccent,
                     ),
                     title: Row(
                       children: <Widget>[
@@ -274,7 +338,6 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.star,
-                      color: Colors.yellow,
                     ),
                     title: Text(S.of(context).titleToRate),
                     trailing: Icon(
@@ -294,7 +357,6 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.favorite,
-                      color: Colors.red,
                     ),
                     title: Text(S.of(context).titleRecommend),
                     trailing: Icon(
@@ -323,7 +385,6 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.alternate_email,
-                      color: Colors.black,
                     ),
                     title: new Text(S.of(context).feedback),
                     onTap: () {
@@ -387,7 +448,6 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.flag,
-                      color: Colors.greenAccent,
                     ),
                     title: new Text(S.of(context).versions),
                     onTap: () {

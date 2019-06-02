@@ -18,7 +18,6 @@ import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
-import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -79,27 +78,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           // todo -> 个人中心页面
                           _launchURL(Strings.v2exHost + '/member/' + userName);
                         }
-                      },
-                    ),
-                    InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 14.0),
-                        child: Icon(
-                          Icons.brightness_4,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      onTap: () {
-                        bool currentIsDark;
-                        if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
-                          currentIsDark = false;
-                        } else {
-                          currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
-                        }
-                        SpHelper.sp.setBool(SP_IS_DARK, !currentIsDark);
-                        eventBus.emit(MyEventSettingChange);
-                        print('wml');
                       },
                     ),
                   ],
@@ -208,6 +186,17 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotCategory()));
                 },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.history),
+                title: new Text(S.of(context).recentRead),
+                onTap: () {
+                  Navigator.pop(context);
+                  // todo
+                },
+              ),
+              new Divider(
+                height: 0,
               ),
               new ListTile(
                 enabled: userName.isNotEmpty,
