@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
@@ -228,6 +229,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
+        // 从「近期已读」移除
+        var databaseHelper = DatabaseHelper.instance;
+        var i = await databaseHelper.delete(topicDetailModel.topicId);
+        print(i);
         Navigator.pop(context);
         return;
       }

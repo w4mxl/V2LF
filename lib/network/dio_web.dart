@@ -659,6 +659,8 @@ class DioWeb {
     // Use html parser and query selector
     var document = parse(response.data);
 
+    detailModel.topicId = topicId;
+
     if (response.isRedirect || document.querySelector('#Main > div.box > div.message') != null) {
       Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
       return detailModel;

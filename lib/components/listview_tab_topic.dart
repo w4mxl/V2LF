@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -81,6 +82,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
 /// topic item view
 class TopicItemView extends StatelessWidget {
+  final dbHelper = DatabaseHelper.instance;
   final TabTopicItem topic;
 
   TopicItemView(this.topic);
@@ -89,7 +91,10 @@ class TopicItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // 保存到数据库（新增或者修改之前记录到最前面）todo
+        // 保存到数据库（新增或者修改之前记录到最前面）
+        // 添加到「近期已读」
+        dbHelper.insert(topic);
+
         Navigator.push(
           context,
           new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),

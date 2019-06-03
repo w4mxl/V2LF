@@ -111,7 +111,7 @@ class $zh_CN extends S {
   @override
   String get sureLogout => "您确定要退出登录吗？";
   @override
-  String get history => "往期最热";
+  String get history => "往期";
   @override
   String get signup => "注册";
   @override
@@ -137,7 +137,7 @@ class $zh_CN extends S {
   @override
   String get login => "登录";
   @override
-  String get recentRead => "近期已读";
+  String get recentRead => "已读";
   @override
   String get search => "搜索";
   @override

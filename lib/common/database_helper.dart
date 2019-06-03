@@ -1,3 +1,5 @@
+import 'dart:async';
+
 /// @author: wml
 /// @date  : 2019-05-31 18:17
 /// @email : mxl1989@gmail.com
@@ -6,26 +8,37 @@
 
 import 'dart:io';
 
+import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
-  static final _databaseName = "MyDatabase.db";
+  static final _databaseName = "MyReadHistory.db";
   static final _databaseVersion = 1;
 
-  static final table = 'my_table';
+  static final table = 'recent_read_table';
 
-  static final columnId = '_id';
-  static final columnName = 'name';
-  static final columnAge = 'age';
+  static final columnTopicId = 'topicId';
+  static final columnReadStatus = 'readStatus';
+  static final columnMemberId = 'memberId';
+
+  static final columnAvatar = 'avatar';
+  static final columnTopicContent = 'topicContent';
+  static final columnReplyCount = 'replyCount';
+  static final columnNodeId = 'nodeId';
+  static final columnNodeName = 'nodeName';
+  static final columnLastReplyMId = 'lastReplyMId';
+  static final columnLastReplyTime = 'lastReplyTime';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
+
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   // only have a single app-wide reference to the database
   static Database _database;
+
   Future<Database> get database async {
     if (_database != null) return _database;
     // lazily instantiate the db the first time it is accessed
@@ -44,9 +57,16 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY,
-            $columnName TEXT NOT NULL,
-            $columnAge INTEGER NOT NULL
+            $columnTopicId TEXT PRIMARY KEY,
+            $columnReadStatus TEXT NOT NULL,
+            $columnMemberId TEXT NOT NULL,
+            $columnAvatar TEXT NOT NULL,
+            $columnTopicContent TEXT NOT NULL,
+            $columnReplyCount TEXT NOT NULL,
+            $columnNodeId TEXT NOT NULL,
+            $columnNodeName TEXT NOT NULL,
+            $columnLastReplyMId TEXT NOT NULL,
+            $columnLastReplyTime TEXT NOT NULL
           )
           ''');
   }
@@ -56,9 +76,20 @@ class DatabaseHelper {
   // Inserts a row in the database where each key in the Map is a column name
   // and the value is the column value. The return value is the id of the
   // inserted row.
-  Future<int> insert(Map<String, dynamic> row) async {
+  Future<int> insert(TabTopicItem tabTopicItem) async {
+    // 判断如果已经有相同id的主题存在，则先删除后添加
+    if (await queryTopic(tabTopicItem.topicId)) {
+      print("已存在，先移除");
+      delete(tabTopicItem.topicId);
+    }
     Database db = await instance.database;
-    return await db.insert(table, row);
+    return await db.insert(table, tabTopicItem.toMap());
+  }
+
+  Future<bool> queryTopic(String topicId) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(table, where: '$columnTopicId = ?', whereArgs: [topicId]);
+    return result.length > 0;
   }
 
   // All of the rows are returned as a list of maps, where each map is
@@ -66,6 +97,15 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
     return await db.query(table);
+  }
+
+  // 获取 Topic list
+  Future<List<TabTopicItem>> getRecentReadTopics() async {
+    var mapList = await queryAllRows();
+    List<TabTopicItem> topicList = List<TabTopicItem>();
+    mapList.forEach((map) => topicList.insert(0, TabTopicItem.fromMap(map)));
+    print("当前数据库共有${topicList.length}条记录");
+    return topicList;
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
@@ -77,16 +117,21 @@ class DatabaseHelper {
 
   // We are assuming here that the id column in the map is set. The other
   // column values will be used to update the row.
-  Future<int> update(Map<String, dynamic> row) async {
+  Future<int> update(TabTopicItem tabTopicItem) async {
     Database db = await instance.database;
-    int id = row[columnId];
-    return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+    return await db.update(table, tabTopicItem.toMap(), where: '$columnTopicId = ?', whereArgs: [tabTopicItem.topicId]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
-  Future<int> delete(int id) async {
+  Future<int> delete(String topicId) async {
     Database db = await instance.database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    print("删除某条已读： " + topicId);
+    return await db.delete(table, where: '$columnTopicId = ?', whereArgs: [topicId]);
+  }
+
+  Future<int> deleteAll() async {
+    Database db = await instance.database;
+    return await db.delete(table);
   }
 }

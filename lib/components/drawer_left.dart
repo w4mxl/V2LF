@@ -16,6 +16,7 @@ import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
+import 'package:flutter_app/pages/page_recent_read_topics.dart';
 import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
@@ -192,7 +193,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).recentRead),
                 onTap: () {
                   Navigator.pop(context);
-                  // todo
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RecentReadTopicsPage()));
                 },
               ),
               new Divider(

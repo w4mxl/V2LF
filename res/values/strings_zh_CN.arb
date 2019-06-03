@@ -220,7 +220,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "history": "往期最热",
+  "history": "往期",
   "@history": {
     "type": "text",
     "placeholders": {}
@@ -250,6 +250,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "recentRead": "近期已读",
+  "recentRead": "已读",
   "darkMode": "夜间模式"
 }
