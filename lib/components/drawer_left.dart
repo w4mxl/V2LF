@@ -57,10 +57,23 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     InkWell(
-                      child: Text(
-                        userName.isNotEmpty ? userName : "      " + S.of(context).login,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      child: userName.isEmpty
+                          ? Container(
+                              child: Text(
+                                S.of(context).login,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              width: 72,
+                              alignment: Alignment.bottomCenter,
+                            )
+                          : Text(
+                              userName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                       onTap: () {
                         if (userName.isEmpty) {
                           var future = Navigator.push(context,
