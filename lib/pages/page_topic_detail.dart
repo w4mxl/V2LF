@@ -116,9 +116,9 @@ class _DialogOfCommentState extends State<DialogOfComment> {
           decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让回复有助于他人"),
           controller: _textController,
           onChanged: (String text) => setState(() {
-                _isComposing = text.length > 0;
-                widget.onValueChange(text);
-              }),
+            _isComposing = text.length > 0;
+            widget.onValueChange(text);
+          }),
           onSubmitted: _onTextMsgSubmitted,
         ),
       ],
@@ -739,10 +739,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         height: 25.0,
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) => Icon(
-                                              Icons.account_circle,
-                                              size: 25,
-                                              color: Color(0xFFcccccc),
-                                            ),
+                                          Icons.account_circle,
+                                          size: 25,
+                                          color: Color(0xFFcccccc),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -752,16 +752,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   offstage: reply.userName != _detailModel.createdId,
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: Container(
-                                        padding: EdgeInsets.all(1),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey),
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Text(
-                                          '楼主',
-                                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                                        )),
+                                    child: Text(
+                                      '楼主',
+                                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -785,7 +779,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       ),
                                       // 评论时间和平台
                                       new Padding(
-                                        padding: const EdgeInsets.only(left: 6.0, right: 4.0),
+                                        padding: const EdgeInsets.only(left: 6.0, right: 8.0),
                                         child: new Text(
                                           reply.lastReplyTime,
                                           style: new TextStyle(
@@ -876,10 +870,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         height: 25.0,
                                                                         fit: BoxFit.cover,
                                                                         placeholder: (context, url) => Icon(
-                                                                              Icons.account_circle,
-                                                                              size: 25,
-                                                                              color: Color(0xFFcccccc),
-                                                                            ),
+                                                                          Icons.account_circle,
+                                                                          size: 25,
+                                                                          color: Color(0xFFcccccc),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
@@ -887,22 +881,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       Strings.v2exHost + '/member/' + item.userName),
                                                                 ),
                                                                 Offstage(
-                                                                  offstage: item.userName != _detailModel.createdId,
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.only(top: 4.0),
-                                                                    child: Container(
-                                                                        padding: EdgeInsets.all(1),
-                                                                        decoration: BoxDecoration(
-                                                                          border: Border.all(color: Colors.grey),
-                                                                          borderRadius: BorderRadius.circular(4),
-                                                                        ),
-                                                                        child: Text(
-                                                                          '楼主',
-                                                                          style:
-                                                                              TextStyle(fontSize: 10, color: Colors.grey),
-                                                                        )),
-                                                                  ),
-                                                                ),
+                                                                    offstage: item.userName != _detailModel.createdId,
+                                                                    child: Text(
+                                                                      '楼主',
+                                                                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                                                                    )),
                                                               ],
                                                             ),
                                                             SizedBox(

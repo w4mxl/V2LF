@@ -108,7 +108,7 @@ class TopicItemView extends StatelessWidget {
             new Text(
               topic.topicContent,
               // 区分：已读 or 未读 todo
-              style: new TextStyle(fontSize: 17),
+              style: new TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
             ),
             SizedBox(
               height: 8,
@@ -132,8 +132,7 @@ class TopicItemView extends StatelessWidget {
                   topic.memberId,
                   textAlign: TextAlign.left,
                   maxLines: 1,
-                  style: new TextStyle(
-                      fontSize: 14.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                  style: new TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Theme.of(context).disabledColor),
                 ),
                 SizedBox(
                   width: 6,
@@ -142,12 +141,14 @@ class TopicItemView extends StatelessWidget {
                   padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
                   decoration: BoxDecoration(
                     border: Border.all(color: Theme.of(context).dividerColor),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: new Text(
                     topic.nodeName,
-                    style:
-                        new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor, fontWeight: FontWeight.bold),
+                    style: new TextStyle(
+                      fontSize: 12.0,
+                      color: Theme.of(context).disabledColor,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -167,14 +168,14 @@ class TopicItemView extends StatelessWidget {
                     children: <Widget>[
                       new Icon(
                         FontAwesomeIcons.comment,
-                        size: 16.0,
+                        size: 14.0,
                         color: Colors.grey,
                       ),
                       new Padding(
                         padding: const EdgeInsets.only(left: 4.0),
                         child: new Text(
                           topic.replyCount,
-                          style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                          style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
                         ),
                       ),
                     ],

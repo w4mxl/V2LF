@@ -75,9 +75,8 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                       data: atomItem.content.replaceFirst('<br />', ''),
                       defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
                       linkStyle: TextStyle(
-                          color: MyTheme.appMainColor[400],
-                          decoration: TextDecoration.underline,
-                          decorationColor: MyTheme.appMainColor[400]),
+                        color: Theme.of(context).accentColor,
+                      ),
                       onLinkTap: (url) {
                         if (UrlHelper.canLaunchInApp(context, url)) {
                           return;
