@@ -83,9 +83,6 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                         }
                         _launchURL(url);
                       },
-                      onImageTap: () {
-                        // todo
-                      },
                     ),
                   ),
                 );

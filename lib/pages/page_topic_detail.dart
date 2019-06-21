@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/common/database_helper.dart';
+import 'package:flutter_app/components/fullscreen_image_view.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
@@ -623,8 +624,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   }
                   _launchURL(url);
                 },
-                onImageTap: () {
-                  // todo
+                onImageTap: (source) {
+                  print(source);
+//                  Navigator.push(
+//                    context,
+//                    MaterialPageRoute(
+//                      builder: (context) => FullScreenWrapper(
+//                        imageProvider: NetworkImage(source),
+//                      ),
+//                    ),
+//                  );
                 },
                 // 0.9.6 版本使用 customRender 就不能使用 useRichText 解析了，暂时先这样 todo
 //                customRender: (node, children) {
