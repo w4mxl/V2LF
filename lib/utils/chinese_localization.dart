@@ -5,7 +5,7 @@ import 'dart:async';
  * @date  : 2019/3/18 11:51
  * @email : mxl1989@gmail.com
  * @desc  : https://github.com/flutter/flutter/issues/13452 根据这里的yy1300326388回复来解决
- * 问题：在iOS真机上语言为非因为时，在文本输入框上长按会下面报错，原因其实是 Cupertino 很多widget 还没有翻译全
+ * 问题：在iOS真机上语言为非英文时，在文本输入框上长按会下面报错，原因其实是 Cupertino 很多widget 还没有翻译全
  * NoSuchMethodError: The getter 'pasteButtonLabel' was called on null
  */
 

@@ -626,14 +626,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 },
                 onImageTap: (source) {
                   print(source);
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => FullScreenWrapper(
-//                        imageProvider: NetworkImage(source),
-//                      ),
-//                    ),
-//                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenWrapper(
+                        imageProvider: NetworkImage(source),
+                      ),
+                    ),
+                  );
                 },
                 // 0.9.6 版本使用 customRender 就不能使用 useRichText 解析了，暂时先这样 todo
 //                customRender: (node, children) {
