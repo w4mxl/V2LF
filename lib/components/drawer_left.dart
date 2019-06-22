@@ -145,11 +145,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                               ));
                     }
                   },
-                  child: Container(
-                    padding: EdgeInsets.all(1),
-                    child: Text(poemOne != null ? poemOne.data.content : ""),
-                    color: MyTheme.appMainColor[200],
-                  ),
+                  child: Text(poemOne != null ? poemOne.data.content : ""),
                 ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
