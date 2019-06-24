@@ -1,6 +1,6 @@
 import 'package:flutter_app/model/tab.dart';
 
-const String HOST = 'https://jiasule.v2ex.com/';
+const String HOST = 'https://www.v2ex.com/';
 const String API_PATH = 'api/';
 
 const String API_HOST = HOST + API_PATH;

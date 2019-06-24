@@ -68,7 +68,7 @@ class _WebviewPageState extends State<WebviewPage> {
             print("A2 cookie: " + cookie.toString());
             String cookiePath = await Utils.getCookiePath();
             PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
-            cookieJar.saveFromResponse(Uri.parse("https://jiasule.v2ex.com/"), <Cookie>[cookie]);
+            cookieJar.saveFromResponse(Uri.parse("https://www.v2ex.com/"), <Cookie>[cookie]);
 
             // 获取用户信息，保存
             bool result = await DioWeb.getUserInfo();
