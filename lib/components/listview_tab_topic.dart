@@ -38,6 +38,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new FutureBuilder<List<TabTopicItem>>(
         future: topicListFuture,
         builder: (context, snapshot) {
@@ -132,7 +133,8 @@ class TopicItemView extends StatelessWidget {
                   topic.memberId,
                   textAlign: TextAlign.left,
                   maxLines: 1,
-                  style: new TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold, color: Theme.of(context).disabledColor),
+                  style: new TextStyle(
+                      fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
                 ),
                 SizedBox(
                   width: 6,
@@ -141,13 +143,14 @@ class TopicItemView extends StatelessWidget {
                   padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
                   decoration: BoxDecoration(
                     border: Border.all(color: Theme.of(context).dividerColor),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   child: new Text(
                     topic.nodeName,
                     style: new TextStyle(
                       fontSize: 12.0,
                       color: Theme.of(context).disabledColor,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

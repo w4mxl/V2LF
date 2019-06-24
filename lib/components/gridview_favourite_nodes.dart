@@ -39,6 +39,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<List<FavNode>>(
       future: _future,
       builder: (BuildContext context, AsyncSnapshot<List<FavNode>> snapshot) {

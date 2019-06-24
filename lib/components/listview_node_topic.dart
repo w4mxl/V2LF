@@ -58,6 +58,7 @@ class TopicListViewState extends State<NodeTopicListView> with AutomaticKeepAliv
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (items.length > 0) {
       return new RefreshIndicator(
           child: ListView.builder(

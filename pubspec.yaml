@@ -7,7 +7,7 @@ description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 2019.2+5
+version: 2019.2+6
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

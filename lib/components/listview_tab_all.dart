@@ -55,6 +55,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (_scrollController != PrimaryScrollController.of(context)) {
       // 监听是否滑到了页面底部
       _scrollController = PrimaryScrollController.of(context)

@@ -702,6 +702,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   }
                   _launchURL(url);
                 },
+                onImageTap: (source) {
+                  print(source);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenWrapper(
+                        imageProvider: NetworkImage(source),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -993,6 +1004,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             return;
                                           }
                                           _launchURL(url);
+                                        },
+                                        onImageTap: (source) {
+                                          print(source);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => FullScreenWrapper(
+                                                imageProvider: NetworkImage(source),
+                                              ),
+                                            ),
+                                          );
                                         },
                                       )),
                                   Divider(
