@@ -45,8 +45,10 @@ class _TopicDetailsState extends State<TopicDetails> {
   void initState() {
     super.initState();
 
-    // 设置默认操作进度加载背景
-    Progresshud.setDefaultMaskTypeBlack();
+    // 设置默认操作进度加载背景 todo 存在 bug 在Android一直转圈不消失
+    if (Platform.isIOS) {
+      Progresshud.setDefaultMaskTypeBlack();
+    }
 
     // check login state
     isLogin = SpHelper.sp.containsKey(SP_USERNAME);
