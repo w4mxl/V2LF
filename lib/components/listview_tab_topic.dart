@@ -109,7 +109,7 @@ class TopicItemView extends StatelessWidget {
             new Text(
               topic.topicContent,
               // 区分：已读 or 未读 todo
-              style: new TextStyle(fontSize: 17),
+              style: topic.readStatus == 'read' ? TextStyle(fontSize: 17, color: Colors.grey) : TextStyle(fontSize: 17),
             ),
             SizedBox(
               height: 8,

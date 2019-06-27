@@ -99,13 +99,24 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
-  // 获取 Topic list
+  // 获取近期已读列表
   Future<List<TabTopicItem>> getRecentReadTopics() async {
     var mapList = await queryAllRows();
     List<TabTopicItem> topicList = List<TabTopicItem>();
     mapList.forEach((map) => topicList.insert(0, TabTopicItem.fromMap(map)));
     print("当前数据库共有${topicList.length}条记录");
     return topicList;
+  }
+
+  // 对请求回来的数据，已读的增加已读标记
+  Future<List<TabTopicItem>> addReadState(List<TabTopicItem> list) async {
+    list.forEach((TabTopicItem tabTopicItem) async {
+      if (await queryTopic(tabTopicItem.topicId)) {
+        print("${tabTopicItem.topicContent} :存在，设为已读");
+        tabTopicItem.readStatus = 'read';
+      }
+    });
+    return list;
   }
 
   // All of the methods (insert, query, update, delete) can also be done using

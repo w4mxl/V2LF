@@ -1,7 +1,7 @@
 // 主页tab下的item
 class TabTopicItem {
-  /// unread
-  /// read
+  /// unread 未读
+  /// read 已读
   String readStatus = 'unread';
   String memberId = '';
   String topicId = '';

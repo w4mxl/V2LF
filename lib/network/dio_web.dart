@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
@@ -156,9 +157,11 @@ class DioWeb {
 
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/a
         item.nodeName = aNode.xpath("/table/tr/td[3]/span[1]/a/text()")[0].name;
-        // 去数据库比对，判断是否为已读状态 todo
+
         topics.add(item);
       }
+      // 去数据库比对，判断是否为已读状态 todo
+      return await DatabaseHelper.instance.addReadState(topics);
     }
     return topics;
   }
