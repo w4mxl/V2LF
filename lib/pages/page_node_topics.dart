@@ -14,6 +14,7 @@ import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:ovprogresshud/progresshud.dart';
 
 class NodeTopics extends StatefulWidget {
@@ -132,9 +133,9 @@ class _NodeTopicsState extends State<NodeTopics> {
                         fit: BoxFit.contain,
                         placeholder: (context, url) => new CircularProgressIndicator(),
                         errorWidget: (context, url, error) => CachedNetworkImage(
-                              imageUrl: "https:" + _node.avatarLarge,
-                              fit: BoxFit.contain,
-                            ),
+                          imageUrl: "https:" + _node.avatarLarge,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
             ),
@@ -197,13 +198,18 @@ class _NodeTopicsState extends State<NodeTopics> {
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  child: Text(
-                    // Android
-                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
-                    _node.header == null ? '' : _node.header,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                  child: Html(
+                    data: _node.header == null ? '' : _node.header,
+                    defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+
+//                  child: Text(
+//                    // Android
+//                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
+//                    _node.header == null ? '' : _node.header,
+//                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                    textAlign: TextAlign.center,
+//                  ),
                 ),
               ),
               SizedBox(
