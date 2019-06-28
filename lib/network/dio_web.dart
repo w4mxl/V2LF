@@ -211,16 +211,16 @@ class DioWeb {
     List<NodeTopicItem> topics = new List<NodeTopicItem>();
 
     // todo 这里">"花了几乎一个下午摸索出解析到数据，但是还是不完全明白原因
-    final String reg4tag = "<div class=\"cell\"> (.*?)</table></div>";
+    final String reg4tag = "<div class=\"cell\">(.*?)</table></div>";
 //    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
 
-    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
+    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img loading=\"lazy\" src=\"(.*?)\" class=\"avatar\" ";
 
     final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
 
     final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
-    final String reg4inner = "<div class=\"inner\"> (.*?)</table></div>";
+    final String reg4inner = "<div class=\"inner\">(.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
 
     var response = await dio.get('/go/' + tabKey + "?p=" + p.toString());

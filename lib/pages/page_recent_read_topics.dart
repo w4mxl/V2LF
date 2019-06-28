@@ -75,6 +75,10 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               hasData = snapshot.data.length > 0;
+              // 近期已读列表不用灰色显示
+              snapshot.data.forEach((TabTopicItem topic) {
+                topic.readStatus = 'unread';
+              });
 
               return snapshot.data.length > 0
                   ? new Container(
