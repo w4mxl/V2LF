@@ -82,11 +82,17 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 }
 
 /// topic item view
-class TopicItemView extends StatelessWidget {
-  final dbHelper = DatabaseHelper.instance;
+class TopicItemView extends StatefulWidget {
   final TabTopicItem topic;
 
   TopicItemView(this.topic);
+
+  @override
+  _TopicItemViewState createState() => _TopicItemViewState();
+}
+
+class _TopicItemViewState extends State<TopicItemView> {
+  final dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +100,15 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         // 保存到数据库（新增或者修改之前记录到最前面）
         // 添加到「近期已读」
-        dbHelper.insert(topic);
+        dbHelper.insert(widget.topic);
+
+        setState(() {
+          widget.topic.readStatus = 'read';
+        });
 
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),
+          new MaterialPageRoute(builder: (context) => new TopicDetails(widget.topic.topicId)),
         );
       },
       child: new Container(
@@ -107,9 +117,10 @@ class TopicItemView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             new Text(
-              topic.topicContent,
+              widget.topic.topicContent,
               // 区分：已读 or 未读 todo
-              style: topic.readStatus == 'read' ? TextStyle(fontSize: 17, color: Colors.grey) : TextStyle(fontSize: 17),
+              style:
+                  widget.topic.readStatus == 'read' ? TextStyle(fontSize: 17, color: Colors.grey) : TextStyle(fontSize: 17),
             ),
             SizedBox(
               height: 8,
@@ -119,7 +130,7 @@ class TopicItemView extends StatelessWidget {
                 // 头像
                 ClipOval(
                   child: new CachedNetworkImage(
-                    imageUrl: "https:" + topic.avatar,
+                    imageUrl: "https:" + widget.topic.avatar,
                     height: 21.0,
                     width: 21.0,
                     fit: BoxFit.cover,
@@ -130,7 +141,7 @@ class TopicItemView extends StatelessWidget {
                   width: 6,
                 ),
                 Text(
-                  topic.memberId,
+                  widget.topic.memberId,
                   textAlign: TextAlign.left,
                   maxLines: 1,
                   style: new TextStyle(
@@ -146,7 +157,7 @@ class TopicItemView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: new Text(
-                    topic.nodeName,
+                    widget.topic.nodeName,
                     style: new TextStyle(
                       fontSize: 12.0,
                       color: Theme.of(context).disabledColor,
@@ -158,15 +169,15 @@ class TopicItemView extends StatelessWidget {
                   width: 6,
                 ),
                 Offstage(
-                  offstage: topic.lastReplyTime == '',
+                  offstage: widget.topic.lastReplyTime == '',
                   child: Text(
-                    topic.lastReplyTime,
+                    widget.topic.lastReplyTime,
                     style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
                   ),
                 ),
                 Spacer(),
                 Offstage(
-                  offstage: topic.replyCount == '',
+                  offstage: widget.topic.replyCount == '',
                   child: Row(
                     children: <Widget>[
                       new Icon(
@@ -177,7 +188,7 @@ class TopicItemView extends StatelessWidget {
                       new Padding(
                         padding: const EdgeInsets.only(left: 4.0),
                         child: new Text(
-                          topic.replyCount,
+                          widget.topic.replyCount,
                           style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
                         ),
                       ),
