@@ -60,7 +60,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
       // 监听是否滑到了页面底部
       _scrollController = PrimaryScrollController.of(context)
         ..addListener(() {
-          _checkScrollToButtom();
+          _checkScrollToBottom();
         });
     }
     if (items.length > 0) {
@@ -97,7 +97,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     return LoadingList();
   }
 
-  void _checkScrollToButtom() {
+  void _checkScrollToBottom() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       print("加载更多...");
       if (SpHelper.sp.containsKey(SP_USERNAME)) {
@@ -135,7 +135,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
 
   @override
   void dispose() {
-    _scrollController.removeListener(_checkScrollToButtom);
+    _scrollController.removeListener(_checkScrollToBottom);
     super.dispose();
   }
 }
