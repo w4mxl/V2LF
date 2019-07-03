@@ -46,6 +46,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
             return new RefreshIndicator(
                 child: new Container(
                     child: ListView.builder(
+                        primary: false,
                         itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
                         itemCount: snapshot.data.length)),
                 onRefresh: _onRefresh);
@@ -119,8 +120,7 @@ class _TopicItemViewState extends State<TopicItemView> {
             new Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读 todo
-              style:
-                  widget.topic.readStatus == 'read' ? TextStyle(fontSize: 17, color: Colors.grey) : TextStyle(fontSize: 17),
+              style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
             ),
             SizedBox(
               height: 8,

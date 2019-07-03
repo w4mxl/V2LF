@@ -110,12 +110,12 @@ class DatabaseHelper {
 
   // 对请求回来的数据，已读的增加已读标记
   Future<List<TabTopicItem>> addReadState(List<TabTopicItem> list) async {
-    list.forEach((TabTopicItem tabTopicItem) async {
+    for (var tabTopicItem in list) {
       if (await queryTopic(tabTopicItem.topicId)) {
         print("${tabTopicItem.topicContent} :存在，设为已读");
         tabTopicItem.readStatus = 'read';
       }
-    });
+    }
     return list;
   }
 
