@@ -198,18 +198,17 @@ class _NodeTopicsState extends State<NodeTopics> {
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  child: Html(
-                    data: _node.header == null ? '' : _node.header,
-                    defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-
-//                  child: Text(
-//                    // Android
-//                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
-//                    _node.header == null ? '' : _node.header,
-//                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//                    textAlign: TextAlign.center,
+//                  child: Html( // todo Html not ready for this !
+//                    data: _node.header == null ? '' : _node.header,
+//                    defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
 //                  ),
+                  child: Text(
+                    // Android
+                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
+                    _node.header == null ? '' : _node.header,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               SizedBox(
