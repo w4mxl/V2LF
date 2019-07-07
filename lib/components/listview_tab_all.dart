@@ -30,6 +30,10 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     super.initState();
     // 获取数据
     getTopics();
+
+    // todo
+    // 检查是否有新的通知（登录状态下）
+    // 设置定时检查
   }
 
   @override
