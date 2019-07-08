@@ -8,7 +8,7 @@ class UrlHelper {
     if (url.contains("https://www.v2ex.com/t/")) {
       NavigatorInApp.toTopicDetails(context, url.replaceAll("https://www.v2ex.com/t/", ""));
       return true;
-    } else if (url.startsWith('/t/') && url.contains('#reply')) {
+    } else if (url.startsWith('/t/')) {
       // <a href="/t/484922#reply11">
       NavigatorInApp.toTopicDetails(context, url.replaceFirst("/t/", "").split('#')[0]);
       return true;
