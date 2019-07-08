@@ -6,24 +6,26 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 ## V2LF
 
-`V2LF` is a v2ex unofficial app.**'V2LF' means 'way to love flutter'.**
-The original intention of developing this app is to learn flutter.
+`V2LF` 是一个 v2ex 技术社区的第三方 app。
+**'V2LF' 名字是取 'way to love flutter' 的缩写。**
+开发这个 app 的初衷是想在实战中学习 Flutter。
 
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/w4mxl/V2LF/blob/master/LICENSE)
 
-## ScreenShot
+## 截图预览
 
 ![](https://ws3.sinaimg.cn/large/006tNc79gy1g2n2s34asfj31xl0u0hdt.jpg)
 ![](https://ws2.sinaimg.cn/large/006tNc79gy1g2n2sd61vnj31xl0u0npd.jpg)
 
 
-## Building the project
+## 编译运行
 
-### Missing Key.Properties file
+### 缺失 Key.Properties 文件
 
-If you try to build the project straight away, you'll get an error complaining that a `key.properties` file is missing and Exit code 1 from: /V2LF/android/gradlew app:properties:. To resolve that,
+下载源码后首次运行，您将会收到一个错误，提示缺少 key.properties 文件。
+请通过下面步骤解决这个问题，
 
-1.  Open V2LF\android\app\build.gradle file and comment following lines-
+1.  打开 V2LF\android\app\build.gradle 文件，然后参考下面，注释掉其中一些代码
 
 ```
 //keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -43,7 +45,7 @@ buildTypes {
 }
 ```
 
-2.  Open V2LF\android\local.properties and add -
+2.  打开 V2LF\android\local.properties ，然后在最后添加下面几行代码：
 
 ```
 flutter.versionName=1.0.0
@@ -51,16 +53,15 @@ flutter.versionCode=1
 flutter.buildMode=release
 ```
 
-### The stack & building from source
+### 开发环境
 
-The project is currently built using the latest Flutter Channel dev, with Dart 2 enabled.
-
-To build the project, ensure that you have a recent version of the Flutter SDK installed. Then either run `flutter run` in the project root or use your IDE of choice.
+这个项目目前是在 Flutter Dev 分支 + Dart 2 环境下开发的，每次 Flutter SDK 升级后也会做相应的适配和兼容。
+想正常编译运行此项目，请先确定您已经正确配置好 Flutter 开发环境。
 
 ## To-Do
 
-Please pay attention to the project progress in [trello](https://trello.com/b/YPOJsfQx/v2lf)
+如您对此项目进展有兴趣，请通过关注 [trello](https://trello.com/b/YPOJsfQx/v2lf) 来追踪最新动态。
 
-## License
+## 代码许可
 
 [GPL v3.0 License](https://www.wikiwand.com/zh/GNU%E9%80%9A%E7%94%A8%E5%85%AC%E5%85%B1%E8%AE%B8%E5%8F%AF%E8%AF%81)
