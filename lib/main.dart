@@ -22,7 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
-import 'pages/page_notifications.dart';
+import 'package:flutter_app/pages/page_notifications.dart';
 import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -100,12 +100,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     //监听是否有未读消息需要通知
     eventBus.on(MyEventHasNewNotification, (unreadNumber) async {
       // 展示本地通知
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          'your channel id', 'your channel name', 'your channel description',
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails('notify', '有未读消息通知', 'v2ex平台的未读消息',
           importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(0, 'plain title', 'plain body', platformChannelSpecifics,
+      await flutterLocalNotificationsPlugin.show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的新消息，点击查看', platformChannelSpecifics,
           payload: 'item x');
     });
   }
@@ -181,10 +180,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NotificationTopics()),
-    );
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationTopics()));
+    print("wml");
   }
 
   //当整个页面dispose时，记得把控制器也dispose掉，释放内存
