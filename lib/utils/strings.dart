@@ -9,6 +9,7 @@ const String MyEventSettingChange = 'MyEventSettingChange'; // 设置中变动
 const String MyEventTabsChange = 'MyEventTabsChange'; // 设置中自定义了主页 tabs
 const String MyEventRefreshTopic = 'MyEventRefreshTopic'; // 话题详情页刷新
 const String MyEventNodeIsFav = 'MyEventNodeIsFav'; // 节点是否被收藏
+const String MyEventHasNewNotification = 'MyEventHasNewNotification'; // 检测到有新未读通知
 
 class Strings {
   static String v2exHost = "https://www.v2ex.com";

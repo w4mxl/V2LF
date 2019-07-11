@@ -116,7 +116,9 @@ class DioWeb {
     var elements = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[1]/table/tr/td[1]/input");
     if (elements != null) {
       String notificationInfo = elements.first.attributes["value"]; // value="1 条未读提醒"
-      print('未读数：' + notificationInfo.split(' ')[0]);
+      var unreadNumber = notificationInfo.split(' ')[0];
+      print('未读数：' + unreadNumber);
+      eventBus.emit(MyEventHasNewNotification, unreadNumber);
       SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 

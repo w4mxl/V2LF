@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -21,8 +22,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
+import 'pages/page_notifications.dart';
 import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // Must be top-level function
 _parseAndDecode(String response) {
@@ -74,6 +77,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   // 定义底部导航 Tab
   TabController _tabController;
 
+  // 本地消息推送
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
   @override
   void initState() {
     super.initState();
@@ -90,11 +96,24 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     eventBus.on(MyEventTabsChange, (arg) {
       _loadCustomTabs();
     });
+
+    //监听是否有未读消息需要通知
+    eventBus.on(MyEventHasNewNotification, (unreadNumber) async {
+      // 展示本地通知
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          'your channel id', 'your channel name', 'your channel description',
+          importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(0, 'plain title', 'plain body', platformChannelSpecifics,
+          payload: 'item x');
+    });
   }
 
   void _init() {
     _loadLocale();
     _loadCustomTabs();
+    _initializeNotify();
     // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
     DioWeb.verifyLoginStatus();
   }
@@ -150,12 +169,31 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     }
   }
 
+  _initializeNotify() async {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var ios = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(android, ios);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NotificationTopics()),
+    );
+  }
+
   //当整个页面dispose时，记得把控制器也dispose掉，释放内存
   @override
   void dispose() {
     _tabController.dispose();
     eventBus.off(MyEventSettingChange);
     eventBus.off(MyEventTabsChange);
+    eventBus.off(MyEventHasNewNotification);
     super.dispose();
   }
 
