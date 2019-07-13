@@ -118,7 +118,13 @@ class DioWeb {
       String notificationInfo = elements.first.attributes["value"]; // value="1 条未读提醒"
       var unreadNumber = notificationInfo.split(' ')[0];
       print('未读数：' + unreadNumber);
-      eventBus.emit(MyEventHasNewNotification, unreadNumber);
+
+      // 避免首页请求数据时一直弹出提醒
+      var notificationCountSp = SpHelper.sp.getString(SP_NOTIFICATION_COUNT);
+      if (notificationCountSp == null || notificationCountSp != unreadNumber) {
+        eventBus.emit(MyEventHasNewNotification, unreadNumber);
+      }
+
       SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 

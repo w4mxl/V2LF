@@ -12,6 +12,7 @@ import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/network/http.dart';
+import 'package:flutter_app/pages/page_favourite.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -104,8 +105,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
           importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的新消息，点击查看', platformChannelSpecifics,
-          payload: 'item x');
+      await flutterLocalNotificationsPlugin
+          .show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的未读消息，点击查看', platformChannelSpecifics, payload: '');
     });
   }
 
@@ -168,9 +169,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     }
   }
 
-  _initializeNotify() async {
+  void _initializeNotify() {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var android = AndroidInitializationSettings('ic_stat_v');
     var ios = IOSInitializationSettings();
     var initializationSettings = InitializationSettings(android, ios);
     flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
@@ -180,8 +181,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationTopics()));
-    print("wml");
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FavouritePage()),
+    );
   }
 
   //当整个页面dispose时，记得把控制器也dispose掉，释放内存
