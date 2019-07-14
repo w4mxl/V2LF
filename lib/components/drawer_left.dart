@@ -68,10 +68,17 @@ class _DrawerLeftState extends State<DrawerLeft> {
                               width: 72,
                               alignment: Alignment.bottomCenter,
                             )
-                          : Text(
-                              userName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                          : Opacity(
+                              opacity: 0.9,
+                              child: Container(
+                                child: Text(
+                                  userName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                color: Colors.grey,
+                                padding: EdgeInsets.all(2),
                               ),
                             ),
                       onTap: () {
@@ -145,7 +152,17 @@ class _DrawerLeftState extends State<DrawerLeft> {
                               ));
                     }
                   },
-                  child: Text(poemOne != null ? poemOne.data.content : ""),
+                  child: Opacity(
+                    child: Container(
+                      child: Text(
+                        poemOne != null ? poemOne.data.content : "",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      color: Colors.grey,
+                      padding: EdgeInsets.all(2),
+                    ),
+                    opacity: 0.8,
+                  ),
                 ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
