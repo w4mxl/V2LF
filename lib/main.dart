@@ -68,6 +68,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   DateTime _lastPressedAt; //上次点击时间
 
   Locale _locale;
@@ -181,10 +183,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    await Navigator.push(
-      context,
+
+    await navigatorKey.currentState.push(
       MaterialPageRoute(builder: (context) => FavouritePage()),
     );
+
   }
 
   //当整个页面dispose时，记得把控制器也dispose掉，释放内存
@@ -200,6 +203,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: [
