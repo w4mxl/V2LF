@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_notifications.dart';
 import 'package:flutter_app/generated/i18n.dart';
 
-class NotificationTopics extends StatefulWidget {
+class NotificationPage extends StatefulWidget {
   @override
-  _NotificationTopicsState createState() => _NotificationTopicsState();
+  _NotificationPageState createState() => _NotificationPageState();
 }
 
-class _NotificationTopicsState extends State<NotificationTopics> {
+class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

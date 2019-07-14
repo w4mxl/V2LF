@@ -12,21 +12,20 @@ import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/model/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/network/http.dart';
-import 'package:flutter_app/pages/page_favourite.dart';
+import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
-import 'package:flutter_app/pages/page_notifications.dart';
 import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // Must be top-level function
 _parseAndDecode(String response) {
@@ -184,10 +183,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       debugPrint('notification payload: ' + payload);
     }
 
-    await navigatorKey.currentState.push(
-      MaterialPageRoute(builder: (context) => FavouritePage()),
-    );
+    SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
 
+    await navigatorKey.currentState.push(
+      MaterialPageRoute(builder: (context) => NotificationPage()),
+    );
   }
 
   //当整个页面dispose时，记得把控制器也dispose掉，释放内存

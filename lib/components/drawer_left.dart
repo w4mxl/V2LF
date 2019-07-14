@@ -221,7 +221,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationTopics()));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationPage()));
                 },
               ),
               new ListTile(
