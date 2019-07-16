@@ -159,7 +159,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         style: TextStyle(fontSize: 13),
                       ),
                       color: Colors.grey,
-                      padding: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(userName.isEmpty ? 0 : 2),
                     ),
                     opacity: 0.8,
                   ),
