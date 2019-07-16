@@ -278,7 +278,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _thankReply(String replyID) async {
-    bool isSuccess = await DioWeb.thankTopicReply(replyID, _detailModel.token);
+    bool isSuccess = await DioWeb.thankTopicReply(replyID);
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
       // 更新UI：红心️后面的数字

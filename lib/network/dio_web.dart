@@ -710,12 +710,18 @@ class DioWeb {
 
     // token 是否收藏
     // <a href="/unfavorite/topic/541492?t=lqstjafahqohhptitvcrplmjbllwqsxc" class="op">取消收藏</a>
+    // #Wrapper > div > div:nth-child(1) > div.inner > div > a:nth-child(2)
     if (document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']") != null) {
       String collect =
           document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
       detailModel.token = collect.split('?t=')[1];
       detailModel.isFavorite = collect.startsWith('/unfavorite');
     }
+
+    // <a href="#;" onclick="if (confirm('确定不想再看到这个主题？')) { location.href = '/ignore/topic/583319?once=62479'; }"
+    //    class="op" style="user-select: auto;">忽略主题</a>
+    // #Wrapper > div > div:nth-child(1) > div.inner > div > a:nth-child(5)
+
     // 是否感谢 document.querySelector('#topic_thank > span')
     detailModel.isThank = document.querySelector('#topic_thank > span') != null;
     print(detailModel.isFavorite == true ? 'yes' : 'no');
@@ -783,10 +789,15 @@ class DioWeb {
     return false;
   }
 
-  // 感谢某条评论
-  static Future<bool> thankTopicReply(String replyID, String token) async {
-    var response = await dio.post("/thank/reply/" + replyID + "?t=" + token);
-    if (response.statusCode == 200 && response.data.toString().isEmpty) {
+  // 感谢某条评论 https://www.v2ex.com/thank/reply/7626703?once=62479
+  static Future<bool> thankTopicReply(String replyID) async {
+    String once = await getOnce();
+    print("thankTopicReply：" + once);
+    if (once == null || once.isEmpty) {
+      return false;
+    }
+    var response = await dio.post("/thank/reply/" + replyID + "?once=" + once);
+    if (response.statusCode == 200) {
       return true;
     }
     return false;
