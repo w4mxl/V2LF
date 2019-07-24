@@ -100,7 +100,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
                 child: Center(
                     child: Text(
               '回复',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ))),
             IconButton(
               icon: Icon(Icons.send),
@@ -531,7 +531,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
                                 style: new TextStyle(
-                                    fontSize: 14.0,
+                                    fontSize: 15.0,
                                     color: MyTheme.isDark ? Colors.white : Colors.black87,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -552,7 +552,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 _detailModel.nodeName,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(fontSize: 14.0, color: Colors.green, fontWeight: FontWeight.bold),
+                                style: new TextStyle(fontSize: 15.0, color: Colors.green, fontWeight: FontWeight.bold),
                               ),
                             ),
                             onTap: () => Navigator.push(
@@ -574,7 +574,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             padding: const EdgeInsets.only(left: 4.0),
                             child: Text(
                               _detailModel.smallGray,
-                              style: new TextStyle(fontSize: 12.0, color: Theme.of(context).disabledColor),
+                              style: new TextStyle(fontSize: 13.0, color: Theme.of(context).disabledColor),
                             ),
                           )
                         ],
@@ -590,7 +590,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     padding: const EdgeInsets.only(left: 4.0),
                     child: new Text(
                       _detailModel.replyCount,
-                      style: new TextStyle(fontSize: 14.0, color: Theme.of(context).unselectedWidgetColor),
+                      style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
                     ),
                   )
                 ],
@@ -615,7 +615,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
+                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 16),
                 linkStyle: TextStyle(
                     color: MyTheme.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -688,12 +688,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             children: <Widget>[
               Text(
                 subtle.fade,
-                style: TextStyle(color: MyTheme.isDark ? Colors.white70 : Colors.grey, fontSize: 12.0),
+                style: TextStyle(color: MyTheme.isDark ? Colors.white70 : Colors.grey, fontSize: 13.0),
               ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 12.0),
+                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 13.0),
                 linkStyle: TextStyle(
                     color: MyTheme.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -773,10 +773,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 Offstage(
                                   offstage: reply.userName != _detailModel.createdId,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 4.0),
-                                    child: Text(
-                                      '楼主',
-                                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    child: Container(
+                                      padding: EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: Colors.redAccent[100],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        '楼主',
+                                        style: TextStyle(fontSize: 10, color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -797,7 +804,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       new Text(
                                         reply.userName,
                                         style:
-                                            new TextStyle(fontSize: 14.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                            new TextStyle(fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                       ),
                                       // 评论时间和平台
                                       new Padding(
@@ -806,7 +813,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           reply.lastReplyTime,
                                           style: new TextStyle(
                                             color: const Color(0xFFcccccc),
-                                            fontSize: 12.0,
+                                            fontSize: 13.0,
                                           ),
                                         ),
                                       ),
@@ -825,7 +832,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               reply.favorites,
                                               style: TextStyle(
                                                 color: const Color(0xFFcccccc),
-                                                fontSize: 12.0,
+                                                fontSize: 13.0,
                                               ),
                                             )
                                           ],
@@ -853,7 +860,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       child: Html(
                                         data: reply.contentRendered,
                                         defaultTextStyle:
-                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.5),
+                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.5),
                                         linkStyle: TextStyle(
                                             color: MyTheme.appMainColor[400],
                                             decoration: TextDecoration.underline,
@@ -903,11 +910,22 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       Strings.v2exHost + '/member/' + item.userName),
                                                                 ),
                                                                 Offstage(
-                                                                    offstage: item.userName != _detailModel.createdId,
-                                                                    child: Text(
-                                                                      '楼主',
-                                                                      style: TextStyle(fontSize: 10, color: Colors.grey),
-                                                                    )),
+                                                                  offstage: item.userName != _detailModel.createdId,
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.only(top: 6.0),
+                                                                    child: Container(
+                                                                      padding: EdgeInsets.all(2),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Colors.redAccent[100],
+                                                                        borderRadius: BorderRadius.circular(4),
+                                                                      ),
+                                                                      child: Text(
+                                                                        '楼主',
+                                                                        style: TextStyle(fontSize: 10, color: Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
                                                               ],
                                                             ),
                                                             SizedBox(
@@ -925,7 +943,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       new Text(
                                                                         item.userName,
                                                                         style: new TextStyle(
-                                                                            fontSize: 14.0,
+                                                                            fontSize: 15.0,
                                                                             color: Colors.grey,
                                                                             fontWeight: FontWeight.bold),
                                                                       ),
@@ -937,7 +955,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                           item.lastReplyTime,
                                                                           style: new TextStyle(
                                                                             color: const Color(0xFFcccccc),
-                                                                            fontSize: 12.0,
+                                                                            fontSize: 13.0,
                                                                           ),
                                                                         ),
                                                                       ),
@@ -956,7 +974,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                               item.favorites,
                                                                               style: TextStyle(
                                                                                 color: const Color(0xFFcccccc),
-                                                                                fontSize: 12.0,
+                                                                                fontSize: 13.0,
                                                                               ),
                                                                             )
                                                                           ],
@@ -988,7 +1006,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                             color: MyTheme.isDark
                                                                                 ? Colors.white
                                                                                 : Colors.black,
-                                                                            fontSize: 14.5),
+                                                                            fontSize: 15.5),
                                                                         linkStyle: TextStyle(
                                                                             color: MyTheme.appMainColor[400],
                                                                             decoration: TextDecoration.underline,
