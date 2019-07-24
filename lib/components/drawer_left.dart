@@ -159,7 +159,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         style: TextStyle(fontSize: 13),
                       ),
                       color: Colors.grey,
-                      padding: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(userName.isEmpty ? 0 : 2),
                     ),
                     opacity: 0.8,
                   ),
@@ -197,7 +197,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
                         border: Border.all(
                           color: Colors.white,
-                          width: 1.5,
+                          width: 1.8,
                         )),
                   ),
                 ),
@@ -270,6 +270,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 height: 0,
               ),
               new ListTile(
+                enabled: userName.isNotEmpty,
                 leading: new Icon(Icons.add),
                 title: new Text(S.of(context).create),
                 onTap: () {

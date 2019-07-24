@@ -1,6 +1,7 @@
 // 特定节点话题列表页面
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +43,10 @@ class _NodeTopicsState extends State<NodeTopics> {
   void initState() {
     super.initState();
 
-    // 设置默认操作进度加载背景
-    Progresshud.setDefaultMaskTypeBlack();
+    // 设置默认操作进度加载背景 todo 存在 bug 在Android一直转圈不消失
+    if (Platform.isIOS) {
+      Progresshud.setDefaultMaskTypeBlack();
+    }
 
     // 获取数据
     getNodeInfo();
