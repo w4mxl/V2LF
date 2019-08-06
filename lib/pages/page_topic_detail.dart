@@ -100,7 +100,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
                 child: Center(
                     child: Text(
               '回复',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
             ))),
             IconButton(
               icon: Icon(Icons.send),
@@ -615,7 +615,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Html(
                 data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 16),
+                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 15),
                 linkStyle: TextStyle(
                     color: MyTheme.appMainColor[400],
                     decoration: TextDecoration.underline,
@@ -782,7 +782,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       ),
                                       child: Text(
                                         '楼主',
-                                        style: TextStyle(fontSize: 10, color: Colors.white),
+                                        style: TextStyle(fontSize: 9.5, color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -860,7 +860,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       child: Html(
                                         data: reply.contentRendered,
                                         defaultTextStyle:
-                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.5),
+                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15),
                                         linkStyle: TextStyle(
                                             color: MyTheme.appMainColor[400],
                                             decoration: TextDecoration.underline,
@@ -921,7 +921,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       ),
                                                                       child: Text(
                                                                         '楼主',
-                                                                        style: TextStyle(fontSize: 10, color: Colors.white),
+                                                                        style:
+                                                                            TextStyle(fontSize: 9.5, color: Colors.white),
                                                                       ),
                                                                     ),
                                                                   ),
@@ -1006,7 +1007,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                             color: MyTheme.isDark
                                                                                 ? Colors.white
                                                                                 : Colors.black,
-                                                                            fontSize: 15.5),
+                                                                            fontSize: 15),
                                                                         linkStyle: TextStyle(
                                                                             color: MyTheme.appMainColor[400],
                                                                             decoration: TextDecoration.underline,

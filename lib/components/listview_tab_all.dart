@@ -41,7 +41,6 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      print(_scrollController.positions.length);
       if (_scrollController.positions.elementAt(0).pixels == _scrollController.positions.elementAt(0).maxScrollExtent) {
         print("加载更多...");
         if (SpHelper.sp.containsKey(SP_USERNAME)) {
