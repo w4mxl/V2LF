@@ -493,183 +493,169 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     return Card(
       elevation: 0.0,
       margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Container(
-              padding: const EdgeInsets.all(10.0),
-              child: new Row(
-                children: <Widget>[
-                  // 头像
-                  GestureDetector(
-                    child: ClipOval(
-                      child: new CachedNetworkImage(
-                        imageUrl: 'https:' + _detailModel.avatar,
-                        height: 44.0,
-                        width: 44.0,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Container(
+            padding: const EdgeInsets.all(10.0),
+            child: new Row(
+              children: <Widget>[
+                // 头像
+                GestureDetector(
+                  child: ClipOval(
+                    child: new CachedNetworkImage(
+                      imageUrl: 'https:' + _detailModel.avatar,
+                      height: 44.0,
+                      width: 44.0,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
                     ),
-                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                   ),
-                  SizedBox(width: 10.0),
-                  new Expanded(
-                      child: new Column(
-                    children: <Widget>[
-                      new Row(
-                        children: <Widget>[
-                          // 用户ID
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: new Text(
-                                _detailModel.createdId,
-                                textAlign: TextAlign.left,
-                                maxLines: 1,
-                                style: new TextStyle(
-                                    fontSize: 15.0,
-                                    color: MyTheme.isDark ? Colors.white : Colors.black87,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
-                          ),
-                          new Icon(
-                            Icons.keyboard_arrow_right,
-                            color: Colors.green,
-                            size: 16.0,
-                          ),
-                          // 节点名称
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: new Text(
-                                _detailModel.nodeName,
-                                textAlign: TextAlign.left,
-                                maxLines: 1,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.green, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            onTap: () => Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) =>
-                                        NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          new Icon(
-                            Icons.keyboard,
-                            size: 16.0,
-                            color: Theme.of(context).disabledColor,
-                          ),
-                          new Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
-                              _detailModel.smallGray,
-                              style: new TextStyle(fontSize: 13.0, color: Theme.of(context).disabledColor),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  )),
-                  new Icon(
-                    FontAwesomeIcons.comment,
-                    size: 16.0,
-                    color: Colors.grey,
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: new Text(
-                      _detailModel.replyCount,
-                      style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            // topic title
-            new Container(
-              padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
-              width: 500.0,
-              child: new Text(
-                _detailModel.topicTitle,
-                softWrap: true,
-                style: new TextStyle(
-                  color: MyTheme.isDark ? Colors.white : Colors.black87,
-                  fontSize: 19.0,
-                  fontWeight: FontWeight.bold,
+                  onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                 ),
-              ),
-            ),
-            // topic content
-            new Container(
-              padding: const EdgeInsets.all(10.0),
-              child: Html(
-                data: _detailModel.contentRendered,
-                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 15),
-                linkStyle: TextStyle(
-                    color: MyTheme.appMainColor[400],
-                    decoration: TextDecoration.underline,
-                    decorationColor: MyTheme.appMainColor[400]),
-                onLinkTap: (url) {
-                  if (UrlHelper.canLaunchInApp(context, url)) {
-                    return;
-                  }
-                  _launchURL(url);
-                },
-                onImageTap: (source) {
-                  print(source);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenWrapper(
-                        imageProvider: NetworkImage(source),
-                      ),
+                SizedBox(width: 10.0),
+                new Expanded(
+                    child: new Column(
+                  children: <Widget>[
+                    new Row(
+                      children: <Widget>[
+                        // 用户ID
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: new Text(
+                              _detailModel.createdId,
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: MyTheme.isDark ? Colors.white : Colors.black87,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                        ),
+                        new Icon(
+                          Icons.keyboard_arrow_right,
+                          color: Colors.green,
+                          size: 16.0,
+                        ),
+                        // 节点名称
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: new Text(
+                              _detailModel.nodeName,
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              style: new TextStyle(fontSize: 15.0, color: Colors.green, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          onTap: () => Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                        ),
+                      ],
                     ),
-                  );
-                },
-                // 0.9.6 版本使用 customRender 就不能使用 useRichText 解析了，暂时先这样 todo
-//                customRender: (node, children) {
-//                  if (node is dom.Element) {
-//                    switch (node.localName) {
-//                      case "img":
-//                        return GestureDetector(
-//                          child: Image.network(node.attributes['src']),
-//                          onTap: () {
-//                            Navigator.push(
-//                              context,
-//                              MaterialPageRoute(
-//                                builder: (context) => FullScreenWrapper(
-//                                      imageProvider: NetworkImage(node.attributes['src']),
-//                                    ),
-//                              ),
-//                            );
-//                          },
-//                        );
-//                    }
-//                  }
-//                },
+                    Row(
+                      children: <Widget>[
+                        new Icon(
+                          Icons.keyboard,
+                          size: 16.0,
+                          color: Theme.of(context).disabledColor,
+                        ),
+                        new Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            _detailModel.smallGray,
+                            style: new TextStyle(fontSize: 13.0, color: Theme.of(context).disabledColor),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                )),
+                new Icon(
+                  FontAwesomeIcons.comment,
+                  size: 16.0,
+                  color: Colors.grey,
+                ),
+                new Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: new Text(
+                    _detailModel.replyCount,
+                    style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
+                  ),
+                )
+              ],
+            ),
+          ),
+          // topic title
+          new Container(
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+            width: 500.0,
+            child: new Text(
+              _detailModel.topicTitle,
+              softWrap: true,
+              style: new TextStyle(
+                color: MyTheme.isDark ? Colors.white : Colors.black87,
+                fontSize: 19.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            // 附言
-            Offstage(
-              offstage: _detailModel.subtleList.length == 0,
-              child: Column(
-                  children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
-                return _buildSubtle(subtle);
-              }).toList()),
+          ),
+          // topic content
+          new Container(
+            padding: const EdgeInsets.all(10.0),
+            child: Html(
+              data: _detailModel.contentRendered,
+              defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 15),
+              linkStyle: TextStyle(
+                  color: MyTheme.appMainColor[400],
+                  decoration: TextDecoration.underline,
+                  decorationColor: MyTheme.appMainColor[400]),
+              onLinkTap: (url) {
+                if (UrlHelper.canLaunchInApp(context, url)) {
+                  return;
+                }
+                _launchURL(url);
+              },
+              onImageTap: (source) {
+                print(source);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FullScreenWrapper(
+                      imageProvider: NetworkImage(source),
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+          // 附言
+          Offstage(
+            offstage: _detailModel.subtleList.length == 0,
+            child: Column(
+              children: <Widget>[
+                Column(
+                    children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                  return _buildSubtle(subtle);
+                }).toList()),
+                Container(
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: MyTheme.isDark ? Colors.black12 : const Color(0xFFfffff9),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -757,12 +743,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         imageUrl: 'https:' + reply.avatar,
-                                        width: 25.0,
-                                        height: 25.0,
+                                        width: 28.0,
+                                        height: 28.0,
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) => Icon(
                                           Icons.account_circle,
-                                          size: 25,
+                                          size: 28,
                                           color: Color(0xFFcccccc),
                                         ),
                                       ),
@@ -775,14 +761,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(top: 6.0),
                                     child: Container(
-                                      padding: EdgeInsets.all(2),
+                                      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                                       decoration: BoxDecoration(
                                         color: Colors.redAccent[100],
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
                                         '楼主',
-                                        style: TextStyle(fontSize: 9.5, color: Colors.white),
+                                        style: TextStyle(fontSize: 9, color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -878,6 +864,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                               Fluttertoast.showToast(
                                                   msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
                                             } else {
+                                              // 弹出找到的此用户之前评论
                                               showDialog(
                                                   context: context,
                                                   builder: (BuildContext context) {
@@ -895,12 +882,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                     child: ClipOval(
                                                                       child: CachedNetworkImage(
                                                                         imageUrl: 'https:' + item.avatar,
-                                                                        width: 25.0,
-                                                                        height: 25.0,
+                                                                        width: 28.0,
+                                                                        height: 28.0,
                                                                         fit: BoxFit.cover,
                                                                         placeholder: (context, url) => Icon(
                                                                           Icons.account_circle,
-                                                                          size: 25,
+                                                                          size: 28,
                                                                           color: Color(0xFFcccccc),
                                                                         ),
                                                                       ),
@@ -914,15 +901,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                   child: Padding(
                                                                     padding: const EdgeInsets.only(top: 6.0),
                                                                     child: Container(
-                                                                      padding: EdgeInsets.all(2),
+                                                                      padding:
+                                                                          EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                                                                       decoration: BoxDecoration(
                                                                         color: Colors.redAccent[100],
                                                                         borderRadius: BorderRadius.circular(4),
                                                                       ),
                                                                       child: Text(
                                                                         '楼主',
-                                                                        style:
-                                                                            TextStyle(fontSize: 9.5, color: Colors.white),
+                                                                        style: TextStyle(fontSize: 9, color: Colors.white),
                                                                       ),
                                                                     ),
                                                                   ),
@@ -1172,8 +1159,8 @@ class LoadingRepliesSkeleton extends StatelessWidget {
                           children: [
                             ClipOval(
                               child: Container(
-                                width: 25.0,
-                                height: 25.0,
+                                width: 28.0,
+                                height: 28.0,
                                 color: Colors.white,
                               ),
                             ),

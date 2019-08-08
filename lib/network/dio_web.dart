@@ -686,8 +686,11 @@ class DioWeb {
         .replaceAll('/go/', '');
     detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
     //  at 9 小时 26 分钟前，1608 次点击
-    detailModel.smallGray =
-        document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small').text.split('at')[1];
+    detailModel.smallGray = document
+        .querySelector('#Wrapper > div > div:nth-child(1) > div.header > small')
+        .text
+        .split('at')[1]
+        .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
 
@@ -701,7 +704,7 @@ class DioWeb {
     if (appendNodes != null && appendNodes.length > 0) {
       for (var node in appendNodes) {
         TopicSubtleItem subtleItem = TopicSubtleItem();
-        subtleItem.fade = node.querySelector('span.fade').text;
+        subtleItem.fade = node.querySelector('span.fade').text.replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）;
         subtleItem.content = node.querySelector('div.topic_content').innerHtml;
         subtleList.add(subtleItem);
       }
