@@ -63,8 +63,8 @@ Please pay attention to the project progress in [trello](https://trello.com/b/YP
 
 ## Related Links
 
-- (邀请体验： V2LF - 用 Flutter 开发的 V2EX App)[https://www.v2ex.com/t/548936#reply169]
-- (V2LF - 使用 Flutter 开发的开源的 V2EX 客户端)[https://www.v2ex.com/t/563913#reply57]
+- [邀请体验： V2LF - 用 Flutter 开发的 V2EX App](https://www.v2ex.com/t/548936#reply169)
+- [V2LF - 使用 Flutter 开发的开源的 V2EX 客户端](https://www.v2ex.com/t/563913#reply57)
 
 ## License
 
