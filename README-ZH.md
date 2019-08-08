@@ -58,9 +58,14 @@ flutter.buildMode=release
 这个项目目前是在 Flutter Dev 分支 + Dart 2 环境下开发的，每次 Flutter SDK 升级后也会做相应的适配和兼容。
 想正常编译运行此项目，请先确定您已经正确配置好 Flutter 开发环境。
 
-## To-Do
+## 后续开发
 
 如您对此项目进展有兴趣，请通过关注 [trello](https://trello.com/b/YPOJsfQx/v2lf) 来追踪最新动态。
+
+## 相关链接
+
+- (邀请体验： V2LF - 用 Flutter 开发的 V2EX App)[https://www.v2ex.com/t/548936#reply169]
+- (V2LF - 使用 Flutter 开发的开源的 V2EX 客户端)[https://www.v2ex.com/t/563913#reply57]
 
 ## 代码许可
 

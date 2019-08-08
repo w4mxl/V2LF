@@ -61,6 +61,11 @@ To build the project, ensure that you have a recent version of the Flutter SDK i
 
 Please pay attention to the project progress in [trello](https://trello.com/b/YPOJsfQx/v2lf)
 
+## Related Links
+
+- (邀请体验： V2LF - 用 Flutter 开发的 V2EX App)[https://www.v2ex.com/t/548936#reply169]
+- (V2LF - 使用 Flutter 开发的开源的 V2EX 客户端)[https://www.v2ex.com/t/563913#reply57]
+
 ## License
 
 [GPL v3.0 License](https://www.wikiwand.com/zh/GNU%E9%80%9A%E7%94%A8%E5%85%AC%E5%85%B1%E8%AE%B8%E5%8F%AF%E8%AF%81)
