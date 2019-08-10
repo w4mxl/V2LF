@@ -168,6 +168,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
     Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
     Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
+    Action(id: 'only_up', title: '只看楼主/全部', icon: Icons.visibility),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
     Action(id: 'share', title: '分享', icon: Icons.share),
@@ -179,6 +180,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   int maxPage = 1;
 
   bool isUpLoading = false;
+
+  bool isOnlyUp = false; // 只看楼主
+  List<ReplyItem> replyListAll = List(); //只看楼主时保存的当前所有评论
 
   TopicDetailModel _detailModel;
   List<ReplyItem> replyList = List();
@@ -234,8 +238,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       if (topicDetailModel.topicTitle.isEmpty) {
         // 从「近期已读」移除
         var databaseHelper = DatabaseHelper.instance;
-        var i = await databaseHelper.delete(topicDetailModel.topicId);
-        print(i);
+        await databaseHelper.delete(topicDetailModel.topicId);
         Navigator.pop(context);
         return;
       }
@@ -285,6 +288,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
+    }
+  }
+
+  void _onlyUp(bool isOnly) {
+    if (replyList.length != 0) {
+      if (isOnly) {
+        // 查看全部
+        setState(() {
+          replyList.clear();
+          replyList.addAll(replyListAll);
+          isOnlyUp = false;
+        });
+      } else {
+        // 只看楼主
+        replyListAll.clear();
+        replyListAll.addAll(replyList);
+        setState(() {
+          replyList.retainWhere((item) => item.userName == _detailModel.createdId);
+          isOnlyUp = true;
+        });
+      }
     }
   }
 
@@ -341,12 +365,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         // 用默认浏览器打开帖子链接
         launch(Strings.v2exHost + '/t/' + widget.topicId, forceSafariVC: false);
         break;
+      case 'only_up':
+        print(action.title);
+        // 只看楼主/查看全部
+        _onlyUp(isOnlyUp);
+        break;
       case 'link':
         print(action.title);
         // 复制链接到剪贴板
         Clipboard.setData(ClipboardData(text: Strings.v2exHost + '/t/' + widget.topicId));
         Progresshud.showSuccessWithStatus('已复制好帖子链接');
-
         break;
       case 'copy':
         print(action.title);
