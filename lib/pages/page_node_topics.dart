@@ -19,9 +19,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:ovprogresshud/progresshud.dart';
 
 class NodeTopics extends StatefulWidget {
-  final NodeItem node;
+  final String nodeId;
 
-  NodeTopics(this.node);
+  NodeTopics(this.nodeId);
 
   @override
   _NodeTopicsState createState() => _NodeTopicsState();
@@ -61,7 +61,7 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 
   Future getNodeInfo() async {
-    var node = await NetworkApi.getNodeInfo(widget.node.nodeId);
+    var node = await NetworkApi.getNodeInfo(widget.nodeId);
     if (node != null) {
       setState(() {
         _node = node;
@@ -73,7 +73,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.node.nodeId, p++);
+      List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
         Navigator.pop(context);

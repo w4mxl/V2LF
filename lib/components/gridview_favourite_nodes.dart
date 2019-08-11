@@ -139,8 +139,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
         ),
       ),
       onTap: () {
-        var future = Navigator.push(
-            context, new MaterialPageRoute(builder: (context) => new NodeTopics(NodeItem(node.nodeId, node.nodeName))));
+        var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node.nodeId)));
         future.then((value) {
           setState(() {
             _future = getFavNodes();

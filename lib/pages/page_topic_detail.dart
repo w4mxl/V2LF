@@ -291,24 +291,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     }
   }
 
+  /// 只看楼主 or 查看全部
   void _onlyUp(bool isOnly) {
-    if (replyList.length != 0) {
-      if (isOnly) {
-        // 查看全部
-        setState(() {
-          replyList.clear();
-          replyList.addAll(replyListAll);
-          isOnlyUp = false;
-        });
-      } else {
-        // 只看楼主
-        replyListAll.clear();
-        replyListAll.addAll(replyList);
-        setState(() {
-          replyList.retainWhere((item) => item.userName == _detailModel.createdId);
-          isOnlyUp = true;
-        });
-      }
+    if (isOnly) {
+      // 查看全部
+      setState(() {
+        isOnlyUp = false;
+        replyList.clear();
+        replyList.addAll(replyListAll);
+      });
+    } else if (replyList.length != 0) {
+      // 只看楼主
+      replyListAll.clear();
+      replyListAll.addAll(replyList);
+      setState(() {
+        isOnlyUp = true;
+        replyList.retainWhere((item) => item.userName == _detailModel.createdId);
+      });
     }
   }
 
@@ -582,9 +581,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             ),
                           ),
                           onTap: () => Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => NodeTopics(NodeItem(_detailModel.nodeId, _detailModel.nodeName)))),
+                              context, new MaterialPageRoute(builder: (context) => NodeTopics(_detailModel.nodeId))),
                         ),
                       ],
                     ),
@@ -743,7 +740,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
-              child: new Text("目前尚无回复", style: new TextStyle(color: Colors.grey[600])),
+              child: Text(isOnlyUp ? '楼主尚未回复' : '目前尚无回复', style: new TextStyle(color: Colors.grey[600])),
             ))
         : Card(
             elevation: 0.0,

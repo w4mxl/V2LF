@@ -12,6 +12,9 @@ class UrlHelper {
       // <a href="/t/484922#reply11">
       NavigatorInApp.toTopicDetails(context, url.replaceFirst("/t/", "").split('#')[0]);
       return true;
+    } else if (url.startsWith('/go/')) {
+      NavigatorInApp.toNodeTopics(context, url.replaceFirst("/go/", ""));
+      return true;
     }
 
     return false;

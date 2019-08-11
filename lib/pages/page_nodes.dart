@@ -124,7 +124,7 @@ class NodeGroupWidget extends StatelessWidget {
           style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 13.0),
         ),
       ),
-      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node))),
+      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node.nodeId))),
     );
   }
 }
@@ -201,7 +201,7 @@ class DataSearch extends SearchDelegate<String> {
                 ])),
             trailing: Icon(Icons.navigate_next),
             onTap: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index]))),
+                Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index].nodeId))),
           ),
       itemCount: suggestionNodes.length,
     );
