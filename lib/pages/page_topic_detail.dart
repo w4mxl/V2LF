@@ -215,6 +215,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           getData();
         } else {
           print("没有更多...");
+          HapticFeedback.heavyImpact(); // 震动反馈
         }
       }
     });
@@ -295,6 +296,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   void _onlyUp(bool isOnly) {
     if (isOnly) {
       // 查看全部
+      HapticFeedback.heavyImpact(); // 震动反馈
       setState(() {
         isOnlyUp = false;
         replyList.clear();
@@ -302,6 +304,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       });
     } else if (replyList.length != 0) {
       // 只看楼主
+      HapticFeedback.heavyImpact(); // 震动反馈
       replyListAll.clear();
       replyListAll.addAll(replyList);
       setState(() {
@@ -354,6 +357,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         print(action.title);
         if (_detailModel.token.isNotEmpty) {
           // 收藏 / 取消收藏
+          HapticFeedback.heavyImpact(); // 震动反馈
           _favoriteTopic();
         } else {
           Progresshud.showErrorWithStatus('无法获取 token');

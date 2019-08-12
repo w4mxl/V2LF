@@ -455,23 +455,23 @@ class _SettingPageState extends State<SettingPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => WhatsNewPage.changelog(
-                                title: Text(
-                                  "What's New",
-                                  textScaleFactor: 1.2,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    // Text Style Needed to Look like iOS 11
-                                    fontSize: 22.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                buttonText: Text(
-                                  'Close',
-                                  //textScaleFactor: textScaleFactor,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                buttonColor: Theme.of(context).accentColor,
+                            title: Text(
+                              "What's New",
+                              textScaleFactor: 1.2,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                // Text Style Needed to Look like iOS 11
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            buttonText: Text(
+                              'Close',
+                              //textScaleFactor: textScaleFactor,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            buttonColor: Theme.of(context).accentColor,
+                          ),
                           fullscreenDialog: true,
                         ),
                       );

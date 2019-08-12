@@ -5,17 +5,16 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/components/listview_node_topic.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/node.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
-import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:ovprogresshud/progresshud.dart';
 
 class NodeTopics extends StatefulWidget {
@@ -91,6 +90,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (nodeIdWithOnce.isNotEmpty) {
       bool isSuccess = await DioWeb.favoriteNode(isFavorite, nodeIdWithOnce);
       if (isSuccess) {
+        HapticFeedback.heavyImpact(); // 震动反馈
         Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
         setState(() {
           isFavorite = !isFavorite;

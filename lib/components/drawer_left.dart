@@ -24,6 +24,7 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -106,6 +107,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 accountEmail: GestureDetector(
                   onTap: () {
                     if (poemOne != null) {
+                      HapticFeedback.mediumImpact(); // 震动反馈
                       // 显示诗词dialog
                       showDialog(
                           context: context,
@@ -156,7 +158,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     child: Container(
                       child: Text(
                         poemOne != null ? poemOne.data.content : "",
-                        style: TextStyle(fontSize: 13),
+                        style: TextStyle(fontSize: 14),
                       ),
                       color: Colors.grey,
                       padding: EdgeInsets.all(userName.isEmpty ? 0 : 2),
