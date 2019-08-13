@@ -792,6 +792,33 @@ class DioWeb {
     return false;
   }
 
+  // 忽略主题
+  // <a href="#;" onclick="if (confirm('确定不想再看到这个主题？'))
+  // { location.href = '/ignore/topic/556280?once=35630'; }" class="tb" style="user-select: auto;">忽略主题</a>
+  static Future<bool> ignoreTopic(String topicId) async {
+    String once = await getOnce();
+    print("ignoreTopic：" + once);
+    if (once == null || once.isEmpty) {
+      return false;
+    }
+    var response = await dio.get("/ignore/topic/" + topicId + "?once=" + once);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  // 报告主题
+  // https://www.v2ex.com/report/topic/36307?t=1399527187
+  static Future<bool> reportTopic(String topicId) async {
+    String url = "/report/topic/" + topicId + "?t=1399527187"; // todo 目前看 t 是固定值
+    var response = await dio.get(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   // 感谢某条评论 https://www.v2ex.com/thank/reply/7626703?once=62479
   static Future<bool> thankTopicReply(String replyID) async {
     String once = await getOnce();

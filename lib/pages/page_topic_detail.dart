@@ -168,9 +168,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
     Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
     Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
-    Action(id: 'only_up', title: '只看楼主/全部', icon: Icons.visibility),
+    Action(id: 'only_up', title: '楼主 / 全部', icon: Icons.visibility),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
+    Action(id: 'ignore_topic', title: '忽略主题', icon: Icons.do_not_disturb_alt),
+    Action(id: 'report_topic', title: '举报主题', icon: Icons.report_problem),
     Action(id: 'share', title: '分享', icon: Icons.share),
   ];
 
@@ -281,6 +283,25 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     }
   }
 
+  Future _ignoreTopic() async {
+    bool isSuccess = await DioWeb.ignoreTopic(widget.topicId);
+    if (isSuccess) {
+      Progresshud.showSuccessWithStatus('已完成对 ${widget.topicId} 号主题的忽略');
+      Navigator.pop(context);
+    } else {
+      Progresshud.showErrorWithStatus('操作失败');
+    }
+  }
+
+  Future _reportTopic() async {
+    bool isSuccess = await DioWeb.reportTopic(widget.topicId);
+    if (isSuccess) {
+      Progresshud.showSuccessWithStatus('举报成功');
+    } else {
+      Progresshud.showErrorWithStatus('操作失败');
+    }
+  }
+
   Future _thankReply(String replyID) async {
     bool isSuccess = await DioWeb.thankTopicReply(replyID);
     if (isSuccess) {
@@ -330,24 +351,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         } else {
           if (_detailModel.token.isNotEmpty) {
             // ⏏ 确认对话框
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                      content: Text('你确定要向本主题创建者发送谢意？'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('取消'),
-                          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-                        ),
-                        FlatButton(
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).pop();
-                              // 发送感谢
-                              _thankTopic();
-                            },
-                            child: Text('确定')),
-                      ],
-                    ));
+            showAlert('你确定要向本主题创建者发送谢意？', _thankTopic);
           } else {
             Progresshud.showErrorWithStatus('无法获取 token');
           }
@@ -372,6 +376,26 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         print(action.title);
         // 只看楼主/查看全部
         _onlyUp(isOnlyUp);
+        break;
+      case 'ignore_topic':
+        print(action.title);
+        // 判断登录
+        if (isLogin) {
+          // ⏏ 确认对话框  todo 确定撤销对这个主题的忽略？
+          showAlert('您确定不想再看到这个主题？', _ignoreTopic);
+        } else {
+          Progresshud.showInfoWithStatus('请先登录');
+        }
+        break;
+      case 'report_topic':
+        print(action.title);
+        // 判断登录
+        if (isLogin) {
+          // ⏏ 确认对话框
+          showAlert('你确认需要报告这个主题？', _reportTopic);
+        } else {
+          Progresshud.showInfoWithStatus('请先登录');
+        }
         break;
       case 'link':
         print(action.title);
@@ -442,6 +466,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       default:
         break;
     }
+  }
+
+  // 抽取出功能一致的 alert
+  void showAlert(String title, Function() function) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              content: Text(title),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('取消'),
+                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                ),
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      function();
+                    },
+                    child: Text('确定')),
+              ],
+            ));
   }
 
   @override
