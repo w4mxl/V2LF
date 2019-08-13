@@ -126,56 +126,69 @@ class _TopicItemViewState extends State<TopicItemView> {
               height: 8,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // 头像
-                ClipOval(
-                  child: new CachedNetworkImage(
-                    imageUrl: "https:" + widget.topic.avatar,
-                    height: 21.0,
-                    width: 21.0,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Icon(Icons.account_circle, size: 21.0, color: Color(0xFFcccccc)),
-                  ),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  widget.topic.memberId,
-                  textAlign: TextAlign.left,
-                  maxLines: 1,
-                  style: new TextStyle(
-                      fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
-                ),
-                SizedBox(
-                  width: 6,
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Theme.of(context).dividerColor),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: new Text(
-                    widget.topic.nodeName,
-                    style: new TextStyle(
-                      fontSize: 12.0,
-                      color: Theme.of(context).disabledColor,
-                      fontWeight: FontWeight.bold,
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // 头像
+                        ClipOval(
+                          child: new CachedNetworkImage(
+                            imageUrl: "https:" + widget.topic.avatar,
+                            height: 21.0,
+                            width: 21.0,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Icon(Icons.account_circle, size: 21.0, color: Color(0xFFcccccc)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          widget.topic.memberId,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          style: new TextStyle(
+                              fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).dividerColor),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: new Text(
+                            widget.topic.nodeName,
+                            style: new TextStyle(
+                              fontSize: 12.0,
+                              color: Theme.of(context).disabledColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Offstage(
+                          offstage: widget.topic.lastReplyTime == '',
+                          child: Text(
+                            widget.topic.lastReplyTime,
+                            style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 6,
+                  width: 5,
                 ),
-                Offstage(
-                  offstage: widget.topic.lastReplyTime == '',
-                  child: Text(
-                    widget.topic.lastReplyTime,
-                    style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
-                  ),
-                ),
-                Spacer(),
                 Offstage(
                   offstage: widget.topic.replyCount == '',
                   child: Row(
