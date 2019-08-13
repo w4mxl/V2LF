@@ -7,7 +7,7 @@ description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 2019.2+9
+version: 2019.3+1
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -44,7 +44,7 @@ dependencies:
       url: https://github.com/2d-inc/Flare-Flutter.git
       path: flare_flutter
       ref: dev
-  share: ^0.6.1+1 # https://pub.dartlang.org/packages/share#-installing-tab-
+  share: ^0.6.2+1 # https://pub.dartlang.org/packages/share#-installing-tab-
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
   font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
