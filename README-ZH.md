@@ -8,16 +8,24 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/w4mxl/V2LF/blob/master/LICENSE)
 
-`V2LF` 是一个 v2ex 技术社区的第三方 app。
-**'V2LF' 名字是取 'way to love flutter' 的缩写。**
-开发这个 app 的初衷是想在实战中学习 Flutter。
+`V2LF` 是一个 v2ex 技术社区的第三方 app。**'V2LF' 名字是取 'way to love flutter' 的缩写。**开发这个 app 的初衷是想在实战中学习 Flutter。
+
+在 v2ex 网站功能基础上，V2LF 希望进一步扩展出更多有趣功能的 app。目前已经新增有：
+
+- 夜间模式
+- 往期热点
+- 近期已读
+- 主题切换
+- 高效搜索
+- 只看楼主
+
 
 [![Get it from iTunes](https://lisk.io/assets/svg/download_on_the_app_store_badge.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://lisk.io/assets/svg/download_on_the_play_store_badge.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
 
 ## 截图预览
 
-![](https://ws3.sinaimg.cn/large/006tNc79gy1g2n2s34asfj31xl0u0hdt.jpg)
-![](https://ws2.sinaimg.cn/large/006tNc79gy1g2n2sd61vnj31xl0u0npd.jpg)
+![](https://i.loli.net/2019/08/19/NQVUa8p13GZdSxt.jpg)
+![](https://i.loli.net/2019/08/19/CTg61O7XNWtb9V2.jpg)
 
 
 ## 编译运行

@@ -8,17 +8,14 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/w4mxl/V2LF/blob/master/LICENSE)
 
-`V2LF` is a v2ex unofficial app.
-**'V2LF' means 'way to love flutter'.**
-The original intention of developing this app is to learn flutter.
+`V2LF` is a v2ex unofficial app.**'V2LF' means 'way to love flutter'.**The original intention of developing this app is to learn flutter.
 
 [![Get it from iTunes](https://lisk.io/assets/svg/download_on_the_app_store_badge.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://lisk.io/assets/svg/download_on_the_play_store_badge.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
 
 ## ScreenShot
 
-![](https://ws3.sinaimg.cn/large/006tNc79gy1g2n2s34asfj31xl0u0hdt.jpg)
-![](https://ws2.sinaimg.cn/large/006tNc79gy1g2n2sd61vnj31xl0u0npd.jpg)
-
+![](https://i.loli.net/2019/08/19/NQVUa8p13GZdSxt.jpg)
+![](https://i.loli.net/2019/08/19/CTg61O7XNWtb9V2.jpg)
 
 ## Building the project
 
