@@ -71,8 +71,8 @@ class _WebviewPageState extends State<WebviewPage> {
             cookieJar.saveFromResponse(Uri.parse("https://www.v2ex.com/"), <Cookie>[cookie]);
 
             // 获取用户信息，保存
-            bool result = await DioWeb.getUserInfo();
-            if (result) {
+            String result = await DioWeb.getUserInfo();
+            if (result == "true") {
               Fluttertoast.showToast(
                   msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
                   timeInSecForIos: 2,

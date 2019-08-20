@@ -17,6 +17,7 @@ const String SP_JINRISHICI_TOKEN = "jinrishici_token";
 // 与登录状态有关
 const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
+const String SP_ONCE = "once";
 
 // dark light
 const String SP_IS_DARK = "isDark";

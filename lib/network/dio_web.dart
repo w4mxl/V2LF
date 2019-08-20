@@ -418,7 +418,8 @@ class DioWeb {
   }
 
   // 登录 POST -> 获取用户信息
-  static Future<bool> loginPost(LoginFormData loginFormData) async {
+  // Future<String> "true" "false" "2fa"
+  static Future<String> loginPost(LoginFormData loginFormData) async {
     // 此处 Origin 和 Referer 是必要的
     dio.options.headers = {
       "Origin": 'https://www.v2ex.com',
@@ -441,13 +442,13 @@ class DioWeb {
       var response = await dio.post("/signin", data: formData);
       dio.options.contentType = ContentType.json; // 还原
       if (response.statusCode == 302) {
-        // 这里实际已经登录成功了，去获取用户信息
         // 还原
         dio.options.headers = {
           'user-agent': Platform.isIOS
               ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
               : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
         };
+        // 这里实际已经登录成功了，去获取用户信息
         return await getUserInfo();
       } else {
         // 登录失败，去获取错误提示信息
@@ -462,7 +463,7 @@ class DioWeb {
         }
         print("wml error!!!!：$errorInfo");
         Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.CENTER);
-        return false;
+        return "false";
       }
     } on DioError catch (e) {
       Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
@@ -470,12 +471,39 @@ class DioWeb {
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
-      return false;
+      return "false";
     }
   }
 
-  static Future<bool> getUserInfo() async {
+  static Future<bool> twoFALogin(String code) async {
+    String once = SpHelper.sp.getString(SP_ONCE);
+    print("twoFALogin：" + once);
+    if (once == null || once.isEmpty) {
+      return false;
+    }
+    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+    FormData formData = new FormData.from({
+      "once": once,
+      "code": code,
+    });
+    print("wml: once = " + once + ",code = " + code);
+    var response = await dio.post("/2fa", data: formData);
+    dio.options.contentType = ContentType.json; // 还原
+    if (response.statusCode == 302) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<String> getUserInfo() async {
     var response = await dio.get(Strings.v2exHost);
+    if (response.redirects.length > 0) {
+      print("wml:" + response.redirects[0].location.path);
+      // 需要两步验证
+      if (response.redirects[0].location.path == "/2fa") {
+        response = await dio.get('/2fa');
+      }
+    }
     var tree = ETree.fromString(response.data);
     var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
     if (elementOfAvatarImg != null) {
@@ -498,9 +526,22 @@ class DioWeb {
       SpHelper.sp.setString(SP_AVATAR, avatar);
       SpHelper.sp.setString(SP_USERNAME, username);
       // todo 判断用户是否开启了两步验证
-      return true;
+
+      // 需要两步验证
+      if (response.request.path == "/2fa") {
+        var tree = ETree.fromString(response.data);
+        // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[3]/td[2]/input[1]
+        String once = tree
+            .xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td[2]/input[@name='once']")
+            .first
+            .attributes["value"];
+        print('两步验证前保存once:$once');
+        SpHelper.sp.setString(SP_ONCE, once);
+        return "2fa";
+      }
+      return "true";
     }
-    return false;
+    return "false";
   }
 
   // 获取「主题收藏」下的topics [xpath 解析的]

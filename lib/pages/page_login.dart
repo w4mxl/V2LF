@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -31,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _accountController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
+  TextEditingController _2faController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>> _passwordFieldKey = GlobalKey<FormFieldState<String>>();
@@ -167,8 +169,8 @@ class _LoginPageState extends State<LoginPage> {
                               loginFormData.captchaInput = _captchaController.text;
                               //var formData = bloc.submit(loginFormData);
                               print(loginFormData.toString());
-                              bool loginResult = await DioWeb.loginPost(loginFormData);
-                              if (loginResult) {
+                              String loginResult = await DioWeb.loginPost(loginFormData);
+                              if (loginResult == "true") {
                                 // 登录成功
                                 // 让登录按钮有完成✅效果
                                 setState(() {
@@ -181,6 +183,100 @@ class _LoginPageState extends State<LoginPage> {
                                 Timer(Duration(milliseconds: 800), () {
                                   Navigator.of(context).pop(true);
                                 });
+                              } else if (loginResult == "2fa") {
+                                // 让登录按钮恢复初始状态
+                                setState(() {
+                                  _loginState = 0;
+                                });
+                                // 弹出两步验证对话框
+                                Platform.isIOS
+                                    ? showCupertinoDialog(
+                                        context: context,
+                                        builder: (BuildContext contextDialog) {
+                                          return CupertinoAlertDialog(
+                                            title: Text('两步验证登录'),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text('你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                CupertinoTextField(
+                                                  placeholder: '验证码',
+                                                  controller: _2faController,
+                                                ),
+                                              ],
+                                            ),
+                                            actions: <Widget>[
+                                              CupertinoButton(
+                                                  child: Text('取消'),
+                                                  onPressed: () async {
+                                                    Navigator.pop(contextDialog);
+                                                    await V2exClient.logout();
+                                                  }),
+                                              CupertinoButton(
+                                                  child: Text('确定'),
+                                                  onPressed: () async {
+                                                    Navigator.pop(contextDialog);
+                                                    bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
+                                                    if (twoFAResult) {
+                                                      Fluttertoast.showToast(
+                                                          msg: S
+                                                              .of(context)
+                                                              .toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                          timeInSecForIos: 2,
+                                                          gravity: ToastGravity.CENTER);
+                                                      Navigator.of(context).pop(true);
+                                                    }
+                                                  }),
+                                            ],
+                                          );
+                                        })
+                                    : showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext contextDialog) {
+                                          return AlertDialog(
+                                            title: Text('两步验证登录'),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text('你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                CupertinoTextField(
+                                                  placeholder: '验证码',
+                                                  controller: _2faController,
+                                                ),
+                                              ],
+                                            ),
+                                            actions: <Widget>[
+                                              CupertinoButton(
+                                                  child: Text('取消'),
+                                                  onPressed: () async {
+                                                    Navigator.pop(contextDialog);
+                                                    await V2exClient.logout();
+                                                  }),
+                                              CupertinoButton(
+                                                  child: Text('确定'),
+                                                  onPressed: () async {
+                                                    Navigator.pop(contextDialog);
+                                                    bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
+                                                    if (twoFAResult) {
+                                                      Fluttertoast.showToast(
+                                                          msg: S
+                                                              .of(context)
+                                                              .toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                          timeInSecForIos: 2,
+                                                          gravity: ToastGravity.CENTER);
+                                                      Navigator.of(context).pop(true);
+                                                    }
+                                                  }),
+                                            ],
+                                          );
+                                        });
                               } else {
                                 // 登录失败
                                 refreshCaptcha();
@@ -278,6 +374,7 @@ class _LoginPageState extends State<LoginPage> {
     _accountController.dispose();
     _pwdController.dispose();
     _captchaController.dispose();
+    _2faController.dispose();
     super.dispose();
   }
 }

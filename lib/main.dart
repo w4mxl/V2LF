@@ -41,7 +41,17 @@ void main() async {
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
   PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
-  dio.interceptors..add(CookieManager(cookieJar))..add(LogInterceptor());
+  dio.interceptors
+    ..add(CookieManager(cookieJar))
+    ..add(InterceptorsWrapper(onResponse: (Response response) {
+      /*if (response.redirects.length > 0) {
+        print("wml:" + response.redirects[0].location.path);
+        // 两步验证
+        if (response.redirects[0].location.path == "/2fa") {}
+      }*/
+      return response;
+    }))
+    ..add(LogInterceptor());
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
   dio.options.connectTimeout = 15000;
   dio.options.receiveTimeout = 15000;
