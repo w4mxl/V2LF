@@ -20,8 +20,10 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'common/v2ex_client.dart';
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
 import 'theme/theme_data.dart';
@@ -41,17 +43,7 @@ void main() async {
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
   PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
-  dio.interceptors
-    ..add(CookieManager(cookieJar))
-    ..add(InterceptorsWrapper(onResponse: (Response response) {
-      /*if (response.redirects.length > 0) {
-        print("wml:" + response.redirects[0].location.path);
-        // 两步验证
-        if (response.redirects[0].location.path == "/2fa") {}
-      }*/
-      return response;
-    }))
-    ..add(LogInterceptor());
+  dio.interceptors..add(CookieManager(cookieJar))..add(LogInterceptor());
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
   dio.options.connectTimeout = 15000;
   dio.options.receiveTimeout = 15000;

@@ -388,13 +388,13 @@ class _LinkTextSpan extends TextSpan {
             text: text ?? url,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch(url);
+                launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
               });
 }
 
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(msg: 'Could not launch $url', gravity: ToastGravity.CENTER);
   }

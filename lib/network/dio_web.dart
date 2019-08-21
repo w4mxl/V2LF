@@ -39,6 +39,10 @@ class DioWeb {
       if (response.isRedirect) {
         // 登录已经失效，注销数据
         print('登录已经失效，注销数据');
+        // 需要再次两步验证了
+        if (response.redirects[0].location.path == "/2fa") {
+          Fluttertoast.showToast(msg: '两步验证到期了，请重新登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
+        }
         await V2exClient.logout();
       } else {
         // 登录状态正常，尝试领取每日奖励

@@ -126,7 +126,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Progresshud.showErrorWithStatus('Could not launch $url');
   }
