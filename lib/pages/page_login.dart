@@ -203,6 +203,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   height: 10,
                                                 ),
                                                 CupertinoTextField(
+                                                  keyboardType: TextInputType.number,
+                                                  maxLength: 6,
                                                   placeholder: '验证码',
                                                   controller: _2faController,
                                                 ),
@@ -252,6 +254,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   height: 10,
                                                 ),
                                                 CupertinoTextField(
+                                                  keyboardType: TextInputType.number,
+                                                  maxLength: 6,
                                                   placeholder: '验证码',
                                                   controller: _2faController,
                                                 ),
