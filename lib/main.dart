@@ -43,35 +43,7 @@ void main() async {
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
   PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
-  dio.interceptors
-    ..add(CookieManager(cookieJar))
-    ..add(InterceptorsWrapper(
-      onError: (DioError e) {
-        if (e != null) {
-          switch (e.type) {
-            case DioErrorType.CANCEL:
-              break;
-            case DioErrorType.CONNECT_TIMEOUT:
-              Fluttertoast.showToast(msg: 'Connecting timeout[15000ms]', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.SEND_TIMEOUT:
-              // TODO: Handle this case.
-              break;
-            case DioErrorType.RECEIVE_TIMEOUT:
-              Fluttertoast.showToast(msg: '响应超时...', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.RESPONSE:
-              // TODO: Handle this case.
-              break;
-            case DioErrorType.DEFAULT:
-              // TODO: Handle this case.
-              break;
-          }
-        }
-        return e;
-      },
-    ))
-    ..add(LogInterceptor());
+  dio.interceptors..add(CookieManager(cookieJar))..add(LogInterceptor());
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
   dio.options.connectTimeout = 15000;
   dio.options.receiveTimeout = 15000;

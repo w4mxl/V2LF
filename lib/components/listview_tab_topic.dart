@@ -43,19 +43,26 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
         future: topicListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return new RefreshIndicator(
-                child: new Container(
-                    child: ListView.builder(
-                        primary: false,
-                        itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                        itemCount: snapshot.data.length)),
+            return RefreshIndicator(
+                child: snapshot.data.length > 0
+                    ? Container(
+                        child: ListView.builder(
+                            primary: false,
+                            itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
+                            itemCount: snapshot.data.length))
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('暂无数据'),
+                        ],
+                      ),
                 onRefresh: _onRefresh);
           } else if (snapshot.hasError) {
             print("wmllll:${snapshot.error}");
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Text(S.of(context).oops),
+                Text(S.of(context).oops),
                 RaisedButton.icon(
                   onPressed: () {
                     _onRefresh();

@@ -105,7 +105,28 @@ class DioWeb {
         } else {
           response = await dio.get('/recent?p=' + p.toString());
         }
-      } on DioError {
+      } on DioError catch (e) {
+        if (e != null) {
+          switch (e.type) {
+            case DioErrorType.CANCEL:
+              break;
+            case DioErrorType.CONNECT_TIMEOUT:
+              Fluttertoast.showToast(msg: '连接超时...', gravity: ToastGravity.CENTER);
+              break;
+            case DioErrorType.SEND_TIMEOUT:
+              Fluttertoast.showToast(msg: '发送数据超时...', gravity: ToastGravity.CENTER);
+              break;
+            case DioErrorType.RECEIVE_TIMEOUT:
+              Fluttertoast.showToast(msg: '接收数据超时...', gravity: ToastGravity.CENTER);
+              break;
+            case DioErrorType.RESPONSE:
+              Fluttertoast.showToast(msg: '响应超时...', gravity: ToastGravity.CENTER);
+              break;
+            case DioErrorType.DEFAULT:
+              // Fluttertoast.showToast(msg: '未知错误...', gravity: ToastGravity.CENTER);
+              break;
+          }
+        }
         return topics;
       }
     } else {
