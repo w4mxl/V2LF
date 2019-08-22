@@ -218,9 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                                               CupertinoButton(
                                                   child: Text('确定'),
                                                   onPressed: () async {
-                                                    Navigator.pop(contextDialog);
                                                     bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
                                                     if (twoFAResult) {
+                                                      Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
                                                           msg: S
                                                               .of(context)
@@ -228,6 +228,11 @@ class _LoginPageState extends State<LoginPage> {
                                                           timeInSecForIos: 2,
                                                           gravity: ToastGravity.CENTER);
                                                       Navigator.of(context).pop(true);
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                          msg: '验证失败，请重新输入验证码',
+                                                          timeInSecForIos: 2,
+                                                          gravity: ToastGravity.CENTER);
                                                     }
                                                   }),
                                             ],
@@ -262,9 +267,9 @@ class _LoginPageState extends State<LoginPage> {
                                               CupertinoButton(
                                                   child: Text('确定'),
                                                   onPressed: () async {
-                                                    Navigator.pop(contextDialog);
                                                     bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
                                                     if (twoFAResult) {
+                                                      Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
                                                           msg: S
                                                               .of(context)
@@ -272,6 +277,11 @@ class _LoginPageState extends State<LoginPage> {
                                                           timeInSecForIos: 2,
                                                           gravity: ToastGravity.CENTER);
                                                       Navigator.of(context).pop(true);
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                          msg: '验证失败，请重新输入验证码',
+                                                          timeInSecForIos: 2,
+                                                          gravity: ToastGravity.CENTER);
                                                     }
                                                   }),
                                             ],
