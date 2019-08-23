@@ -48,10 +48,8 @@ class _NewTopicPageState extends State<NewTopicPage> {
   void initState() {
     super.initState();
 
-    // 设置默认操作进度加载背景 todo 存在 bug 在Android一直转圈不消失
-    if (Platform.isIOS) {
-      Progresshud.setDefaultMaskTypeBlack();
-    }
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
 
     if (!isFirst) {
       Future.delayed(

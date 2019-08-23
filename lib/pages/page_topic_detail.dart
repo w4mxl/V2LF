@@ -45,10 +45,8 @@ class _TopicDetailsState extends State<TopicDetails> {
   void initState() {
     super.initState();
 
-    // 设置默认操作进度加载背景 todo 存在 bug 在Android一直转圈不消失
-    if (Platform.isIOS) {
-      Progresshud.setDefaultMaskTypeBlack();
-    }
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
 
     // check login state
     isLogin = SpHelper.sp.containsKey(SP_USERNAME);
@@ -167,13 +165,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),
     Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
     Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
-    Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
     Action(id: 'only_up', title: '楼主 / 全部', icon: Icons.visibility),
+    Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
+    Action(id: 'share', title: '分享', icon: Icons.share),
+    Action(), // for PopupMenuDivider
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
     Action(id: 'ignore_topic', title: '忽略主题', icon: Icons.do_not_disturb_alt),
     Action(id: 'report_topic', title: '举报主题', icon: Icons.report_problem),
-    Action(id: 'share', title: '分享', icon: Icons.share),
   ];
 
   String _lastEditCommentDraft = '';
@@ -523,19 +522,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           PopupMenuButton<Action>(
             onSelected: _select,
             itemBuilder: (BuildContext context) {
-              return actions.skip(3).map<PopupMenuItem<Action>>((Action action) {
-                return PopupMenuItem<Action>(
-                  value: action,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: Icon(action.icon),
-                      ),
-                      Text(action.title)
-                    ],
-                  ),
-                );
+              return actions.skip(3).map<PopupMenuEntry<Action>>((Action action) {
+                return action.id == null
+                    ? PopupMenuDivider(
+                        height: 0,
+                      )
+                    : PopupMenuItem<Action>(
+                        value: action,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Icon(action.icon),
+                            ),
+                            Text(action.title)
+                          ],
+                        ),
+                      );
               }).toList();
             },
           ),
