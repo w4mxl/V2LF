@@ -587,7 +587,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       height: 44.0,
                       width: 44.0,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Icon(Icons.account_circle, size: 40.0, color: Color(0xFFcccccc)),
+                      placeholder: (context, url) => Image.asset(
+                        'assets/images/ic_person.png',
+                        width: 44,
+                        height: 44,
+                        color: Color(0xFFcccccc),
+                      ),
                     ),
                   ),
                   onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
@@ -823,9 +828,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         width: 28.0,
                                         height: 28.0,
                                         fit: BoxFit.cover,
-                                        placeholder: (context, url) => Icon(
-                                          Icons.account_circle,
-                                          size: 28,
+                                        placeholder: (context, url) => Image.asset(
+                                          'assets/images/ic_person.png',
+                                          width: 28,
+                                          height: 28,
                                           color: Color(0xFFcccccc),
                                         ),
                                       ),
@@ -962,9 +968,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         width: 28.0,
                                                                         height: 28.0,
                                                                         fit: BoxFit.cover,
-                                                                        placeholder: (context, url) => Icon(
-                                                                          Icons.account_circle,
-                                                                          size: 28,
+                                                                        placeholder: (context, url) => Image.asset(
+                                                                          'assets/images/ic_person.png',
+                                                                          width: 28,
+                                                                          height: 28,
                                                                           color: Color(0xFFcccccc),
                                                                         ),
                                                                       ),

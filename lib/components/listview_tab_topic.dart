@@ -47,7 +47,8 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 child: snapshot.data.length > 0
                     ? Container(
                         child: ListView.builder(
-                            primary: false,
+                            // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
+                            physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
                             itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
                             itemCount: snapshot.data.length))
                     : Column(
@@ -148,7 +149,12 @@ class _TopicItemViewState extends State<TopicItemView> {
                             height: 21.0,
                             width: 21.0,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Icon(Icons.account_circle, size: 21.0, color: Color(0xFFcccccc)),
+                            placeholder: (context, url) => Image.asset(
+                              'assets/images/ic_person.png',
+                              width: 21,
+                              height: 21,
+                              color: Color(0xFFcccccc),
+                            ),
                           ),
                         ),
                         SizedBox(

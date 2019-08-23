@@ -194,7 +194,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                               ? CachedNetworkImageProvider(
                                   "https:" + avatar,
                                 )
-                              : new AssetImage("assets/images/ic_person.png"),
+                              : AssetImage("assets/images/ic_person.png"),
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
                         border: Border.all(

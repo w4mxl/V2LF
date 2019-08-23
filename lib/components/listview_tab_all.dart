@@ -81,6 +81,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     if (items.length > 0) {
       return new RefreshIndicator(
           child: ListView.builder(
+            physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
             controller: _scrollController,
             itemCount: items.length + 1,
             itemBuilder: (context, index) {
