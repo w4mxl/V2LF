@@ -8,7 +8,9 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 [![LICENSE](https://img.shields.io/badge/license-GPL%20v3.0-blue.svg?style=flat-square)](https://github.com/w4mxl/V2LF/blob/master/LICENSE)
 
-`V2LF` 是一个 v2ex 技术社区的第三方 app。**'V2LF' 名字是取 'way to love flutter' 的缩写。**开发这个 app 的初衷是想在实战中学习 Flutter。
+`V2LF` 是一个 v2ex 技术社区的第三方 app。
+**'V2LF' 名字是取 'way to love flutter' 的缩写。**
+开发这个 app 的初衷是想在实战中学习 Flutter。
 
 在 v2ex 网站功能基础上，V2LF 希望进一步扩展出更多有趣功能的 app。目前已经新增有：
 
