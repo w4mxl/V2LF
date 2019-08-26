@@ -263,7 +263,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _thankTopic() async {
-    bool isSuccess = await DioWeb.thankTopic(widget.topicId, _detailModel.token);
+    bool isSuccess = await DioWeb.thankTopic(widget.topicId);
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
       eventBus.emit(MyEventRefreshTopic);

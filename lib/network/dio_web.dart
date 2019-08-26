@@ -839,9 +839,14 @@ class DioWeb {
   }
 
   // 感谢主题
-  static Future<bool> thankTopic(String topicId, String token) async {
-    var response = await dio.post("/thank/topic/" + topicId + "?t=" + token);
-    if (response.statusCode == 200 && response.data.toString().isEmpty) {
+  static Future<bool> thankTopic(String topicId) async {
+    String once = await getOnce();
+    print("thankTopic：" + once);
+    if (once == null || once.isEmpty) {
+      return false;
+    }
+    var response = await dio.post("/thank/topic/" + topicId + "?once=" + once);
+    if (response.statusCode == 200) {
       return true;
     }
     return false;

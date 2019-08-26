@@ -20,10 +20,10 @@ class TopicDetailModel {
   String contentRendered = ''; // 带html标签
   List<TopicSubtleItem> subtleList; // 附言
 
-  String token = ''; // 用于操作：对主题收藏、感谢
+  String token = ''; // 用于操作：对主题收藏
   // <a href="#;" onclick="if (confirm('确定不想再看到这个主题？')) { location.href = '/ignore/topic/583319?once=62479'; }"
   // class="op" style="user-select: auto;">忽略主题</a>
-  // String once = ''; // 用于操作：对忽略主题、对评论发送感谢
+  // String once = ''; // 用于操作：对忽略主题、给主题发送感谢、对评论发送感谢
   bool isFavorite = false; // 是否已收藏
   bool isThank = false; // 是否已感谢
 
