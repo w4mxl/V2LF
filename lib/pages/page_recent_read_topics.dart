@@ -6,13 +6,16 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/database_helper.dart';
-import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'page_topic_detail.dart';
 
 class RecentReadTopicsPage extends StatefulWidget {
   @override
@@ -56,7 +59,6 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
                             FlatButton(
                                 onPressed: () async {
                                   Navigator.of(context, rootNavigator: true).pop();
-                                  // todo 清空已读数据库
                                   await databaseHelper.deleteAll();
                                   setState(() {
                                     topicListFuture = getTopics();
@@ -97,6 +99,120 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
               child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
             );
           }),
+    );
+  }
+}
+
+/// topic item view
+class TopicItemView extends StatefulWidget {
+  final TabTopicItem topic;
+
+  TopicItemView(this.topic);
+
+  @override
+  _TopicItemViewState createState() => _TopicItemViewState();
+}
+
+class _TopicItemViewState extends State<TopicItemView> {
+  final dbHelper = DatabaseHelper.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // 保存到数据库（新增或者修改之前记录到最前面）
+        // 添加到「近期已读」
+        dbHelper.insert(widget.topic);
+
+        setState(() {
+          widget.topic.readStatus = 'read';
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TopicDetails(widget.topic.topicId)),
+        );
+      },
+      child: new Container(
+        padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Text(
+              widget.topic.topicContent,
+              // 区分：已读 or 未读 todo
+              style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // 头像
+                        ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl: "https:" + widget.topic.avatar,
+                            height: 21.0,
+                            width: 21.0,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/images/ic_person.png',
+                              width: 21,
+                              height: 21,
+                              color: Color(0xFFcccccc),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Text(
+                          widget.topic.memberId,
+                          textAlign: TextAlign.left,
+                          maxLines: 1,
+                          style: new TextStyle(
+                              fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                        ),
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).dividerColor),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: new Text(
+                            widget.topic.nodeName,
+                            style: new TextStyle(
+                              fontSize: 12.0,
+                              color: Theme.of(context).disabledColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Divider(
+              height: 0,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

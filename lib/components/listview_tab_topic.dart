@@ -81,8 +81,10 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
   //刷新数据,重新设置future就行了
   Future _onRefresh() async {
-    setState(() {
-      topicListFuture = getTopics();
+    await Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        topicListFuture = getTopics();
+      });
     });
   }
 
