@@ -38,6 +38,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "titleAutoAward": "自动签到",
+  "@titleAutoAward": {
+    "type": "text",
+    "placeholders": {}
+  },
   "titlePersonalityHome": "主页管理",
   "@titlePersonalityHome": {
     "type": "text",

@@ -46,12 +46,15 @@ class DioWeb {
         await V2exClient.logout();
       } else {
         // 登录状态正常，尝试领取每日奖励
-        checkDailyAward().then((onValue) {
-          if (!onValue) {
-            dailyMission();
-            print('准备去领取奖励...');
-          }
-        });
+        bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
+        if (_spAutoAward == null || _spAutoAward) {
+          checkDailyAward().then((onValue) {
+            if (!onValue) {
+              dailyMission();
+              print('准备去领取奖励...');
+            }
+          });
+        }
       }
     }
   }

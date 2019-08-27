@@ -28,6 +28,7 @@ class _SettingPageState extends State<SettingPage> {
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
   bool _switchSystemFont = false;
+  bool _switchAutoAward = true; // 是否自动签到；默认是
   bool _currentIsDark = false;
 
   @override
@@ -55,6 +56,12 @@ class _SettingPageState extends State<SettingPage> {
     } else {
       _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
     }
+
+    bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
+    if (_spAutoAward != null) {
+      _switchAutoAward = _spAutoAward;
+    }
+    print("wml:" + _spAutoAward.toString());
   }
 
   void _updateData() {
@@ -259,7 +266,6 @@ class _SettingPageState extends State<SettingPage> {
                 ],
               ),
             ),
-            // 多语言设置
             Container(
               margin: const EdgeInsets.only(top: 15.0),
               color: Theme.of(context).cardColor,
@@ -268,6 +274,7 @@ class _SettingPageState extends State<SettingPage> {
                   Divider(
                     height: 0.0,
                   ),
+                  // 多语言设置
                   ExpansionTile(
                     leading: Icon(
                       Icons.language,
@@ -320,6 +327,41 @@ class _SettingPageState extends State<SettingPage> {
                           }),
                     ],
                   ),
+                  Divider(
+                    height: 0.0,
+                    indent: 20.0,
+                  ),
+                  // 自动签到
+                  Platform.isIOS
+                      ? CupertinoSwitchListTile(
+                          value: _switchAutoAward,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchAutoAward = value;
+                              SpHelper.sp.setBool(SP_AUTO_AWARD, value);
+                            });
+                          },
+                          title: Text(S.of(context).titleAutoAward),
+                          secondary: Icon(
+                            Icons.monetization_on,
+                          ),
+                          selected: false,
+                          activeColor: MyTheme.appMainColor,
+                        )
+                      : SwitchListTile(
+                          value: _switchAutoAward,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchAutoAward = value;
+                              SpHelper.sp.setBool(SP_AUTO_AWARD, value);
+                            });
+                          },
+                          title: Text(S.of(context).titleAutoAward),
+                          secondary: Icon(
+                            Icons.monetization_on,
+                          ),
+                          selected: false,
+                        ),
                   Divider(
                     height: 0.0,
                   ),

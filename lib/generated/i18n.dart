@@ -62,6 +62,7 @@ class S implements WidgetsLocalizations {
   String get signup => "Sign-up";
   String get sureLogout => "Are you sure you want to sign out ?";
   String get thank => "Thank";
+  String get titleAutoAward => "Auto Daily Award";
   String get titleLanguage => "Language";
   String get titlePersonalityHome => "Manage Homepage";
   String get titleRecommend => "Recommend to friends";
@@ -174,6 +175,8 @@ class $zh_CN extends S {
   String get languageAuto => "跟随系统";
   @override
   String get nodes => "节点";
+  @override
+  String get titleAutoAward => "自动签到";
   @override
   String get thank => "感谢";
   @override

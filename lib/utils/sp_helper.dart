@@ -14,6 +14,8 @@ const String SP_FONT_FAMILY = "font_family";
 
 const String SP_JINRISHICI_TOKEN = "jinrishici_token";
 
+const String SP_AUTO_AWARD = "auto_award";
+
 // 与登录状态有关
 const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
