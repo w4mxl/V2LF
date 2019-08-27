@@ -263,7 +263,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _thankTopic() async {
+    Progresshud.show();
     bool isSuccess = await DioWeb.thankTopic(widget.topicId);
+    Progresshud.dismiss();
     if (isSuccess) {
       Progresshud.showSuccessWithStatus('感谢已发送');
       eventBus.emit(MyEventRefreshTopic);
@@ -273,7 +275,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _favoriteTopic() async {
+    Progresshud.show();
     bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
+    Progresshud.dismiss();
     if (isSuccess) {
       Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
       eventBus.emit(MyEventRefreshTopic);
