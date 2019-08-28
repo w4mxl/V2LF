@@ -166,11 +166,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
     Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
     Action(id: 'only_up', title: '楼主 / 全部', icon: Icons.visibility),
+    Action(id: 'link', title: '复制链接', icon: Icons.link),
+    Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
     Action(id: 'web', title: '浏览器打开', icon: Icons.explore),
     Action(id: 'share', title: '分享', icon: Icons.share),
     Action(), // for PopupMenuDivider
-    Action(id: 'link', title: '复制链接', icon: Icons.link),
-    Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
     Action(id: 'ignore_topic', title: '忽略主题', icon: Icons.do_not_disturb_alt),
     Action(id: 'report_topic', title: '举报主题', icon: Icons.report_problem),
   ];
@@ -501,13 +501,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           Offstage(
             child: Row(
               children: <Widget>[
-                IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isThank
-                        ? FontAwesomeIcons.solidKissWinkHeart
-                        : actions[0].icon),
-                    onPressed: () {
-                      _select(actions[0]);
-                    }),
+                Offstage(
+                  offstage: _detailModel != null && _detailModel.createdId == SpHelper.sp.getString(SP_USERNAME),
+                  child: IconButton(
+                      icon: Icon(_detailModel != null && _detailModel.isThank
+                          ? FontAwesomeIcons.solidKissWinkHeart
+                          : actions[0].icon),
+                      onPressed: () {
+                        _select(actions[0]);
+                      }),
+                ),
                 IconButton(
                     icon: Icon(
                         _detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
