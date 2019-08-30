@@ -6,6 +6,7 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:ovprogresshud/progresshud.dart';
 
 import 'listview_tab_topic.dart';
 
@@ -101,7 +102,8 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
           new Text(S.of(context).oops),
           RaisedButton.icon(
             onPressed: () {
-              _onRefresh();
+              Progresshud.show();
+              _onRefresh().then((_) => Progresshud.dismiss());
             },
             icon: Icon(Icons.refresh),
             label: Text(S.of(context).retry),

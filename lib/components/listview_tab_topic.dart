@@ -11,6 +11,7 @@ import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ovprogresshud/progresshud.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TopicListView extends StatefulWidget {
@@ -66,7 +67,8 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                 Text(S.of(context).oops),
                 RaisedButton.icon(
                   onPressed: () {
-                    _onRefresh();
+                    Progresshud.show();
+                    _onRefresh().then((_) => Progresshud.dismiss());
                   },
                   icon: Icon(Icons.refresh),
                   label: Text(S.of(context).retry),
