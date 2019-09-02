@@ -90,15 +90,16 @@ class _DialogOfCommentState extends State<DialogOfComment> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            GestureDetector(
-              child: Text('取消'),
-              onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+            IconButton(
+              icon: Icon(Icons.image),
+              onPressed: () => launch('https://sm.ms/',
+                  forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null),
             ),
             Expanded(
                 child: Center(
                     child: Text(
               '回复',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ))),
             IconButton(
               icon: Icon(Icons.send),
@@ -114,7 +115,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
           // line is filled up.
           maxLines: null,
           // maxLength: 200,
-          decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让回复有助于他人"),
+          decoration: InputDecoration.collapsed(hintText: "(u_u) 请尽量让回复有助于他人\n\n 可以通过左上角入口上传图片\n 复制链接到这里"),
           controller: _textController,
           onChanged: (String text) => setState(() {
             _isComposing = text.length > 0;
