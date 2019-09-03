@@ -28,7 +28,7 @@ class LoginPage extends StatefulWidget {
 
 LoginFormData loginFormData;
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   TextEditingController _accountController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
@@ -40,6 +40,10 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
   int _loginState = 0; //登录按钮状态，0 默认初始状态；1 登录中；2 登录结束
+  Animation _animation;
+  AnimationController _controller;
+  GlobalKey _globalKey = GlobalKey();
+  double _width = double.maxFinite;
 
   @override
   void initState() {
@@ -152,13 +156,23 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 40.0,
+                      height: 50.0,
                     ),
                     ButtonTheme(
+                      key: _globalKey,
+                      height: 48.0,
+                      minWidth: _width,
                       child: RaisedButton(
+                        animationDuration: Duration(milliseconds: 1000),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: buildButtonProgressChild(context),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
                             if (loginFormData != null) {
+                              animateButton();
+
                               // 让登录按钮有loading效果
                               setState(() {
                                 _loginState = 1;
@@ -176,12 +190,12 @@ class _LoginPageState extends State<LoginPage> {
                                 setState(() {
                                   _loginState = 2;
                                 });
-                                Fluttertoast.showToast(
-                                    msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                    timeInSecForIos: 2,
-                                    gravity: ToastGravity.CENTER);
                                 Timer(Duration(milliseconds: 800), () {
                                   Navigator.of(context).pop(true);
+                                  Fluttertoast.showToast(
+                                      msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                      timeInSecForIos: 2,
+                                      gravity: ToastGravity.CENTER);
                                 });
                               } else if (loginResult == "2fa") {
                                 // 让登录按钮恢复初始状态
@@ -302,10 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           }
                         },
-                        child: buildButtonProgressChild(context),
                       ),
-                      height: 55.0,
-                      minWidth: 400.0,
                     ),
                     SizedBox(
                       height: 12.0,
@@ -379,8 +390,23 @@ class _LoginPageState extends State<LoginPage> {
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       );
     } else {
+      print("wml:$_loginState");
       return Icon(Icons.check, color: Colors.white);
     }
+  }
+
+  void animateButton() {
+    double initialWidth = _globalKey.currentContext.size.width;
+
+    _controller = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+
+    _animation = Tween(begin: 0.0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          _width = initialWidth - ((initialWidth - 48) * _animation.value);
+        });
+      });
+    _controller.forward();
   }
 
   @override
@@ -389,6 +415,7 @@ class _LoginPageState extends State<LoginPage> {
     _pwdController.dispose();
     _captchaController.dispose();
     _2faController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }
