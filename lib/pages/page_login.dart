@@ -167,6 +167,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                        padding: EdgeInsets.all(0),
                         child: buildButtonProgressChild(context),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {

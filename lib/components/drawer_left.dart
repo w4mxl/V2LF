@@ -16,6 +16,7 @@ import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
+import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_recent_read_topics.dart';
 import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
@@ -84,8 +85,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                             ),
                       onTap: () {
                         if (userName.isEmpty) {
-                          var future = Navigator.push(context,
-                              new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
+                          var future = Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
                           future.then((value) {
                             // 直接close登录页则value为null；登录成功 value 为 true
                             if (value != null && value) {
@@ -98,7 +99,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           });
                         } else {
                           // todo -> 个人中心页面
-                          _launchURL(Strings.v2exHost + '/member/' + userName);
+                          // _launchURL(Strings.v2exHost + '/member/' + userName);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(),
+                              ));
                         }
                       },
                     ),
