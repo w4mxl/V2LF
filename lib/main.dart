@@ -39,6 +39,8 @@ parseJson(String text) {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // 配置 dio
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
