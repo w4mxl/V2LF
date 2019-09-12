@@ -15,7 +15,10 @@ import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_app/utils/url_helper.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:ovprogresshud/progresshud.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NodeTopics extends StatefulWidget {
   final String nodeId;
@@ -194,22 +197,23 @@ class _NodeTopicsState extends State<NodeTopics> {
                 height: 4,
               ),
               Offstage(
+                // Android
+                // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
                 // 自言自语的是："header": "&nbsp;",
                 offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
-                child: Container(
-                  alignment: Alignment.center,
+                child: Html(
                   padding: EdgeInsets.only(left: 10, right: 10),
-//                  child: Html( // todo Html not ready for this !
-//                    data: _node.header == null ? '' : _node.header,
-//                    defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//                  ),
-                  child: Text(
-                    // Android
-                    // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
-                    _node.header == null ? '' : _node.header,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
+                  data: _node.header == null ? '' : _node.header,
+                  defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  customTextAlign: (node) {
+                    return TextAlign.center;
+                  },
+                  onLinkTap: (url) {
+                    if (UrlHelper.canLaunchInApp(context, url)) {
+                      return;
+                    }
+                    _launchURL(url);
+                  },
                 ),
               ),
               SizedBox(
@@ -262,5 +266,14 @@ class _NodeTopicsState extends State<NodeTopics> {
         child: Text(S.of(context).loadingPage(p.toString())),
       ),
     );
+  }
+}
+
+// 外链跳转
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+  } else {
+    Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }
