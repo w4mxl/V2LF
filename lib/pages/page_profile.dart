@@ -27,6 +27,25 @@ class ProfilePage extends StatelessWidget {
             itemBuilder: _mainListBuilder,
             itemCount: 1,
           ),
+          // 左上角返回按钮
+          Positioned(
+            top: MediaQuery.of(context).padding.top,
+            left: 0.0,
+            child: IconTheme(
+              data: const IconThemeData(color: Colors.white),
+              child: SafeArea(
+                top: false,
+                bottom: false,
+                child: IconButton(
+                  icon: const BackButtonIcon(),
+                  tooltip: 'Back',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -40,7 +59,7 @@ class ProfilePage extends StatelessWidget {
   Container _buildHeader(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 50.0),
-      height: 240.0,
+      //height: 260.0,
       child: Stack(
         children: <Widget>[
           Container(
@@ -49,64 +68,116 @@ class ProfilePage extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               elevation: 5.0,
               color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  Text(
-                    "w4mxl",
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Text("UI/UX designer | Foodie | Kathmandu"),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  Container(
-                    height: 40.0,
-                    child: Row(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Expanded(
-                          child: ListTile(
-                            title: Text(
-                              "302",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle:
-                                Text("Posts".toUpperCase(), textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
-                          ),
+                        Text(
+                          "w4mxl",
+                          style: Theme.of(context).textTheme.title,
                         ),
-                        Expanded(
-                          child: ListTile(
-                            title: Text(
-                              "10.3K",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                        // todo 判断用户是否在线
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: ClipOval(
+                            child: Container(
+                              color: Colors.green,
+                              width: 8,
+                              height: 8,
                             ),
-                            subtitle: Text("Followers".toUpperCase(),
-                                textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            title: Text(
-                              "120",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text("Following".toUpperCase(),
-                                textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
                           ),
                         ),
                       ],
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          "这里是签名",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                      ],
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        style: TextStyle(fontSize: 14),
+                        children: [
+                          TextSpan(
+                            text: '上海市众安xxxxxxxxxxxxxxx科技股份有限公司',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                            text: ' / 工程师',
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      "V2EX xxxxxxxxx第 62179 号会员，加入于 2014-05-08 13:33:07",
+                      style: TextStyle(fontSize: 12, color: Colors.black45),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Container(
+                      height: 80.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "302",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text("Posts".toUpperCase(),
+                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "10.3K",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text("Followers".toUpperCase(),
+                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "120",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text("Followi".toUpperCase(),
+                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
