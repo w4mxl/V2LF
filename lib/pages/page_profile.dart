@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 // 登录: 本人、他人
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/listview_favourite_topics.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -25,19 +26,19 @@ class ProfilePage extends StatelessWidget {
           ),
           ListView.builder(
             itemBuilder: _mainListBuilder,
-            itemCount: 1,
+            itemCount: 4,
           ),
           // 左上角返回按钮
           Positioned(
             top: MediaQuery.of(context).padding.top,
             left: 0.0,
             child: IconTheme(
-              data: const IconThemeData(color: Colors.white),
+              data: IconThemeData(color: Colors.white),
               child: SafeArea(
                 top: false,
                 bottom: false,
                 child: IconButton(
-                  icon: const BackButtonIcon(),
+                  icon: BackButtonIcon(),
                   tooltip: 'Back',
                   onPressed: () {
                     Navigator.pop(context);
@@ -53,6 +54,9 @@ class ProfilePage extends StatelessWidget {
 
   Widget _mainListBuilder(BuildContext context, int index) {
     if (index == 0) return _buildHeader(context);
+    if (index == 1) return _buildRecentTopicsHeader(context);
+    if (index == 2) return FavTopicListView();
+    if (index == 3) return _buildRecentRepliesHeader(context);
   }
 
   // 头像区域
@@ -98,16 +102,13 @@ class ProfilePage extends StatelessWidget {
                     SizedBox(
                       height: 5.0,
                     ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "这里是签名",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: Text(
+                        "这里是签名",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                     Text.rich(
                       TextSpan(
@@ -132,50 +133,37 @@ class ProfilePage extends StatelessWidget {
                       style: TextStyle(fontSize: 12, color: Colors.black45),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
-                      height: 16.0,
+                    Divider(),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: -5,
+                      children: <Widget>[
+                        Chip(
+                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_home.png'),
+                          label: Text(
+                            'https://w4mxl.github.io',
+                          ),
+                          backgroundColor: Colors.grey[200],
+                        ),
+                        Chip(
+                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_geo.png'),
+                          label: Text('上海'),
+                          backgroundColor: Colors.grey[200],
+                        ),
+                        Chip(
+                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_instagram.png'),
+                          label: Text('w4mxl'),
+                          backgroundColor: Colors.grey[200],
+                        )
+                      ],
                     ),
-                    Container(
-                      height: 80.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: ListTile(
-                              title: Text(
-                                "302",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text("Posts".toUpperCase(),
-                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
-                            ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: Text(
-                                "10.3K",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text("Followers".toUpperCase(),
-                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
-                            ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: Text(
-                                "120",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text("Followi".toUpperCase(),
-                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0)),
-                            ),
-                          ),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        '这是用户的个人简介内容',
+                        style: TextStyle(fontSize: 14),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -195,6 +183,50 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Container _buildRecentTopicsHeader(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            'w4mxl 最近主题',
+            style: Theme.of(context).textTheme.title,
+          ),
+          FlatButton(
+              onPressed: () {},
+              child: Text(
+                'SEE ALL',
+                style: TextStyle(color: Colors.blue),
+              ))
+        ],
+      ),
+    );
+  }
+
+  Container _buildRecentRepliesHeader(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            'w4mxl 最近回复',
+            style: Theme.of(context).textTheme.title,
+          ),
+          FlatButton(
+              onPressed: () {},
+              child: Text(
+                'SEE ALL',
+                style: TextStyle(color: Colors.blue),
+              ))
         ],
       ),
     );
