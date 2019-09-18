@@ -9,10 +9,13 @@ import 'package:flutter_app/model/web/item_fav_node.dart';
 import 'package:flutter_app/model/web/item_fav_topic.dart';
 import 'package:flutter_app/model/web/item_node_topic.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
+import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
+import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/model/web/item_topic_reply.dart';
 import 'package:flutter_app/model/web/item_topic_subtle.dart';
 import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/http.dart';
@@ -726,6 +729,31 @@ class DioWeb {
     }
 
     return notifications;
+  }
+
+  static Future<MemberProfileModel> getMemberProfile(String userName) async {
+    print('在请求$userName 个人页面数据');
+    MemberProfileModel profileModel = MemberProfileModel();
+    List<Clips> clips = List(); // 网站、位置、社交媒体id 等
+
+    String memberIntro = ''; // 个人简介
+
+    String token = '';
+    bool isFollow = false; // 是否关注
+    bool isBlock = false; // 是否屏蔽
+
+    List<ProfileRecentTopicItem> topicList = List(); // 近期主题
+    List<ProfileRecentReplyItem> replyList = List(); // 近期回复
+
+    var response = await dio.get('/member/' + userName);
+    var document = parse(response.data);
+
+    // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img
+    profileModel.avatar = document
+        .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
+        .attributes["src"];
+    print(profileModel.avatar);
+    return profileModel;
   }
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child

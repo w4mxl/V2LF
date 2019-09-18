@@ -10,11 +10,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    DioWeb.getMemberProfile("d5");
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
