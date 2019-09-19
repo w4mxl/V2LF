@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -10,27 +13,54 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_html/flutter_html.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  MemberProfileModel _memberProfileModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+  }
+
+  Future getData() async {
+    var memberProfileModel = await DioWeb.getMemberProfile("ydatong");
+    if (memberProfileModel != null) {
+      setState(() {
+        _memberProfileModel = memberProfileModel;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    DioWeb.getMemberProfile("d5");
-
     return Scaffold(
       body: Stack(
-        children: <Widget>[
+        children: [
           Container(
             height: 200,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
             ),
           ),
-          ListView.builder(
-            itemBuilder: _mainListBuilder,
-            itemCount: 4,
-          ),
+          _memberProfileModel == null
+              ? Center(
+                  child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemBuilder: _mainListBuilder,
+                  itemCount: 4,
+                ),
           // 左上角返回按钮
           Positioned(
             top: MediaQuery.of(context).padding.top,
@@ -62,7 +92,6 @@ class ProfilePage extends StatelessWidget {
     if (index == 3) return _buildRecentRepliesHeader(context);
   }
 
-  // 头像区域
   Container _buildHeader(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 50.0),
@@ -86,7 +115,7 @@ class ProfilePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "w4mxl",
+                          _memberProfileModel.userName,
                           style: Theme.of(context).textTheme.title,
                         ),
                         // todo 判断用户是否在线
@@ -105,15 +134,18 @@ class ProfilePage extends StatelessWidget {
                     SizedBox(
                       height: 5.0,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0),
-                      child: Text(
-                        "这里是签名",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
+                    Visibility(
+                      visible: _memberProfileModel.sign.isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          _memberProfileModel.sign,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ),
-                    Text.rich(
+                    /*Text.rich(
                       TextSpan(
                         style: TextStyle(fontSize: 14),
                         children: [
@@ -127,12 +159,23 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                       textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 5.0,
+                    ),*/
+                    Visibility(
+                      visible: _memberProfileModel.company.isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Html(
+                          data: _memberProfileModel.company.isNotEmpty
+                              ? _memberProfileModel.company.split(' &nbsp; ')[1]
+                              : '',
+                          customTextAlign: (node) {
+                            return TextAlign.center;
+                          },
+                        ),
+                      ),
                     ),
                     Text(
-                      "V2EX xxxxxxxxx第 62179 号会员，加入于 2014-05-08 13:33:07",
+                      _memberProfileModel.memberInfo.replaceFirst(' +08:00', ''), // 时间 去除+ 08:00;,
                       style: TextStyle(fontSize: 12, color: Colors.black45),
                       textAlign: TextAlign.center,
                     ),
@@ -180,8 +223,7 @@ class ProfilePage extends StatelessWidget {
                 shape: CircleBorder(),
                 child: CircleAvatar(
                   radius: 40.0,
-                  backgroundImage: CachedNetworkImageProvider(
-                      'https://cdn.v2ex.com/gravatar/bf07a96ee6f886e82c49f081f87b2c25?s=73&d=retro'),
+                  backgroundImage: CachedNetworkImageProvider("https:${_memberProfileModel.avatar}"),
                 ),
               ),
             ],

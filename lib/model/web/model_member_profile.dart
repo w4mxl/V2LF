@@ -10,8 +10,7 @@ class MemberProfileModel {
   String avatar = '';
   String userName = '';
   String sign = ''; // 签名
-  String company = ''; // 所在公司
-  String jobTitle = ''; // 工作职位
+  String company = ''; // 所在公司 / 职位
   String memberInfo = ''; // V2EX 第 62179 号会员，加入于 2014-05-08 13:33:07 +08:00
 
   List<Clips> clips; // 网站、位置、社交媒体id 等

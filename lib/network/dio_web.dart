@@ -748,11 +748,36 @@ class DioWeb {
     var response = await dio.get('/member/' + userName);
     var document = parse(response.data);
 
+    // 头像
     // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img
     profileModel.avatar = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
         .attributes["src"];
-    print(profileModel.avatar);
+    // 用户名
+    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > h1
+    // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(3) > h1
+    profileModel.userName =
+        document.querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > h1').text;
+    // 用户加入信息
+    profileModel.memberInfo = document
+        .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span.gray')
+        .text;
+    // 签名
+    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span.bigger
+    profileModel.sign = document
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger')
+        .text;
+
+    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span:nth-child(5)
+    if (document.querySelector(
+            '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8) > li') !=
+        null) {
+      profileModel.company = document
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8)')
+          .innerHtml;
+    }
     return profileModel;
   }
 

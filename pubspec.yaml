@@ -10,7 +10,7 @@ description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love
 version: 2019.4+15
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
