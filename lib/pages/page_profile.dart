@@ -185,6 +185,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       runSpacing: -5,
                       children: <Widget>[
                         Chip(
+                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com' + _memberProfileModel.clips[0].icon),
+                          label: Text(
+                            _memberProfileModel.clips[0].name,
+                          ),
+                          backgroundColor: Colors.grey[200],
+                        ),
+                        Chip(
                           avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_home.png'),
                           label: Text(
                             'https://w4mxl.github.io',

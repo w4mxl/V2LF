@@ -734,7 +734,7 @@ class DioWeb {
   static Future<MemberProfileModel> getMemberProfile(String userName) async {
     print('在请求$userName 个人页面数据');
     MemberProfileModel profileModel = MemberProfileModel();
-    List<Clips> clips = List(); // 网站、位置、社交媒体id 等
+    List<Clip> clips = List(); // 网站、位置、社交媒体id 等
 
     String memberIntro = ''; // 个人简介
 
@@ -778,6 +778,21 @@ class DioWeb {
               '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8)')
           .innerHtml;
     }
+
+    // #Wrapper > div > div:nth-child(1) > div.widgets
+    List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div.widgets");
+    if (appendNodes != null && appendNodes.length > 0) {
+      for (var node in appendNodes) {
+        Clip clip = Clip();
+        clip.icon = node.querySelector('a > img').attributes['src'];
+        clip.name = node.querySelector('a').text;
+        clip.url = node.querySelector('a').attributes['href'];
+        print('wml::${clip.url}');
+        clips.add(clip);
+      }
+      profileModel.clips = clips;
+    }
+    print("wml::${appendNodes.length}");
     return profileModel;
   }
 
