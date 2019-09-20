@@ -780,19 +780,29 @@ class DioWeb {
     }
 
     // #Wrapper > div > div:nth-child(1) > div.widgets
-    List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div.widgets");
-    if (appendNodes != null && appendNodes.length > 0) {
-      for (var node in appendNodes) {
+    List<dom.Element> nodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div.widgets > a");
+    if (nodes != null && nodes.length > 0) {
+      for (var node in nodes) {
         Clip clip = Clip();
-        clip.icon = node.querySelector('a > img').attributes['src'];
-        clip.name = node.querySelector('a').text;
-        clip.url = node.querySelector('a').attributes['href'];
-        print('wml::${clip.url}');
+        clip.icon = node.querySelector('img').attributes['src'];
+        clip.name = node.text.trim();
+        clip.url = node.attributes['href'];
+        print('wml::${clip.name}');
         clips.add(clip);
       }
       profileModel.clips = clips;
     }
-    print("wml::${appendNodes.length}");
+    print("wml::${nodes.length}");
+
+    // 个人简介
+    // #Wrapper > div > div:nth-child(1) > div:nth-child(3)
+    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
+      profileModel.memberIntro =
+          document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(5)").text;
+    }
+
+    print("wml::${profileModel.memberIntro}");
+
     return profileModel;
   }
 

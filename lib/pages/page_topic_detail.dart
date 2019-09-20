@@ -18,6 +18,7 @@ import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -603,7 +604,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       ),
                     ),
                   ),
-                  onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                  onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                 ),
                 SizedBox(width: 10.0),
                 new Expanded(
@@ -626,7 +627,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          onTap: () => _launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                          onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
                         ),
                         new Icon(
                           Icons.keyboard_arrow_right,
@@ -711,7 +712,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 if (UrlHelper.canLaunchInApp(context, url)) {
                   return;
                 }
-                _launchURL(url);
+                Utils.launchURL(url);
               },
               onImageTap: (source) {
                 print(source);
@@ -778,7 +779,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   if (UrlHelper.canLaunchInApp(context, url)) {
                     return;
                   }
-                  _launchURL(url);
+                  Utils.launchURL(url);
                 },
                 onImageTap: (source) {
                   print(source);
@@ -845,7 +846,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       ),
                                     ),
                                   ),
-                                  onTap: () => _launchURL(Strings.v2exHost + '/member/' + reply.userName),
+                                  onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + reply.userName),
                                 ),
                                 Offstage(
                                   offstage: reply.userName != _detailModel.createdId,
@@ -985,7 +986,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  onTap: () => _launchURL(
+                                                                  onTap: () => Utils.launchURL(
                                                                       Strings.v2exHost + '/member/' + item.userName),
                                                                 ),
                                                                 Offstage(
@@ -1103,7 +1104,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                             }
                                             return;
                                           }
-                                          _launchURL(url);
+                                          Utils.launchURL(url);
                                         },
                                         onImageTap: (source) {
                                           print(source);
@@ -1219,15 +1220,6 @@ class Action {
   final String id;
   final String title;
   final IconData icon;
-}
-
-// 外链跳转
-_launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-  } else {
-    Progresshud.showErrorWithStatus('Could not launch $url');
-  }
 }
 
 class LoadingRepliesSkeleton extends StatelessWidget {

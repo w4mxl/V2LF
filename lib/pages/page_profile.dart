@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as prefix1;
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -12,10 +13,13 @@ import 'package:flutter/cupertino.dart';
 // 登录: 本人、他人
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/components/listview_favourite_topics.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -34,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("ydatong");
+    var memberProfileModel = await DioWeb.getMemberProfile("w4mxl");
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -116,7 +120,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: <Widget>[
                         Text(
                           _memberProfileModel.userName,
-                          style: Theme.of(context).textTheme.title,
+                          style: prefix1.TextStyle(
+                            fontSize: 24,
+                            fontWeight: prefix1.FontWeight.bold,
+                          ),
                         ),
                         // todo 判断用户是否在线
                         Padding(
@@ -145,76 +152,56 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    /*Text.rich(
-                      TextSpan(
-                        style: TextStyle(fontSize: 14),
-                        children: [
-                          TextSpan(
-                            text: '上海市众安xxxxxxxxxxxxxxx科技股份有限公司',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text: ' / 工程师',
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),*/
-                    Visibility(
-                      visible: _memberProfileModel.company.isNotEmpty,
-                      child: Padding(
+                    if (_memberProfileModel.company.isNotEmpty)
+                      Padding(
                         padding: const EdgeInsets.only(bottom: 5.0),
                         child: Html(
-                          data: _memberProfileModel.company.isNotEmpty
-                              ? _memberProfileModel.company.split(' &nbsp; ')[1]
-                              : '',
+                          data: _memberProfileModel.company.split(' &nbsp; ')[1],
                           customTextAlign: (node) {
                             return TextAlign.center;
                           },
                         ),
                       ),
-                    ),
-                    Text(
-                      _memberProfileModel.memberInfo.replaceFirst(' +08:00', ''), // 时间 去除+ 08:00;,
-                      style: TextStyle(fontSize: 12, color: Colors.black45),
-                      textAlign: TextAlign.center,
-                    ),
-                    Divider(),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: -5,
-                      children: <Widget>[
-                        Chip(
-                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com' + _memberProfileModel.clips[0].icon),
-                          label: Text(
-                            _memberProfileModel.clips[0].name,
-                          ),
-                          backgroundColor: Colors.grey[200],
-                        ),
-                        Chip(
-                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_home.png'),
-                          label: Text(
-                            'https://w4mxl.github.io',
-                          ),
-                          backgroundColor: Colors.grey[200],
-                        ),
-                        Chip(
-                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_geo.png'),
-                          label: Text('上海'),
-                          backgroundColor: Colors.grey[200],
-                        ),
-                        Chip(
-                          avatar: CachedNetworkImage(imageUrl: 'https://www.v2ex.com/static/img/social_instagram.png'),
-                          label: Text('w4mxl'),
-                          backgroundColor: Colors.grey[200],
-                        )
-                      ],
-                    ),
                     Padding(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.only(bottom: 10.0),
                       child: Text(
-                        '这是用户的个人简介内容',
-                        style: TextStyle(fontSize: 14),
+                        _memberProfileModel.memberInfo.replaceFirst(' +08:00', ''), // 时间 去除+ 08:00;,
+                        style: TextStyle(fontSize: 12, color: Colors.black45),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    if (_memberProfileModel.clips != null)
+                      Column(
+                        children: <Widget>[
+                          Divider(),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: -5,
+                            children: _memberProfileModel.clips.map((Clip clip) {
+                              return ActionChip(
+                                avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
+                                label: Text(
+                                  clip.name,
+                                ),
+                                backgroundColor: Colors.grey[200],
+                                onPressed: () {
+                                  Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
+                                      ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
+                                      : clip.url);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    Visibility(
+                      visible: _memberProfileModel.memberIntro.isNotEmpty,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          _memberProfileModel.memberIntro.trimLeft().trimRight(),
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ),
                     ),
                   ],
