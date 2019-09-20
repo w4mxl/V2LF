@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart' as prefix1;
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -13,8 +12,7 @@ import 'package:flutter/cupertino.dart' as prefix1;
 // 登录: 本人、他人
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
-import 'package:flutter_app/components/listview_favourite_topics.dart';
+import 'package:flutter_app/components/listview_member_recent_topics.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
@@ -92,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _mainListBuilder(BuildContext context, int index) {
     if (index == 0) return _buildHeader(context);
     if (index == 1) return _buildRecentTopicsHeader(context);
-    if (index == 2) return FavTopicListView();
+    if (index == 2) return MemberRecentTopicsListView();
     if (index == 3) return _buildRecentRepliesHeader(context);
   }
 
@@ -120,9 +118,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: <Widget>[
                         Text(
                           _memberProfileModel.userName,
-                          style: prefix1.TextStyle(
+                          style: TextStyle(
                             fontSize: 24,
-                            fontWeight: prefix1.FontWeight.bold,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         // todo 判断用户是否在线
