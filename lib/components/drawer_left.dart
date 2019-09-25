@@ -101,10 +101,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           // todo -> 个人中心页面
                           // _launchURL(Strings.v2exHost + '/member/' + userName);
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfilePage(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfilePage(),
+                            ),
+                          );
                         }
                       },
                     ),
@@ -190,7 +191,13 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       });
                     } else {
                       // todo -> 个人中心页面
-                      _launchURL(Strings.v2exHost + '/member/' + userName);
+                      // _launchURL(Strings.v2exHost + '/member/' + userName);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(),
+                        ),
+                      );
                     }
                   },
                   child: Container(

@@ -213,14 +213,15 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Material(
-                elevation: 5.0,
-                shape: CircleBorder(),
-                child: CircleAvatar(
-                  radius: 40.0,
-                  backgroundImage: CachedNetworkImageProvider("https:${_memberProfileModel.avatar}"),
-                ),
-              ),
+//              Material(
+//                elevation: 5.0,
+//                shape: CircleBorder(),
+//                child: CircleAvatar(
+//                  radius: 40.0,
+//                  backgroundImage: CachedNetworkImageProvider("https:${_memberProfileModel.avatar}"),
+//                ),
+//              ),
+              OnlinePersonAction("https:${_memberProfileModel.avatar}", true),
             ],
           ),
         ],
@@ -231,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Container _buildRecentTopicsHeader(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.only(left: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -333,6 +334,55 @@ class _ProfilePageState extends State<ProfilePage> {
               ))
         ],
       ),
+    );
+  }
+}
+
+/// 用户是否在线
+class OnlinePersonAction extends StatelessWidget {
+  final String avatarPath;
+  final bool online;
+
+  OnlinePersonAction(this.avatarPath, this.online);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(3.4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              width: 2,
+              color: Color(0xFF558AED),
+            ),
+          ),
+          child: Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              image: DecorationImage(image: CachedNetworkImageProvider(avatarPath), fit: BoxFit.cover),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+                color: online ? Colors.greenAccent : Colors.redAccent,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  width: 1,
+                  color: Color(0xFFFFFFFF),
+                )),
+          ),
+        )
+      ],
     );
   }
 }

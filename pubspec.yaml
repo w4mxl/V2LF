@@ -50,12 +50,12 @@ dependencies:
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
   flutter_whatsnew: ^1.0.0 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
   shimmer: ^1.0.0
-  # zefyr: ^0.5.0 # https://pub.dartlang.org/packages/zefyr#-installing-tab-
-  zefyr:
-    git:
-      url: https://github.com/memspace/zefyr.git
-      ref: dev
-      path: packages/zefyr
+  zefyr: ^0.8.0 # https://pub.dartlang.org/packages/zefyr#-installing-tab-
+  #    zefyr:
+  #      git:
+  #        url: https://github.com/memspace/zefyr.git
+  #        ref: dev
+  #        path: packages/zefyr
   photo_view: ^0.4.2
   # webview_flutter: ^0.3.6 无法弹出键盘输入的问题还没解决
   flutter_webview_plugin: ^0.3.7
