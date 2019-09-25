@@ -98,8 +98,7 @@ class DioWeb {
     }
   }
 
-  // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]
-  // p > 0 则通过 recent 获取数据
+  // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]，p > 0 则通过 recent 获取数据
   static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey, int p) async {
     List<TabTopicItem> topics = new List<TabTopicItem>();
 
@@ -448,8 +447,7 @@ class DioWeb {
     return loginFormData;
   }
 
-  // 登录 POST -> 获取用户信息
-  // Future<String> "true" "false" "2fa"
+  // 登录 POST -> 获取用户信息，Future<String> "true" "false" "2fa"
   static Future<String> loginPost(LoginFormData loginFormData) async {
     // 此处 Origin 和 Referer 是必要的
     dio.options.headers = {
@@ -506,6 +504,7 @@ class DioWeb {
     }
   }
 
+  // 两步验证
   static Future<bool> twoFALogin(String code) async {
     String once = SpHelper.sp.getString(SP_ONCE);
     print("twoFALogin：" + once);
@@ -526,6 +525,7 @@ class DioWeb {
     return false;
   }
 
+  // 获取当前用户信息
   static Future<String> getUserInfo() async {
     var response = await dio.get(Strings.v2exHost);
     if (response.redirects.length > 0) {
@@ -731,6 +731,7 @@ class DioWeb {
     return notifications;
   }
 
+  // 获取用户主页数据
   static Future<MemberProfileModel> getMemberProfile(String userName) async {
     print('在请求$userName 个人页面数据');
     MemberProfileModel profileModel = MemberProfileModel();
@@ -764,10 +765,14 @@ class DioWeb {
         .text;
     // 签名
     // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span.bigger
-    profileModel.sign = document
-        .querySelector(
-            '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger')
-        .text;
+    if (document.querySelector(
+            '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger') !=
+        null) {
+      profileModel.sign = document
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger')
+          .text;
+    }
 
     // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span:nth-child(5)
     if (document.querySelector(
@@ -802,6 +807,45 @@ class DioWeb {
     }
 
     print("wml::${profileModel.memberIntro}");
+
+    // 解析"最近主题" : 可能是多个 / 0 / 用户设置为隐藏
+    if (document.querySelector("#Wrapper > div > div:nth-child(5) > div[class='cell item']") != null) {
+      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div:nth-child(5) > div[class='cell item']");
+      for (var value in rootNode) {
+        ProfileRecentTopicItem recentTopicItem = ProfileRecentTopicItem();
+        recentTopicItem.topicId = value
+            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .attributes["href"]
+            .replaceAll("/t/", "")
+            .split("#")[0]; // 得到是 /t/522540#reply17
+        recentTopicItem.replyCount = value
+            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .attributes["href"]
+            .replaceAll("/t/", "")
+            .split("#")[1]
+            .replaceFirst('reply', '');
+
+        recentTopicItem.topicTitle = value.querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a').text;
+
+        // #Wrapper > div > div:nth-child(3) > div:nth-child(2) > table > tbody > tr > td:nth-child(1) > span:nth-child(1) > a
+        recentTopicItem.nodeId = value
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .attributes["href"]
+            .replaceAll('/go/', '');
+        recentTopicItem.nodeName = document.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
+
+        if (recentTopicItem.replyCount != '0') {
+          recentTopicItem.lastReplyTime =
+              ' • ' + value.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
+        }
+        topicList.add(recentTopicItem);
+      }
+      print("wml::${rootNode.length}");
+    } else if (document.querySelector("#Wrapper > div > div:nth-child(5) > div.inner") != null) {
+      // 用户设置为隐藏
+      topicList = null;
+    }
+    profileModel.topicList = topicList;
 
     return profileModel;
   }
