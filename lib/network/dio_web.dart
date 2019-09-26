@@ -754,6 +754,12 @@ class DioWeb {
     profileModel.avatar = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
         .attributes["src"];
+
+    // 是否在线
+    if (document.querySelector('#strong.online') != null) {
+      profileModel.online = true;
+    }
+
     // 用户名
     // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > h1
     // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(3) > h1
@@ -762,7 +768,9 @@ class DioWeb {
     // 用户加入信息
     profileModel.memberInfo = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span.gray')
-        .text;
+        .text
+        .replaceFirst('V2EX ', '');
+
     // 签名
     // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span.bigger
     if (document.querySelector(
@@ -846,6 +854,26 @@ class DioWeb {
       topicList = null;
     }
     profileModel.topicList = topicList;
+
+    // 解析"最近回复" : 可能是多个 / 0
+    if (document.querySelector('#Wrapper > div > div:nth-child(9) > div.dock_area') != null) {
+      var dockAreaList = document.querySelectorAll('div.dock_area');
+      var replyContentList = document.querySelectorAll('div.reply_content');
+      for (int i = 0; i < dockAreaList.length; i++) {
+        ProfileRecentReplyItem recentReplyItem = ProfileRecentReplyItem();
+        recentReplyItem.topicId = dockAreaList[i]
+            .querySelector('table > tbody > tr > td > span > a')
+            .attributes["href"]
+            .replaceAll("/t/", "")
+            .split("#")[0];
+        recentReplyItem.dockAreaText = "回复了" + dockAreaList[i].text.trimRight().trimLeft().split('回复了')[1];
+        recentReplyItem.replyTime =
+            dockAreaList[i].text.trimRight().trimLeft().split('回复了')[0].replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;
+        recentReplyItem.replyContent = replyContentList[i].innerHtml;
+        replyList.add(recentReplyItem);
+      }
+    }
+    profileModel.replyList = replyList;
 
     return profileModel;
   }

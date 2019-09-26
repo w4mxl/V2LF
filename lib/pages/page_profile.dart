@@ -5,12 +5,14 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("lloovve");
+    var memberProfileModel = await DioWeb.getMemberProfile("vgggy");
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -64,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               : ListView.builder(
                   itemBuilder: _mainListBuilder,
-                  itemCount: 4,
+                  itemCount: 5,
                 ),
           // 左上角返回按钮
           Positioned(
@@ -95,15 +97,16 @@ class _ProfilePageState extends State<ProfilePage> {
     if (index == 1) return _buildRecentTopicsHeader(context);
     if (index == 2) return _buildRecentTopicsListView(context);
     if (index == 3) return _buildRecentRepliesHeader(context);
+    if (index == 4) return _buildRecentRepliesListView(context);
   }
 
   Container _buildHeader(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 50.0),
-      //height: 260.0,
       child: Stack(
         children: <Widget>[
           Container(
+            width: double.infinity,
             padding: EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0, bottom: 10.0),
             child: Material(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -116,28 +119,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 50.0,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          _memberProfileModel.userName,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        // todo 判断用户是否在线
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
-                          child: ClipOval(
-                            child: Container(
-                              color: Colors.green,
-                              width: 8,
-                              height: 8,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      _memberProfileModel.userName,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(
                       height: 5.0,
@@ -213,15 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-//              Material(
-//                elevation: 5.0,
-//                shape: CircleBorder(),
-//                child: CircleAvatar(
-//                  radius: 40.0,
-//                  backgroundImage: CachedNetworkImageProvider("https:${_memberProfileModel.avatar}"),
-//                ),
-//              ),
-              OnlinePersonAction("https:${_memberProfileModel.avatar}", true),
+              OnlinePersonAction("https:${_memberProfileModel.avatar}", _memberProfileModel.online),
             ],
           ),
         ],
@@ -244,14 +223,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Offstage(
-            offstage: _memberProfileModel.topicList == null,
+            offstage: _memberProfileModel.topicList == null || _memberProfileModel.topicList.length == 0,
             child: FlatButton(
                 onPressed: () {},
                 child: Text(
                   '查看所有',
                   style: TextStyle(color: Colors.blue),
                 )),
-          )
+          ),
         ],
       ),
     );
@@ -260,23 +239,29 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildRecentTopicsListView(BuildContext context) {
     if (_memberProfileModel.topicList == null) {
       // 根据 xxx 的设置，主题列表被隐藏
-      return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-            width: 128.0,
-            height: 114.0,
-            margin: EdgeInsets.only(bottom: 10),
-            child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
-        Container(
-          padding: EdgeInsets.only(bottom: 20),
-          width: 250,
-          child: Text("根据 ${_memberProfileModel.userName} 的设置，主题列表被隐藏",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black45,
-              )),
+      return Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                width: 128.0,
+                height: 114.0,
+                margin: EdgeInsets.only(bottom: 10),
+                child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+            Container(
+              padding: EdgeInsets.only(bottom: 20),
+              width: 250,
+              child: Text("根据 ${_memberProfileModel.userName} 的设置，主题列表被隐藏",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black45,
+                  )),
+            ),
+          ],
         ),
-      ]);
+      );
     } else if (_memberProfileModel.topicList.length > 0) {
       return Container(
         color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
@@ -318,23 +303,64 @@ class _ProfilePageState extends State<ProfilePage> {
   Container _buildRecentRepliesHeader(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.only(left: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            '最近回复',
-            style: Theme.of(context).textTheme.title,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Text(
+              '最近回复',
+              style: Theme.of(context).textTheme.title,
+            ),
           ),
-          FlatButton(
-              onPressed: () {},
-              child: Text(
-                'SEE ALL',
-                style: TextStyle(color: Colors.blue),
-              ))
+          Offstage(
+            offstage: _memberProfileModel.replyList.length == 0,
+            child: FlatButton(
+                onPressed: () {},
+                child: Text(
+                  '查看所有',
+                  style: TextStyle(color: Colors.blue),
+                )),
+          ),
         ],
       ),
     );
+  }
+
+  Widget _buildRecentRepliesListView(BuildContext context) {
+    if (_memberProfileModel.replyList.length > 0) {
+      return Container(
+        color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          // 禁用滚动事件
+          itemCount: _memberProfileModel.replyList.length,
+          itemBuilder: (context, index) {
+            return ReplyItemView(_memberProfileModel.replyList[index]);
+          },
+          separatorBuilder: (BuildContext context, int index) => Divider(
+            height: 0,
+            indent: 12,
+            endIndent: 12,
+          ),
+        ),
+      );
+    } else {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "${_memberProfileModel.userName} 暂未发布任何回复",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black45,
+            ),
+          ),
+        ),
+      );
+    }
   }
 }
 
@@ -348,22 +374,16 @@ class OnlinePersonAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      overflow: Overflow.visible,
       children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(3.4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            border: Border.all(
-              width: 2,
-              color: Color(0xFF558AED),
-            ),
-          ),
-          child: Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              image: DecorationImage(image: CachedNetworkImageProvider(avatarPath), fit: BoxFit.cover),
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Material(
+            elevation: 8.0,
+            shape: CircleBorder(),
+            child: CircleAvatar(
+              radius: 40.0,
+              backgroundImage: CachedNetworkImageProvider(avatarPath),
             ),
           ),
         ),
@@ -480,6 +500,74 @@ class TopicItemView extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// reply item view
+class ReplyItemView extends StatelessWidget {
+  final ProfileRecentReplyItem reply;
+
+  ReplyItemView(this.reply);
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          new MaterialPageRoute(builder: (context) => TopicDetails(reply.topicId)),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              color: Color(0xffedf3f5),
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  reply.dockAreaText,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Html(
+              data: reply.replyContent,
+              defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
+              linkStyle: TextStyle(
+                color: Theme.of(context).accentColor,
+              ),
+              onLinkTap: (url) {
+                if (UrlHelper.canLaunchInApp(context, url)) {
+                  return;
+                } else if (url.contains("/member/")) {
+                  // @xxx 需要补齐 base url
+                  url = Strings.v2exHost + url;
+                  print(url);
+                }
+                Utils.launchURL(url);
+              },
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                reply.replyTime,
+                style: TextStyle(fontSize: 12, color: Colors.black54),
               ),
             ),
           ],

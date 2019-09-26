@@ -9,6 +9,7 @@ import 'item_profile_recent_topic.dart';
 class MemberProfileModel {
   String avatar = '';
   String userName = '';
+  bool online = false;
   String sign = ''; // 签名
   String company = ''; // 所在公司 / 职位
   String memberInfo = ''; // V2EX 第 62179 号会员，加入于 2014-05-08 13:33:07 +08:00
