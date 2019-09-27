@@ -211,7 +211,7 @@ class DioWeb {
     String content = '';
 
     final String reg4Node =
-        "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"right\" width=\"60\"><span class=\"fade\">(.*?)</td></tr></table>";
+        "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"right\" width=\"80\"><span class=\"fade\">(.*?)</td></tr></table>";
 
     final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
     final String reg4NodeItem = "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
@@ -252,9 +252,9 @@ class DioWeb {
     final String reg4tag = "<div class=\"cell\">(.*?)</table></div>";
 //    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
 
-    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img loading=\"lazy\" src=\"(.*?)\" class=\"avatar\" ";
+    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
 
-    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\">(.*?)</a></span>";
+    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\" class=\"topic-link\">(.*?)</a></span>";
 
     final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
@@ -861,14 +861,11 @@ class DioWeb {
       var replyContentList = document.querySelectorAll('div.reply_content');
       for (int i = 0; i < dockAreaList.length; i++) {
         ProfileRecentReplyItem recentReplyItem = ProfileRecentReplyItem();
-        recentReplyItem.topicId = dockAreaList[i]
-            .querySelector('table > tbody > tr > td > span > a')
-            .attributes["href"]
-            .replaceAll("/t/", "")
-            .split("#")[0];
-        recentReplyItem.dockAreaText = "回复了" + dockAreaList[i].text.trimRight().trimLeft().split('回复了')[1];
-        recentReplyItem.replyTime =
-            dockAreaList[i].text.trimRight().trimLeft().split('回复了')[0].replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;
+        recentReplyItem.replyTime = dockAreaList[i]
+            .querySelector('table > tbody > tr > td > div > span.fade')
+            .text
+            .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
+        recentReplyItem.dockAreaText = dockAreaList[i].querySelector('table > tbody > tr > td > span').innerHtml;
         recentReplyItem.replyContent = replyContentList[i].innerHtml;
         replyList.add(recentReplyItem);
       }
