@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("vgggy");
+    var memberProfileModel = await DioWeb.getMemberProfile("zli");
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -60,14 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
               gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
             ),
           ),
-          _memberProfileModel == null
-              ? Center(
-                  child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemBuilder: _mainListBuilder,
-                  itemCount: 5,
-                ),
           // 左上角返回按钮
           Positioned(
             top: MediaQuery.of(context).padding.top,
@@ -87,6 +79,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          _memberProfileModel == null
+              ? Center(
+                  child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemBuilder: _mainListBuilder,
+                  itemCount: 5,
+                ),
         ],
       ),
     );
@@ -517,61 +517,64 @@ class ReplyItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          new MaterialPageRoute(builder: (context) => TopicDetails(reply.topicId)),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              color: Color(0xffedf3f5),
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  reply.dockAreaText,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black54,
-                  ),
-                ),
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Html(
+            data: reply.dockAreaText,
+            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 15.0),
+            linkStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+            ),
+            onLinkTap: (url) {
+              if (UrlHelper.canLaunchInApp(context, url)) {
+                return;
+              } else if (url.contains("/member/")) {
+                // @xxx 需要补齐 base url
+                url = Strings.v2exHost + url;
+                print(url);
+              }
+              Utils.launchURL(url);
+            },
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Html(
+            data: reply.replyContent,
+            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Colors.grey[200],
+            padding: EdgeInsets.all(4.0),
+            linkStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+            ),
+            onLinkTap: (url) {
+              if (UrlHelper.canLaunchInApp(context, url)) {
+                return;
+              } else if (url.contains("/member/")) {
+                // @xxx 需要补齐 base url
+                url = Strings.v2exHost + url;
+                print(url);
+              }
+              Utils.launchURL(url);
+            },
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Container(
+            alignment: Alignment.bottomRight,
+            child: Text(
+              reply.replyTime,
+              style: new TextStyle(
+                fontSize: 12.0,
+                color: MyTheme.isDark ? Colors.white70 : Colors.black54,
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Html(
-              data: reply.replyContent,
-              defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
-              linkStyle: TextStyle(
-                color: Theme.of(context).accentColor,
-              ),
-              onLinkTap: (url) {
-                if (UrlHelper.canLaunchInApp(context, url)) {
-                  return;
-                } else if (url.contains("/member/")) {
-                  // @xxx 需要补齐 base url
-                  url = Strings.v2exHost + url;
-                  print(url);
-                }
-                Utils.launchURL(url);
-              },
-            ),
-            Container(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                reply.replyTime,
-                style: TextStyle(fontSize: 12, color: Colors.black54),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
