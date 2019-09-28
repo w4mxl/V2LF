@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -41,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("zli");
+    var memberProfileModel = await DioWeb.getMemberProfile("ydatong");
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -244,11 +243,13 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-                width: 128.0,
-                height: 114.0,
-                margin: EdgeInsets.only(bottom: 10),
-                child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+            Image.asset(
+              'assets/images/lock.png',
+              width: 128,
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.only(bottom: 20),
               width: 250,
