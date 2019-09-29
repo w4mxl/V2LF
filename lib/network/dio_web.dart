@@ -811,7 +811,7 @@ class DioWeb {
     // #Wrapper > div > div:nth-child(1) > div:nth-child(3)
     if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
       profileModel.memberIntro =
-          document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(5)").text;
+          document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(3)").text;
     }
 
     print("wml::${profileModel.memberIntro}");
