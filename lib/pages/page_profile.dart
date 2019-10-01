@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("ydatong");
+    var memberProfileModel = await DioWeb.getMemberProfile("socekin");
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -57,22 +57,76 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverPersistentHeader(
+          SliverAppBar(
             pinned: true,
-            floating: true,
-            delegate: CustomSliverDelegate(
-              expandedHeight: 120,
+            expandedHeight: 240,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    _memberProfileModel != null ? _memberProfileModel.userName : '',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    _memberProfileModel != null
+                        ? _memberProfileModel.memberInfo.replaceFirst(' +08:00', '')
+                        : '', // 时间 去除+ 08:00;,
+                    style: TextStyle(fontSize: 10),
+                  )
+                ],
+              ),
+              //titlePadding: EdgeInsets.only(bottom: 60),
+              background: Container(
+                child: _memberProfileModel != null
+                    ? Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 100.0),
+                            child: OnlinePersonAction("https:${_memberProfileModel.avatar}", _memberProfileModel.online),
+                          ),
+                        ],
+                      )
+                    : Center(
+                        child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+                      ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
+                ),
+              ),
             ),
           ),
+          if (_memberProfileModel != null &&
+                  (_memberProfileModel.sign.isNotEmpty ||
+                      _memberProfileModel.company.isNotEmpty ||
+                      _memberProfileModel.memberIntro.isNotEmpty) ||
+              _memberProfileModel.clips != null)
+            _buildUserOtherInfo(),
           SliverPersistentHeader(
             pinned: true,
             delegate: StickyTabBarDelegate(
               child: TabBar(
                 labelColor: Colors.black,
+                labelPadding: EdgeInsets.zero,
                 controller: this.tabController,
                 tabs: <Widget>[
-                  Tab(text: 'Home'),
-                  Tab(text: 'Profile'),
+                  Tab(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.white,
+                      child: Center(child: Text('最近回复')),
+                    ),
+                  ),
+                  Tab(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.white,
+                      child: Center(child: Text('最近回复')),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -81,256 +135,172 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             child: TabBarView(
               controller: this.tabController,
               children: <Widget>[
-                Center(child: Text('Content of Home')),
-                Center(child: Text('Content of Profile')),
+//                Center(child: Text('Content of Home')),
+//                Center(child: Text('Content of Profile')),
+                _buildRecentTopicsListView(),
+                _buildRecentRepliesListView(),
               ],
             ),
           ),
         ],
       ),
-/*      body: Stack(
-        children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
-            ),
-          ),
-          // 左上角返回按钮
-          Positioned(
-            top: MediaQuery.of(context).padding.top,
-            left: 0.0,
-            child: IconTheme(
-              data: IconThemeData(color: Colors.white),
-              child: SafeArea(
-                top: false,
-                bottom: false,
-                child: IconButton(
-                  icon: BackButtonIcon(),
-                  tooltip: 'Back',
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ),
-          ),
-          _memberProfileModel == null
-              ? Center(
-                  child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemBuilder: _mainListBuilder,
-                  itemCount: 5,
-                ),
-        ],
-      ),*/
     );
   }
 
-  Widget _mainListBuilder(BuildContext context, int index) {
-    if (index == 0) return _buildHeader(context);
-    if (index == 1) return _buildRecentTopicsHeader(context);
-    if (index == 2) return _buildRecentTopicsListView(context);
-    if (index == 3) return _buildRecentRepliesHeader(context);
-    if (index == 4) return _buildRecentRepliesListView(context);
-  }
-
-  Container _buildHeader(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 50.0),
-      child: Stack(
+  Widget _buildUserOtherInfo() {
+    return SliverToBoxAdapter(
+      child: Column(
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0, bottom: 10.0),
-            child: Material(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-              elevation: 5.0,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    Text(
-                      _memberProfileModel.userName,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Visibility(
-                      visible: _memberProfileModel.sign.isNotEmpty,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
-                        child: Text(
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Visibility(
+                  visible: _memberProfileModel.sign.isNotEmpty,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 5.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text('签名：'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
                           _memberProfileModel.sign,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 16),
                         ),
-                      ),
+                      ],
                     ),
-                    if (_memberProfileModel.company.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
-                        child: Html(
-                          data: _memberProfileModel.company.split(' &nbsp; ')[1],
-                          customTextAlign: (node) {
-                            return TextAlign.center;
-                          },
+                  ),
+                ),
+                if (_memberProfileModel.company.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text('公司：'),
+                        SizedBox(
+                          width: 10,
                         ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        _memberProfileModel.memberInfo.replaceFirst(' +08:00', ''), // 时间 去除+ 08:00;,
-                        style: TextStyle(fontSize: 12, color: Colors.black45),
-                        textAlign: TextAlign.center,
-                      ),
+                        Html(
+                          shrinkToFit: true,
+                          data: _memberProfileModel.company.split(' &nbsp; ')[1],
+                        ),
+                      ],
                     ),
-                    if (_memberProfileModel.clips != null)
-                      Column(
-                        children: <Widget>[
-                          Divider(),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: -5,
-                            children: _memberProfileModel.clips.map((Clip clip) {
-                              return ActionChip(
-                                avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
-                                label: Text(
-                                  clip.name,
-                                ),
-                                backgroundColor: Colors.grey[200],
-                                onPressed: () {
-                                  Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
-                                      ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
-                                      : clip.url);
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    Visibility(
-                      visible: _memberProfileModel.memberIntro.isNotEmpty,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
+                  ),
+                Visibility(
+                  visible: _memberProfileModel.memberIntro.isNotEmpty,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text('简介：'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
                           _memberProfileModel.memberIntro.trimLeft().trimRight(),
                           style: TextStyle(fontSize: 14),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+                if (_memberProfileModel.clips != null)
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: -5,
+                    children: _memberProfileModel.clips.map((Clip clip) {
+                      return ActionChip(
+                        avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
+                        label: Text(
+                          clip.name,
+                        ),
+                        backgroundColor: Colors.grey[200],
+                        onPressed: () {
+                          Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
+                              ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
+                              : clip.url);
+                        },
+                      );
+                    }).toList(),
+                  ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecentTopicsListView() {
+    if (_memberProfileModel != null) {
+      if (_memberProfileModel?.topicList == null) {
+        // 根据 xxx 的设置，主题列表被隐藏
+        return Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/lock.png',
+                width: 128,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 20),
+                width: 250,
+                child: Text("根据 ${_memberProfileModel?.userName} 的设置，主题列表被隐藏",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black45,
+                    )),
+              ),
+            ],
+          ),
+        );
+      } else if (_memberProfileModel.topicList.length > 0) {
+        return Container(
+          color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            // 禁用滚动事件
+            itemCount: _memberProfileModel.topicList.length,
+            itemBuilder: (context, index) {
+              return TopicItemView(_memberProfileModel.topicList[index]);
+            },
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              height: 0,
+              indent: 12,
+              endIndent: 12,
+            ),
+          ),
+        );
+      } else if (_memberProfileModel.topicList?.length == 0) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "${_memberProfileModel.userName} 暂未发布任何主题",
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black45,
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              OnlinePersonAction("https:${_memberProfileModel.avatar}", _memberProfileModel.online),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _buildRecentTopicsHeader(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Text(
-              '最近主题',
-              style: Theme.of(context).textTheme.title,
-            ),
-          ),
-          Offstage(
-            offstage: _memberProfileModel.topicList == null || _memberProfileModel.topicList.length == 0,
-            child: FlatButton(
-                onPressed: () {},
-                child: Text(
-                  '查看所有',
-                  style: TextStyle(color: Colors.blue),
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecentTopicsListView(BuildContext context) {
-    if (_memberProfileModel.topicList == null) {
-      // 根据 xxx 的设置，主题列表被隐藏
-      return Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/lock.png',
-              width: 128,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 20),
-              width: 250,
-              child: Text("根据 ${_memberProfileModel.userName} 的设置，主题列表被隐藏",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black45,
-                  )),
-            ),
-          ],
-        ),
-      );
-    } else if (_memberProfileModel.topicList.length > 0) {
-      return Container(
-        color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          // 禁用滚动事件
-          itemCount: _memberProfileModel.topicList.length,
-          itemBuilder: (context, index) {
-            return TopicItemView(_memberProfileModel.topicList[index]);
-          },
-          separatorBuilder: (BuildContext context, int index) => Divider(
-            height: 0,
-            indent: 12,
-            endIndent: 12,
-          ),
-        ),
-      );
-    } else if (_memberProfileModel.topicList.length == 0) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "${_memberProfileModel.userName} 暂未发布任何主题",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black45,
-            ),
-          ),
-        ),
-      );
+        );
+      }
     }
     // By default, show a loading spinner
     return new Center(
@@ -338,133 +308,45 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
     );
   }
 
-  Container _buildRecentRepliesHeader(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+  Widget _buildRecentRepliesListView() {
+    if (_memberProfileModel != null) {
+      if (_memberProfileModel.replyList.length > 0) {
+        return Container(
+          color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            // 禁用滚动事件
+            itemCount: _memberProfileModel.replyList.length,
+            itemBuilder: (context, index) {
+              return ReplyItemView(_memberProfileModel.replyList[index]);
+            },
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              height: 0,
+              indent: 12,
+              endIndent: 12,
+            ),
+          ),
+        );
+      } else {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
-              '最近回复',
-              style: Theme.of(context).textTheme.title,
+              "${_memberProfileModel.userName} 暂未发布任何回复",
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black45,
+              ),
             ),
           ),
-          Offstage(
-            offstage: _memberProfileModel.replyList.length == 0,
-            child: FlatButton(
-                onPressed: () {},
-                child: Text(
-                  '查看所有',
-                  style: TextStyle(color: Colors.blue),
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRecentRepliesListView(BuildContext context) {
-    if (_memberProfileModel.replyList.length > 0) {
-      return Container(
-        color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          // 禁用滚动事件
-          itemCount: _memberProfileModel.replyList.length,
-          itemBuilder: (context, index) {
-            return ReplyItemView(_memberProfileModel.replyList[index]);
-          },
-          separatorBuilder: (BuildContext context, int index) => Divider(
-            height: 0,
-            indent: 12,
-            endIndent: 12,
-          ),
-        ),
-      );
-    } else {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "${_memberProfileModel.userName} 暂未发布任何回复",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.black45,
-            ),
-          ),
-        ),
-      );
+        );
+      }
     }
-  }
-}
-
-class CustomSliverDelegate extends SliverPersistentHeaderDelegate {
-  final double expandedHeight;
-  final bool hideTitleWhenExpanded;
-
-  CustomSliverDelegate({
-    @required this.expandedHeight,
-    this.hideTitleWhenExpanded = true,
-  });
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final appBarSize = expandedHeight - shrinkOffset;
-    final cardTopPosition = expandedHeight / 2 - shrinkOffset;
-    final proportion = 2 - (expandedHeight / appBarSize);
-    final percent = proportion < 0 || proportion > 1 ? 0.0 : proportion;
-    return SizedBox(
-      height: expandedHeight + expandedHeight / 2,
-      child: Stack(
-        children: [
-          SizedBox(
-            height: appBarSize < kToolbarHeight ? kToolbarHeight : appBarSize,
-            child: AppBar(
-              backgroundColor: Colors.green,
-              leading: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {},
-              ),
-              elevation: 0.0,
-              title: Opacity(opacity: hideTitleWhenExpanded ? 1.0 - percent : 1.0, child: Text("Test")),
-            ),
-          ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            top: cardTopPosition > 0 ? cardTopPosition : 0,
-            bottom: 0.0,
-            child: Opacity(
-              opacity: percent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30 * percent),
-                child: Card(
-                  elevation: 20.0,
-                  child: Center(
-                    child: Text("Header"),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return new Center(
+      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
-  }
-
-  @override
-  double get maxExtent => expandedHeight + expandedHeight / 2;
-
-  @override
-  double get minExtent => kToolbarHeight;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
   }
 }
 
@@ -502,26 +384,23 @@ class OnlinePersonAction extends StatelessWidget {
     return Stack(
       overflow: Overflow.visible,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Material(
-            elevation: 8.0,
-            shape: CircleBorder(),
-            child: CircleAvatar(
-              radius: 40.0,
-              backgroundImage: CachedNetworkImageProvider(avatarPath),
-            ),
+        Material(
+          elevation: 8.0,
+          shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
+          child: CircleAvatar(
+            radius: 50.0,
+            backgroundImage: CachedNetworkImageProvider(avatarPath),
           ),
         ),
         Positioned(
-          top: 10,
-          right: 10,
+          top: 12,
+          right: 5,
           child: Container(
-            width: 10,
-            height: 10,
+            width: 12,
+            height: 12,
             decoration: BoxDecoration(
                 color: online ? Colors.greenAccent : Colors.redAccent,
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(6),
                 border: Border.all(
                   width: 1,
                   color: Color(0xFFFFFFFF),
