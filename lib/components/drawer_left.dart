@@ -170,7 +170,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       color: Colors.grey,
                       padding: EdgeInsets.all(userName.isEmpty ? 0 : 2),
                     ),
-                    opacity: 0.8,
+                    opacity: 0.9,
                   ),
                 ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
@@ -192,12 +192,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     } else {
                       // todo -> 个人中心页面
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfilePage(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
                     }
                   },
                   child: Container(
