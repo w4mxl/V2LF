@@ -740,8 +740,6 @@ class DioWeb {
     MemberProfileModel profileModel = MemberProfileModel();
     List<Clip> clips = List(); // 网站、位置、社交媒体id 等
 
-    String memberIntro = ''; // 个人简介
-
     String token = '';
     bool isFollow = false; // 是否关注
     bool isBlock = false; // 是否屏蔽
@@ -753,19 +751,18 @@ class DioWeb {
     var document = parse(response.data);
 
     // 头像
-    // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img
-    profileModel.avatar = document
-        .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
-        .attributes["src"];
+    profileModel.avatar = currentUserName == userName
+        ? SpHelper.sp.getString(SP_AVATAR) // 存储的照片比个人页获取的要高清一些
+        : document
+            .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
+            .attributes["src"];
 
     // 是否在线
-    if (document.querySelector('#strong.online') != null) {
+    if (document.querySelector('strong.online') != null) {
       profileModel.online = true;
     }
 
     // 用户名
-    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > h1
-    // #Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(3) > h1
     profileModel.userName =
         document.querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > h1').text;
     // 用户加入信息
@@ -775,7 +772,6 @@ class DioWeb {
         .replaceFirst('V2EX ', '');
 
     // 签名
-    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span.bigger
     if (document.querySelector(
             '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger') !=
         null) {
@@ -785,7 +781,6 @@ class DioWeb {
           .text;
     }
 
-    // #Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(3) > span:nth-child(5)
     if (document.querySelector(
             '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8) > li') !=
         null) {
@@ -795,7 +790,6 @@ class DioWeb {
           .innerHtml;
     }
 
-    // #Wrapper > div > div:nth-child(1) > div.widgets
     List<dom.Element> nodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div.widgets > a");
     if (nodes != null && nodes.length > 0) {
       for (var node in nodes) {
@@ -865,7 +859,10 @@ class DioWeb {
     profileModel.topicList = topicList;
 
     // 解析"最近回复" : 可能是多个 / 0
-    if (document.querySelector('#Wrapper > div > div:nth-child(9) > div.dock_area') != null) {
+    String selectReply = currentUserName == userName
+        ? '#Wrapper > div > div:nth-child(13) > div.dock_area'
+        : '#Wrapper > div > div:nth-child(9) > div.dock_area';
+    if (document.querySelector(selectReply) != null) {
       var dockAreaList = document.querySelectorAll('div.dock_area');
       var replyContentList = document.querySelectorAll('div.reply_content');
       for (int i = 0; i < dockAreaList.length; i++) {

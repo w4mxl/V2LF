@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
@@ -26,7 +24,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // 没登录：他人
 // 登录: 本人、他人
 
-bool isLogin = false;
+bool isLogin = false; // 用于判断关注和屏蔽
 
 class ProfilePage extends StatefulWidget {
   final String userName;
@@ -37,7 +35,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage> {
   MemberProfileModel _memberProfileModel;
 
   @override
@@ -63,7 +61,6 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        shrinkWrap: true,
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
@@ -236,9 +233,14 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             visible: _memberProfileModel != null &&
                 _memberProfileModel.topicList != null &&
                 _memberProfileModel.topicList.length > 0,
-            child: Text(
-              '查看所有',
-              style: TextStyle(color: Colors.grey.shade500),
+            child: InkWell(
+              child: Text(
+                '查看所有',
+                style: TextStyle(color: Colors.grey.shade500),
+              ),
+              onTap: (){
+                // 转到用户的所有主题页面
+              },
             ),
           ),
         ],
@@ -378,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   }
 }
 
-/// 用户是否在线
+/// 用户头像 & 是否在线
 class OnlinePersonAction extends StatelessWidget {
   final String avatarPath;
   final bool online;
