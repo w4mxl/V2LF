@@ -13,6 +13,7 @@ import 'package:flutter_app/model/web/model_topic_detail.dart';
 import 'package:flutter_app/model/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
+import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -604,7 +605,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       ),
                     ),
                   ),
-                  onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId)),
+                  ),
                 ),
                 SizedBox(width: 10.0),
                 new Expanded(
@@ -846,7 +850,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       ),
                                     ),
                                   ),
-                                  onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + reply.userName),
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ProfilePage(reply.userName)),
+                                  ),
                                 ),
                                 Offstage(
                                   offstage: reply.userName != _detailModel.createdId,
@@ -986,8 +993,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  onTap: () => Utils.launchURL(
-                                                                      Strings.v2exHost + '/member/' + item.userName),
+                                                                  onTap: () => Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => ProfilePage(item.userName)),
+                                                                  ),
                                                                 ),
                                                                 Offstage(
                                                                   offstage: item.userName != _detailModel.createdId,

@@ -4,12 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -24,7 +26,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // 没登录：他人
 // 登录: 本人、他人
 
+bool isLogin = false;
+
 class ProfilePage extends StatefulWidget {
+  final String userName;
+
+  ProfilePage(this.userName);
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -32,19 +40,18 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
   MemberProfileModel _memberProfileModel;
 
-  TabController tabController;
-
   @override
   void initState() {
     super.initState();
 
-    this.tabController = TabController(length: 2, vsync: this);
+    // check login state
+    isLogin = SpHelper.sp.containsKey(SP_USERNAME);
 
     getData();
   }
 
   Future getData() async {
-    var memberProfileModel = await DioWeb.getMemberProfile("socekin");
+    var memberProfileModel = await DioWeb.getMemberProfile(widget.userName);
     if (memberProfileModel != null) {
       setState(() {
         _memberProfileModel = memberProfileModel;
@@ -56,10 +63,11 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        shrinkWrap: true,
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
-            expandedHeight: 240,
+            expandedHeight: 250,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               title: Column(
@@ -98,50 +106,18 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             ),
           ),
           if (_memberProfileModel != null &&
-                  (_memberProfileModel.sign.isNotEmpty ||
-                      _memberProfileModel.company.isNotEmpty ||
-                      _memberProfileModel.memberIntro.isNotEmpty) ||
-              _memberProfileModel.clips != null)
+              (_memberProfileModel.sign.isNotEmpty ||
+                  _memberProfileModel.company.isNotEmpty ||
+                  _memberProfileModel.memberIntro.isNotEmpty ||
+                  _memberProfileModel.clips != null))
             _buildUserOtherInfo(),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: StickyTabBarDelegate(
-              child: TabBar(
-                labelColor: Colors.black,
-                labelPadding: EdgeInsets.zero,
-                controller: this.tabController,
-                tabs: <Widget>[
-                  Tab(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.white,
-                      child: Center(child: Text('最近回复')),
-                    ),
-                  ),
-                  Tab(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.white,
-                      child: Center(child: Text('最近回复')),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: this.tabController,
-              children: <Widget>[
-//                Center(child: Text('Content of Home')),
-//                Center(child: Text('Content of Profile')),
-                _buildRecentTopicsListView(),
-                _buildRecentRepliesListView(),
-              ],
-            ),
-          ),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            _buildRecentTopicsHeader(context),
+            _buildRecentTopicsListView(),
+            _buildRecentRepliesHeader(context),
+            _buildRecentRepliesListView(),
+          ])),
         ],
       ),
     );
@@ -149,90 +125,121 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
 
   Widget _buildUserOtherInfo() {
     return SliverToBoxAdapter(
-      child: Column(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Visibility(
+                    visible: _memberProfileModel.sign.isNotEmpty,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('签名：'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            _memberProfileModel.sign,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_memberProfileModel.company.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('公司：'),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Html(
+                            shrinkToFit: true,
+                            data: _memberProfileModel.company.split(' &nbsp; ')[1],
+                          ),
+                        ],
+                      ),
+                    ),
+                  Visibility(
+                    visible: _memberProfileModel.memberIntro.isNotEmpty,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('简介：'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            _memberProfileModel.memberIntro.trimLeft().trimRight(),
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_memberProfileModel.clips != null)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: -5,
+                      children: _memberProfileModel.clips.map((Clip clip) {
+                        return ActionChip(
+                          avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
+                          label: Text(
+                            clip.name,
+                          ),
+                          backgroundColor: Colors.grey[200],
+                          onPressed: () {
+                            Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
+                                ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
+                                : clip.url);
+                          },
+                        );
+                      }).toList(),
+                    ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 0,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _buildRecentTopicsHeader(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Visibility(
-                  visible: _memberProfileModel.sign.isNotEmpty,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text('签名：'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          _memberProfileModel.sign,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (_memberProfileModel.company.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text('公司：'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Html(
-                          shrinkToFit: true,
-                          data: _memberProfileModel.company.split(' &nbsp; ')[1],
-                        ),
-                      ],
-                    ),
-                  ),
-                Visibility(
-                  visible: _memberProfileModel.memberIntro.isNotEmpty,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text('简介：'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          _memberProfileModel.memberIntro.trimLeft().trimRight(),
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (_memberProfileModel.clips != null)
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: -5,
-                    children: _memberProfileModel.clips.map((Clip clip) {
-                      return ActionChip(
-                        avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
-                        label: Text(
-                          clip.name,
-                        ),
-                        backgroundColor: Colors.grey[200],
-                        onPressed: () {
-                          Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
-                              ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
-                              : clip.url);
-                        },
-                      );
-                    }).toList(),
-                  ),
-              ],
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Text(
+              '最近主题',
+              style: Theme.of(context).textTheme.title,
             ),
           ),
-          Divider(
-            height: 0,
+          Visibility(
+            visible: _memberProfileModel != null &&
+                _memberProfileModel.topicList != null &&
+                _memberProfileModel.topicList.length > 0,
+            child: Text(
+              '查看所有',
+              style: TextStyle(color: Colors.grey.shade500),
+            ),
           ),
         ],
       ),
@@ -272,8 +279,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         return Container(
           color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
           child: ListView.separated(
-            padding: EdgeInsets.zero,
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             physics: NeverScrollableScrollPhysics(),
             // 禁用滚动事件
             itemCount: _memberProfileModel.topicList.length,
@@ -302,9 +309,32 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         );
       }
     }
-    // By default, show a loading spinner
-    return new Center(
-      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+    return Container();
+  }
+
+  Container _buildRecentRepliesHeader(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Text(
+              '最近回复',
+              style: Theme.of(context).textTheme.title,
+            ),
+          ),
+          Visibility(
+            visible: _memberProfileModel != null && _memberProfileModel.replyList.length > 0,
+            child: Text(
+              '查看所有',
+              style: TextStyle(color: Colors.grey.shade500),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -344,31 +374,7 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
         );
       }
     }
-    return new Center(
-      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-    );
-  }
-}
-
-class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar child;
-
-  StickyTabBarDelegate({@required this.child});
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return this.child;
-  }
-
-  @override
-  double get maxExtent => this.child.preferredSize.height;
-
-  @override
-  double get minExtent => this.child.preferredSize.height;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
+    return Container();
   }
 }
 

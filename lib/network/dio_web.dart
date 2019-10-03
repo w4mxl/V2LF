@@ -734,6 +734,9 @@ class DioWeb {
   // 获取用户主页数据
   static Future<MemberProfileModel> getMemberProfile(String userName) async {
     print('在请求$userName 个人页面数据');
+
+    String currentUserName = SpHelper.sp.getString(SP_USERNAME);
+
     MemberProfileModel profileModel = MemberProfileModel();
     List<Clip> clips = List(); // 网站、位置、社交媒体id 等
 
@@ -804,21 +807,26 @@ class DioWeb {
         clips.add(clip);
       }
       profileModel.clips = clips;
-    }
-    print("wml::${nodes.length}");
 
-    // 个人简介
-    // #Wrapper > div > div:nth-child(1) > div:nth-child(3)
-    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
-      profileModel.memberIntro =
-          document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(3)").text;
+      // 个人简介
+      if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
+        profileModel.memberIntro =
+            document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(5)").text;
+      }
+    } else {
+      // 个人简介
+      if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
+        profileModel.memberIntro =
+            document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(3)").text;
+      }
     }
-
-    print("wml::${profileModel.memberIntro}");
 
     // 解析"最近主题" : 可能是多个 / 0 / 用户设置为隐藏
-    if (document.querySelector("#Wrapper > div > div:nth-child(5) > div[class='cell item']") != null) {
-      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div:nth-child(5) > div[class='cell item']");
+    String select = currentUserName == userName
+        ? "#Wrapper > div > div:nth-child(9) > div[class='cell item']"
+        : "#Wrapper > div > div:nth-child(5) > div[class='cell item']";
+    if (document.querySelector(select) != null) {
+      List<dom.Element> rootNode = document.querySelectorAll(select);
       for (var value in rootNode) {
         ProfileRecentTopicItem recentTopicItem = ProfileRecentTopicItem();
         recentTopicItem.topicId = value
@@ -834,6 +842,7 @@ class DioWeb {
             .replaceFirst('reply', '');
 
         recentTopicItem.topicTitle = value.querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a').text;
+        print("wml::${recentTopicItem.topicTitle}");
 
         // #Wrapper > div > div:nth-child(3) > div:nth-child(2) > table > tbody > tr > td:nth-child(1) > span:nth-child(1) > a
         recentTopicItem.nodeId = value
@@ -869,6 +878,7 @@ class DioWeb {
         recentReplyItem.replyContent = replyContentList[i].innerHtml;
         replyList.add(recentReplyItem);
       }
+      print("wmllll::${dockAreaList.length}");
     }
     profileModel.replyList = replyList;
 

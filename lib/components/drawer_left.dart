@@ -103,7 +103,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(),
+                              builder: (context) => ProfilePage(userName),
                             ),
                           );
                         }
@@ -192,7 +192,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     } else {
                       // todo -> 个人中心页面
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage(userName)),
+                      );
                     }
                   },
                   child: Container(
