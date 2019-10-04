@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as prefix1;
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ovprogresshud/progresshud.dart';
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -41,6 +44,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   MemberProfileModel _memberProfileModel;
 
+  List<Action> actions = <Action>[];
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +62,36 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _memberProfileModel = memberProfileModel;
       });
+    }
+  }
+
+  Future _follow() async {
+    Progresshud.show();
+    String userId = _memberProfileModel.memberInfo.split(' ')[1].split(' ')[0];
+    bool isSuccess = await DioWeb.follow(_memberProfileModel.isFollow, userId);
+    Progresshud.dismiss();
+    if (isSuccess) {
+      Progresshud.showSuccessWithStatus(_memberProfileModel.isFollow ? '已取消关注' : '已加入特别关注');
+      setState(() {
+        _memberProfileModel.isFollow = !_memberProfileModel.isFollow;
+      });
+    } else {
+      Progresshud.showErrorWithStatus('操作失败');
+    }
+  }
+
+  Future _block() async {
+    Progresshud.show();
+    String userId = _memberProfileModel.memberInfo.split(' ')[1].split(' ')[0];
+    bool isSuccess = await DioWeb.block(_memberProfileModel.isBlock, userId, _memberProfileModel.token);
+    Progresshud.dismiss();
+    if (isSuccess) {
+      Progresshud.showSuccessWithStatus(_memberProfileModel.isBlock ? '已取消屏蔽' : '已屏蔽');
+      setState(() {
+        _memberProfileModel.isBlock = !_memberProfileModel.isBlock;
+      });
+    } else {
+      Progresshud.showErrorWithStatus('操作失败');
     }
   }
 
@@ -104,6 +139,29 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
+            actions: <Widget>[
+              Visibility(
+                visible: isLogin && widget.userName != SpHelper.sp.getString(SP_USERNAME),
+                child: Row(
+                  children: <Widget>[
+                    prefix0.IconButton(
+                        icon: prefix1.Icon(
+                          _memberProfileModel != null && _memberProfileModel.isFollow ? Icons.star : Icons.star_border,
+                        ),
+                        tooltip: '关注或取消关注',
+                        onPressed: () => _follow()),
+                    prefix0.IconButton(
+                        icon: prefix1.Icon(
+                          _memberProfileModel != null && _memberProfileModel.isBlock
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        tooltip: '屏蔽或取消屏蔽',
+                        onPressed: () => _block()),
+                  ],
+                ),
+              ),
+            ],
           ),
           if (_memberProfileModel != null &&
               (_memberProfileModel.sign.isNotEmpty ||
@@ -158,7 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.only(bottom: 5.0),
                       child: Row(
                         children: <Widget>[
-                          Text('公司：'),
+                          Text('就职：'),
                           SizedBox(
                             width: 7,
                           ),
@@ -388,6 +446,14 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return Container();
   }
+}
+
+class Action {
+  final String id;
+  final String text;
+  final IconData iconData;
+
+  Action(this.id, this.text, {this.iconData});
 }
 
 /// 用户头像 & 是否在线

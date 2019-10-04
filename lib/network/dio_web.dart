@@ -734,15 +734,39 @@ class DioWeb {
     MemberProfileModel profileModel = MemberProfileModel();
     List<Clip> clips = List(); // 网站、位置、社交媒体id 等
 
-    String token = '';
-    bool isFollow = false; // 是否关注
-    bool isBlock = false; // 是否屏蔽
-
     List<ProfileRecentTopicItem> topicList = List(); // 近期主题
     List<ProfileRecentReplyItem> replyList = List(); // 近期回复
 
     var response = await dio.get('/member/' + userName);
     var document = parse(response.data);
+
+    // 登录状态且不是本人，才获取关注和屏蔽状态
+    if (SpHelper.sp.containsKey(SP_USERNAME) && userName != SpHelper.sp.getString(SP_USERNAME)) {
+      // onclick="if (confirm('确认要开始关注 wuqingdzx？')) { location.href = '/follow/278271?once=68661'; }"
+      String followStr = document
+          .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5)  > div.fr > input')
+          .attributes["value"];
+      print("!!!!::::" + followStr);
+      // 取消特别关注 加入特别关注
+      profileModel.isFollow = (followStr == '取消特别关注');
+
+      String blockStr = document
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5)  > div.fr >  input.super.normal.button')
+          .attributes["value"];
+
+      // Unblock Block
+      profileModel.isBlock = (blockStr == 'Unblock');
+      // onclick="if (confirm('确认要屏蔽 wuqingdzx？')) { location.href = '/block/278271?t=1399527187'; }"
+      // todo 是不是这里的 token 都是 1399527187 ？
+      profileModel.token = document
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5)  > div.fr >  input.super.normal.button')
+          .attributes["onclick"]
+          .split('?t=')[1]
+          .split('\'')[0];
+      print("!!!!::::" + blockStr + ",,,," + profileModel.token);
+    }
 
     // 头像
     profileModel.avatar = currentUserName == userName
@@ -874,6 +898,37 @@ class DioWeb {
     profileModel.replyList = replyList;
 
     return profileModel;
+  }
+
+  // 关注 / 取消关注 用户
+  // if (confirm('确认要开始关注 wuqingdzx？')) { location.href = '/follow/278271?once=68661'; }
+  // if (confirm('确认要取消对 wuqingdzx 的关注？')) { location.href = '/unfollow/278271?once=39422'; }
+  static Future<bool> follow(bool isFollow, String userId) async {
+    String once = await getOnce();
+    if (once == null || once.isEmpty) {
+      print('wml::follow:: once error');
+      return false;
+    }
+    String url = isFollow ? ("/unfollow/" + userId + "?once=" + once) : ("/follow/" + userId + "?once=" + once);
+    print('wml::follow:: $url');
+    var response = await dio.get(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  // 屏蔽 / 取消屏蔽 用户
+  // if (confirm('确认要屏蔽 wmllll？')) { location.href = '/block/391045?t=1399527187'; }
+  // if (confirm('确认要解除对 wmllll 的屏蔽？')) { location.href = '/unblock/391045?t=1399527187'; }
+  static Future<bool> block(bool isBlock, String userId, String token) async {
+    String url = isBlock ? ("/unblock/" + userId + "?t=" + token) : ("/block/" + userId + "?t=" + token);
+    print('wml::block:: $url');
+    var response = await dio.get(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   // 获取用户的所有主题列表信息 https://www.v2ex.com/member/w4mxl/topics?p=1
