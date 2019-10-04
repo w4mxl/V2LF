@@ -674,17 +674,11 @@ class DioWeb {
     List<NotificationItem> notifications = new List<NotificationItem>();
     // 调用 dio 之前检查登录时保存的cookie是否带上了
     var response = await dio.get("/notifications" + "?p=" + p.toString());
-    var tree = ETree.fromString(response.data);
-
-    //*[@id="Wrapper"]/div/div/div[12]/table/tbody/tr/td[2]/strong
-    var page = tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()") != null
-        ? tree.xpath("//*[@id='Wrapper']/div/div/div[12]/table/tr/td[2]/strong/text()")[0].name
-        : null;
-    // Fluttertoast.showToast(msg: '页数：$page');
-
-    // Use html parser and query selector
     var document = parse(response.data);
-    List<dom.Element> aRootNode = document.querySelectorAll('div.cell');
+
+    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+
+    List<dom.Element> aRootNode = document.querySelectorAll('div.cell[id]'); // 2019.10.4 发现v2ex网站页面有改动，需要过滤
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         NotificationItem item = new NotificationItem();
