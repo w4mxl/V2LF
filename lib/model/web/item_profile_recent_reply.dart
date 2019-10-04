@@ -3,4 +3,6 @@ class ProfileRecentReplyItem {
   String dockAreaText = '';
   String replyContent = '';
   String replyTime = '';
+
+  int maxPage = 1;
 }

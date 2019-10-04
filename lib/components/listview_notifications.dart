@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -193,7 +194,12 @@ class TopicItemView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap: () => _launchURL(Strings.v2exHost + '/member/' + notificationItem.userName),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(notificationItem.userName),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: 4,

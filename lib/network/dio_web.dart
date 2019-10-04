@@ -669,7 +669,7 @@ class DioWeb {
     return nodes;
   }
 
-  // 获取「通知」下的列表信息 [html 解析的]
+  // 获取「通知」下的列表信息
   static Future<List<NotificationItem>> getNotifications(int p) async {
     List<NotificationItem> notifications = new List<NotificationItem>();
     // 调用 dio 之前检查登录时保存的cookie是否带上了
@@ -874,6 +874,82 @@ class DioWeb {
     profileModel.replyList = replyList;
 
     return profileModel;
+  }
+
+  // 获取用户的所有主题列表信息 https://www.v2ex.com/member/w4mxl/topics?p=1
+  static Future<List<ProfileRecentTopicItem>> getAllTopics(String userName, int p) async {
+    List<ProfileRecentTopicItem> topics = List<ProfileRecentTopicItem>();
+    var response = await dio.get("/member/" + userName + "/topics?p=" + p.toString());
+    var document = parse(response.data);
+
+    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+
+    List<dom.Element> aRootNode = document.querySelectorAll("div[class='cell item']");
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        ProfileRecentTopicItem item = new ProfileRecentTopicItem();
+
+        if (page != null) {
+          item.maxPage = int.parse(page.split('/')[1]);
+        }
+
+        item.topicId = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .attributes["href"]
+            .replaceAll("/t/", "")
+            .split("#")[0]; // 得到是 /t/522540#reply17
+        item.replyCount = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .attributes["href"]
+            .replaceAll("/t/", "")
+            .split("#")[1]
+            .replaceFirst('reply', '');
+
+        item.topicTitle = aNode.querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a').text;
+
+        item.nodeId = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .attributes["href"]
+            .replaceAll('/go/', '');
+        item.nodeName = document.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
+
+        if (item.replyCount != '0') {
+          item.lastReplyTime = ' • ' + aNode.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
+        }
+        topics.add(item);
+      }
+    }
+
+    return topics;
+  }
+
+  // 获取用户的所有回复列表信息 https://www.v2ex.com/member/w4mxl/replies
+  static Future<List<ProfileRecentReplyItem>> getAllReplies(String userName, int p) async {
+    List<ProfileRecentReplyItem> replies = List<ProfileRecentReplyItem>();
+    var response = await dio.get("/member/" + userName + "/replies?p=" + p.toString());
+    var document = parse(response.data);
+
+    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+
+    var dockAreaList = document.querySelectorAll('div.dock_area');
+    var replyContentList = document.querySelectorAll('div.reply_content');
+
+    for (int i = 0; i < dockAreaList.length; i++) {
+      ProfileRecentReplyItem item = new ProfileRecentReplyItem();
+
+      if (page != null) {
+        item.maxPage = int.parse(page.split('/')[1]);
+      }
+
+      item.replyTime = dockAreaList[i]
+          .querySelector('table > tbody > tr > td > div > span.fade')
+          .text
+          .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
+      item.dockAreaText = dockAreaList[i].querySelector('table > tbody > tr > td > span').innerHtml;
+      item.replyContent = replyContentList[i].innerHtml;
+      replies.add(item);
+    }
+    return replies;
   }
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child

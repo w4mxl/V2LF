@@ -7,7 +7,10 @@ import 'package:flutter_app/model/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/model/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/model/web/model_member_profile.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
+import 'package:flutter_app/pages/page_user_all_replies.dart';
+import 'package:flutter_app/pages/page_user_all_topics.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -238,8 +241,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 '查看所有',
                 style: TextStyle(color: Colors.grey.shade500),
               ),
-              onTap: (){
+              onTap: () {
                 // 转到用户的所有主题页面
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserAllTopicsPage(widget.userName)));
               },
             ),
           ),
@@ -330,9 +334,15 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Visibility(
             visible: _memberProfileModel != null && _memberProfileModel.replyList.length > 0,
-            child: Text(
-              '查看所有',
-              style: TextStyle(color: Colors.grey.shade500),
+            child: InkWell(
+              child: Text(
+                '查看所有',
+                style: TextStyle(color: Colors.grey.shade500),
+              ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserAllRepliesPage(widget.userName)),
+              ),
             ),
           ),
         ],
@@ -462,20 +472,24 @@ class TopicItemView extends StatelessWidget {
                                 scrollDirection: Axis.horizontal,
                                 child: new Row(
                                   children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Theme.of(context).dividerColor),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        topic.nodeName,
-                                        style: TextStyle(
-                                          fontSize: 12.0,
-                                          color: Theme.of(context).disabledColor,
-                                          fontWeight: FontWeight.bold,
+                                    InkWell(
+                                      child: Container(
+                                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Theme.of(context).dividerColor),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          topic.nodeName,
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Theme.of(context).disabledColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
+                                      onTap: () => Navigator.push(
+                                          context, MaterialPageRoute(builder: (context) => NodeTopics(topic.nodeId))),
                                     ),
                                     Text(
                                       '${topic.lastReplyTime}',

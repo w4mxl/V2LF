@@ -7,4 +7,6 @@ class ProfileRecentTopicItem {
   String nodeName = '';
   String lastReplyMId = '';
   String lastReplyTime = '';
+
+  int maxPage = 1;
 }
