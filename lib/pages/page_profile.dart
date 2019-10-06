@@ -34,8 +34,9 @@ bool isLogin = false; // 用于判断关注和屏蔽
 
 class ProfilePage extends StatefulWidget {
   final String userName;
+  final String avatar;
 
-  ProfilePage(this.userName);
+  ProfilePage(this.userName, this.avatar);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -109,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    _memberProfileModel != null ? _memberProfileModel.userName : '',
+                    widget.userName,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -122,18 +123,15 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               //titlePadding: EdgeInsets.only(bottom: 60),
               background: Container(
-                child: _memberProfileModel != null
-                    ? Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 100.0),
-                            child: OnlinePersonAction("https:${_memberProfileModel.avatar}", _memberProfileModel.online),
-                          ),
-                        ],
-                      )
-                    : Center(
-                        child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-                      ),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 100.0),
+                      child: OnlinePersonAction(
+                          widget.avatar, _memberProfileModel != null ? _memberProfileModel.online : false),
+                    ),
+                  ],
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
                 ),
@@ -329,7 +327,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                 padding: EdgeInsets.only(bottom: 20),
                 width: 250,
-                child: Text("根据 ${_memberProfileModel?.userName} 的设置，主题列表被隐藏",
+                child: Text("根据 ${widget.userName} 的设置，主题列表被隐藏",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -363,7 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "${_memberProfileModel.userName} 暂未发布任何主题",
+              "${widget.userName} 暂未发布任何主题",
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.black45,
@@ -373,7 +371,9 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       }
     }
-    return Container();
+    return Center(
+      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+    );
   }
 
   Container _buildRecentRepliesHeader(BuildContext context) {
@@ -434,7 +434,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "${_memberProfileModel.userName} 暂未发布任何回复",
+              "${widget.userName} 暂未发布任何回复",
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.black45,
@@ -444,7 +444,9 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       }
     }
-    return Container();
+    return Center(
+      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+    );
   }
 }
 
@@ -468,12 +470,15 @@ class OnlinePersonAction extends StatelessWidget {
     return Stack(
       overflow: Overflow.visible,
       children: <Widget>[
-        Material(
-          elevation: 8.0,
-          shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
-          child: CircleAvatar(
-            radius: 50.0,
-            backgroundImage: CachedNetworkImageProvider(avatarPath),
+        Hero(
+          tag: 'avatar',
+          child: Material(
+            elevation: 8.0,
+            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
+            child: CircleAvatar(
+              radius: 50.0,
+              backgroundImage: CachedNetworkImageProvider(avatarPath),
+            ),
           ),
         ),
         Positioned(
@@ -617,7 +622,9 @@ class ReplyItemView extends StatelessWidget {
         children: <Widget>[
           Html(
             data: reply.dockAreaText,
-            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 15.0),
+            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 13.0),
+            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Color(0xffedf3f5),
+            padding: EdgeInsets.all(4.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,
             ),
@@ -637,9 +644,7 @@ class ReplyItemView extends StatelessWidget {
           ),
           Html(
             data: reply.replyContent,
-            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.0),
-            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Colors.grey[200],
-            padding: EdgeInsets.all(4.0),
+            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,
             ),

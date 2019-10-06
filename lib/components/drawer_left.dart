@@ -22,7 +22,6 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
-import 'package:flutter_app/utils/strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
@@ -103,7 +102,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(userName),
+                              builder: (context) => ProfilePage(userName, "https:$avatar"),
                             ),
                           );
                         }
@@ -194,24 +193,27 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProfilePage(userName)),
+                        MaterialPageRoute(builder: (context) => ProfilePage(userName, "https:" + avatar)),
                       );
                     }
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: avatar.isNotEmpty
-                              ? CachedNetworkImageProvider(
-                                  "https:" + avatar,
-                                )
-                              : AssetImage("assets/images/ic_person.png"),
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
-                        )),
+                  child: Hero(
+                    tag: 'avatar',
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: avatar.isNotEmpty
+                                ? CachedNetworkImageProvider(
+                                    "https:" + avatar,
+                                  )
+                                : AssetImage("assets/images/ic_person.png"),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          )),
+                    ),
                   ),
                 ),
                 // 这里可以根据一天的不同时间显示不同的background，增加美观

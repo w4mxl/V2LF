@@ -769,11 +769,11 @@ class DioWeb {
     }
 
     // 头像
-    profileModel.avatar = currentUserName == userName
+    /*profileModel.avatar = currentUserName == userName
         ? SpHelper.sp.getString(SP_AVATAR) // 存储的照片比个人页获取的要高清一些
         : document
             .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(1) > img')
-            .attributes["src"];
+            .attributes["src"];*/
 
     // 是否在线
     if (document.querySelector('strong.online') != null) {
@@ -781,8 +781,8 @@ class DioWeb {
     }
 
     // 用户名
-    profileModel.userName =
-        document.querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > h1').text;
+    /*profileModel.userName =
+        document.querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > h1').text;*/
     // 用户加入信息
     profileModel.memberInfo = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span.gray')

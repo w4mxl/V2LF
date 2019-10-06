@@ -607,7 +607,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   ),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId)),
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
                   ),
                 ),
                 SizedBox(width: 10.0),
@@ -852,7 +853,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   ),
                                   onTap: () => Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => ProfilePage(reply.userName)),
+                                    MaterialPageRoute(
+                                        builder: (context) => ProfilePage(reply.userName, 'https:${reply.avatar}')),
                                   ),
                                 ),
                                 Offstage(
@@ -996,7 +998,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                   onTap: () => Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(
-                                                                        builder: (context) => ProfilePage(item.userName)),
+                                                                        builder: (context) => ProfilePage(
+                                                                            item.userName, 'https:${item.avatar}')),
                                                                   ),
                                                                 ),
                                                                 Offstage(

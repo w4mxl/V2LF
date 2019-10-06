@@ -7,8 +7,8 @@ import 'item_profile_recent_topic.dart';
 /// @desc  : 用户个人信息页：个人信息；最近主题；最近回复
 
 class MemberProfileModel {
-  String avatar = '';
-  String userName = '';
+  // String avatar = '';
+  // String userName = '';
   bool online = false;
   String sign = ''; // 签名
   String company = ''; // 所在公司 / 职位

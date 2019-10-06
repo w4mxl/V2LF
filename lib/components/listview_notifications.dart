@@ -197,7 +197,7 @@ class TopicItemView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfilePage(notificationItem.userName),
+                        builder: (context) => ProfilePage(notificationItem.userName, "https:${notificationItem.avatar}"),
                       ),
                     ),
                   ),
