@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildUserOtherInfo() {
     return SliverToBoxAdapter(
       child: Container(
-        color: Colors.white,
+        color: MyTheme.isDark ? Colors.black87 : Colors.white,
         child: Column(
           children: <Widget>[
             Padding(
@@ -293,7 +293,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           label: Text(
                             clip.name,
                           ),
-                          backgroundColor: Colors.grey[200],
+                          backgroundColor: MyTheme.isDark ? Colors.black26 : Colors.grey[200],
                           onPressed: () {
                             Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
                                 ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
@@ -316,7 +316,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Container _buildRecentTopicsHeader(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: MyTheme.isDark ? Colors.black54 : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,7 +325,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近主题',
-              style: Theme.of(context).textTheme.title,
+              style: new TextStyle(fontSize: 20.0, color: MyTheme.isDark ? Colors.white : Colors.black),
             ),
           ),
           Visibility(
@@ -353,7 +353,8 @@ class _ProfilePageState extends State<ProfilePage> {
       if (_memberProfileModel?.topicList == null) {
         // 根据 xxx 的设置，主题列表被隐藏
         return Container(
-          color: Colors.white,
+          padding: EdgeInsets.only(top: 20, bottom: 20),
+          color: MyTheme.isDark ? Colors.black : Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -365,13 +366,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 10,
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 20),
                 width: 250,
                 child: Text("根据 ${widget.userName} 的设置，主题列表被隐藏",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black45,
+                      color: MyTheme.isDark ? Colors.white70 : Colors.black54,
                     )),
               ),
             ],
@@ -418,7 +418,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Container _buildRecentRepliesHeader(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: MyTheme.isDark ? Colors.black54 : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -427,7 +427,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近回复',
-              style: Theme.of(context).textTheme.title,
+              style: new TextStyle(fontSize: 20.0, color: MyTheme.isDark ? Colors.white : Colors.black),
             ),
           ),
           Visibility(
