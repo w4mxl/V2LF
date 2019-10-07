@@ -36,7 +36,9 @@ class ProfilePage extends StatefulWidget {
   final String userName;
   final String avatar;
 
-  ProfilePage(this.userName, this.avatar);
+  final String heroTag;
+
+  ProfilePage(this.userName, this.avatar, {this.heroTag = 'avatar'});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -127,8 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 100.0),
-                      child: OnlinePersonAction(
-                          widget.avatar, _memberProfileModel != null ? _memberProfileModel.online : false),
+                      child: _buildUserAvatar(),
                     ),
                   ],
                 ),
@@ -176,6 +177,45 @@ class _ProfilePageState extends State<ProfilePage> {
           ])),
         ],
       ),
+    );
+  }
+
+  /// 用户头像 & 是否在线
+
+  Widget _buildUserAvatar() {
+    return Stack(
+      overflow: Overflow.visible,
+      children: <Widget>[
+        Hero(
+          tag: widget.heroTag,
+          transitionOnUserGestures: true,
+          child: Material(
+            elevation: 8.0,
+            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
+            child: CircleAvatar(
+              radius: 50.0,
+              backgroundImage: CachedNetworkImageProvider(widget.avatar),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 12,
+          right: 5,
+          child: Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+                color: (_memberProfileModel != null ? _memberProfileModel.online : false)
+                    ? Colors.greenAccent
+                    : Colors.redAccent,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  width: 1,
+                  color: Color(0xFFFFFFFF),
+                )),
+          ),
+        )
+      ],
     );
   }
 
@@ -458,49 +498,6 @@ class Action {
   Action(this.id, this.text, {this.iconData});
 }
 
-/// 用户头像 & 是否在线
-class OnlinePersonAction extends StatelessWidget {
-  final String avatarPath;
-  final bool online;
-
-  OnlinePersonAction(this.avatarPath, this.online);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      overflow: Overflow.visible,
-      children: <Widget>[
-        Hero(
-          tag: 'avatar',
-          child: Material(
-            elevation: 8.0,
-            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
-            child: CircleAvatar(
-              radius: 50.0,
-              backgroundImage: CachedNetworkImageProvider(avatarPath),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 12,
-          right: 5,
-          child: Container(
-            width: 12,
-            height: 12,
-            decoration: BoxDecoration(
-                color: online ? Colors.greenAccent : Colors.redAccent,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  width: 1,
-                  color: Color(0xFFFFFFFF),
-                )),
-          ),
-        )
-      ],
-    );
-  }
-}
-
 /// topic item view
 class TopicItemView extends StatelessWidget {
   final ProfileRecentTopicItem topic;
@@ -560,7 +557,12 @@ class TopicItemView extends StatelessWidget {
                                         ),
                                       ),
                                       onTap: () => Navigator.push(
-                                          context, MaterialPageRoute(builder: (context) => NodeTopics(topic.nodeId))),
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => NodeTopics(
+                                                    topic.nodeId,
+                                                    nodeName: topic.nodeName,
+                                                  ))),
                                     ),
                                     Text(
                                       '${topic.lastReplyTime}',

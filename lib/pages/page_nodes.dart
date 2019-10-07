@@ -124,7 +124,13 @@ class NodeGroupWidget extends StatelessWidget {
           style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 13.0),
         ),
       ),
-      onTap: () => Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node.nodeId))),
+      onTap: () => Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => NodeTopics(
+                    node.nodeId,
+                    nodeName: node.nodeName,
+                  ))),
     );
   }
 }
@@ -190,19 +196,23 @@ class DataSearch extends SearchDelegate<String> {
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-            title: RichText(
-                text: TextSpan(
-                    text: suggestionNodes[index].nodeName.substring(0, query.length),
-                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
-                    children: [
-                  TextSpan(
-                      text: suggestionNodes[index].nodeName.substring(query.length),
-                      style: DefaultTextStyle.of(context).style)
-                ])),
-            trailing: Icon(Icons.navigate_next),
-            onTap: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) => new NodeTopics(suggestionNodes[index].nodeId))),
-          ),
+        title: RichText(
+            text: TextSpan(
+                text: suggestionNodes[index].nodeName.substring(0, query.length),
+                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                children: [
+              TextSpan(
+                  text: suggestionNodes[index].nodeName.substring(query.length), style: DefaultTextStyle.of(context).style)
+            ])),
+        trailing: Icon(Icons.navigate_next),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NodeTopics(
+                      suggestionNodes[index].nodeId,
+                      nodeName: suggestionNodes[index].nodeName,
+                    ))),
+      ),
       itemCount: suggestionNodes.length,
     );
   }

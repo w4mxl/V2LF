@@ -103,12 +103,15 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CachedNetworkImage(
-              imageUrl: node.img,
-              fit: BoxFit.fill,
-              width: 73,
-              height: 73,
-              placeholder: (context, url) => Icon(Icons.photo, size: 32.0, color: Color(0xFFcccccc)),
+            Hero(
+              tag: 'node_${node.nodeId}',
+              child: CachedNetworkImage(
+                imageUrl: node.img,
+                fit: BoxFit.fill,
+                width: 73,
+                height: 73,
+                placeholder: (context, url) => Icon(Icons.photo, size: 32.0, color: Color(0xFFcccccc)),
+              ),
             ),
             SizedBox(
               height: 8,
@@ -139,7 +142,14 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
         ),
       ),
       onTap: () {
-        var future = Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodeTopics(node.nodeId)));
+        var future = Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new NodeTopics(
+                      node.nodeId,
+                      nodeName: node.nodeName,
+                      nodeImg: node.img,
+                    )));
         future.then((value) {
           setState(() {
             _future = getFavNodes();

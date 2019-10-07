@@ -13,6 +13,7 @@ import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -197,7 +198,8 @@ class TopicItemView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfilePage(notificationItem.userName, "https:${notificationItem.avatar}"),
+                        builder: (context) =>
+                            ProfilePage(notificationItem.userName, "https:${Utils.avatarLarge(notificationItem.avatar)}"),
                       ),
                     ),
                   ),

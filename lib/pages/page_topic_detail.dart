@@ -591,17 +591,21 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               children: <Widget>[
                 // 头像
                 GestureDetector(
-                  child: ClipOval(
-                    child: new CachedNetworkImage(
-                      imageUrl: 'https:' + _detailModel.avatar,
-                      height: 44.0,
-                      width: 44.0,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/images/ic_person.png',
-                        width: 44,
-                        height: 44,
-                        color: Color(0xFFcccccc),
+                  child: Hero(
+                    tag: 'avatar',
+                    transitionOnUserGestures: true,
+                    child: ClipOval(
+                      child: new CachedNetworkImage(
+                        imageUrl: 'https:' + _detailModel.avatar,
+                        height: 44.0,
+                        width: 44.0,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Image.asset(
+                          'assets/images/ic_person.png',
+                          width: 44,
+                          height: 44,
+                          color: Color(0xFFcccccc),
+                        ),
                       ),
                     ),
                   ),
@@ -652,7 +656,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             ),
                           ),
                           onTap: () => Navigator.push(
-                              context, new MaterialPageRoute(builder: (context) => NodeTopics(_detailModel.nodeId))),
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => NodeTopics(
+                                        _detailModel.nodeId,
+                                        nodeName: _detailModel.nodeName,
+                                      ))),
                         ),
                       ],
                     ),
@@ -835,7 +844,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               children: <Widget>[
                                 // 评论item头像
                                 GestureDetector(
-                                  child: Container(
+                                  child: Hero(
+                                    tag: 'avatar$index',
+                                    transitionOnUserGestures: true,
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         imageUrl: 'https:' + reply.avatar,
@@ -854,7 +865,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ProfilePage(reply.userName, 'https:${reply.avatar}')),
+                                        builder: (context) => ProfilePage(
+                                              reply.userName,
+                                              'https:${Utils.avatarLarge(reply.avatar)}',
+                                              heroTag: 'avatar$index',
+                                            )),
                                   ),
                                 ),
                                 Offstage(

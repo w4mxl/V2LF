@@ -9,7 +9,9 @@ import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:shimmer/shimmer.dart';
@@ -131,7 +133,7 @@ class _TopicItemViewState extends State<TopicItemView> {
           children: <Widget>[
             new Text(
               widget.topic.topicContent,
-              // 区分：已读 or 未读 todo
+              // 区分：已读 or 未读
               style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
             ),
             SizedBox(
@@ -146,30 +148,49 @@ class _TopicItemViewState extends State<TopicItemView> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        // 头像
-                        ClipOval(
-                          child: new CachedNetworkImage(
-                            imageUrl: "https:" + widget.topic.avatar,
-                            height: 21.0,
-                            width: 21.0,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Image.asset(
-                              'assets/images/ic_person.png',
-                              width: 21,
-                              height: 21,
-                              color: Color(0xFFcccccc),
-                            ),
+                        InkWell(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              // 头像
+                              ClipOval(
+                                child: new CachedNetworkImage(
+                                  imageUrl: "https:" + widget.topic.avatar,
+                                  height: 21.0,
+                                  width: 21.0,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => Image.asset(
+                                    'assets/images/ic_person.png',
+                                    width: 21,
+                                    height: 21,
+                                    color: Color(0xFFcccccc),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 6,
+                              ),
+                              // 用户名
+                              Text(
+                                widget.topic.memberId,
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
+                                style: new TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).unselectedWidgetColor),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          widget.topic.memberId,
-                          textAlign: TextAlign.left,
-                          maxLines: 1,
-                          style: new TextStyle(
-                              fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                          onTap: () {
+                            var largeAvatar = Utils.avatarLarge(widget.topic.avatar);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(widget.topic.memberId, 'https:$largeAvatar'),
+                              ),
+                            );
+                          },
                         ),
                         SizedBox(
                           width: 6,

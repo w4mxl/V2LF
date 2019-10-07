@@ -97,7 +97,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                             }
                           });
                         } else {
-                          // todo -> 个人中心页面
                           // _launchURL(Strings.v2exHost + '/member/' + userName);
                           Navigator.push(
                             context,
@@ -189,7 +188,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         }
                       });
                     } else {
-                      // todo -> 个人中心页面
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
                       Navigator.push(
                         context,
@@ -199,20 +197,17 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   },
                   child: Hero(
                     tag: 'avatar',
-                    child: Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: avatar.isNotEmpty
-                                ? CachedNetworkImageProvider(
-                                    "https:" + avatar,
-                                  )
-                                : AssetImage("assets/images/ic_person.png"),
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(36.0)), // currentAccountPicture 宽高是72
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          )),
+                    transitionOnUserGestures: true,
+                    child: Material(
+                      shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+                      child: CircleAvatar(
+                        radius: 36,
+                        backgroundImage: avatar.isNotEmpty
+                            ? CachedNetworkImageProvider(
+                                "https:" + avatar,
+                              )
+                            : AssetImage("assets/images/ic_person.png"),
+                      ),
                     ),
                   ),
                 ),

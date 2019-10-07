@@ -22,8 +22,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NodeTopics extends StatefulWidget {
   final String nodeId;
+  final String nodeName;
+  final String nodeImg;
 
-  NodeTopics(this.nodeId);
+  NodeTopics(this.nodeId, {this.nodeName, this.nodeImg});
 
   @override
   _NodeTopicsState createState() => _NodeTopicsState();
@@ -125,23 +127,24 @@ class _NodeTopicsState extends State<NodeTopics> {
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(_node == null ? '' : _node.title),
+              title: Text(widget.nodeName != null ? widget.nodeName : (_node == null ? '' : _node.title)),
               centerTitle: true,
-              background: _node == null
-                  ? Container()
-                  : SafeArea(
-                      child: CachedNetworkImage(
-                        imageUrl: (_node.avatarLarge == '/static/img/node_large.png')
-                            ? Strings.nodeDefaultImag
-                            : "https:" + _node.avatarLarge.replaceFirst('large', 'xxlarge'),
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) => new CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => CachedNetworkImage(
-                          imageUrl: "https:" + _node.avatarLarge,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
+              background: SafeArea(
+                child: Hero(
+                  tag: 'node_${widget.nodeId}',
+                  child: CachedNetworkImage(
+                    imageUrl: widget.nodeImg != null
+                        ? widget.nodeImg
+                        : (_node != null
+                            ? ((_node.avatarLarge == '/static/img/node_large.png')
+                                ? Strings.nodeDefaultImag
+                                : "https:${_node.avatarLarge}")
+                            : ''),
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                  ),
+                ),
+              ),
             ),
             actions: <Widget>[
               // 收藏/取消收藏 按钮

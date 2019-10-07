@@ -22,6 +22,7 @@ import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
@@ -539,18 +540,7 @@ class DioWeb {
     var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
     if (elementOfAvatarImg != null) {
       // 获取用户头像
-      String avatar = elementOfAvatarImg.attributes["src"];
-      // 获取到的是24*24大小，改成73*73
-      //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
-      //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
-      var regExp1 = RegExp(r's=24');
-      var regExp2 = RegExp(r'normal');
-      if (avatar.contains(regExp1)) {
-        avatar = avatar.replaceFirst(regExp1, 's=73');
-      } else if (avatar.contains(regExp2)) {
-        avatar = avatar.replaceFirst(regExp2, 'large');
-      }
-
+      String avatar = Utils.avatarLarge(elementOfAvatarImg.attributes["src"]);
       String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
       var username = href.substring('/member/'.length);
       // 保存 username avatar
