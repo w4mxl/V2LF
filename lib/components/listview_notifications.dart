@@ -216,7 +216,7 @@ class TopicItemView extends StatelessWidget {
                           // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                           data: notificationItem.title,
                           defaultTextStyle:
-                              TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 15.0),
+                              TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 13.0),
                           linkStyle: TextStyle(
                             color: Theme.of(context).accentColor,
                           ),
@@ -240,7 +240,7 @@ class TopicItemView extends StatelessWidget {
                           child: Html(
                             data: notificationItem.reply,
                             defaultTextStyle:
-                                TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 14.0),
+                                TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
                             backgroundColor: MyTheme.isDark ? Colors.grey[800] : Colors.grey[200],
                             padding: EdgeInsets.all(4.0),
                             linkStyle: TextStyle(

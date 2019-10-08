@@ -211,6 +211,9 @@ class _NodeTopicsState extends State<NodeTopics> {
                   customTextAlign: (node) {
                     return TextAlign.center;
                   },
+                  linkStyle: TextStyle(
+                    color: Theme.of(context).accentColor,
+                  ),
                   onLinkTap: (url) {
                     if (UrlHelper.canLaunchInApp(context, url)) {
                       return;
