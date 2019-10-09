@@ -78,8 +78,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                color: Colors.grey,
                                 padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
                               ),
                             ),
                       onTap: () {
@@ -165,8 +168,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                         poemOne != null ? poemOne.data.content : "",
                         style: TextStyle(fontSize: 14),
                       ),
-                      color: Colors.grey,
+                      // color: Colors.grey,
                       padding: EdgeInsets.all(userName.isEmpty ? 0 : 2),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
                     ),
                     opacity: 0.9,
                   ),
