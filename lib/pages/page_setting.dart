@@ -182,6 +182,13 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                     indent: 20.0,
                   ),
+                  ExpansionTile(
+                    leading: Icon(Icons.brightness_4),
+                    title: Text(S.of(context).titleAppearance),
+                    children: <Widget>[
+                      // 根据系统及版本判断
+                    ],
+                  ),
                   // Dark mode
                   Platform.isIOS
                       ? CupertinoSwitchListTile(

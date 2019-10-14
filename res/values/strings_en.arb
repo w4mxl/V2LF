@@ -28,6 +28,7 @@
     "type": "text",
     "placeholders": {}
   },
+  "titleAppearance": "Appearance",
   "titleSystemFont": "System Font",
   "@titleSystemFont": {
     "type": "text",

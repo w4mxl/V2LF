@@ -23,11 +23,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleTheme": "主题切换",
+  "titleTheme": "主题",
   "@titleTheme": {
     "type": "text",
     "placeholders": {}
   },
+  "titleAppearance": "外观",
   "titleSystemFont": "系统字体",
   "@titleSystemFont": {
     "type": "text",
