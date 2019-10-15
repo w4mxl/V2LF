@@ -20,10 +20,8 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'common/v2ex_client.dart';
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
 import 'theme/theme_data.dart';

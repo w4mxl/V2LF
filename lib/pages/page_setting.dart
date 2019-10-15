@@ -17,6 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:device_info/device_info.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
@@ -25,6 +26,9 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  IosDeviceInfo iosInfo;
+  AndroidDeviceInfo androidInfo;
+
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
   bool _switchSystemFont = false;
@@ -34,6 +38,8 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
+
+    _deviceInfo();
 
     _list.add(LanguageModel('', ''));
     _list.add(LanguageModel('zh', 'CN'));
@@ -62,6 +68,18 @@ class _SettingPageState extends State<SettingPage> {
       _switchAutoAward = _spAutoAward;
     }
     print("wml:" + _spAutoAward.toString());
+  }
+
+  /// 获取设备系统版本号
+  _deviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      androidInfo = await deviceInfo.androidInfo;
+      print('Running on ${androidInfo.version.sdkInt}');
+    } else if (Platform.isIOS) {
+      iosInfo = await deviceInfo.iosInfo;
+      print('Running on ${iosInfo.systemVersion}');
+    }
   }
 
   void _updateData() {
@@ -182,46 +200,8 @@ class _SettingPageState extends State<SettingPage> {
                     height: 0.0,
                     indent: 20.0,
                   ),
-                  ExpansionTile(
-                    leading: Icon(Icons.brightness_4),
-                    title: Text(S.of(context).titleAppearance),
-                    children: <Widget>[
-                      // 根据系统及版本判断
-                    ],
-                  ),
                   // Dark mode
-                  Platform.isIOS
-                      ? CupertinoSwitchListTile(
-                          value: _currentIsDark,
-                          onChanged: (value) {
-                            setState(() {
-                              _currentIsDark = value;
-                              SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
-                              eventBus.emit(MyEventSettingChange);
-                            });
-                          },
-                          title: Text(S.of(context).darkMode),
-                          secondary: Icon(
-                            Icons.brightness_4,
-                          ),
-                          selected: false,
-                          activeColor: MyTheme.appMainColor,
-                        )
-                      : SwitchListTile(
-                          value: _currentIsDark,
-                          onChanged: (value) {
-                            setState(() {
-                              _currentIsDark = value;
-                              SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
-                              eventBus.emit(MyEventSettingChange);
-                            });
-                          },
-                          title: Text(S.of(context).darkMode),
-                          secondary: Icon(
-                            Icons.brightness_4,
-                          ),
-                          selected: false,
-                        ),
+                  _appAppearanceTile(context),
                   Divider(
                     height: 0.0,
                     indent: 20.0,
@@ -544,6 +524,71 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
     );
+  }
+
+  Widget _appAppearanceTile(BuildContext context) {
+    return Platform.isIOS
+        ? (double.parse(iosInfo.systemVersion) < 13
+            ? CupertinoSwitchListTile(
+                value: _currentIsDark,
+                onChanged: (value) {
+                  appearanceSwitchApply(value);
+                },
+                title: Text(S.of(context).darkMode),
+                secondary: Icon(
+                  Icons.brightness_4,
+                ),
+                selected: false,
+                activeColor: MyTheme.appMainColor,
+              )
+            : ExpansionTile(
+                leading: Icon(Icons.brightness_4),
+                title: Row(
+                  children: <Widget>[
+                    Text(S.of(context).titleAppearance),
+                    Expanded(
+                      child: Text(''),
+                    ),
+                  ],
+                ),
+                children: <Widget>[
+                  // 根据系统及版本判断
+                ],
+              ))
+        : (androidInfo.version.sdkInt < 29
+            ? SwitchListTile(
+                value: _currentIsDark,
+                onChanged: (value) {
+                  appearanceSwitchApply(value);
+                },
+                title: Text(S.of(context).darkMode),
+                secondary: Icon(
+                  Icons.brightness_4,
+                ),
+                selected: false,
+              )
+            : ExpansionTile(
+                leading: Icon(Icons.brightness_4),
+                title: Row(
+                  children: <Widget>[
+                    Text(S.of(context).titleAppearance),
+                    Expanded(
+                      child: Text(''),
+                    ),
+                  ],
+                ),
+                children: <Widget>[
+                  // 根据系统及版本判断
+                ],
+              ));
+  }
+
+  void appearanceSwitchApply(bool value) {
+    setState(() {
+      _currentIsDark = value;
+      SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
+      eventBus.emit(MyEventSettingChange);
+    });
   }
 
   void updateLanguage(LanguageModel model) {
