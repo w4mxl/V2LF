@@ -13,8 +13,8 @@
       "name": {}
     }
   },
-  "languageAuto": "跟随系统",
-  "@languageAuto": {
+  "followSystem": "跟随系统",
+  "@followSystem": {
     "type": "text",
     "placeholders": {}
   },
@@ -257,5 +257,7 @@
     "placeholders": {}
   },
   "recentRead": "已读",
-  "darkMode": "夜间模式"
+  "darkMode": "夜间模式",
+  "day": "浅色",
+  "night": "深色"
 }

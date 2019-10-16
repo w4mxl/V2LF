@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Utils {
   static String getLanguageName(BuildContext context, String languageCode) {
     if (languageCode.isEmpty) {
-      return S.of(context).languageAuto;
+      return S.of(context).followSystem;
     } else if (languageCode == 'en') {
       return 'English';
     } else

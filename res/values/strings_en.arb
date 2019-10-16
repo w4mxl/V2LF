@@ -13,8 +13,8 @@
       "name": {}
     }
   },
-  "languageAuto": "Auto",
-  "@languageAuto": {
+  "followSystem": "Auto",
+  "@followSystem": {
     "type": "text",
     "placeholders": {}
   },
@@ -257,5 +257,7 @@
     "placeholders": {}
   },
   "recentRead": "Recent Read",
-  "darkMode": "Dark Mode"
+  "darkMode": "Dark Mode",
+  "day": "Light",
+  "night": "Dark"
 }

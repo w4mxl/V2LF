@@ -8,6 +8,7 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/model/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -28,6 +29,8 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   IosDeviceInfo iosInfo;
   AndroidDeviceInfo androidInfo;
+
+  int _currentAppearance; // 当前外观
 
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
@@ -63,6 +66,12 @@ class _SettingPageState extends State<SettingPage> {
       _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
     }
 
+    if (SpHelper.sp.getInt(SP_DAY_NIGHT) == null) {
+      _currentAppearance = MODE_NIGHT_FOLLOW_SYSTEM;
+    } else {
+      _currentAppearance = SpHelper.sp.getInt(SP_DAY_NIGHT);
+    }
+
     bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
     if (_spAutoAward != null) {
       _switchAutoAward = _spAutoAward;
@@ -80,6 +89,7 @@ class _SettingPageState extends State<SettingPage> {
       iosInfo = await deviceInfo.iosInfo;
       print('Running on ${iosInfo.systemVersion}');
     }
+    setState(() {});
   }
 
   void _updateData() {
@@ -272,7 +282,7 @@ class _SettingPageState extends State<SettingPage> {
                         Expanded(
                           child: Text(
                             SpHelper.getLanguageModel() == null
-                                ? S.of(context).languageAuto
+                                ? S.of(context).followSystem
                                 : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode),
                             style: TextStyle(
                               fontSize: 14.0,
@@ -286,17 +296,18 @@ class _SettingPageState extends State<SettingPage> {
                     children: <Widget>[
                       ListView.builder(
                           shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: _list.length,
                           itemBuilder: (BuildContext context, int index) {
                             LanguageModel model = _list[index];
-                            return new ListTile(
-                              title: new Text(
+                            return ListTile(
+                              title: Text(
                                 (model.languageCode.isEmpty
-                                    ? S.of(context).languageAuto
+                                    ? S.of(context).followSystem
                                     : Utils.getLanguageName(context, model.languageCode)),
-                                style: new TextStyle(fontSize: 13.0),
+                                style: TextStyle(fontSize: 14.0),
                               ),
-                              trailing: new Radio(
+                              trailing: Radio(
                                   value: true,
                                   groupValue: model.isSelected == true,
                                   //activeColor: Colors.indigoAccent,
@@ -528,7 +539,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _appAppearanceTile(BuildContext context) {
     return Platform.isIOS
-        ? (double.parse(iosInfo.systemVersion) < 13
+        ? (double.parse(iosInfo?.systemVersion) < 13
             ? CupertinoSwitchListTile(
                 value: _currentIsDark,
                 onChanged: (value) {
@@ -541,21 +552,8 @@ class _SettingPageState extends State<SettingPage> {
                 selected: false,
                 activeColor: MyTheme.appMainColor,
               )
-            : ExpansionTile(
-                leading: Icon(Icons.brightness_4),
-                title: Row(
-                  children: <Widget>[
-                    Text(S.of(context).titleAppearance),
-                    Expanded(
-                      child: Text(''),
-                    ),
-                  ],
-                ),
-                children: <Widget>[
-                  // 根据系统及版本判断
-                ],
-              ))
-        : (androidInfo.version.sdkInt < 29
+            : expansionTileAppearance(context))
+        : (androidInfo?.version?.sdkInt < 29
             ? SwitchListTile(
                 value: _currentIsDark,
                 onChanged: (value) {
@@ -567,20 +565,55 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 selected: false,
               )
-            : ExpansionTile(
-                leading: Icon(Icons.brightness_4),
-                title: Row(
-                  children: <Widget>[
-                    Text(S.of(context).titleAppearance),
-                    Expanded(
-                      child: Text(''),
-                    ),
-                  ],
-                ),
-                children: <Widget>[
-                  // 根据系统及版本判断
-                ],
-              ));
+            : expansionTileAppearance(context));
+  }
+
+  ExpansionTile expansionTileAppearance(BuildContext context) {
+    return ExpansionTile(
+      leading: Icon(Icons.brightness_4),
+      title: Row(
+        children: <Widget>[
+          Text(S.of(context).titleAppearance),
+          Expanded(
+            child: Text(
+              _currentAppearance == -1
+                  ? S.of(context).followSystem
+                  : (_currentAppearance == 1 ? S.of(context).day : S.of(context).night),
+              style: TextStyle(
+                fontSize: 14.0,
+                color: MyTheme.gray_99,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
+      children: <Widget>[
+        // * Light
+        // * Dark
+        // * System default (the recommended default option)
+        ListView.builder(
+          itemBuilder: (context, index) {
+            return RadioListTile(
+              title: Text(index == 0 ? S.of(context).followSystem : (index == 1 ? S.of(context).day : S.of(context).night),
+                  style: TextStyle(fontSize: 14.0)),
+              value: index == 0 ? MODE_NIGHT_FOLLOW_SYSTEM : (index == 1 ? MODE_NIGHT_NO : MODE_NIGHT_YES),
+              groupValue: _currentAppearance,
+              onChanged: (newValue) {
+                setState(() {
+                  _currentAppearance = newValue;
+                  // todo
+                });
+              },
+              controlAffinity: ListTileControlAffinity.trailing,
+            );
+          },
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 3,
+        ),
+      ],
+    );
   }
 
   void appearanceSwitchApply(bool value) {

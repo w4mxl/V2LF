@@ -33,18 +33,20 @@ class S implements WidgetsLocalizations {
   String get create => "New Topic";
   String get createTitle => "Create New Topic";
   String get darkMode => "Dark Mode";
+  String get day => "Light";
   String get enterAccount => "Enter account";
   String get enterCaptcha => "Enter right captcha";
   String get enterPassword => "Enter password";
   String get favorites => "Favorites";
   String get feedback => "Send Feedback";
+  String get followSystem => "Auto";
   String get forgetPassword => "Forgot password ?";
   String get hintPersonalityHome => "Reselect and sort the nodes displayed on the homepage";
   String get history => "History Hottest";
-  String get languageAuto => "Auto";
   String get login => "Login";
   String get logout => "Logout";
   String get logoutLong => "Log out";
+  String get night => "Dark";
   String get noComment => "no comment yet";
   String get noHistorySearch => "No search history";
   String get nodes => "Nodes";
@@ -113,15 +115,21 @@ class $zh_CN extends S {
   @override
   String get reply => "回复";
   @override
+  String get day => "浅色";
+  @override
   String get settings => "设置";
   @override
   String get sureLogout => "您确定要退出登录吗？";
+  @override
+  String get night => "深色";
   @override
   String get history => "往期";
   @override
   String get signup => "注册";
   @override
   String get replyHint => "(u_u) 请尽量让回复有助于他人";
+  @override
+  String get followSystem => "跟随系统";
   @override
   String get versions => "版本记录";
   @override
@@ -174,8 +182,6 @@ class $zh_CN extends S {
   String get clearHistorySearch => "清空历史记录";
   @override
   String get enterPassword => "请输入密码";
-  @override
-  String get languageAuto => "跟随系统";
   @override
   String get nodes => "节点";
   @override

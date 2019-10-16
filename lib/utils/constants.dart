@@ -85,3 +85,7 @@ List<TabModel> TABS = <TabModel>[
   TabModel('问与答', 'qna'),
   TabModel('R2', 'r2'),
 ];
+
+const int MODE_NIGHT_NO = 1; // Light
+const int MODE_NIGHT_YES = 2; // Dark
+const int MODE_NIGHT_FOLLOW_SYSTEM = -1; // uses the system's night mode

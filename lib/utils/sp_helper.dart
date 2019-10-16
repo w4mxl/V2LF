@@ -23,6 +23,7 @@ const String SP_ONCE = "once";
 
 // dark light
 const String SP_IS_DARK = "isDark";
+const String SP_DAY_NIGHT = "day_night";
 
 // 搜索历史记录
 const String SP_SEARCH_HISTORY = "search_history";
