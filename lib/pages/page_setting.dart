@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/components/switch_list_tile_cupertino.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/language.dart';
+import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/constants.dart';

@@ -1,5 +1,5 @@
-import 'package:flutter_app/model/web/item_topic_reply.dart';
-import 'package:flutter_app/model/web/item_topic_subtle.dart';
+import 'package:flutter_app/models/web/item_topic_reply.dart';
+import 'package:flutter_app/models/web/item_topic_subtle.dart';
 
 /// @author: wml
 /// @date  : 2019/2/27 12:45

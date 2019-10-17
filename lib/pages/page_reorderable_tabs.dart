@@ -8,7 +8,7 @@ import 'dart:convert';
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/tab.dart';
+import 'package:flutter_app/models/tab.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -85,7 +85,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
               eventBus.emit(MyEventTabsChange);
               Navigator.of(context).pop();
             } else {
-              Fluttertoast.showToast(msg: '保存出错了...', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
+              Fluttertoast.showToast(msg: '保存出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
             }
           },
           child: Text(
@@ -100,14 +100,14 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
     final _listTiles = _tabs
         .map(
           (item) => CheckboxListTile(
-                key: Key(item.key),
-                value: item.checked ?? false,
-                onChanged: (bool newValue) {
-                  setState(() => item.checked = newValue);
-                },
-                title: Text(item.title),
-                secondary: Icon(Icons.drag_handle),
-              ),
+            key: Key(item.key),
+            value: item.checked ?? false,
+            onChanged: (bool newValue) {
+              setState(() => item.checked = newValue);
+            },
+            title: Text(item.title),
+            secondary: Icon(Icons.drag_handle),
+          ),
         )
         .toList();
     return Scaffold(

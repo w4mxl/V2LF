@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/jinrishici.dart';
+import 'package:flutter_app/models/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
@@ -405,12 +405,4 @@ class _LinkTextSpan extends TextSpan {
               ..onTap = () {
                 launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
               });
-}
-
-_launchURL(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-  } else {
-    Fluttertoast.showToast(msg: 'Could not launch $url', gravity: ToastGravity.CENTER);
-  }
 }

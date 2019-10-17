@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/sov2ex.dart';
+import 'package:flutter_app/models/sov2ex.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -285,9 +285,9 @@ class Sov2exResultItem extends StatelessWidget {
         ],
       ),
       onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
-          ),
+        context,
+        MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
+      ),
     );
   }
 }

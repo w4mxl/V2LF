@@ -6,7 +6,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/web/item_notification.dart';
+import 'package:flutter_app/models/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';

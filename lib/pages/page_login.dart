@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/web/login_form_data.dart';
+import 'package:flutter_app/models/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';

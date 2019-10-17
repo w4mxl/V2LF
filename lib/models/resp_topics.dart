@@ -1,7 +1,7 @@
 import 'dart:convert' show json;
 
-import 'package:flutter_app/model/resp_member.dart';
-import 'package:flutter_app/model/resp_node.dart';
+import 'package:flutter_app/models/resp_member.dart';
+import 'package:flutter_app/models/resp_node.dart';
 
 class TopicsResp {
   List<Topic> list;

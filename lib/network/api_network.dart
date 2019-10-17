@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_app/model/jinrishici.dart';
-import 'package:flutter_app/model/node.dart';
-import 'package:flutter_app/model/resp_replies.dart';
-import 'package:flutter_app/model/resp_site_info.dart';
-import 'package:flutter_app/model/resp_topics.dart';
-import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/models/jinrishici.dart';
+import 'package:flutter_app/models/node.dart';
+import 'package:flutter_app/models/resp_replies.dart';
+import 'package:flutter_app/models/resp_site_info.dart';
+import 'package:flutter_app/models/resp_topics.dart';
+import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/utils/constants.dart' as Constants;
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:http/http.dart' as http;

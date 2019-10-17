@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:ovprogresshud/progresshud.dart';

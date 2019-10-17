@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/search_node_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:notus/convert.dart';

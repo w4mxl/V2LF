@@ -1,6 +1,6 @@
 import 'dart:convert' show json;
 
-import 'package:flutter_app/model/resp_member.dart';
+import 'package:flutter_app/models/resp_member.dart';
 
 class RepliesResp {
   List<Reply> list;

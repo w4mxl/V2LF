@@ -12,8 +12,8 @@ import 'package:flutter/cupertino.dart';
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/web/item_fav_node.dart';
-import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/models/web/item_fav_node.dart';
+import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/theme/theme_data.dart';

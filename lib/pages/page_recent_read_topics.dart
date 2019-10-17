@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'page_topic_detail.dart';

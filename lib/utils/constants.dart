@@ -1,4 +1,4 @@
-import 'package:flutter_app/model/tab.dart';
+import 'package:flutter_app/models/tab.dart';
 
 const String HOST = 'https://www.v2ex.com/';
 const String API_PATH = 'api/';

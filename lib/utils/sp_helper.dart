@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter_app/model/language.dart';
-import 'package:flutter_app/model/tab.dart';
+import 'package:flutter_app/models/language.dart';
+import 'package:flutter_app/models/tab.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

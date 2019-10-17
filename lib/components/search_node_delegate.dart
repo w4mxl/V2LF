@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/web/node.dart';
+import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 
@@ -101,10 +101,10 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
             return ListView.builder(
               itemBuilder: (context, index) => ListTile(
-                    title: Text(resultNodes[index].nodeName),
-                    trailing: Icon(Icons.navigate_next),
-                    onTap: () => close(context, resultNodes[index]),
-                  ),
+                title: Text(resultNodes[index].nodeName),
+                trailing: Icon(Icons.navigate_next),
+                onTap: () => close(context, resultNodes[index]),
+              ),
               itemCount: resultNodes.length,
             );
           }
@@ -120,10 +120,10 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
     return ListView.separated(
       itemBuilder: (context, index) => ListTile(
-            title: Text(suggestionNodes[index].nodeName),
-            trailing: Icon(Icons.whatshot),
-            onTap: () => close(context, suggestionNodes[index]),
-          ),
+        title: Text(suggestionNodes[index].nodeName),
+        trailing: Icon(Icons.whatshot),
+        onTap: () => close(context, suggestionNodes[index]),
+      ),
       itemCount: suggestionNodes.length,
       separatorBuilder: (context, index) => Divider(height: 0),
     );

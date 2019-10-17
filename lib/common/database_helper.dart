@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'dart:io';
 
-import 'package:flutter_app/model/web/item_tab_topic.dart';
+import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
