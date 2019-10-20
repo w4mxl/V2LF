@@ -7,6 +7,7 @@ import 'package:flutter_app/components/switch_list_tile_cupertino.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/event_bus.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:device_info/device_info.dart';
@@ -34,7 +36,6 @@ class _SettingPageState extends State<SettingPage> {
 
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
-  bool _switchSystemFont = false;
   bool _switchAutoAward = true; // 是否自动签到；默认是
   bool _currentIsDark = false;
 
@@ -55,21 +56,16 @@ class _SettingPageState extends State<SettingPage> {
 
     _updateData();
 
-    String _spFont = SpHelper.sp.getString(SP_FONT_FAMILY);
-    if (_spFont != null && _spFont == 'System') {
-      _switchSystemFont = true;
-    }
-
     if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
       _currentIsDark = false;
     } else {
       _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
     }
 
-    if (SpHelper.sp.getInt(SP_DAY_NIGHT) == null) {
+    if (SpHelper.sp.getInt(SP_NIGHT_MODE) == null) {
       _currentAppearance = MODE_NIGHT_FOLLOW_SYSTEM;
     } else {
-      _currentAppearance = SpHelper.sp.getInt(SP_DAY_NIGHT);
+      _currentAppearance = SpHelper.sp.getInt(SP_NIGHT_MODE);
     }
 
     bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
@@ -185,15 +181,28 @@ class _SettingPageState extends State<SettingPage> {
                   // 主题设置
                   ExpansionTile(
                     leading: Icon(Icons.color_lens, color: ListTileTheme.of(context).iconColor),
-                    title: Text(S.of(context).titleTheme),
+                    title: Row(
+                      children: <Widget>[
+                        Text(S.of(context).titleTheme),
+                        Expanded(
+                          child: Text(
+                            SpHelper.getThemeColor(),
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: MyTheme.gray_99,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
                     children: <Widget>[
                       Wrap(
                         children: themeColorMap.keys.map((key) {
                           Color value = themeColorMap[key];
                           return new InkWell(
                             onTap: () {
-                              SpHelper.sp.setString(KEY_THEME_COLOR, key);
-                              eventBus.emit(MyEventSettingChange);
+                              Provider.of<DisplayModel>(context).switchColor(key);
                             },
                             child: new Container(
                               margin: EdgeInsets.all(5.0),
@@ -219,17 +228,9 @@ class _SettingPageState extends State<SettingPage> {
                   // 字体切换
                   Platform.isIOS
                       ? CupertinoSwitchListTile(
-                          value: _switchSystemFont,
+                          value: SpHelper.getFontFamily() == 'System',
                           onChanged: (value) {
-                            setState(() {
-                              _switchSystemFont = value;
-                              if (value) {
-                                SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
-                              } else {
-                                SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
-                              }
-                              eventBus.emit(MyEventSettingChange);
-                            });
+                            buildSwitchFontSetState(value, context);
                           },
                           title: Text(S.of(context).titleSystemFont),
                           secondary: Icon(
@@ -239,17 +240,9 @@ class _SettingPageState extends State<SettingPage> {
                           activeColor: MyTheme.appMainColor,
                         )
                       : SwitchListTile(
-                          value: _switchSystemFont,
+                          value: SpHelper.getFontFamily() == 'System',
                           onChanged: (value) {
-                            setState(() {
-                              _switchSystemFont = value;
-                              if (value) {
-                                SpHelper.sp.setString(SP_FONT_FAMILY, 'System');
-                              } else {
-                                SpHelper.sp.setString(SP_FONT_FAMILY, 'Whitney');
-                              }
-                              eventBus.emit(MyEventSettingChange);
-                            });
+                            buildSwitchFontSetState(value, context);
                           },
                           title: Text(S.of(context).titleSystemFont),
                           secondary: Icon(
@@ -535,6 +528,16 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
     );
+  }
+
+  void buildSwitchFontSetState(bool value, BuildContext context) {
+    return setState(() {
+      if (value) {
+        Provider.of<DisplayModel>(context).switchFont('System');
+      } else {
+        Provider.of<DisplayModel>(context).switchFont('Whitney');
+      }
+    });
   }
 
   Widget _appAppearanceTile(BuildContext context) {

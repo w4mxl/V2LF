@@ -13,6 +13,7 @@ import 'package:flutter_app/models/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
@@ -60,7 +62,7 @@ void main() async {
   // 实例 sp
   SpHelper.sp = await SharedPreferences.getInstance();
 
-  runApp(new MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -204,49 +206,59 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      debugShowCheckedModeBanner: false,
-      locale: _locale,
-      localizationsDelegates: [
-        S.delegate,
-        ChineseCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
-        GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: appTheme(),
-      home: WillPopScope(
-        child: new Scaffold(
-            appBar: AppBar(
-              title: new TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicatorColor: Colors.white,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: tabs.map((TabModel choice) {
-                  return new Tab(
-                    text: choice.title,
-                  );
-                }).toList(),
-              ),
-              elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: DisplayModel())],
+      child: Consumer<DisplayModel>(
+        builder: (context, displayModel, _) {
+          return MaterialApp(
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            locale: _locale,
+            localizationsDelegates: [
+              S.delegate,
+              ChineseCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
+              GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            theme: ThemeData(
+              primarySwatch: Provider.of<DisplayModel>(context).materialColor,
+              fontFamily: Provider.of<DisplayModel>(context).fontName,
             ),
-            body: new TabBarView(
-              controller: _tabController,
-              children: tabs.map((TabModel choice) {
-                return choice.key == 'all' ? TabAllListView('all') : TopicListView(choice.key);
-              }).toList(),
+            home: WillPopScope(
+              child: new Scaffold(
+                  appBar: AppBar(
+                    title: new TabBar(
+                      controller: _tabController,
+                      isScrollable: true,
+                      indicatorColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      tabs: tabs.map((TabModel choice) {
+                        return new Tab(
+                          text: choice.title,
+                        );
+                      }).toList(),
+                    ),
+                    elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+                  ),
+                  body: new TabBarView(
+                    controller: _tabController,
+                    children: tabs.map((TabModel choice) {
+                      return choice.key == 'all' ? TabAllListView('all') : TopicListView(choice.key);
+                    }).toList(),
+                  ),
+                  drawer: new DrawerLeft()),
+              onWillPop: () async {
+                if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+                  // 1秒内连续按两次返回键退出
+                  // 两次点击间隔超过1秒则重新计时
+                  _lastPressedAt = DateTime.now();
+                  return false;
+                }
+                return true;
+              },
             ),
-            drawer: new DrawerLeft()),
-        onWillPop: () async {
-          if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
-            // 1秒内连续按两次返回键退出
-            // 两次点击间隔超过1秒则重新计时
-            _lastPressedAt = DateTime.now();
-            return false;
-          }
-          return true;
+          );
         },
       ),
     );

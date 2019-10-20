@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/models/tab.dart';
+import 'package:flutter_app/utils/constants.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +24,7 @@ const String SP_ONCE = "once";
 
 // dark light
 const String SP_IS_DARK = "isDark";
-const String SP_DAY_NIGHT = "day_night";
+const String SP_NIGHT_MODE = "night_mode";
 
 // 搜索历史记录
 const String SP_SEARCH_HISTORY = "search_history";
@@ -82,6 +83,23 @@ class SpHelper {
       _colorKey = 'gray';
     }
     return _colorKey;
+  }
+
+  // 获取设置好的外观
+  static int getNightMode() {
+    int _nightMode = sp.getInt(SP_NIGHT_MODE);
+    if (_nightMode == null) {
+      _nightMode = MODE_NIGHT_FOLLOW_SYSTEM;
+    }
+    return _nightMode;
+  }
+
+  static String getFontFamily() {
+    var _fontFamily = sp.getString(SP_FONT_FAMILY);
+    if (_fontFamily == null) {
+      _fontFamily = 'Whitney';
+    }
+    return _fontFamily;
   }
 
   // 获取自定义的主页Tabs
