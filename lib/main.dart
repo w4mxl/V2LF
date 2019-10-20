@@ -223,8 +223,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             supportedLocales: S.delegate.supportedLocales,
             theme: ThemeData(
               primarySwatch: Provider.of<DisplayModel>(context).materialColor,
+              brightness: Provider.of<DisplayModel>(context).nightMode == 1 ? Brightness.light : Brightness.dark,
               fontFamily: Provider.of<DisplayModel>(context).fontName,
             ),
+            //darkTheme: ,
+            //themeMode: ,
             home: WillPopScope(
               child: new Scaffold(
                   appBar: AppBar(

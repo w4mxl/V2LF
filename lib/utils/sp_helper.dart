@@ -89,7 +89,7 @@ class SpHelper {
   static int getNightMode() {
     int _nightMode = sp.getInt(SP_NIGHT_MODE);
     if (_nightMode == null) {
-      _nightMode = MODE_NIGHT_FOLLOW_SYSTEM;
+      _nightMode = MODE_NIGHT_YES;
     }
     return _nightMode;
   }

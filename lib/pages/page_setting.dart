@@ -606,6 +606,7 @@ class _SettingPageState extends State<SettingPage> {
                 setState(() {
                   _currentAppearance = newValue;
                   // todo
+                  Provider.of<DisplayModel>(context).switchNightMode(newValue);
                 });
               },
               controlAffinity: ListTileControlAffinity.trailing,

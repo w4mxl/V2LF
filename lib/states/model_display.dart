@@ -16,12 +16,19 @@ class DisplayModel extends ChangeNotifier {
   String _fontName = SpHelper.getFontFamily();
 
   get materialColor => _materialColor;
+  get nightMode => _nightMode;
   get fontName => _fontName;
 
   switchColor(String newColor) {
     _materialColor = themeColorMap[newColor];
     notifyListeners();
     SpHelper.sp.setString(KEY_THEME_COLOR, newColor);
+  }
+
+  switchNightMode(int newNightMode) {
+    _nightMode = newNightMode;
+    notifyListeners();
+    SpHelper.sp.setInt(SP_NIGHT_MODE, _nightMode);
   }
 
   switchFont(String newFontName) {
