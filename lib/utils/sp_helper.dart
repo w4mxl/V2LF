@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/models/tab.dart';
-import 'package:flutter_app/utils/constants.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +25,7 @@ const String SP_ONCE = "once";
 
 // dark light
 const String SP_IS_DARK = "isDark";
-const String SP_NIGHT_MODE = "night_mode";
+const String SP_THEME_MODE = "theme_mode";
 
 // 搜索历史记录
 const String SP_SEARCH_HISTORY = "search_history";
@@ -43,37 +44,27 @@ class SpHelper {
   static SharedPreferences sp;
 
   // T 用于区分存储类型
-  static void putObject<T>(String key, Object value) {
-    switch (T) {
-      case int:
-        sp.setInt(key, value);
-        break;
-      case double:
-        sp.setDouble(key, value);
-        break;
-      case bool:
-        sp.setBool(key, value);
-        break;
-      case String:
-        sp.setString(key, value);
-        break;
-      case List:
-        sp.setStringList(key, value);
-        break;
-      default:
-        sp.setString(key, value == null ? "" : json.encode(value));
-        break;
-    }
+  static void setObject<T>(String key, Object value) {
+    sp.setString(key, value == null ? "" : json.encode(value));
+  }
+
+  /// get object
+  static T getObject<T>(String key, T f(Map v), {T defValue}) {
+    String _data = sp.getString(key);
+    Map map = (isEmpty(_data)) ? null : json.decode(_data);
+    return map == null ? defValue : f(map);
   }
 
   // 获取设置好的语言
   static LanguageModel getLanguageModel() {
-    String _saveLanguage = sp.getString(KEY_LANGUAGE);
+    return getObject(KEY_LANGUAGE, (v) => LanguageModel.fromJson(v));
+
+/*    String _saveLanguage = sp.getString(KEY_LANGUAGE);
     if (isNotEmpty(_saveLanguage)) {
       Map userMap = json.decode(_saveLanguage);
       return LanguageModel.fromJson(userMap);
     }
-    return null;
+    return null;*/
   }
 
   // 获取设置好的主题
@@ -86,12 +77,16 @@ class SpHelper {
   }
 
   // 获取设置好的外观
-  static int getNightMode() {
-    int _nightMode = sp.getInt(SP_NIGHT_MODE);
-    if (_nightMode == null) {
-      _nightMode = MODE_NIGHT_YES;
+  static ThemeMode getThemeMode() {
+    String _spThemeMode = sp.getString(SP_THEME_MODE);
+    switch (_spThemeMode) {
+      case THEME_MODE_DARK:
+        return ThemeMode.dark;
+      case THEME_MODE_LIGHT:
+        return ThemeMode.light;
+      default:
+        return ThemeMode.system;
     }
-    return _nightMode;
   }
 
   static String getFontFamily() {

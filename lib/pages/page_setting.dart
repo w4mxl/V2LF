@@ -32,7 +32,7 @@ class _SettingPageState extends State<SettingPage> {
   IosDeviceInfo iosInfo;
   AndroidDeviceInfo androidInfo;
 
-  int _currentAppearance; // 当前外观
+  ThemeMode _currentAppearance = SpHelper.getThemeMode(); // 当前外观
 
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
@@ -60,12 +60,6 @@ class _SettingPageState extends State<SettingPage> {
       _currentIsDark = false;
     } else {
       _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
-    }
-
-    if (SpHelper.sp.getInt(SP_NIGHT_MODE) == null) {
-      _currentAppearance = MODE_NIGHT_FOLLOW_SYSTEM;
-    } else {
-      _currentAppearance = SpHelper.sp.getInt(SP_NIGHT_MODE);
     }
 
     bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
@@ -189,7 +183,7 @@ class _SettingPageState extends State<SettingPage> {
                             SpHelper.getThemeColor(),
                             style: TextStyle(
                               fontSize: 14.0,
-                              color: MyTheme.gray_99,
+                              color: Colors.grey,
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -279,7 +273,7 @@ class _SettingPageState extends State<SettingPage> {
                                 : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode),
                             style: TextStyle(
                               fontSize: 14.0,
-                              color: MyTheme.gray_99,
+                              color: Colors.grey,
                             ),
                             textAlign: TextAlign.right,
                           ),
@@ -579,12 +573,12 @@ class _SettingPageState extends State<SettingPage> {
           Text(S.of(context).titleAppearance),
           Expanded(
             child: Text(
-              _currentAppearance == -1
+              _currentAppearance == ThemeMode.system
                   ? S.of(context).followSystem
-                  : (_currentAppearance == 1 ? S.of(context).day : S.of(context).night),
+                  : (_currentAppearance == ThemeMode.light ? S.of(context).day : S.of(context).night),
               style: TextStyle(
                 fontSize: 14.0,
-                color: MyTheme.gray_99,
+                color: Colors.grey,
               ),
               textAlign: TextAlign.right,
             ),
@@ -600,13 +594,12 @@ class _SettingPageState extends State<SettingPage> {
             return RadioListTile(
               title: Text(index == 0 ? S.of(context).followSystem : (index == 1 ? S.of(context).day : S.of(context).night),
                   style: TextStyle(fontSize: 14.0)),
-              value: index == 0 ? MODE_NIGHT_FOLLOW_SYSTEM : (index == 1 ? MODE_NIGHT_NO : MODE_NIGHT_YES),
+              value: index == 0 ? ThemeMode.system : (index == 1 ? ThemeMode.light : ThemeMode.dark),
               groupValue: _currentAppearance,
               onChanged: (newValue) {
                 setState(() {
                   _currentAppearance = newValue;
-                  // todo
-                  Provider.of<DisplayModel>(context).switchNightMode(newValue);
+                  Provider.of<DisplayModel>(context).switchThemeMode(newValue);
                 });
               },
               controlAffinity: ListTileControlAffinity.trailing,
@@ -631,7 +624,7 @@ class _SettingPageState extends State<SettingPage> {
   void updateLanguage(LanguageModel model) {
     _currentLanguage = model;
     _updateData();
-    SpHelper.putObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
+    SpHelper.setObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
     eventBus.emit(MyEventSettingChange);
   }
 }
