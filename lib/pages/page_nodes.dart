@@ -7,7 +7,6 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 
 // 节点导航页面
 class NodesPage extends StatefulWidget {
@@ -41,16 +40,16 @@ class _NodePageState extends State<NodesPage> {
         ],
       ),
       body: new Container(
-          color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+//          color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
           child: new Center(
-            child: nodeGroups.length > 0
-                ? new ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    itemBuilder: itemBuilder,
-                    itemCount: nodeGroups.length,
-                  )
-                : Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-          )),
+        child: nodeGroups.length > 0
+            ? new ListView.builder(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                itemBuilder: itemBuilder,
+                itemCount: nodeGroups.length,
+              )
+            : Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+      )),
     );
   }
 
@@ -91,7 +90,7 @@ class NodeGroupWidget extends StatelessWidget {
         children: <Widget>[
           new Text(
             nodeGroup.nodeGroupName,
-            style: new TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: new TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
           ),
           new Padding(padding: const EdgeInsets.only(bottom: 10.0)),
           new Wrap(
@@ -110,8 +109,9 @@ class NodeGroupWidget extends StatelessWidget {
     );
 
     return new Card(
+      elevation: 4,
       child: _container,
-      margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
     );
   }
 
@@ -121,7 +121,7 @@ class NodeGroupWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
         child: new Text(
           node.nodeName,
-          style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 13.0),
+          style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 14.0),
         ),
       ),
       onTap: () => Navigator.push(
@@ -150,7 +150,8 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    if (MyTheme.isDark) {
+    // todo 还需理解，找出更好的解决方式
+    if (MediaQuery.platformBrightnessOf(context) == Brightness.dark) {
       final ThemeData theme = Theme.of(context);
       return theme.copyWith(
         primaryColor: theme.primaryColor,

@@ -222,7 +222,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildUserOtherInfo() {
     return SliverToBoxAdapter(
       child: Container(
-        color: MyTheme.isDark ? Colors.black87 : Colors.white,
         child: Column(
           children: <Widget>[
             Padding(
@@ -293,7 +292,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           label: Text(
                             clip.name,
                           ),
-                          backgroundColor: MyTheme.isDark ? Colors.black26 : Colors.grey[200],
                           onPressed: () {
                             Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
                                 ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
@@ -316,7 +314,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Container _buildRecentTopicsHeader(BuildContext context) {
     return Container(
-      color: MyTheme.isDark ? Colors.black54 : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近主题',
-              style: new TextStyle(fontSize: 20.0, color: MyTheme.isDark ? Colors.white : Colors.black),
+              style: new TextStyle(fontSize: 20.0),
             ),
           ),
           Visibility(
@@ -354,7 +351,6 @@ class _ProfilePageState extends State<ProfilePage> {
         // 根据 xxx 的设置，主题列表被隐藏
         return Container(
           padding: EdgeInsets.only(top: 20, bottom: 20),
-          color: MyTheme.isDark ? Colors.black : Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -371,7 +367,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
-                      color: MyTheme.isDark ? Colors.white70 : Colors.black54,
+                      color: Theme.of(context).unselectedWidgetColor,
                     )),
               ),
             ],
@@ -379,7 +375,6 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       } else if (_memberProfileModel.topicList.length > 0) {
         return Container(
-          color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
           child: ListView.separated(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
@@ -418,7 +413,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Container _buildRecentRepliesHeader(BuildContext context) {
     return Container(
-      color: MyTheme.isDark ? Colors.black54 : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -427,7 +421,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近回复',
-              style: new TextStyle(fontSize: 20.0, color: MyTheme.isDark ? Colors.white : Colors.black),
+              style: new TextStyle(fontSize: 20.0),
             ),
           ),
           Visibility(
@@ -452,7 +446,6 @@ class _ProfilePageState extends State<ProfilePage> {
     if (_memberProfileModel != null) {
       if (_memberProfileModel.replyList.length > 0) {
         return Container(
-          color: MyTheme.isDark ? Colors.black : CupertinoColors.white,
           child: ListView.separated(
             padding: EdgeInsets.zero,
             shrinkWrap: true,
@@ -531,7 +524,7 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.topicTitle,
-                                style: new TextStyle(fontSize: 16.0, color: MyTheme.isDark ? Colors.white : Colors.black),
+                                style: new TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
@@ -624,8 +617,8 @@ class ReplyItemView extends StatelessWidget {
         children: <Widget>[
           Html(
             data: reply.dockAreaText,
-            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 13.0),
-            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Color(0xffedf3f5),
+            defaultTextStyle: TextStyle(color: Theme.of(context).unselectedWidgetColor, fontSize: 13.0),
+            backgroundColor: Theme.of(context).cardColor,
             padding: EdgeInsets.all(4.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,
@@ -646,7 +639,7 @@ class ReplyItemView extends StatelessWidget {
           ),
           Html(
             data: reply.replyContent,
-            defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
+            defaultTextStyle: TextStyle(fontSize: 15.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,
             ),
@@ -670,7 +663,7 @@ class ReplyItemView extends StatelessWidget {
               reply.replyTime,
               style: new TextStyle(
                 fontSize: 12.0,
-                color: MyTheme.isDark ? Colors.white70 : Colors.black54,
+                color: Theme.of(context).unselectedWidgetColor,
               ),
             ),
           ),
