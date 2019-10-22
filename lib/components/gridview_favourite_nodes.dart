@@ -4,19 +4,18 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_app/models/web/item_fav_node.dart';
+import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_node_topics.dart';
+
 /**
  * @author: wml
  * @date  : 2019/3/30 6:20 PM
  * @email : mxl1989@gmail.com
  * @desc  : 收藏的节点
  */
-
-import 'package:flutter/material.dart';
-import 'package:flutter_app/models/web/item_fav_node.dart';
-import 'package:flutter_app/models/web/node.dart';
-import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/pages/page_node_topics.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 
 class FavouriteNodesGrid extends StatefulWidget {
   @override
@@ -128,11 +127,11 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
                     Icon(
                       Icons.forum,
                       size: 13,
-                      color: MyTheme.isDark ? Colors.white70 : Colors.grey,
+                      color: Colors.grey,
                     ),
                     Text(
                       node.replyCount,
-                      style: TextStyle(color: MyTheme.isDark ? Colors.white70 : Colors.grey, fontSize: 12),
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ],
                 ),

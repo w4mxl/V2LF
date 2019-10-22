@@ -126,7 +126,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   void _loadLocale() {
     LanguageModel model = SpHelper.getLanguageModel();
     String _colorKey = SpHelper.getThemeColor();
-    bool _spIsDark = SpHelper.sp.getBool(SP_IS_DARK);
 
     if (!mounted) return;
     setState(() {
@@ -138,10 +137,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
       if (themeColorMap[_colorKey] != null) {
         MyTheme.appMainColor = themeColorMap[_colorKey];
-      }
-
-      if (_spIsDark != null) {
-        MyTheme.isDark = _spIsDark;
       }
     });
   }
@@ -214,11 +209,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
             ],
             supportedLocales: S.delegate.supportedLocales,
-//            theme: ThemeData(
-//              primarySwatch: Provider.of<DisplayModel>(context).materialColor,
-//              brightness: Provider.of<DisplayModel>(context).nightMode == 1 ? Brightness.light : Brightness.dark,
-//              fontFamily: Provider.of<DisplayModel>(context).fontName,
-//            ),
             theme: displayModel.themeDate(),
             darkTheme: displayModel.themeDate(darkTheme: true),
             themeMode: displayModel.themeMode,

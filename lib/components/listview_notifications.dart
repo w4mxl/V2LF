@@ -182,15 +182,12 @@ class TopicItemView extends StatelessWidget {
                           notificationItem.userName,
                           style: TextStyle(fontSize: 14),
                         ),
-                        SizedBox(
-                          width: 4,
-                        ),
                         // 20天前
-                        Text(
-                          notificationItem.date,
-                          style: new TextStyle(
-                            fontSize: 12.0,
-                            color: MyTheme.isDark ? Colors.white70 : Colors.black54,
+                        Expanded(
+                          child: Text(
+                            notificationItem.date,
+                            style: Theme.of(context).textTheme.caption,
+                            textAlign: TextAlign.right,
                           ),
                         ),
                       ],
@@ -213,10 +210,8 @@ class TopicItemView extends StatelessWidget {
                       new Container(
                         alignment: Alignment.centerLeft,
                         child: Html(
-                          // todo 这里还有点展示问题(不能连在一行)，是flutter_html那边的问题
                           data: notificationItem.title,
-                          defaultTextStyle:
-                              TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black54, fontSize: 13.0),
+                          defaultTextStyle: TextStyle(color: Theme.of(context).hintColor, fontSize: 13.0),
                           linkStyle: TextStyle(
                             color: Theme.of(context).accentColor,
                           ),
@@ -239,9 +234,8 @@ class TopicItemView extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 8.0),
                           child: Html(
                             data: notificationItem.reply,
-                            defaultTextStyle:
-                                TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15.0),
-                            backgroundColor: MyTheme.isDark ? Colors.grey[800] : Colors.grey[200],
+                            defaultTextStyle: TextStyle(fontSize: 15.0),
+                            backgroundColor: Theme.of(context).hoverColor,
                             padding: EdgeInsets.all(4.0),
                             linkStyle: TextStyle(
                               color: Theme.of(context).accentColor,

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 
 /// @author: wml
 /// @date  : 2019/4/14 10:57 PM
@@ -35,7 +34,8 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    if (MyTheme.isDark) {
+    // todo 还需理解，找出更好的解决方式
+    if (MediaQuery.platformBrightnessOf(context) == Brightness.dark) {
       final ThemeData theme = Theme.of(context);
       return theme.copyWith(
         primaryColor: theme.primaryColor,

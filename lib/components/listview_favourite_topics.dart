@@ -64,9 +64,9 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     if (items.length > 0) {
-      return new RefreshIndicator(
+      return RefreshIndicator(
           child: Container(
-            color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+            //color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,
@@ -75,7 +75,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
                     // 滑到了最后一个item
                     return _buildLoadText();
                   } else {
-                    return new TopicItemView(items[index]);
+                    return TopicItemView(items[index]);
                   }
                 }),
           ),
@@ -109,7 +109,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
       ]);
     }
     // By default, show a loading spinner
-    return new Center(
+    return Center(
       child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
   }
@@ -152,56 +152,59 @@ class TopicItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(topic.topicId)),
+          MaterialPageRoute(builder: (context) => TopicDetails(topic.topicId)),
         );
       },
       child: Card(
-        margin: const EdgeInsets.only(left: 8.0, top: 8.0, right: 8.0),
-        child: new Container(
-          child: new Column(
+        elevation: 4,
+        margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
+        child: Container(
+          child: Column(
             children: <Widget>[
-              new Container(
+              Container(
                 padding: const EdgeInsets.all(12.0),
-                child: new Row(
+                child: Row(
                   children: <Widget>[
-                    new Expanded(
-                      child: new Container(
+                    Expanded(
+                      child: Container(
                           margin: const EdgeInsets.only(right: 8.0),
-                          child: new Column(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               /// title
-                              new Container(
+                              Container(
                                 alignment: Alignment.centerLeft,
-                                child: new Text(
+                                child: Text(
                                   topic.topicTitle,
-                                  style: new TextStyle(fontSize: 16.0, color: MyTheme.isDark ? Colors.white : Colors.black),
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                  ),
                                 ),
                               ),
-                              new Container(
+                              Container(
                                 margin: const EdgeInsets.only(top: 5.0),
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
-                                  child: new Row(
+                                  child: Row(
                                     children: <Widget>[
                                       Material(
                                         color: MyTheme.appMainColor[200],
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-                                        child: new Container(
+                                        child: Container(
                                           padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 1.0, bottom: 1.0),
                                           alignment: Alignment.center,
-                                          child: new Text(
+                                          child: Text(
                                             topic.nodeName,
-                                            style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                                            style: TextStyle(fontSize: 12.0, color: Colors.white),
                                           ),
                                         ),
                                       ),
                                       // 圆形头像
-                                      new Container(
+                                      Container(
                                         margin: const EdgeInsets.only(left: 6.0, right: 4.0),
                                         width: 20.0,
                                         height: 20.0,
@@ -209,29 +212,12 @@ class TopicItemView extends StatelessWidget {
                                           backgroundImage: CachedNetworkImageProvider("https:${topic.avatar}"),
                                         ),
                                       ),
-                                      new Text(
-                                        topic.memberId,
-                                        style: new TextStyle(
-                                          fontSize: 12.0,
-                                          color: MyTheme.isDark ? Colors.white70 : Colors.black54,
-                                        ),
-                                      ),
-                                      new Text(
-                                        '${topic.lastReplyTime}• ',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        style: new TextStyle(
-                                          fontSize: 12.0,
-                                          color: const Color(0xffcccccc),
-                                        ),
-                                      ),
-                                      new Text(
-                                        topic.lastReplyMId,
-                                        style: new TextStyle(
-                                          fontSize: 12.0,
-                                          color: MyTheme.isDark ? Colors.white70 : Colors.black54,
-                                        ),
-                                      ),
+                                      Text(topic.memberId, style: Theme.of(context).textTheme.caption),
+                                      Text('${topic.lastReplyTime}• ',
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          style: Theme.of(context).textTheme.caption),
+                                      Text(topic.lastReplyMId, style: Theme.of(context).textTheme.caption),
                                     ],
                                   ),
                                 ),
@@ -243,14 +229,14 @@ class TopicItemView extends StatelessWidget {
                       offstage: topic.replyCount == '0',
                       child: Material(
                         color: MyTheme.appMainColor[400],
-                        shape: new StadiumBorder(),
-                        child: new Container(
+                        shape: StadiumBorder(),
+                        child: Container(
                           width: 35.0,
                           height: 20.0,
                           alignment: Alignment.center,
-                          child: new Text(
+                          child: Text(
                             topic.replyCount,
-                            style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                            style: TextStyle(fontSize: 12.0, color: Colors.white),
                           ),
                         ),
                       ),

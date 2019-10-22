@@ -23,8 +23,7 @@ const String SP_USERNAME = "username";
 const String SP_AVATAR = "avatar";
 const String SP_ONCE = "once";
 
-// dark light
-const String SP_IS_DARK = "isDark";
+// theme mode:  dark / light / follow system
 const String SP_THEME_MODE = "theme_mode";
 
 // 搜索历史记录
@@ -82,10 +81,10 @@ class SpHelper {
     switch (_spThemeMode) {
       case THEME_MODE_DARK:
         return ThemeMode.dark;
-      case THEME_MODE_LIGHT:
-        return ThemeMode.light;
-      default:
+      case THEME_MODE_SYSTEM:
         return ThemeMode.system;
+      default:
+        return ThemeMode.light;
     }
   }
 

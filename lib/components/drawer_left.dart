@@ -136,8 +136,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                         Text(
                                           '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
                                           style: TextStyle(
-                                              color:
-                                                  MyTheme.isDark ? MyTheme.appMainColor[300] : MyTheme.appMainColor[700]),
+                                            color: Theme.of(context).accentColor,
+                                          ),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),

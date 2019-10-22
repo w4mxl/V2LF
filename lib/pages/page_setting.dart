@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/theme/theme_data.dart';
-import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -20,7 +20,6 @@ import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:device_info/device_info.dart';
 
 // 设置页面
 class SettingPage extends StatefulWidget {
@@ -37,7 +36,6 @@ class _SettingPageState extends State<SettingPage> {
   List<LanguageModel> _list = new List();
   LanguageModel _currentLanguage;
   bool _switchAutoAward = true; // 是否自动签到；默认是
-  bool _currentIsDark = false;
 
   @override
   void initState() {
@@ -55,12 +53,6 @@ class _SettingPageState extends State<SettingPage> {
     }
 
     _updateData();
-
-    if (SpHelper.sp.getBool(SP_IS_DARK) == null) {
-      _currentIsDark = false;
-    } else {
-      _currentIsDark = SpHelper.sp.getBool(SP_IS_DARK);
-    }
 
     bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
     if (_spAutoAward != null) {
@@ -131,7 +123,6 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
       body: Container(
-        color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
         child: ListView(
           children: <Widget>[
             // 主页tab设置
@@ -538,9 +529,9 @@ class _SettingPageState extends State<SettingPage> {
     return Platform.isIOS
         ? (double.parse(iosInfo?.systemVersion) < 13
             ? CupertinoSwitchListTile(
-                value: _currentIsDark,
-                onChanged: (value) {
-                  appearanceSwitchApply(value);
+                value: _currentAppearance == ThemeMode.dark,
+                onChanged: (newValue) {
+                  appearanceSwitchApply(newValue);
                 },
                 title: Text(S.of(context).darkMode),
                 secondary: Icon(
@@ -550,11 +541,11 @@ class _SettingPageState extends State<SettingPage> {
                 activeColor: MyTheme.appMainColor,
               )
             : expansionTileAppearance(context))
-        : (androidInfo?.version?.sdkInt < 29
+        : (androidInfo.version.sdkInt < 29 // todo
             ? SwitchListTile(
-                value: _currentIsDark,
-                onChanged: (value) {
-                  appearanceSwitchApply(value);
+                value: _currentAppearance == ThemeMode.dark,
+                onChanged: (newValue) {
+                  appearanceSwitchApply(newValue);
                 },
                 title: Text(S.of(context).darkMode),
                 secondary: Icon(
@@ -615,9 +606,8 @@ class _SettingPageState extends State<SettingPage> {
 
   void appearanceSwitchApply(bool value) {
     setState(() {
-      _currentIsDark = value;
-      SpHelper.sp.setBool(SP_IS_DARK, _currentIsDark);
-      eventBus.emit(MyEventSettingChange);
+      _currentAppearance = value ? ThemeMode.dark : ThemeMode.light;
+      Provider.of<DisplayModel>(context).switchThemeMode(_currentAppearance);
     });
   }
 

@@ -159,31 +159,17 @@ class TopicItemView extends StatelessWidget {
                               alignment: Alignment.centerLeft,
                               child: new Text(
                                 topic.title,
-                                style: new TextStyle(fontSize: 16.0, color: MyTheme.isDark ? Colors.white : Colors.black87),
+                                style: Theme.of(context).textTheme.subhead,
                               ),
                             ),
                             new Container(
                               margin: const EdgeInsets.only(top: 4.0),
                               child: new Row(
                                 children: <Widget>[
-                                  new Text(
-                                    topic.memberId,
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    style: new TextStyle(
-                                      fontSize: 12.0,
-                                      color: MyTheme.isDark ? Colors.white70 : Colors.black87,
-                                    ),
-                                  ),
-                                  new Text(
-                                    ' • ${topic.characters} • ${topic.clickTimes}',
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    style: new TextStyle(
-                                      fontSize: 11.0,
-                                      color: const Color(0xffcccccc),
-                                    ),
-                                  ),
+                                  new Text(topic.memberId,
+                                      textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
+                                  new Text(' • ${topic.characters} • ${topic.clickTimes}',
+                                      textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
                                 ],
                               ),
                             ),

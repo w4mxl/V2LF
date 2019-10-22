@@ -73,7 +73,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                     padding: const EdgeInsets.all(12),
                     child: Html(
                       data: atomItem.content.replaceFirst('<br />', ''),
-                      defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 14.5),
+                      defaultTextStyle: TextStyle(fontSize: 14),
                       linkStyle: TextStyle(
                         color: Theme.of(context).accentColor,
                       ),
