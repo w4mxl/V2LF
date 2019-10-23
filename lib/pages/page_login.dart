@@ -9,9 +9,9 @@ import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/login_form_data.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'page_web.dart';
@@ -69,14 +69,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     );
 
     return Scaffold(
-      backgroundColor: MyTheme.isDark ? Colors.grey[850] : Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: MyTheme.isDark ? Brightness.dark : Brightness.light,
-        iconTheme: IconThemeData(
-          color: MyTheme.isDark ? Colors.white : Colors.black,
-        ),
-        backgroundColor: MyTheme.isDark ? Colors.grey[850] : Colors.white,
+        iconTheme: Theme.of(context).iconTheme,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: ScrollConfiguration(
         child: SingleChildScrollView(
@@ -328,8 +324,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         InkWell(
                           child: Text(
                             S.of(context).signup,
-                            style:
-                                TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
+                            style: Theme.of(context).textTheme.caption,
                           ),
                           // 注册 -> 跳转到注册web页面
                           onTap: () => launch("https://www.v2ex.com/signup",
@@ -338,8 +333,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         InkWell(
                           child: Text(
                             S.of(context).forgetPassword,
-                            style:
-                                TextStyle(color: MyTheme.isDark ? Theme.of(context).unselectedWidgetColor : Colors.black54),
+                            style: Theme.of(context).textTheme.caption,
                           ),
                           // 忘记密码 -> 跳转到重置密码web页面
                           onTap: () => launch("https://www.v2ex.com/forgot",
@@ -350,14 +344,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     SizedBox(
                       height: 12.0,
                     ),
-                    InkWell(
-                      child: Image(
-                        image: AssetImage(
-                          'assets/images/btn_google_signin.png',
-                        ),
-                        height: 40,
-                      ),
-                      onTap: () {
+                    RaisedButton.icon(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                      onPressed: () async {
                         if (loginFormData != null) {
                           var future = Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
@@ -373,6 +362,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           Fluttertoast.showToast(msg: '登录遇到一些问题...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
                         }
                       },
+                      icon: Icon(
+                        FontAwesomeIcons.google,
+                        size: 16.0,
+                      ),
+                      label: Text("Google"),
                     ),
                   ],
                 ),

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/jinrishici.dart';
@@ -19,12 +20,11 @@ import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_recent_read_topics.dart';
 import 'package:flutter_app/pages/page_setting.dart';
-import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart';
 
 class DrawerLeft extends StatefulWidget {
   @override
@@ -220,7 +220,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ),
                 // 这里可以根据一天的不同时间显示不同的background，增加美观
                 decoration: new BoxDecoration(
-                  color: MyTheme.appMainColor,
+                  color: Provider.of<DisplayModel>(context).materialColor,
                   image: new DecorationImage(
                       fit: BoxFit.cover,
                       image: new NetworkImage(GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()]

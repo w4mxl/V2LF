@@ -9,7 +9,6 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/states/model_display.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -222,7 +221,6 @@ class _SettingPageState extends State<SettingPage> {
                             Icons.font_download,
                           ),
                           selected: false,
-                          activeColor: MyTheme.appMainColor,
                         )
                       : SwitchListTile(
                           value: SpHelper.getFontFamily() == 'System',
@@ -322,7 +320,6 @@ class _SettingPageState extends State<SettingPage> {
                             Icons.monetization_on,
                           ),
                           selected: false,
-                          activeColor: MyTheme.appMainColor,
                         )
                       : SwitchListTile(
                           value: _switchAutoAward,
@@ -538,7 +535,6 @@ class _SettingPageState extends State<SettingPage> {
                   Icons.brightness_4,
                 ),
                 selected: false,
-                activeColor: MyTheme.appMainColor,
               )
             : expansionTileAppearance(context))
         : (androidInfo.version.sdkInt < 29 // todo

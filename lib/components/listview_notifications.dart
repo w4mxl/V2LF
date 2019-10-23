@@ -10,7 +10,6 @@ import 'package:flutter_app/models/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';

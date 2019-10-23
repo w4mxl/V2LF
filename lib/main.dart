@@ -26,7 +26,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
-import 'theme/theme_data.dart';
 import 'utils/event_bus.dart';
 
 // Must be top-level function
@@ -125,7 +124,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void _loadLocale() {
     LanguageModel model = SpHelper.getLanguageModel();
-    String _colorKey = SpHelper.getThemeColor();
 
     if (!mounted) return;
     setState(() {
@@ -133,10 +131,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         _locale = Locale(model.languageCode, model.countryCode);
       } else {
         _locale = null;
-      }
-
-      if (themeColorMap[_colorKey] != null) {
-        MyTheme.appMainColor = themeColorMap[_colorKey];
       }
     });
   }

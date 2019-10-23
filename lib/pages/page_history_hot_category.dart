@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/bubble_tab_indicator.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart';
@@ -44,15 +43,13 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
         length: tabs.length,
         child: Scaffold(
           appBar: AppBar(
-//            backgroundColor: Colors.white,
-//            iconTheme: IconThemeData(color: Colors.black54),
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-                unselectedLabelColor: MyTheme.appMainColor[100],
-                labelColor: MyTheme.appMainColor,
-                indicator: new BubbleTabIndicator(
-                  indicatorColor: Colors.white,
+                indicator: BubbleTabIndicator(
+                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark
+                      ? Theme.of(context).focusColor
+                      : Colors.white,
                 ),
                 tabs: tabs),
           ),

@@ -10,11 +10,9 @@ import 'package:flutter_app/components/fullscreen_image_view.dart';
 import 'package:flutter_app/models/web/item_topic_reply.dart';
 import 'package:flutter_app/models/web/item_topic_subtle.dart';
 import 'package:flutter_app/models/web/model_topic_detail.dart';
-import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_profile.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -498,7 +496,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
+      backgroundColor:
+          MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
@@ -630,10 +629,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               _detailModel.createdId,
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: new TextStyle(
-                                  fontSize: 15.0,
-                                  color: MyTheme.isDark ? Colors.white : Colors.black87,
-                                  fontWeight: FontWeight.bold),
+                              style: new TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                             ),
                           ),
                           onTap: () => Utils.launchURL(Strings.v2exHost + '/member/' + _detailModel.createdId),
@@ -706,8 +702,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               _detailModel.topicTitle,
               softWrap: true,
               style: new TextStyle(
-                color: MyTheme.isDark ? Colors.white : Colors.black87,
-                fontSize: 19.0,
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -717,11 +712,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             padding: const EdgeInsets.all(10.0),
             child: Html(
               data: _detailModel.contentRendered,
-              defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 15),
+              defaultTextStyle: Theme.of(context).textTheme.body1,
               linkStyle: TextStyle(
-                  color: MyTheme.appMainColor[400],
-                  decoration: TextDecoration.underline,
-                  decorationColor: MyTheme.appMainColor[400]),
+                color: Theme.of(context).accentColor,
+                decoration: TextDecoration.underline,
+              ),
               onLinkTap: (url) {
                 if (UrlHelper.canLaunchInApp(context, url)) {
                   return;
@@ -753,7 +748,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: MyTheme.isDark ? Colors.black12 : const Color(0xFFfffff9),
+                    color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                        ? Colors.black12
+                        : const Color(0xFFFFFFF0),
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
                   ),
                 ),
@@ -772,23 +769,23 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: MyTheme.isDark ? Colors.black12 : const Color(0xFFfffff9),
+          color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 subtle.fade,
-                style: TextStyle(color: MyTheme.isDark ? Colors.white70 : Colors.grey, fontSize: 13.0),
+                style: Theme.of(context).textTheme.caption,
               ),
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black87, fontSize: 13.0),
+                defaultTextStyle: TextStyle(fontSize: 13.0),
                 linkStyle: TextStyle(
-                    color: MyTheme.appMainColor[400],
-                    decoration: TextDecoration.underline,
-                    decorationColor: MyTheme.appMainColor[400]),
+                  color: Theme.of(context).accentColor,
+                  decoration: TextDecoration.underline,
+                ),
                 onLinkTap: (url) {
                   if (UrlHelper.canLaunchInApp(context, url)) {
                     return;
@@ -961,12 +958,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
-                                        defaultTextStyle:
-                                            TextStyle(color: MyTheme.isDark ? Colors.white : Colors.black, fontSize: 15),
                                         linkStyle: TextStyle(
-                                            color: MyTheme.appMainColor[400],
-                                            decoration: TextDecoration.underline,
-                                            decorationColor: MyTheme.appMainColor[400]),
+                                          color: Theme.of(context).accentColor,
+                                        ),
                                         onLinkTap: (url) {
                                           if (UrlHelper.canLaunchInApp(context, url)) {
                                             return;
@@ -1111,15 +1105,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       // 评论内容
                                                                       child: Html(
                                                                         data: item.contentRendered,
-                                                                        defaultTextStyle: TextStyle(
-                                                                            color: MyTheme.isDark
-                                                                                ? Colors.white
-                                                                                : Colors.black,
-                                                                            fontSize: 15),
                                                                         linkStyle: TextStyle(
-                                                                            color: MyTheme.appMainColor[400],
-                                                                            decoration: TextDecoration.underline,
-                                                                            decorationColor: MyTheme.appMainColor[400]),
+                                                                          color: Theme.of(context).accentColor,
+                                                                        ),
                                                                       )),
                                                                 ],
                                                               ),

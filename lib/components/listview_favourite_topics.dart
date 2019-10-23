@@ -10,7 +10,8 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_fav_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
-import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/states/model_display.dart';
+import 'package:provider/provider.dart';
 
 class FavTopicListView extends StatefulWidget {
   @override
@@ -191,15 +192,18 @@ class TopicItemView extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: <Widget>[
-                                      Material(
-                                        color: MyTheme.appMainColor[200],
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-                                        child: Container(
-                                          padding: const EdgeInsets.only(left: 3.0, right: 3.0, top: 1.0, bottom: 1.0),
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            topic.nodeName,
-                                            style: TextStyle(fontSize: 12.0, color: Colors.white),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Theme.of(context).dividerColor),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          topic.nodeName,
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: Theme.of(context).disabledColor,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
@@ -213,7 +217,7 @@ class TopicItemView extends StatelessWidget {
                                         ),
                                       ),
                                       Text(topic.memberId, style: Theme.of(context).textTheme.caption),
-                                      Text('${topic.lastReplyTime}• ',
+                                      Text('${topic.lastReplyTime}',
                                           textAlign: TextAlign.left,
                                           maxLines: 1,
                                           style: Theme.of(context).textTheme.caption),
@@ -228,7 +232,7 @@ class TopicItemView extends StatelessWidget {
                     Offstage(
                       offstage: topic.replyCount == '0',
                       child: Material(
-                        color: MyTheme.appMainColor[400],
+                        color: Provider.of<DisplayModel>(context).materialColor[400],
                         shape: StadiumBorder(),
                         child: Container(
                           width: 35.0,

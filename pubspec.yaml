@@ -90,7 +90,6 @@ flutter:
      - assets/images/logo_v2lf.png
      - assets/images/ic_sync_white_24dp.png
      - assets/images/minotaur.png
-     - assets/images/btn_google_signin.png
      - assets/images/lock.png
      - CHANGELOG.md
 

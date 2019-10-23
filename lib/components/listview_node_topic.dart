@@ -6,7 +6,8 @@ import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_node_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
-import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/states/model_display.dart';
+import 'package:provider/provider.dart';
 
 class NodeTopicListView extends StatefulWidget {
   final String tabKey;
@@ -179,7 +180,7 @@ class TopicItemView extends StatelessWidget {
                   Offstage(
                     offstage: topic.replyCount == '0',
                     child: Material(
-                      color: MyTheme.appMainColor[400],
+                      color: Provider.of<DisplayModel>(context).materialColor[400],
                       shape: new StadiumBorder(),
                       child: new Container(
                         width: 35.0,

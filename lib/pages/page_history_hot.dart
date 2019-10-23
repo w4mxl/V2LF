@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/bubble_tab_indicator.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
-import 'package:flutter_app/theme/theme_data.dart';
 import 'package:http/http.dart';
 import 'package:webfeed/webfeed.dart';
 
@@ -43,15 +42,13 @@ class _HistoryHotTopicsState extends State<HistoryHotTopics> with AutomaticKeepA
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-//            backgroundColor: Colors.white,
-//            iconTheme: IconThemeData(color: Colors.black54),
             centerTitle: true,
             title: TabBar(
                 isScrollable: true,
-                unselectedLabelColor: MyTheme.appMainColor[100],
-                labelColor: MyTheme.appMainColor,
                 indicator: new BubbleTabIndicator(
-                  indicatorColor: Colors.white,
+                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark
+                      ? Theme.of(context).focusColor
+                      : Colors.white,
                 ),
                 tabs: tabs),
           ),
@@ -128,9 +125,9 @@ class TabBarViewChild extends StatelessWidget {
                     title: Text(item.title.replaceFirst(']', '4444').split('4444')[1]), // 这样处理能保证通过 ']' 分割的准确性
                     subtitle: Text('${item.title.split(']')[0].replaceFirst('[', '')} · ${item.authors[0].name}'),
                     onTap: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(builder: (context) => new TopicDetails(item.links[0].href.split('/t/')[1])),
-                        ),
+                      context,
+                      new MaterialPageRoute(builder: (context) => new TopicDetails(item.links[0].href.split('/t/')[1])),
+                    ),
                   );
                 }).toList())
             .toList(),

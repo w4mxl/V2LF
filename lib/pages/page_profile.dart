@@ -13,7 +13,7 @@ import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/pages/page_user_all_replies.dart';
 import 'package:flutter_app/pages/page_user_all_topics.dart';
-import 'package:flutter_app/theme/theme_data.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
@@ -21,6 +21,7 @@ import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
+import 'package:provider/provider.dart';
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -134,7 +135,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [MyTheme.appMainColor.shade300, MyTheme.appMainColor.shade500]),
+                  gradient: LinearGradient(colors: [
+                    Provider.of<DisplayModel>(context).materialColor.shade300,
+                    Provider.of<DisplayModel>(context).materialColor.shade500
+                  ]),
                 ),
               ),
             ),
@@ -618,7 +622,8 @@ class ReplyItemView extends StatelessWidget {
           Html(
             data: reply.dockAreaText,
             defaultTextStyle: TextStyle(color: Theme.of(context).unselectedWidgetColor, fontSize: 13.0),
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor:
+                MediaQuery.platformBrightnessOf(context) == Brightness.dark ? Colors.grey[800] : Color(0xffedf3f5),
             padding: EdgeInsets.all(4.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,
