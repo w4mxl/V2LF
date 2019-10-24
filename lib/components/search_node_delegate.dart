@@ -35,7 +35,7 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     // todo 还需理解，找出更好的解决方式
-    if (MediaQuery.platformBrightnessOf(context) == Brightness.dark) {
+    if (Theme.of(context).brightness == Brightness.dark) {
       final ThemeData theme = Theme.of(context);
       return theme.copyWith(
         primaryColor: theme.primaryColor,

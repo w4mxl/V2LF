@@ -70,7 +70,7 @@ class SpHelper {
   static String getThemeColor() {
     String _colorKey = sp.getString(KEY_THEME_COLOR);
     if (isEmpty(_colorKey)) {
-      _colorKey = 'gray';
+      _colorKey = 'blueGrey';
     }
     return _colorKey;
   }
@@ -79,12 +79,12 @@ class SpHelper {
   static ThemeMode getThemeMode() {
     String _spThemeMode = sp.getString(SP_THEME_MODE);
     switch (_spThemeMode) {
+      case THEME_MODE_LIGHT:
+        return ThemeMode.light;
       case THEME_MODE_DARK:
         return ThemeMode.dark;
-      case THEME_MODE_SYSTEM:
-        return ThemeMode.system;
       default:
-        return ThemeMode.light;
+        return ThemeMode.system;
     }
   }
 

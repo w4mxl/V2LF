@@ -496,8 +496,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor:
-          MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black : CupertinoColors.lightBackgroundGray,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
@@ -748,9 +747,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                        ? Colors.black12
-                        : const Color(0xFFFFFFF0),
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
                   ),
                 ),
@@ -769,7 +766,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
+          color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -622,8 +622,7 @@ class ReplyItemView extends StatelessWidget {
           Html(
             data: reply.dockAreaText,
             defaultTextStyle: TextStyle(color: Theme.of(context).unselectedWidgetColor, fontSize: 13.0),
-            backgroundColor:
-                MediaQuery.platformBrightnessOf(context) == Brightness.dark ? Colors.grey[800] : Color(0xffedf3f5),
+            backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.grey[800] : Color(0xffedf3f5),
             padding: EdgeInsets.all(4.0),
             linkStyle: TextStyle(
               color: Theme.of(context).accentColor,

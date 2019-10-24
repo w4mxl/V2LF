@@ -221,6 +221,7 @@ class _SettingPageState extends State<SettingPage> {
                             Icons.font_download,
                           ),
                           selected: false,
+                          activeColor: Theme.of(context).accentColor,
                         )
                       : SwitchListTile(
                           value: SpHelper.getFontFamily() == 'System',
@@ -320,6 +321,7 @@ class _SettingPageState extends State<SettingPage> {
                             Icons.monetization_on,
                           ),
                           selected: false,
+                          activeColor: Theme.of(context).accentColor,
                         )
                       : SwitchListTile(
                           value: _switchAutoAward,
@@ -535,6 +537,7 @@ class _SettingPageState extends State<SettingPage> {
                   Icons.brightness_4,
                 ),
                 selected: false,
+                activeColor: Theme.of(context).accentColor,
               )
             : expansionTileAppearance(context))
         : (androidInfo.version.sdkInt < 29 // todo
