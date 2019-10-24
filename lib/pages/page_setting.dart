@@ -1,15 +1,13 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/components/switch_list_tile_cupertino.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/states/model_display.dart';
-import 'package:flutter_app/utils/event_bus.dart';
+import 'package:flutter_app/states/model_locale.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
@@ -27,58 +25,19 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  IosDeviceInfo iosInfo;
-  AndroidDeviceInfo androidInfo;
-
   ThemeMode _currentAppearance = SpHelper.getThemeMode(); // 当前外观
-
-  List<LanguageModel> _list = new List();
-  LanguageModel _currentLanguage;
+  Locale _currentLocale = SpHelper.getLocale();
   bool _switchAutoAward = true; // 是否自动签到；默认是
 
   @override
   void initState() {
     super.initState();
 
-    _deviceInfo();
-
-    _list.add(LanguageModel('', ''));
-    _list.add(LanguageModel('zh', 'CN'));
-    _list.add(LanguageModel('en', ''));
-
-    _currentLanguage = SpHelper.getLanguageModel();
-    if (_currentLanguage == null) {
-      _currentLanguage = _list[0];
-    }
-
-    _updateData();
-
     bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
     if (_spAutoAward != null) {
       _switchAutoAward = _spAutoAward;
     }
     print("wml:" + _spAutoAward.toString());
-  }
-
-  /// 获取设备系统版本号
-  _deviceInfo() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      androidInfo = await deviceInfo.androidInfo;
-      print('Running on ${androidInfo.version.sdkInt}');
-    } else if (Platform.isIOS) {
-      iosInfo = await deviceInfo.iosInfo;
-      print('Running on ${iosInfo.systemVersion}');
-    }
-    setState(() {});
-  }
-
-  void _updateData() {
-    print(_currentLanguage.toString());
-    String language = _currentLanguage.languageCode;
-    for (int i = 0, length = _list.length; i < length; i++) {
-      _list[i].isSelected = (_list[i].languageCode == language);
-    }
   }
 
   @override
@@ -113,7 +72,7 @@ class _SettingPageState extends State<SettingPage> {
                         ));
               },
               child: Text(
-                '登出',
+                S.of(context).logout,
                 semanticsLabel: 'logout',
                 style: Theme.of(context).primaryTextTheme.title.copyWith(fontSize: 18),
               ),
@@ -258,9 +217,9 @@ class _SettingPageState extends State<SettingPage> {
                         Text(S.of(context).titleLanguage),
                         Expanded(
                           child: Text(
-                            SpHelper.getLanguageModel() == null
+                            _currentLocale == null
                                 ? S.of(context).followSystem
-                                : Utils.getLanguageName(context, SpHelper.getLanguageModel().languageCode),
+                                : (_currentLocale.languageCode == LOCALE_ZH ? '简体中文' : 'English'),
                             style: TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey,
@@ -274,30 +233,22 @@ class _SettingPageState extends State<SettingPage> {
                       ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: _list.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            LanguageModel model = _list[index];
-                            return ListTile(
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return RadioListTile(
                               title: Text(
-                                (model.languageCode.isEmpty
-                                    ? S.of(context).followSystem
-                                    : Utils.getLanguageName(context, model.languageCode)),
+                                index == 0 ? S.of(context).followSystem : (index == 1 ? '简体中文' : 'English'),
                                 style: TextStyle(fontSize: 14.0),
                               ),
-                              trailing: Radio(
-                                  value: true,
-                                  groupValue: model.isSelected == true,
-                                  //activeColor: Colors.indigoAccent,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      updateLanguage(model);
-                                    });
-                                  }),
-                              onTap: () {
+                              value: index == 0 ? null : (index == 1 ? Locale('zh', 'CN') : Locale('en')),
+                              groupValue: _currentLocale,
+                              onChanged: (newValue) {
                                 setState(() {
-                                  updateLanguage(model);
+                                  _currentLocale = newValue;
+                                  Provider.of<LocaleModel>(context).switchLocale(newValue);
                                 });
                               },
+                              controlAffinity: ListTileControlAffinity.trailing,
                             );
                           }),
                     ],
@@ -526,7 +477,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _appAppearanceTile(BuildContext context) {
     return Platform.isIOS
-        ? (double.parse(iosInfo?.systemVersion) < 13
+        ? (double.parse(Utils.iosInfo.systemVersion) < 13
             ? CupertinoSwitchListTile(
                 value: _currentAppearance == ThemeMode.dark,
                 onChanged: (newValue) {
@@ -540,7 +491,7 @@ class _SettingPageState extends State<SettingPage> {
                 activeColor: Theme.of(context).accentColor,
               )
             : expansionTileAppearance(context))
-        : (androidInfo.version.sdkInt < 29 // todo
+        : (Utils.androidInfo.version.sdkInt < 29
             ? SwitchListTile(
                 value: _currentAppearance == ThemeMode.dark,
                 onChanged: (newValue) {
@@ -580,6 +531,9 @@ class _SettingPageState extends State<SettingPage> {
         // * Dark
         // * System default (the recommended default option)
         ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 3,
           itemBuilder: (context, index) {
             return RadioListTile(
               title: Text(index == 0 ? S.of(context).followSystem : (index == 1 ? S.of(context).day : S.of(context).night),
@@ -595,9 +549,6 @@ class _SettingPageState extends State<SettingPage> {
               controlAffinity: ListTileControlAffinity.trailing,
             );
           },
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: 3,
         ),
       ],
     );
@@ -608,13 +559,6 @@ class _SettingPageState extends State<SettingPage> {
       _currentAppearance = value ? ThemeMode.dark : ThemeMode.light;
       Provider.of<DisplayModel>(context).switchThemeMode(_currentAppearance);
     });
-  }
-
-  void updateLanguage(LanguageModel model) {
-    _currentLanguage = model;
-    _updateData();
-    SpHelper.setObject(KEY_LANGUAGE, _currentLanguage.languageCode.isEmpty ? null : _currentLanguage);
-    eventBus.emit(MyEventSettingChange);
   }
 }
 

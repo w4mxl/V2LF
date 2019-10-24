@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/models/tab.dart';
 import 'package:flutter_app/states/model_display.dart';
+import 'package:flutter_app/states/model_locale.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String KEY_LANGUAGE = 'key_language';
-const String KEY_THEME_COLOR = 'key_theme_color';
+const String SP_LANGUAGE = 'language';
+const String SP_THEME_COLOR = 'theme_color';
 const String KEY_MAIN_TABS = 'key_main_tabs';
 
 // font
@@ -55,24 +55,25 @@ class SpHelper {
   }
 
   // 获取设置好的语言
-  static LanguageModel getLanguageModel() {
-    return getObject(KEY_LANGUAGE, (v) => LanguageModel.fromJson(v));
-
-/*    String _saveLanguage = sp.getString(KEY_LANGUAGE);
-    if (isNotEmpty(_saveLanguage)) {
-      Map userMap = json.decode(_saveLanguage);
-      return LanguageModel.fromJson(userMap);
+  static Locale getLocale() {
+    String _spLanguage = sp.getString(SP_LANGUAGE);
+    switch (_spLanguage) {
+      case LOCALE_ZH:
+        return Locale('zh', 'CN');
+      case LOCALE_EN:
+        return Locale('en', '');
+      default:
+        return null;
     }
-    return null;*/
   }
 
   // 获取设置好的主题
   static String getThemeColor() {
-    String _colorKey = sp.getString(KEY_THEME_COLOR);
-    if (isEmpty(_colorKey)) {
-      _colorKey = 'blueGrey';
+    String _spColor = sp.getString(SP_THEME_COLOR);
+    if (isEmpty(_spColor)) {
+      _spColor = 'blueGrey';
     }
-    return _colorKey;
+    return _spColor;
   }
 
   // 获取设置好的外观

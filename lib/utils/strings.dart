@@ -5,7 +5,6 @@ import 'dart:io';
 /// @email : mxl1989@gmail.com
 /// @desc  : string 常量
 
-const String MyEventSettingChange = 'MyEventSettingChange'; // 设置中变动
 const String MyEventTabsChange = 'MyEventTabsChange'; // 设置中自定义了主页 tabs
 const String MyEventRefreshTopic = 'MyEventRefreshTopic'; // 话题详情页刷新
 const String MyEventNodeIsFav = 'MyEventNodeIsFav'; // 节点是否被收藏

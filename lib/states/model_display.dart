@@ -31,7 +31,7 @@ class DisplayModel extends ChangeNotifier {
   switchColor(String newColor) {
     _materialColor = themeColorMap[newColor];
     notifyListeners();
-    SpHelper.sp.setString(KEY_THEME_COLOR, newColor);
+    SpHelper.sp.setString(SP_THEME_COLOR, newColor);
   }
 
   switchThemeMode(ThemeMode newThemeMode) {
@@ -51,6 +51,7 @@ class DisplayModel extends ChangeNotifier {
   }
 }
 
+// 方便存取的常量名称；试过直接持久化 ThemeMode 不太好存
 const String THEME_MODE_SYSTEM = 'system';
 const String THEME_MODE_LIGHT = 'light';
 const String THEME_MODE_DARK = 'dark';

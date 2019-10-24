@@ -8,12 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/listview_tab_topic.dart';
-import 'package:flutter_app/models/language.dart';
 import 'package:flutter_app/models/tab.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/states/model_display.dart';
+import 'package:flutter_app/states/model_locale.dart';
 import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
@@ -74,9 +74,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   DateTime _lastPressedAt; //上次点击时间
 
-  Locale _locale;
-  String _fontFamily = 'Whitney';
-
   List<TabModel> tabs = TABS;
 
   // 定义底部导航 Tab
@@ -91,11 +88,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
     _tabController = TabController(length: tabs.length, vsync: this);
     _init();
-
-    //监听设置中的变动
-    eventBus.on(MyEventSettingChange, (arg) {
-      _loadLocale();
-    });
 
     //监听自定义主页Tab的变动
     eventBus.on(MyEventTabsChange, (arg) {
@@ -114,28 +106,16 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
-  void _init() {
-    _loadLocale();
+  _init() {
     _loadCustomTabs();
     _initializeNotify();
     // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
     DioWeb.verifyLoginStatus();
+    // 初始化获取设备系统版本号，设置页用到
+    Utils.deviceInfo();
   }
 
-  void _loadLocale() {
-    LanguageModel model = SpHelper.getLanguageModel();
-
-    if (!mounted) return;
-    setState(() {
-      if (model != null) {
-        _locale = Locale(model.languageCode, model.countryCode);
-      } else {
-        _locale = null;
-      }
-    });
-  }
-
-  void _loadCustomTabs() {
+  _loadCustomTabs() {
     List<TabModel> allTabs = SpHelper.getMainTabs();
 
     if (allTabs != null) {
@@ -156,7 +136,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     }
   }
 
-  void _initializeNotify() {
+  _initializeNotify() {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var android = AndroidInitializationSettings('ic_stat_v');
     var ios = IOSInitializationSettings();
@@ -180,7 +160,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
-    eventBus.off(MyEventSettingChange);
     eventBus.off(MyEventTabsChange);
     eventBus.off(MyEventHasNewNotification);
     super.dispose();
@@ -189,13 +168,13 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: DisplayModel())],
-      child: Consumer<DisplayModel>(
-        builder: (context, displayModel, _) {
+      providers: [ChangeNotifierProvider.value(value: DisplayModel()), ChangeNotifierProvider.value(value: LocaleModel())],
+      child: Consumer2<DisplayModel, LocaleModel>(
+        builder: (context, displayModel, localeModel, _) {
           return MaterialApp(
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
-            locale: _locale,
+            locale: localeModel.locale,
             localizationsDelegates: [
               S.delegate,
               ChineseCupertinoLocalizations.delegate,

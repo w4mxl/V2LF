@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:ovprogresshud/progresshud.dart';
@@ -9,13 +10,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
-  static String getLanguageName(BuildContext context, String languageCode) {
-    if (languageCode.isEmpty) {
-      return S.of(context).followSystem;
-    } else if (languageCode == 'en') {
-      return 'English';
-    } else
-      return '简体中文';
+  static IosDeviceInfo iosInfo;
+  static AndroidDeviceInfo androidInfo;
+
+  // 获取设备系统版本号
+  static deviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      androidInfo = await deviceInfo.androidInfo;
+      print('Running on ${androidInfo.version.sdkInt}');
+    } else if (Platform.isIOS) {
+      iosInfo = await deviceInfo.iosInfo;
+      print('Running on ${iosInfo.systemVersion}');
+    }
   }
 
   static Future<String> getCookiePath() async {

@@ -105,7 +105,7 @@ class $zh_CN extends S {
   @override
   String get enterCaptcha => "输入右侧验证码";
   @override
-  String get logout => "退出";
+  String get logout => "登出";
   @override
   String get captcha => "验证码";
   @override
