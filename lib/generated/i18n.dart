@@ -161,7 +161,7 @@ class $zh_CN extends S {
   @override
   String get actionFav => "收藏";
   @override
-  String get titleLanguage => "多语言";
+  String get titleLanguage => "语言环境";
   @override
   String get browser => "浏览器打开";
   @override

@@ -34,7 +34,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleLanguage": "多语言",
+  "titleLanguage": "语言环境",
   "@titleLanguage": {
     "type": "text",
     "placeholders": {}
