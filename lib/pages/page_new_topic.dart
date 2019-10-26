@@ -138,9 +138,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
               Text('上传图片获得链接'),
             ],
           ),
-          onTap: () {
-            launch('https://sm.ms/', forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
-          },
+          onTap: () => launch('https://sm.ms/', statusBarBrightness: Platform.isIOS ? Brightness.light : null),
         )
       ],
     );

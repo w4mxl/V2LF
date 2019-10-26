@@ -15,7 +15,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0
   shared_preferences: ^0.5.3+5
-  url_launcher: ^5.1.4
+  url_launcher: ^5.2.5
   cached_network_image: ^1.1.1 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.14.0+2 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath     还不支持 ETree.toString(Element) :(

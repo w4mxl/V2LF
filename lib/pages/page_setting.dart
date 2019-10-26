@@ -477,7 +477,7 @@ class _SettingPageState extends State<SettingPage> {
 
   Widget _appAppearanceTile(BuildContext context) {
     return Platform.isIOS
-        ? (double.parse(Utils.iosInfo.systemVersion) < 13
+        ? (int.parse(Utils.iosInfo.systemVersion.split('.')[0]) < 13
             ? CupertinoSwitchListTile(
                 value: _currentAppearance == ThemeMode.dark,
                 onChanged: (newValue) {

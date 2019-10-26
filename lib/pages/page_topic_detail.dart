@@ -92,8 +92,7 @@ class _DialogOfCommentState extends State<DialogOfComment> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.image),
-              onPressed: () => launch('https://sm.ms/',
-                  forceWebView: true, statusBarBrightness: Platform.isIOS ? Brightness.light : null),
+              onPressed: () => launch('https://sm.ms/', statusBarBrightness: Platform.isIOS ? Brightness.light : null),
             ),
             Expanded(
                 child: Center(

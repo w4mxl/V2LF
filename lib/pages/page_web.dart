@@ -43,7 +43,7 @@ class _WebviewPageState extends State<WebviewPage> {
     // 输入完账号密码后请勿关闭网页, 加载成功后会自动关闭
     Fluttertoast.showToast(
         msg: '请确保能正常访问 Google\n请手动点击 "Sign in with Google"\n输入完账号密码后请勿关闭网页, 加载成功后会自动关闭',
-        timeInSecForIos: 4,
+        timeInSecForIos: 6,
         gravity: ToastGravity.CENTER);
 
     print(widget.webUrl);
@@ -64,6 +64,13 @@ class _WebviewPageState extends State<WebviewPage> {
             // _ga: GA1.2.1664839063.1557910385,
             // _gat: 1,  _gid: GA1.2.955802139.1557910385
             // }
+
+            // 2019/10/26 17:07  这次获取的和之前上面获取的不一样，第一个不是 A2；首尾多了双引号
+            /*"V2EX_LANG=zhcn; _ga=GA1.2.1289876692.1572076174; _gid=GA1.2.1961659963.1572076174; _gat=1;
+             A2=\"2|1:0|10:1572080066|2:A2|56:M2IyZmU2Y2Q3ZWRjMzk0MjczYjk5YzdkY2FkNDZlZTRkNmJiNjgxNg==|c51d1ad4f4d2fcdb0175739e8232027120152f8d82d7467360adabed7f8f807f\""*/
+
+            //{"V2EX_LANG: zhcn,  _ga: GA1.2.1289876692.1572076174,  _gid: GA1.2.1961659963.1572076174,  _gat: 1,
+            //    A2: \"2|1:0|10:1572080066|2:A2|56:M2IyZmU2Y2Q3ZWRjMzk0MjczYjk5YzdkY2FkNDZlZTRkNmJiNjgxNg==|c51d1ad4f4d2fcdb0175739e8232027120152f8d82d7467360adabed7f8f807f\""}
             Cookie cookie = new Cookie(m.keys.elementAt(0), m.values.elementAt(0));
             print("A2 cookie: " + cookie.toString());
             String cookiePath = await Utils.getCookiePath();
@@ -132,12 +139,18 @@ class _WebviewPageState extends State<WebviewPage> {
   /// 重写 flutter_webview_plugin 库 base.dart 218 行的 getCookies 方法
   Future<Map<String, String>> getCookies() async {
     final cookiesString = await flutterWebViewPlugin.evalJavascript('document.cookie');
+    print("wml:\n$cookiesString");
+    // 移除多余的空格和 " \ 符号
+    final cookiesStringNew = cookiesString.replaceAll('"', '').replaceAll('\\', '').replaceAll(' ', '');
+    print("wmllll:\n$cookiesStringNew");
     final cookies = <String, String>{};
 
-    if (cookiesString?.isNotEmpty == true) {
-      cookiesString.split(';').forEach((String cookie) {
+    if (cookiesStringNew?.isNotEmpty == true) {
+      cookiesStringNew.split(';').forEach((String cookie) {
         final split = cookie.replaceFirst('=', 'wmlwmlwmlwml').split('wmlwmlwmlwml');
-        cookies[split[0]] = split[1];
+        if (split[0] == "A2") {
+          cookies[split[0]] = split[1];
+        }
       });
     }
 
