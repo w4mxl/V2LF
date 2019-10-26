@@ -47,6 +47,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
+                displacement: 15,
                 child: snapshot.data.length > 0
                     ? Container(
                         child: ListView.builder(
