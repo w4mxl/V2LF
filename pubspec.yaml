@@ -41,7 +41,7 @@ dependencies:
   font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
   flutter_whatsnew: ^1.0.0 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
-  shimmer: ^1.0.0
+  shimmer: ^1.0.1
   zefyr: ^0.8.0 # https://pub.dartlang.org/packages/zefyr#-installing-tab-
   #    zefyr:
   #      git:
