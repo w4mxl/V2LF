@@ -24,6 +24,10 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 
 [![Get it from iTunes](https://lisk.io/assets/svg/download_on_the_app_store_badge.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://lisk.io/assets/svg/download_on_the_play_store_badge.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
 
+[iOS TestFlight](https://testflight.apple.com/join/cvx4MQuh)
+
+[酷安](https://www.coolapk.com/apk/221879)
+
 ## 截图预览
 
 ![](https://i.loli.net/2019/08/19/NQVUa8p13GZdSxt.jpg)
@@ -78,6 +82,7 @@ flutter.buildMode=release
 
 - [邀请体验： V2LF - 用 Flutter 开发的 V2EX App](https://www.v2ex.com/t/548936#reply169)
 - [V2LF - 使用 Flutter 开发的开源的 V2EX 客户端](https://www.v2ex.com/t/563913#reply57)
+- [V2LF - 更新支持了 iOS（iPadOS）13 / Android 10 Dark Mode](https://www.v2ex.com/t/613127)
 
 ## 代码许可
 

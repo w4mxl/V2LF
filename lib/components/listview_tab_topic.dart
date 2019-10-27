@@ -266,8 +266,8 @@ class LoadingList extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
           child: Shimmer.fromColors(
-            baseColor: Colors.grey[300],
-            highlightColor: Colors.grey[100],
+            baseColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[300] : Colors.black12,
+            highlightColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Colors.white70,
             child: Column(
               children: [0, 1, 2, 3, 4, 5, 6]
                   .map((_) => Padding(
@@ -277,11 +277,11 @@ class LoadingList extends StatelessWidget {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 15.0,
+                              height: 18.0,
                               color: Colors.white,
                             ),
                             SizedBox(
-                              height: 15,
+                              height: 14,
                             ),
                             Row(
                               children: <Widget>[
@@ -293,11 +293,11 @@ class LoadingList extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 6,
+                                  width: 8,
                                 ),
                                 Container(
                                   width: 40.0,
-                                  height: 10.0,
+                                  height: 12.0,
                                   color: Colors.white,
                                 ),
                                 SizedBox(
@@ -305,15 +305,15 @@ class LoadingList extends StatelessWidget {
                                 ),
                                 Container(
                                   width: 40.0,
-                                  height: 10.0,
+                                  height: 12.0,
                                   color: Colors.white,
                                 ),
                                 SizedBox(
-                                  width: 4,
+                                  width: 8,
                                 ),
                                 Container(
                                   width: 40.0,
-                                  height: 10.0,
+                                  height: 12.0,
                                   color: Colors.white,
                                 ),
                                 Spacer(),
@@ -327,7 +327,7 @@ class LoadingList extends StatelessWidget {
                                 ),
                                 Container(
                                   width: 20.0,
-                                  height: 10.0,
+                                  height: 12.0,
                                   color: Colors.white,
                                 ),
                               ],

@@ -144,7 +144,7 @@ class _TopicItemViewState extends State<TopicItemView> {
               style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
             ),
             SizedBox(
-              height: 8,
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,8 +177,7 @@ class _TopicItemViewState extends State<TopicItemView> {
                           widget.topic.memberId,
                           textAlign: TextAlign.left,
                           maxLines: 1,
-                          style: new TextStyle(
-                              fontSize: 13.0, fontWeight: FontWeight.w600, color: Theme.of(context).unselectedWidgetColor),
+                          style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
                         ),
                         SizedBox(
                           width: 6,
@@ -194,7 +193,6 @@ class _TopicItemViewState extends State<TopicItemView> {
                             style: new TextStyle(
                               fontSize: 12.0,
                               color: Theme.of(context).disabledColor,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
