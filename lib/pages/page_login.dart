@@ -63,11 +63,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final logo = Image.asset(
-      "assets/images/logo_v2lf.png",
-      width: 48.0,
-    );
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

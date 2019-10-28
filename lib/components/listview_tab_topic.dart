@@ -49,12 +49,11 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
             return RefreshIndicator(
                 displacement: 15,
                 child: snapshot.data.length > 0
-                    ? Container(
-                        child: ListView.builder(
+                    ? ListView.builder(
                             // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
                             physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
                             itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                            itemCount: snapshot.data.length))
+                            itemCount: snapshot.data.length)
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

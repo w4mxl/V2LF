@@ -71,3 +71,6 @@ build/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 /ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 /android/key.properties
+android/app/release/app.aab
+ios/Flutter/flutter_export_environment.sh
+/ios/Runner.xcodeproj/project.pbxproj

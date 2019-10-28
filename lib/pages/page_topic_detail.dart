@@ -696,10 +696,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           new Container(
             padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
             width: 500.0,
-            child: new Text(
+            child: SelectableText(
               _detailModel.topicTitle,
-              softWrap: true,
-              style: new TextStyle(
+              style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
               ),
