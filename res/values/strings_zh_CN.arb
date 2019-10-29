@@ -54,12 +54,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "titleToRate": "请给「V2LF」评分",
+  "titleToRate": "评分鼓励",
   "@titleToRate": {
     "type": "text",
     "placeholders": {}
   },
-  "titleRecommend": "推荐给朋友们",
+  "titleRecommend": "推荐好友",
   "@titleRecommend": {
     "type": "text",
     "placeholders": {}

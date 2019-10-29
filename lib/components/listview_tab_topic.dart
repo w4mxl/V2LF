@@ -15,6 +15,7 @@ import 'package:flutter_app/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -25,7 +26,8 @@ class TopicListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<TopicListView>
+    with AutomaticKeepAliveClientMixin {
   Future<List<TabTopicItem>> topicListFuture;
 
   @override
@@ -46,14 +48,17 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
         future: topicListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return RefreshIndicator(
-                displacement: 15,
+            return LiquidPullToRefresh(
+                showChildOpacityTransition: false,
+                springAnimationDurationInMilliseconds: 600,
                 child: snapshot.data.length > 0
                     ? ListView.builder(
-                            // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
-                            physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
-                            itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                            itemCount: snapshot.data.length)
+                        // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
+                        physics:
+                            ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
+                        itemBuilder: (context, index) =>
+                            TopicItemView(snapshot.data[index]),
+                        itemCount: snapshot.data.length)
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -123,7 +128,8 @@ class _TopicItemViewState extends State<TopicItemView> {
 
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(widget.topic.topicId)),
+          new MaterialPageRoute(
+              builder: (context) => new TopicDetails(widget.topic.topicId)),
         );
       },
       child: new Container(
@@ -134,7 +140,10 @@ class _TopicItemViewState extends State<TopicItemView> {
             new Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读
-              style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
+              style: TextStyle(
+                  fontSize: 17,
+                  color:
+                      widget.topic.readStatus == 'read' ? Colors.grey : null),
             ),
             SizedBox(
               height: 10,
@@ -175,16 +184,22 @@ class _TopicItemViewState extends State<TopicItemView> {
                                 widget.topic.memberId,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                                style: new TextStyle(
+                                    fontSize: 13.0,
+                                    color: Theme.of(context)
+                                        .unselectedWidgetColor),
                               ),
                             ],
                           ),
                           onTap: () {
-                            var largeAvatar = Utils.avatarLarge(widget.topic.avatar);
+                            var largeAvatar =
+                                Utils.avatarLarge(widget.topic.avatar);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfilePage(widget.topic.memberId, 'https:$largeAvatar'),
+                                builder: (context) => ProfilePage(
+                                    widget.topic.memberId,
+                                    'https:$largeAvatar'),
                               ),
                             );
                           },
@@ -193,9 +208,11 @@ class _TopicItemViewState extends State<TopicItemView> {
                           width: 6,
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                          padding: EdgeInsets.only(
+                              top: 1, bottom: 1, left: 4, right: 4),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).dividerColor),
+                            border: Border.all(
+                                color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: new Text(
@@ -213,7 +230,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                           offstage: widget.topic.lastReplyTime == '',
                           child: Text(
                             widget.topic.lastReplyTime,
-                            style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
+                            style: new TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontSize: 12.0),
                           ),
                         ),
                       ],
@@ -236,7 +255,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: new Text(
                           widget.topic.replyCount,
-                          style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                          style: new TextStyle(
+                              fontSize: 13.0,
+                              color: Theme.of(context).unselectedWidgetColor),
                         ),
                       ),
                     ],
@@ -265,8 +286,12 @@ class LoadingList extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
           child: Shimmer.fromColors(
-            baseColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[300] : Colors.black12,
-            highlightColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Colors.white70,
+            baseColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey[300]
+                : Colors.black12,
+            highlightColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey[100]
+                : Colors.white70,
             child: Column(
               children: [0, 1, 2, 3, 4, 5, 6]
                   .map((_) => Padding(

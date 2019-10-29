@@ -709,7 +709,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             padding: const EdgeInsets.all(10.0),
             child: Html(
               data: _detailModel.contentRendered,
-              defaultTextStyle: Theme.of(context).textTheme.body1,
+              defaultTextStyle: Theme.of(context).textTheme.body1.copyWith(
+                fontSize: 15,
+              ),
               linkStyle: TextStyle(
                 color: Theme.of(context).accentColor,
                 decoration: TextDecoration.underline,
@@ -776,7 +778,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(fontSize: 13.0),
+                defaultTextStyle: TextStyle(fontSize: 14.0),
                 linkStyle: TextStyle(
                   color: Theme.of(context).accentColor,
                   decoration: TextDecoration.underline,

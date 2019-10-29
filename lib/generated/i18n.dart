@@ -13,8 +13,7 @@ class S implements WidgetsLocalizations {
 
   static S current;
 
-  static const GeneratedLocalizationsDelegate delegate =
-    GeneratedLocalizationsDelegate();
+  static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
 
@@ -72,7 +71,7 @@ class S implements WidgetsLocalizations {
   String get titleSetting => "Setting";
   String get titleSystemFont => "System Font";
   String get titleTheme => "Theme";
-  String get titleToRate => "Please Rate V2LF";
+  String get titleToRate => "Store Ratings";
   String get versions => "Versions";
   String loadingPage(String num) => "Loading page $num ...";
   String toastLoginSuccess(String name) => "Welcome back, $name!";
@@ -143,7 +142,7 @@ class $zh_CN extends S {
   @override
   String get enterAccount => "请输入用户名";
   @override
-  String get titleToRate => "请给「V2LF」评分";
+  String get titleToRate => "评分鼓励";
   @override
   String get createTitle => "创建新主题";
   @override
@@ -171,7 +170,7 @@ class $zh_CN extends S {
   @override
   String get copyLink => "复制链接";
   @override
-  String get titleRecommend => "推荐给朋友们";
+  String get titleRecommend => "推荐好友";
   @override
   String get retry => "请重试";
   @override
@@ -238,7 +237,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
           S.current = const $zh_CN();
           return SynchronousFuture<S>(S.current);
         default:
-          // NO-OP.
+        // NO-OP.
       }
     }
     S.current = const S();
@@ -296,8 +295,5 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   }
 }
 
-String getLang(Locale l) => l == null
-  ? null
-  : l.countryCode != null && l.countryCode.isEmpty
-    ? l.languageCode
-    : l.toString();
+String getLang(Locale l) =>
+    l == null ? null : l.countryCode != null && l.countryCode.isEmpty ? l.languageCode : l.toString();
