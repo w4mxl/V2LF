@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -42,6 +43,7 @@ class TopicListViewState extends State<AllTopicsListView> with AutomaticKeepAliv
           getTopics();
         } else {
           print("没有更多...");
+          HapticFeedback.heavyImpact(); // 震动反馈
         }
       }
     });

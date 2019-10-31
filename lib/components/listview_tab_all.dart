@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -20,8 +21,7 @@ class TabAllListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<TabAllListView>
-    with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveClientMixin {
   int p = 0; // 0 代表主页Tab all下的； > 0 则是 https://www.v2ex.com/recent 下的数据
   bool isUpLoading = false;
   bool hasError = false;
@@ -44,14 +44,14 @@ class TopicListViewState extends State<TabAllListView>
     _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (_scrollController.positions.elementAt(0).pixels ==
-          _scrollController.positions.elementAt(0).maxScrollExtent) {
+      if (_scrollController.positions.elementAt(0).pixels == _scrollController.positions.elementAt(0).maxScrollExtent) {
         print("加载更多...");
         if (SpHelper.sp.containsKey(SP_USERNAME)) {
           print('加载recent');
           getTopics();
         } else {
           print('recent no');
+          HapticFeedback.heavyImpact(); // 震动反馈
         }
       }
     });
@@ -61,8 +61,7 @@ class TopicListViewState extends State<TabAllListView>
   Future getTopics() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      List<TabTopicItem> newEntries =
-          await DioWeb.getTopicsByTabKey(widget.tabKey, p++);
+      List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey(widget.tabKey, p++);
       if (newEntries.isEmpty) {
         // 应该是网络错误
         print('wml!!!!!');
@@ -88,8 +87,7 @@ class TopicListViewState extends State<TabAllListView>
           showChildOpacityTransition: false,
           springAnimationDurationInMilliseconds: 600,
           child: ListView.builder(
-            physics:
-                ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
+            physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
             controller: _scrollController,
             itemCount: items.length + 1,
             itemBuilder: (context, index) {
@@ -126,9 +124,7 @@ class TopicListViewState extends State<TabAllListView>
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(SpHelper.sp.containsKey(SP_USERNAME)
-            ? S.of(context).loadingPage((p + 1).toString())
-            : "请登录后查看更多"),
+        child: Text(SpHelper.sp.containsKey(SP_USERNAME) ? S.of(context).loadingPage((p + 1).toString()) : "请登录后查看更多"),
       ),
     );
   }
@@ -137,8 +133,7 @@ class TopicListViewState extends State<TabAllListView>
   Future _onRefresh() async {
     print("刷新数据...");
     p = 0;
-    List<TabTopicItem> newEntries =
-        await DioWeb.getTopicsByTabKey(widget.tabKey, p);
+    List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey(widget.tabKey, p);
     setState(() {
       print("刷新数据..........");
       items.clear();

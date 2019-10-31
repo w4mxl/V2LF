@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -46,6 +47,7 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
           getTopics();
         } else {
           print("没有更多...");
+          HapticFeedback.heavyImpact(); // 震动反馈
         }
       }
     });

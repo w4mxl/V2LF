@@ -90,10 +90,10 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.all(6.0),
             child: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(
-                  'https:${SpHelper.sp.getString(SP_AVATAR)}'),
+              radius: 18,
+              backgroundImage: CachedNetworkImageProvider('https:${SpHelper.sp.getString(SP_AVATAR)}'),
             ),
           ),
           Expanded(
@@ -110,8 +110,7 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
                         // Setting maxLines=null makes the text field auto-expand when one
                         // line is filled up.
                         maxLines: null,
-                        decoration:
-                            InputDecoration.collapsed(hintText: "发表公开评论..."),
+                        decoration: InputDecoration.collapsed(hintText: "发表公开评论..."),
                         controller: _textController,
                         onChanged: (String text) => setState(() {
                           _isComposing = text.length > 0;
@@ -126,15 +125,12 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.image),
-                      onPressed: () => launch('https://sm.ms/',
-                          statusBarBrightness:
-                              Platform.isIOS ? Brightness.light : null),
+                      onPressed: () =>
+                          launch('https://sm.ms/', statusBarBrightness: Platform.isIOS ? Brightness.light : null),
                     ),
                     IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: _isComposing
-                          ? () => _onTextMsgSubmitted(_textController.text)
-                          : null,
+                      onPressed: _isComposing ? () => _onTextMsgSubmitted(_textController.text) : null,
                     ),
                   ],
                 ),
@@ -232,9 +228,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        print("滑到底部了，尝试������载更多...");
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        print("滑到底部了，尝试加载更多...");
         if (replyList.length > 0 && p <= maxPage) {
           getData();
         } else {
@@ -257,8 +252,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future getData() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      TopicDetailModel topicDetailModel =
-          await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
+      TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
 
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
@@ -300,12 +294,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   Future _favoriteTopic() async {
     Progresshud.show();
-    bool isSuccess = await DioWeb.favoriteTopic(
-        _detailModel.isFavorite, widget.topicId, _detailModel.token);
+    bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
     Progresshud.dismiss();
     if (isSuccess) {
-      Progresshud.showSuccessWithStatus(
-          _detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
+      Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
       eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
@@ -359,8 +351,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       replyListAll.addAll(replyList);
       setState(() {
         isOnlyUp = true;
-        replyList
-            .retainWhere((item) => item.userName == _detailModel.createdId);
+        replyList.retainWhere((item) => item.userName == _detailModel.createdId);
       });
     }
   }
@@ -371,8 +362,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         print(action.title);
         showModalBottomSheet(
           context: context,
-          builder: (BuildContext context) => BottomSheetOfComment(
-              widget.topicId, _lastEditCommentDraft, _onValueChange),
+          builder: (BuildContext context) => BottomSheetOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange),
         );
         break;
       case 'thank':
@@ -431,8 +421,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       case 'link':
         print(action.title);
         // 复制链接到剪贴板
-        Clipboard.setData(
-            ClipboardData(text: Strings.v2exHost + '/t/' + widget.topicId));
+        Clipboard.setData(ClipboardData(text: Strings.v2exHost + '/t/' + widget.topicId));
         Progresshud.showSuccessWithStatus('已复制好帖子链接');
         break;
       case 'copy':
@@ -450,16 +439,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         // 分享: 帖子标题+链接
         if (_detailModel != null) {
           var text = _detailModel.topicTitle.isNotEmpty
-              ? _detailModel.topicTitle +
-                  " " +
-                  Strings.v2exHost +
-                  '/t/' +
-                  widget.topicId
-              : _detailModel.content +
-                  " " +
-                  Strings.v2exHost +
-                  '/t/' +
-                  widget.topicId;
+              ? _detailModel.topicTitle + " " + Strings.v2exHost + '/t/' + widget.topicId
+              : _detailModel.content + " " + Strings.v2exHost + '/t/' + widget.topicId;
           Share.share(text);
         }
         break;
@@ -469,8 +450,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
-              return BottomSheetOfComment(
-                  widget.topicId, _lastEditCommentDraft, _onValueChange);
+              return BottomSheetOfComment(widget.topicId, _lastEditCommentDraft, _onValueChange);
             });
         break;
       case 'thank_reply':
@@ -483,8 +463,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     actions: <Widget>[
                       FlatButton(
                         child: Text('取消'),
-                        onPressed: () =>
-                            Navigator.of(context, rootNavigator: true).pop(),
+                        onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                       ),
                       FlatButton(
                           onPressed: () {
@@ -519,8 +498,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               actions: <Widget>[
                 FlatButton(
                   child: Text('取消'),
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
+                  onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                 ),
                 FlatButton(
                     onPressed: () {
@@ -535,18 +513,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.black
-          : CupertinoColors.lightBackgroundGray,
+      backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : CupertinoColors.lightBackgroundGray,
       appBar: new AppBar(
         actions: <Widget>[
           Offstage(
             child: Row(
               children: <Widget>[
                 Offstage(
-                  offstage: _detailModel != null &&
-                      _detailModel.createdId ==
-                          SpHelper.sp.getString(SP_USERNAME),
+                  offstage: _detailModel != null && _detailModel.createdId == SpHelper.sp.getString(SP_USERNAME),
                   child: IconButton(
                       icon: Icon(_detailModel != null && _detailModel.isThank
                           ? FontAwesomeIcons.solidKissWinkHeart
@@ -556,9 +530,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       }),
                 ),
                 IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isFavorite
-                        ? FontAwesomeIcons.solidStar
-                        : actions[1].icon),
+                    icon: Icon(
+                        _detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
                     onPressed: () {
                       _select(actions[1]);
                     }),
@@ -574,9 +547,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           PopupMenuButton<Action>(
             onSelected: _select,
             itemBuilder: (BuildContext context) {
-              return actions
-                  .skip(3)
-                  .map<PopupMenuEntry<Action>>((Action action) {
+              return actions.skip(3).map<PopupMenuEntry<Action>>((Action action) {
                 return action.id == null
                     ? PopupMenuDivider(
                         height: 0,
@@ -617,9 +588,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               ),
               onRefresh: _onRefresh)
           : Center(
-              child: Platform.isIOS
-                  ? CupertinoActivityIndicator()
-                  : CircularProgressIndicator(),
+              child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
             ),
     );
   }
@@ -658,9 +627,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProfilePage(
-                            _detailModel.createdId,
-                            'https:${_detailModel.avatar}')),
+                        builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
                   ),
                 ),
                 SizedBox(width: 10.0),
@@ -678,16 +645,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               _detailModel.createdId,
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: new TextStyle(
-                                  fontSize: 15.0, fontWeight: FontWeight.bold),
+                              style: new TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                             ),
                           ),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ProfilePage(
-                                    _detailModel.createdId,
-                                    'https:${_detailModel.avatar}')),
+                                builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
                           ),
                         ),
                         new Icon(
@@ -704,10 +668,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               _detailModel.nodeName,
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: new TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold),
+                              style: new TextStyle(fontSize: 15.0, color: Colors.green, fontWeight: FontWeight.bold),
                             ),
                           ),
                           onTap: () => Navigator.push(
@@ -731,9 +692,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           padding: const EdgeInsets.only(left: 4.0),
                           child: Text(
                             _detailModel.smallGray,
-                            style: new TextStyle(
-                                fontSize: 13.0,
-                                color: Theme.of(context).disabledColor),
+                            style: new TextStyle(fontSize: 13.0, color: Theme.of(context).disabledColor),
                           ),
                         )
                       ],
@@ -749,9 +708,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   padding: const EdgeInsets.only(left: 4.0),
                   child: new Text(
                     _detailModel.replyCount,
-                    style: new TextStyle(
-                        fontSize: 15.0,
-                        color: Theme.of(context).unselectedWidgetColor),
+                    style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
                   ),
                 )
               ],
@@ -759,8 +716,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           ),
           // topic title
           new Container(
-            padding: const EdgeInsets.only(
-                left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
             width: 500.0,
             child: SelectableText(
               _detailModel.topicTitle,
@@ -804,19 +760,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             child: Column(
               children: <Widget>[
                 Column(
-                    children:
-                        _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                    children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
                   return _buildSubtle(subtle);
                 }).toList()),
                 Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.black12
-                        : const Color(0xFFFFFFF0),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(4),
-                        bottomRight: Radius.circular(4)),
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
                   ),
                 ),
               ],
@@ -834,11 +785,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           height: 0,
         ),
         Container(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.black12
-              : const Color(0xFFFFFFF0),
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
+          color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4.0, bottom: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -885,8 +833,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
-              child: Text(isOnlyUp ? '楼主尚未回复' : '目前尚无回复',
-                  style: new TextStyle(color: Colors.grey[600])),
+              child: Text(isOnlyUp ? '楼主尚未回复' : '目前尚无回复', style: new TextStyle(color: Colors.grey[600])),
             ))
         : Card(
             elevation: 0.0,
@@ -901,490 +848,347 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 } else {
                   ReplyItem reply = replyList[index];
                   return InkWell(
-                      child: new Container(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, right: 10.0, top: 10.0),
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
+                    child: new Container(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                      child: new Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              // 评论item头像
+                              GestureDetector(
+                                child: Hero(
+                                  tag: 'avatar$index',
+                                  transitionOnUserGestures: true,
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: 'https:' + reply.avatar,
+                                      width: 28.0,
+                                      height: 28.0,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Image.asset(
+                                        'assets/images/ic_person.png',
+                                        width: 28,
+                                        height: 28,
+                                        color: Color(0xFFcccccc),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage(
+                                            reply.userName,
+                                            'https:${Utils.avatarLarge(reply.avatar)}',
+                                            heroTag: 'avatar$index',
+                                          )),
+                                ),
+                              ),
+                              Offstage(
+                                offstage: reply.userName != _detailModel.createdId,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 6.0),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: Colors.redAccent[100],
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      '楼主',
+                                      style: TextStyle(fontSize: 9, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          new Expanded(
+                              child: new Container(
+                            margin: const EdgeInsets.only(top: 2.0),
+                            child: new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                // 评论item头像
-                                GestureDetector(
-                                  child: Hero(
-                                    tag: 'avatar$index',
-                                    transitionOnUserGestures: true,
-                                    child: ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: 'https:' + reply.avatar,
-                                        width: 28.0,
-                                        height: 28.0,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            Image.asset(
-                                          'assets/images/ic_person.png',
-                                          width: 28,
-                                          height: 28,
-                                          color: Color(0xFFcccccc),
+                                Row(
+                                  children: <Widget>[
+                                    // 评论用户ID
+                                    new Text(
+                                      reply.userName,
+                                      style: new TextStyle(fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                    ),
+                                    // 评论时间和平台
+                                    new Padding(
+                                      padding: const EdgeInsets.only(left: 6.0, right: 8.0),
+                                      child: new Text(
+                                        reply.lastReplyTime,
+                                        style: new TextStyle(
+                                          color: const Color(0xFFcccccc),
+                                          fontSize: 13.0,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProfilePage(
-                                              reply.userName,
-                                              'https:${Utils.avatarLarge(reply.avatar)}',
-                                              heroTag: 'avatar$index',
-                                            )),
-                                  ),
-                                ),
-                                Offstage(
-                                  offstage:
-                                      reply.userName != _detailModel.createdId,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 6.0),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 3, vertical: 1),
-                                      decoration: BoxDecoration(
-                                        color: Colors.redAccent[100],
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Text(
-                                        '楼主',
-                                        style: TextStyle(
-                                            fontSize: 9, color: Colors.white),
+                                    // 获得感谢数
+                                    Offstage(
+                                      offstage: reply.favorites.isEmpty,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.favorite,
+                                            color: Colors.red[100], // Color(0xFFcccccc)
+                                            size: 14.0,
+                                          ),
+                                          SizedBox(width: 2.0),
+                                          Text(
+                                            reply.favorites,
+                                            style: TextStyle(
+                                              color: const Color(0xFFcccccc),
+                                              fontSize: 13.0,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  ),
+                                    Spacer(),
+                                    Material(
+                                      color: Color(0xFFf0f0f0),
+                                      shape: new StadiumBorder(),
+                                      child: new Container(
+                                        width: 20.0,
+                                        height: 14.0,
+                                        alignment: Alignment.center,
+                                        child: new Text(
+                                          reply.number,
+                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                                    // 评论内容
+                                    child: Html(
+                                      data: reply.contentRendered,
+                                      linkStyle: TextStyle(
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                      onLinkTap: (url) {
+                                        if (UrlHelper.canLaunchInApp(context, url)) {
+                                          return;
+                                        } else if (url.contains("/member/")) {
+                                          print(url.split("/member/")[1] + " $index");
+                                          // 找出这个用户的最近一条评论，也可能没有
+                                          var list = replyList.sublist(0, index);
+                                          var item = list.lastWhere((item) => item.userName == url.split("/member/")[1],
+                                              orElse: () => null);
+                                          if (item == null) {
+                                            Fluttertoast.showToast(
+                                                msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
+                                          } else {
+                                            // 弹出找到的此用户之前评论
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return SimpleDialog(
+                                                    contentPadding: EdgeInsets.all(10),
+                                                    children: <Widget>[
+                                                      Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          Column(
+                                                            children: <Widget>[
+                                                              // 评论item头像
+                                                              GestureDetector(
+                                                                child: Container(
+                                                                  child: ClipOval(
+                                                                    child: CachedNetworkImage(
+                                                                      imageUrl: 'https:' + item.avatar,
+                                                                      width: 28.0,
+                                                                      height: 28.0,
+                                                                      fit: BoxFit.cover,
+                                                                      placeholder: (context, url) => Image.asset(
+                                                                        'assets/images/ic_person.png',
+                                                                        width: 28,
+                                                                        height: 28,
+                                                                        color: Color(0xFFcccccc),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                onTap: () => Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => ProfilePage(
+                                                                          item.userName, 'https:${item.avatar}')),
+                                                                ),
+                                                              ),
+                                                              Offstage(
+                                                                offstage: item.userName != _detailModel.createdId,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.only(top: 6.0),
+                                                                  child: Container(
+                                                                    padding:
+                                                                        EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors.redAccent[100],
+                                                                      borderRadius: BorderRadius.circular(4),
+                                                                    ),
+                                                                    child: Text(
+                                                                      '楼主',
+                                                                      style: TextStyle(fontSize: 9, color: Colors.white),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10.0,
+                                                          ),
+                                                          Expanded(
+                                                              child: new Container(
+                                                            margin: const EdgeInsets.only(top: 2.0),
+                                                            child: new Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: <Widget>[
+                                                                new Row(
+                                                                  children: <Widget>[
+                                                                    // 评论用户ID
+                                                                    new Text(
+                                                                      item.userName,
+                                                                      style: new TextStyle(
+                                                                          fontSize: 15.0,
+                                                                          color: Colors.grey,
+                                                                          fontWeight: FontWeight.bold),
+                                                                    ),
+                                                                    // 评论时间和平台
+                                                                    new Padding(
+                                                                      padding: const EdgeInsets.only(left: 6.0, right: 4.0),
+                                                                      child: new Text(
+                                                                        item.lastReplyTime,
+                                                                        style: new TextStyle(
+                                                                          color: const Color(0xFFcccccc),
+                                                                          fontSize: 13.0,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    // 获得感谢数
+                                                                    Offstage(
+                                                                      offstage: item.favorites.isEmpty,
+                                                                      child: Row(
+                                                                        children: <Widget>[
+                                                                          Icon(
+                                                                            Icons.favorite,
+                                                                            color: Colors.red[100], // Color(0xFFcccccc)
+                                                                            size: 14.0,
+                                                                          ),
+                                                                          SizedBox(width: 2.0),
+                                                                          Text(
+                                                                            item.favorites,
+                                                                            style: TextStyle(
+                                                                              color: const Color(0xFFcccccc),
+                                                                              fontSize: 13.0,
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Spacer(),
+                                                                    Material(
+                                                                      color: Color(0xFFf0f0f0),
+                                                                      shape: new StadiumBorder(),
+                                                                      child: new Container(
+                                                                        width: 20.0,
+                                                                        height: 14.0,
+                                                                        alignment: Alignment.center,
+                                                                        child: new Text(
+                                                                          item.number,
+                                                                          style: new TextStyle(
+                                                                              fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                new Container(
+                                                                    padding: EdgeInsets.only(top: 5.0),
+                                                                    // 评论内容
+                                                                    child: Html(
+                                                                      data: item.contentRendered,
+                                                                      linkStyle: TextStyle(
+                                                                        color: Theme.of(context).accentColor,
+                                                                      ),
+                                                                    )),
+                                                              ],
+                                                            ),
+                                                          )),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  );
+                                                });
+                                          }
+                                          return;
+                                        }
+                                        Utils.launchURL(url);
+                                      },
+                                      onImageTap: (source) {
+                                        print(source);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FullScreenWrapper(
+                                              imageProvider: NetworkImage(source),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )),
+                                Divider(
+                                  height: 0,
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            new Expanded(
-                                child: new Container(
-                              margin: const EdgeInsets.only(top: 2.0),
-                              child: new Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      // 评论用户ID
-                                      new Text(
-                                        reply.userName,
-                                        style: new TextStyle(
-                                            fontSize: 15.0,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      // 评论时间和平台
-                                      new Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 6.0, right: 8.0),
-                                        child: new Text(
-                                          reply.lastReplyTime,
-                                          style: new TextStyle(
-                                            color: const Color(0xFFcccccc),
-                                            fontSize: 13.0,
-                                          ),
-                                        ),
-                                      ),
-
-                                      Spacer(),
-                                      Material(
-                                        color: Color(0xFFf0f0f0),
-                                        shape: new StadiumBorder(),
-                                        child: new Container(
-                                          width: 20.0,
-                                          height: 14.0,
-                                          alignment: Alignment.center,
-                                          child: new Text(
-                                            reply.number,
-                                            style: new TextStyle(
-                                                fontSize: 9.0,
-                                                color: Color(0xFFa2a2a2)),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 10.0, top: 5.0),
-                                      // 评论内容
-                                      child: Html(
-                                        data: reply.contentRendered,
-                                        linkStyle: TextStyle(
-                                          color: Theme.of(context).accentColor,
-                                        ),
-                                        onLinkTap: (url) {
-                                          if (UrlHelper.canLaunchInApp(
-                                              context, url)) {
-                                            return;
-                                          } else if (url.contains("/member/")) {
-                                            print(url.split("/member/")[1] +
-                                                " $index");
-                                            // 找出这个用户的最近一条评论，也可能没有
-                                            var list =
-                                                replyList.sublist(0, index);
-                                            var item = list.lastWhere(
-                                                (item) =>
-                                                    item.userName ==
-                                                    url.split("/member/")[1],
-                                                orElse: () => null);
-                                            if (item == null) {
-                                              Fluttertoast.showToast(
-                                                  msg: '1层至$index层间未发现该用户回复',
-                                                  gravity: ToastGravity.CENTER);
-                                            } else {
-                                              // 弹出找到的此用户之前评论
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return SimpleDialog(
-                                                      contentPadding:
-                                                          EdgeInsets.all(10),
-                                                      children: <Widget>[
-                                                        Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Column(
-                                                              children: <
-                                                                  Widget>[
-                                                                // 评论item头像
-                                                                GestureDetector(
-                                                                  child:
-                                                                      Container(
-                                                                    child:
-                                                                        ClipOval(
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        imageUrl:
-                                                                            'https:' +
-                                                                                item.avatar,
-                                                                        width:
-                                                                            28.0,
-                                                                        height:
-                                                                            28.0,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        placeholder:
-                                                                            (context, url) =>
-                                                                                Image.asset(
-                                                                          'assets/images/ic_person.png',
-                                                                          width:
-                                                                              28,
-                                                                          height:
-                                                                              28,
-                                                                          color:
-                                                                              Color(0xFFcccccc),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  onTap: () =>
-                                                                      Navigator
-                                                                          .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) => ProfilePage(
-                                                                            item.userName,
-                                                                            'https:${item.avatar}')),
-                                                                  ),
-                                                                ),
-                                                                Offstage(
-                                                                  offstage: item
-                                                                          .userName !=
-                                                                      _detailModel
-                                                                          .createdId,
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        top:
-                                                                            6.0),
-                                                                    child:
-                                                                        Container(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              3,
-                                                                          vertical:
-                                                                              1),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .redAccent[100],
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(4),
-                                                                      ),
-                                                                      child:
-                                                                          Text(
-                                                                        '楼主',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                9,
-                                                                            color:
-                                                                                Colors.white),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              width: 10.0,
-                                                            ),
-                                                            Expanded(
-                                                                child:
-                                                                    new Container(
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 2.0),
-                                                              child: new Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: <
-                                                                    Widget>[
-                                                                  new Row(
-                                                                    children: <
-                                                                        Widget>[
-                                                                      // 评论用户ID
-                                                                      new Text(
-                                                                        item.userName,
-                                                                        style: new TextStyle(
-                                                                            fontSize:
-                                                                                15.0,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            fontWeight: FontWeight.bold),
-                                                                      ),
-                                                                      // 评论时间和平台
-                                                                      new Padding(
-                                                                        padding: const EdgeInsets.only(
-                                                                            left:
-                                                                                6.0,
-                                                                            right:
-                                                                                4.0),
-                                                                        child:
-                                                                            new Text(
-                                                                          item.lastReplyTime,
-                                                                          style:
-                                                                              new TextStyle(
-                                                                            color:
-                                                                                const Color(0xFFcccccc),
-                                                                            fontSize:
-                                                                                13.0,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      // 获得感谢数
-                                                                      Offstage(
-                                                                        offstage: item
-                                                                            .favorites
-                                                                            .isEmpty,
-                                                                        child:
-                                                                            Row(
-                                                                          children: <
-                                                                              Widget>[
-                                                                            Icon(
-                                                                              Icons.favorite,
-                                                                              color: Colors.red[100], // Color(0xFFcccccc)
-                                                                              size: 14.0,
-                                                                            ),
-                                                                            SizedBox(width: 2.0),
-                                                                            Text(
-                                                                              item.favorites,
-                                                                              style: TextStyle(
-                                                                                color: const Color(0xFFcccccc),
-                                                                                fontSize: 13.0,
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Spacer(),
-                                                                      Material(
-                                                                        color: Color(
-                                                                            0xFFf0f0f0),
-                                                                        shape:
-                                                                            new StadiumBorder(),
-                                                                        child:
-                                                                            new Container(
-                                                                          width:
-                                                                              20.0,
-                                                                          height:
-                                                                              14.0,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          child:
-                                                                              new Text(
-                                                                            item.number,
-                                                                            style:
-                                                                                new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  new Container(
-                                                                      padding: EdgeInsets.only(
-                                                                          top:
-                                                                              5.0),
-                                                                      // 评论内容
-                                                                      child:
-                                                                          Html(
-                                                                        data: item
-                                                                            .contentRendered,
-                                                                        linkStyle:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Theme.of(context).accentColor,
-                                                                        ),
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            )),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    );
-                                                  });
-                                            }
-                                            return;
-                                          }
-                                          Utils.launchURL(url);
-                                        },
-                                        onImageTap: (source) {
-                                          print(source);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FullScreenWrapper(
-                                                imageProvider:
-                                                    NetworkImage(source),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                  // 发送感谢；其它操作按钮
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      // 获得感谢数
-                                      Offstage(
-                                        offstage: reply.favorites.isEmpty,
-                                        child: Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.favorite,
-                                              color: Colors.red[
-                                                  100], // Color(0xFFcccccc)
-                                              size: 14.0,
-                                            ),
-                                            SizedBox(width: 2.0),
-                                            Text(
-                                              reply.favorites,
-                                              style: TextStyle(
-                                                color: const Color(0xFFcccccc),
-                                                fontSize: 13.0,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Row(
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.comment,
-                                              color: Colors.grey, // Color(0xFFcccccc)
-                                              size: 14.0,
-                                            ),
-                                            SizedBox(width: 2.0),
-                                            Text(
-                                              reply.favorites,
-                                              style: TextStyle(
-                                                color: const Color(0xFFcccccc),
-                                                fontSize: 13.0,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      InkWell(
-                                        onTap: () {
-                                          // todo 
-                                        },
-                                        child: Icon(
-                                          Icons.more_vert,
-                                          size: 20,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 0,
-                                  ),
-                                ],
-                              ),
-                            )),
-                          ],
-                        ),
+                          )),
+                        ],
                       ),
-                      onTap: () {
-                        if (isLogin) {
-                          // 点击评论列表item，弹出回复框
-                          select(Action(
-                              id: 'reply_comment',
-                              title: " @" +
-                                  reply.userName +
-                                  " #" +
-                                  reply.number +
-                                  " "));
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    ListTile(
-                                      leading:
-                                          Icon(FontAwesomeIcons.kissWinkHeart),
-                                      title: Text('感谢评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(
-                                            id: 'thank_reply',
-                                            title: reply.replyId));
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(Icons.reply),
-                                      title: Text('回复评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(Icons.content_copy),
-                                      title: Text('拷贝评论'),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        select(Action(
-                                            id: 'reply_copy',
-                                            title: reply.content));
-                                      },
-                                    ),
+                    ),
+                    onTap: () {
+                      if (isLogin) {
+                        // 点击评论列表item，弹出回复框
+                        select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
+                      } else {
+                        Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
+                      }
+                    },
+                    onLongPress: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                if (isLogin)
+                                  ListTile(
+                                    leading: Icon(FontAwesomeIcons.kissWinkHeart),
+                                    title: Text('感谢评论'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      select(Action(id: 'thank_reply', title: reply.replyId));
+                                    },
+                                  ),
+                                ListTile(
+                                  leading: Icon(Icons.content_copy),
+                                  title: Text('拷贝评论'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    select(Action(id: 'reply_copy', title: reply.content));
+                                  },
+                                ),
 //                                    ListTile(
 //                                      leading: Icon(Icons.forum),
 //                                      title: Text('查看对话'),
@@ -1393,38 +1197,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 //                                        Fluttertoast.showToast(msg: 'Developing...');
 //                                      },
 //                                    ),
-                                  ],
-                                );
-                              });
-                        } else {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text('登录'),
-                            action: SnackBarAction(
-                              label: '登录',
-                              onPressed: () {
-                                //未登录
-                                var future = Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => LoginPage(),
-                                        fullscreenDialog: true));
-                                future.then((value) {
-                                  // 直接close登录页则value为null；登录成功 value 为 true
-                                  if (value != null && value) {
-                                    setState(() {
-                                      if (SpHelper.sp
-                                          .containsKey(SP_USERNAME)) {
-                                        isLogin = true;
-                                      }
-                                    });
-                                  }
-                                });
-                              },
-                            ),
-                          ));
-                          Progresshud.showInfoWithStatus('您还未登录  ¯\\_(ツ)_/¯');
-                        }
-                      });
+                              ],
+                            );
+                          });
+                    },
+                  );
                 }
               },
               shrinkWrap: true,
@@ -1437,8 +1214,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(
-            p <= maxPage ? "正在加载第" + p.toString() + "页..." : "---- 🙄 ----"),
+        child: Text(p <= maxPage ? "正在加载第" + p.toString() + "页..." : "---- 🙄 ----"),
       ),
     );
   }
@@ -1447,8 +1223,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    TopicDetailModel topicDetailModel =
-        await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
+    TopicDetailModel topicDetailModel = await DioWeb.getTopicDetailAndReplies(widget.topicId, p++);
     if (mounted) {
       setState(() {
         _detailModel = topicDetailModel;
@@ -1500,8 +1275,7 @@ class LoadingRepliesSkeleton extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             ),
                             Expanded(
                               child: Column(
