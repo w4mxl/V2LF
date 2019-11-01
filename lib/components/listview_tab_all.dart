@@ -83,9 +83,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     super.build(context);
     if (items.length > 0) {
-      return LiquidPullToRefresh(
-          showChildOpacityTransition: false,
-          springAnimationDurationInMilliseconds: 600,
+      return RefreshIndicator(
           child: ListView.builder(
             physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
             controller: _scrollController,

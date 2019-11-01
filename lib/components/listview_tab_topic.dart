@@ -55,9 +55,7 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
         future: topicListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return LiquidPullToRefresh(
-                showChildOpacityTransition: false,
-                springAnimationDurationInMilliseconds: 600,
+            return RefreshIndicator(
                 child: snapshot.data.length > 0
                     ? ListView.builder(
                         // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部

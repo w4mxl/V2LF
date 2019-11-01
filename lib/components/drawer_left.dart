@@ -226,6 +226,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       image: new NetworkImage(GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()]
                           [GoogleNowImg.getCurrentTimeIndex()])),
                 ),
+                margin: null,
               ),
               new ListTile(
                 leading: new Icon(Icons.whatshot),
