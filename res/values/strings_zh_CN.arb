@@ -59,6 +59,7 @@
     "type": "text",
     "placeholders": {}
   },
+  "subtitleToRate": "V2LF 永远不会用弹窗方式引导你评分",
   "titleRecommend": "推荐好友",
   "@titleRecommend": {
     "type": "text",
@@ -84,6 +85,7 @@
     "type": "text",
     "placeholders": {}
   },
+  "following": "关注",
   "settings": "设置",
   "@settings": {
     "type": "text",

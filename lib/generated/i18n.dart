@@ -40,6 +40,7 @@ class S implements WidgetsLocalizations {
   String get favorites => "Favorites";
   String get feedback => "Send Feedback";
   String get followSystem => "Auto";
+  String get following => "Following";
   String get forgetPassword => "Forgot password ?";
   String get hintPersonalityHome => "Reselect and sort the nodes displayed on the homepage";
   String get history => "History Hottest";
@@ -62,6 +63,7 @@ class S implements WidgetsLocalizations {
   String get settings => "Settings";
   String get share => "Share";
   String get signup => "Sign-up";
+  String get subtitleToRate => "V2LF will never interrupt you for ratings";
   String get sureLogout => "Are you sure you want to sign out ?";
   String get thank => "Thank";
   String get titleAppearance => "Appearance";
@@ -94,6 +96,8 @@ class $zh_CN extends S {
   String get titleAppearance => "外观模式";
   @override
   String get forgetPassword => "忘记密码 ?";
+  @override
+  String get subtitleToRate => "V2LF 永远不会用弹窗方式引导你评分";
   @override
   String get about => "关于";
   @override
@@ -134,6 +138,8 @@ class $zh_CN extends S {
   String get versions => "版本记录";
   @override
   String get noComment => "暂无回复";
+  @override
+  String get following => "关注";
   @override
   String get titleSetting => "设置";
   @override

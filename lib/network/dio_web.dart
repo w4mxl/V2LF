@@ -7,6 +7,7 @@ import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/models/web/item_fav_node.dart';
 import 'package:flutter_app/models/web/item_fav_topic.dart';
+import 'package:flutter_app/models/web/item_following_user.dart';
 import 'package:flutter_app/models/web/item_node_topic.dart';
 import 'package:flutter_app/models/web/item_notification.dart';
 import 'package:flutter_app/models/web/item_profile_recent_reply.dart';
@@ -565,10 +566,25 @@ class DioWeb {
     return "false";
   }
 
-  // 获取「主题收藏」下的topics [xpath 解析的]
-  static Future<List<FavTopicItem>> getFavTopics(int p) async {
+  // 获取关注的人 [user-agent 要先换到桌面的再还原到 mobile]
+  static Future<List<FollowingUser>> getFollowingUsers() async {
+    List<FollowingUser> followingUsers = List<FollowingUser>();
+    dio.options.headers = {};
+    var response = await dio.get("/my/following");
+    if (response.statusCode == 200) {
+      // 还原
+      dio.options.headers = {
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+      };
+    }
+  }
+
+  // 获取「主题收藏」或者 「特别关注」下的topics [xpath 解析的]
+  static Future<List<FavTopicItem>> getTopics(String path, int p) async {
     List<FavTopicItem> topics = new List<FavTopicItem>();
-    var response = await dio.get("/my/topics" + "?p=" + p.toString());
+    var response = await dio.get("/my/$path" + "?p=" + p.toString());
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong

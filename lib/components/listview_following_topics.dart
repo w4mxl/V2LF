@@ -1,4 +1,3 @@
-// 收藏 listview
 import 'dart:async';
 import 'dart:io';
 
@@ -14,12 +13,13 @@ import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:provider/provider.dart';
 
-class FavTopicListView extends StatefulWidget {
+// 关注的人的最新主题列表 listview
+class FollowTopicListView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAliveClientMixin {
   int p = 1;
   int maxPage = 1;
 
@@ -51,7 +51,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   Future getTopics() async {
     if (!isLoading) {
       isLoading = true;
-      List<FavTopicItem> newEntries = await DioWeb.getTopics('topics', p++);
+      List<FavTopicItem> newEntries = await DioWeb.getTopics('following', p++);
       setState(() {
         isLoading = false;
         if (newEntries.length > 0) {
@@ -69,7 +69,6 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
     if (items.length > 0) {
       return RefreshIndicator(
           child: Container(
-            //color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
             child: ListView.builder(
                 controller: _scrollController,
                 itemCount: items.length + 1,
@@ -94,20 +93,13 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
         Container(
           padding: EdgeInsets.only(bottom: 20),
           width: 250,
-          child: Text("No Favorites Yet!",
+          child: Text("No Topics Yet!",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
                 color: Colors.black.withOpacity(0.65),
               )),
-        ),
-        Container(
-          width: 270,
-          margin: EdgeInsets.only(bottom: 114),
-          child: Text("Browse to a topic and tap on the star icon to save something in this list.",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 17, height: 1.1, color: Colors.black.withOpacity(0.65))),
         ),
       ]);
     }
@@ -130,7 +122,7 @@ class TopicListViewState extends State<FavTopicListView> with AutomaticKeepAlive
   Future _onRefresh() async {
     print("刷新数据...");
     p = 1;
-    List<FavTopicItem> newEntries = await DioWeb.getTopics('topics', p);
+    List<FavTopicItem> newEntries = await DioWeb.getTopics('following', p);
     setState(() {
       items.clear();
       items.addAll(newEntries);

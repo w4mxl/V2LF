@@ -12,6 +12,7 @@ import 'package:flutter_app/models/jinrishici.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
+import 'package:flutter_app/pages/page_following.dart';
 import 'package:flutter_app/pages/page_history_hot_category.dart';
 import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -266,6 +268,15 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
+                },
+              ),
+              ListTile(
+                enabled: userName.isNotEmpty, // 登录后打开
+                leading: new Icon(Icons.child_care),
+                title: new Text(S.of(context).following),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => FollowingPage()));
                 },
               ),
               new ListTile(

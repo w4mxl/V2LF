@@ -308,6 +308,7 @@ class _SettingPageState extends State<SettingPage> {
                       Icons.star,
                     ),
                     title: Text(S.of(context).titleToRate),
+                    subtitle: Text(S.of(context).subtitleToRate),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,

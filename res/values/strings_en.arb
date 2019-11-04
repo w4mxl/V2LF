@@ -59,6 +59,7 @@
     "type": "text",
     "placeholders": {}
   },
+  "subtitleToRate": "V2LF will never interrupt you for ratings",
   "titleRecommend": "Recommend to friends",
   "@titleRecommend": {
     "type": "text",
@@ -84,6 +85,7 @@
     "type": "text",
     "placeholders": {}
   },
+  "following": "Following",
   "settings": "Settings",
   "@settings": {
     "type": "text",
