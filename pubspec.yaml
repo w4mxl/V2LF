@@ -1,7 +1,7 @@
 name: flutter_app
 description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love flutter'.
 
-version: 2019.6+20
+version: 2019.6+21
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -40,7 +40,9 @@ dependencies:
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
   font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
-  flutter_whatsnew: ^1.0.0 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
+  # flutter_whatsnew: ^1.0.2+2 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
+  # flutter_whatsnew 目前存在问题，fork 后修改源码了
+  flutter_markdown: ^0.2.0
   shimmer: ^1.0.1
   zefyr: ^0.8.0 # https://pub.dartlang.org/packages/zefyr#-installing-tab-
   #    zefyr:
