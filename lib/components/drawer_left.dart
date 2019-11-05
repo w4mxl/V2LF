@@ -200,7 +200,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProfilePage(userName, "https:" + avatar)),
+                        MaterialPageRoute(builder: (context) => ProfilePage(userName, "https:$avatar")),
                       );
                     }
                   },

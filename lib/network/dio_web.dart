@@ -578,7 +578,20 @@ class DioWeb {
             ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
             : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
       };
+      // Use html parser and query selector
+      var document = parse(response.data);
+      List<dom.Element> aRootNode = document.querySelectorAll('div.box > div > a > img.avatar');
+      if (aRootNode != null) {
+        for (var aNode in aRootNode) {
+          FollowingUser followingUser = FollowingUser();
+          followingUser.avatar = Utils.avatarLarge(aNode.attributes['src']);
+          followingUser.userName = aNode.parent.attributes["href"].replaceFirst('/member/', '');
+          followingUsers.add(followingUser);
+        }
+        print("wml::${followingUsers.length}");
+      }
     }
+    return followingUsers;
   }
 
   // 获取「主题收藏」或者 「特别关注」下的topics [xpath 解析的]

@@ -50,12 +50,16 @@ class Utils {
     // 获取到的是24*24大小，改成73*73
     //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
     //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
+    //cdn.v2ex.com/avatar/d0df/5707/71698_mini.png?m=1408718789
     var regExp1 = RegExp(r's=24');
     var regExp2 = RegExp(r'normal');
+    var regExp3 = RegExp(r'mini');
     if (avatar.contains(regExp1)) {
       avatar = avatar.replaceFirst(regExp1, 's=73');
     } else if (avatar.contains(regExp2)) {
       avatar = avatar.replaceFirst(regExp2, 'large');
+    } else if (avatar.contains(regExp3)) {
+      avatar = avatar.replaceFirst(regExp3, 'large');
     }
 
     return avatar;
