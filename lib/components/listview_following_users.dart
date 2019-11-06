@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-
 /// @author: wml
 /// @date  : 2019-11-04 18:30
 /// @email : mxl1989@gmail.com
 /// @desc  : 我关注的人
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/models/web/item_following_user.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_profile.dart';
@@ -44,11 +43,11 @@ class _FollowingUsersListViewState extends State<FollowingUsersListView> with Au
               itemBuilder: (context, index) {
                 return ListTile(
                   leading: Hero(
-                    tag: 'avatar$index',
-                    child: CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider("https:${snapshot.data[index].avatar}"),
-                    ),
-                  ),
+                      tag: 'avatar$index',
+                      child: CircleAvatarWithPlaceholder(
+                        imageUrl: snapshot.data[index].avatar,
+                        size: 40,
+                      )),
                   title: Text(snapshot.data[index].userName),
                   trailing: Icon(
                     Icons.arrow_forward_ios,

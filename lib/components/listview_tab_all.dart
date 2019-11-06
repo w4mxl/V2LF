@@ -10,7 +10,6 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:ovprogresshud/progresshud.dart';
 
 import 'listview_tab_topic.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class TabAllListView extends StatefulWidget {
   final String tabKey;

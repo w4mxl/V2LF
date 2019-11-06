@@ -6,6 +6,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_notification.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -172,11 +173,10 @@ class TopicItemView extends StatelessWidget {
                       children: <Widget>[
                         // 圆形头像
                         Container(
-                          margin: const EdgeInsets.only(right: 4.0),
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircleAvatar(
-                            backgroundImage: CachedNetworkImageProvider("https:${notificationItem.avatar}"),
+                          margin: const EdgeInsets.only(right: 6.0),
+                          child: CircleAvatarWithPlaceholder(
+                            imageUrl: notificationItem.avatar,
+                            size: 21,
                           ),
                         ),
                         Text(
@@ -196,8 +196,7 @@ class TopicItemView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ProfilePage(notificationItem.userName, "https:${Utils.avatarLarge(notificationItem.avatar)}"),
+                        builder: (context) => ProfilePage(notificationItem.userName, "https:${Utils.avatarLarge(notificationItem.avatar)}"),
                       ),
                     ),
                   ),
@@ -274,7 +273,6 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Fluttertoast.showToast(
-        msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
   }
 }

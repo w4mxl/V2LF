@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +15,8 @@ import 'package:flutter_app/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
+import 'circle_avatar.dart';
 
 class TopicListView extends StatefulWidget {
   final String tabKey;
@@ -168,19 +168,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               // 头像
-                              ClipOval(
-                                child: new CachedNetworkImage(
-                                  imageUrl: "https:" + widget.topic.avatar,
-                                  height: 21.0,
-                                  width: 21.0,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => Image.asset(
-                                    'assets/images/ic_person.png',
-                                    width: 21,
-                                    height: 21,
-                                    color: Color(0xFFcccccc),
-                                  ),
-                                ),
+                              CircleAvatarWithPlaceholder(
+                                imageUrl: widget.topic.avatar,
+                                size: 22,
                               ),
                               SizedBox(
                                 width: 6,
@@ -301,8 +291,8 @@ class LoadingList extends StatelessWidget {
                               children: <Widget>[
                                 ClipOval(
                                   child: Container(
-                                    width: 21.0,
-                                    height: 21.0,
+                                    width: 22.0,
+                                    height: 22.0,
                                     color: Colors.white,
                                   ),
                                 ),

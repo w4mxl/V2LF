@@ -6,14 +6,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/database_helper.dart';
+import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_tab_topic.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'page_topic_detail.dart';
 
@@ -54,8 +52,7 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
                     builder: (BuildContext context) => AlertDialog(
                           content: Text('你确定要清空已读记录吗?'),
                           actions: <Widget>[
-                            FlatButton(
-                                onPressed: () => Navigator.of(context, rootNavigator: true).pop(), child: Text('取消')),
+                            FlatButton(onPressed: () => Navigator.of(context, rootNavigator: true).pop(), child: Text('取消')),
                             FlatButton(
                                 onPressed: () async {
                                   Navigator.of(context, rootNavigator: true).pop();
@@ -85,8 +82,7 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
               return snapshot.data.length > 0
                   ? new Container(
                       child: ListView.builder(
-                          itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                          itemCount: snapshot.data.length))
+                          itemBuilder: (context, index) => TopicItemView(snapshot.data[index]), itemCount: snapshot.data.length))
                   : Center(
                       child: Text("NO READ YET!"),
                     );
@@ -156,19 +152,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         // 头像
-                        ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl: "https:" + widget.topic.avatar,
-                            height: 21.0,
-                            width: 21.0,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Image.asset(
-                              'assets/images/ic_person.png',
-                              width: 21,
-                              height: 21,
-                              color: Color(0xFFcccccc),
-                            ),
-                          ),
+                        CircleAvatarWithPlaceholder(
+                          imageUrl: widget.topic.avatar,
+                          size: 21,
                         ),
                         SizedBox(
                           width: 6,

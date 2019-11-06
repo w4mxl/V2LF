@@ -6,12 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/common/database_helper.dart';
+import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/components/fullscreen_image_view.dart';
 import 'package:flutter_app/models/web/item_topic_reply.dart';
 import 'package:flutter_app/models/web/item_topic_subtle.dart';
 import 'package:flutter_app/models/web/model_topic_detail.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/utils/event_bus.dart';
@@ -125,8 +125,7 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.image),
-                      onPressed: () =>
-                          launch('https://sm.ms/', statusBarBrightness: Platform.isIOS ? Brightness.light : null),
+                      onPressed: () => launch('https://sm.ms/', statusBarBrightness: Platform.isIOS ? Brightness.light : null),
                     ),
                     IconButton(
                       icon: Icon(Icons.send),
@@ -522,16 +521,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 Offstage(
                   offstage: _detailModel != null && _detailModel.createdId == SpHelper.sp.getString(SP_USERNAME),
                   child: IconButton(
-                      icon: Icon(_detailModel != null && _detailModel.isThank
-                          ? FontAwesomeIcons.solidKissWinkHeart
-                          : actions[0].icon),
+                      icon: Icon(_detailModel != null && _detailModel.isThank ? FontAwesomeIcons.solidKissWinkHeart : actions[0].icon),
                       onPressed: () {
                         _select(actions[0]);
                       }),
                 ),
                 IconButton(
-                    icon: Icon(
-                        _detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
+                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
                     onPressed: () {
                       _select(actions[1]);
                     }),
@@ -609,25 +605,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   child: Hero(
                     tag: 'avatar',
                     transitionOnUserGestures: true,
-                    child: ClipOval(
-                      child: new CachedNetworkImage(
-                        imageUrl: 'https:' + _detailModel.avatar,
-                        height: 44.0,
-                        width: 44.0,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Image.asset(
-                          'assets/images/ic_person.png',
-                          width: 44,
-                          height: 44,
-                          color: Color(0xFFcccccc),
-                        ),
-                      ),
+                    child: CircleAvatarWithPlaceholder(
+                      imageUrl: _detailModel.avatar,
+                      size: 44,
                     ),
                   ),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
+                    MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
                   ),
                 ),
                 SizedBox(width: 10.0),
@@ -650,8 +635,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           ),
                           onTap: () => Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
+                            MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
                           ),
                         ),
                         new Icon(
@@ -860,19 +844,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 child: Hero(
                                   tag: 'avatar$index',
                                   transitionOnUserGestures: true,
-                                  child: ClipOval(
-                                    child: CachedNetworkImage(
-                                      imageUrl: 'https:' + reply.avatar,
-                                      width: 28.0,
-                                      height: 28.0,
-                                      fit: BoxFit.cover,
-                                      placeholder: (context, url) => Image.asset(
-                                        'assets/images/ic_person.png',
-                                        width: 28,
-                                        height: 28,
-                                        color: Color(0xFFcccccc),
-                                      ),
-                                    ),
+                                  child: CircleAvatarWithPlaceholder(
+                                    imageUrl: reply.avatar,
+                                    size: 28,
                                   ),
                                 ),
                                 onTap: () => Navigator.push(
@@ -983,11 +957,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           print(url.split("/member/")[1] + " $index");
                                           // 找出这个用户的最近一条评论，也可能没有
                                           var list = replyList.sublist(0, index);
-                                          var item = list.lastWhere((item) => item.userName == url.split("/member/")[1],
-                                              orElse: () => null);
+                                          var item = list.lastWhere((item) => item.userName == url.split("/member/")[1], orElse: () => null);
                                           if (item == null) {
-                                            Fluttertoast.showToast(
-                                                msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
+                                            Fluttertoast.showToast(msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
                                           } else {
                                             // 弹出找到的此用户之前评论
                                             showDialog(
@@ -1003,27 +975,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                             children: <Widget>[
                                                               // 评论item头像
                                                               GestureDetector(
-                                                                child: Container(
-                                                                  child: ClipOval(
-                                                                    child: CachedNetworkImage(
-                                                                      imageUrl: 'https:' + item.avatar,
-                                                                      width: 28.0,
-                                                                      height: 28.0,
-                                                                      fit: BoxFit.cover,
-                                                                      placeholder: (context, url) => Image.asset(
-                                                                        'assets/images/ic_person.png',
-                                                                        width: 28,
-                                                                        height: 28,
-                                                                        color: Color(0xFFcccccc),
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                child: CircleAvatarWithPlaceholder(
+                                                                  imageUrl: item.avatar,
+                                                                  size: 28,
                                                                 ),
                                                                 onTap: () => Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) => ProfilePage(
-                                                                          item.userName, 'https:${item.avatar}')),
+                                                                      builder: (context) => ProfilePage(item.userName, 'https:${item.avatar}')),
                                                                 ),
                                                               ),
                                                               Offstage(
@@ -1031,8 +990,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.only(top: 6.0),
                                                                   child: Container(
-                                                                    padding:
-                                                                        EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                                                    padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                                                                     decoration: BoxDecoration(
                                                                       color: Colors.redAccent[100],
                                                                       borderRadius: BorderRadius.circular(4),
@@ -1061,9 +1019,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                     new Text(
                                                                       item.userName,
                                                                       style: new TextStyle(
-                                                                          fontSize: 15.0,
-                                                                          color: Colors.grey,
-                                                                          fontWeight: FontWeight.bold),
+                                                                          fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
                                                                     ),
                                                                     // 评论时间和平台
                                                                     new Padding(
@@ -1107,8 +1063,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         alignment: Alignment.center,
                                                                         child: new Text(
                                                                           item.number,
-                                                                          style: new TextStyle(
-                                                                              fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
                                                                         ),
                                                                       ),
                                                                     ),

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_fav_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -204,11 +204,7 @@ class TopicItemView extends StatelessWidget {
                                       // 圆形头像
                                       Container(
                                         margin: const EdgeInsets.only(left: 6.0, right: 4.0),
-                                        width: 20.0,
-                                        height: 20.0,
-                                        child: CircleAvatar(
-                                          backgroundImage: CachedNetworkImageProvider("https:${topic.avatar}"),
-                                        ),
+                                        child: CircleAvatarWithPlaceholder(imageUrl: topic.avatar,size: 20,),
                                       ),
                                       Text(topic.memberId, style: Theme.of(context).textTheme.caption),
                                       Text('${topic.lastReplyTime}',

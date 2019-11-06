@@ -109,7 +109,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
                 fit: BoxFit.fill,
                 width: 73,
                 height: 73,
-                placeholder: (context, url) => Icon(Icons.photo, size: 32.0, color: Color(0xFFcccccc)),
+                placeholder: (context, url) => Icon(Icons.photo, size: 60.0, color: Colors.grey),
               ),
             ),
             SizedBox(
