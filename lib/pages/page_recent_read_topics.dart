@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/generated/i18n.dart';
-import 'package:flutter_app/models/web/item_tab_topic.dart';
+import 'package:flutter_app/models/web/item_recent_read_topic.dart';
 
 import 'page_topic_detail.dart';
 
@@ -24,9 +24,9 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
   bool hasData = false;
   var databaseHelper = DatabaseHelper.instance;
 
-  Future<List<TabTopicItem>> topicListFuture;
+  Future<List<RecentReadTopicItem>> topicListFuture;
 
-  Future<List<TabTopicItem>> getTopics() async {
+  Future<List<RecentReadTopicItem>> getTopics() async {
     return await databaseHelper.getRecentReadTopics();
   }
 
@@ -69,15 +69,11 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
           )
         ],
       ),
-      body: FutureBuilder<List<TabTopicItem>>(
+      body: FutureBuilder<List<RecentReadTopicItem>>(
           future: topicListFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               hasData = snapshot.data.length > 0;
-              // 近期已读列表不用灰色显示
-              snapshot.data.forEach((TabTopicItem topic) {
-                topic.readStatus = 'unread';
-              });
 
               return snapshot.data.length > 0
                   ? new Container(
@@ -101,7 +97,7 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
 
 /// topic item view
 class TopicItemView extends StatefulWidget {
-  final TabTopicItem topic;
+  final RecentReadTopicItem topic;
 
   TopicItemView(this.topic);
 
@@ -110,20 +106,10 @@ class TopicItemView extends StatefulWidget {
 }
 
 class _TopicItemViewState extends State<TopicItemView> {
-  final dbHelper = DatabaseHelper.instance;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // 保存到数据库（新增或者修改之前记录到最前面）
-        // 添加到「近期已读」
-        dbHelper.insert(widget.topic);
-
-        setState(() {
-          widget.topic.readStatus = 'read';
-        });
-
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => TopicDetails(widget.topic.topicId)),
@@ -137,7 +123,9 @@ class _TopicItemViewState extends State<TopicItemView> {
             new Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读 todo
-              style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
+              style: TextStyle(
+                fontSize: 17,
+              ),
             ),
             SizedBox(
               height: 10,

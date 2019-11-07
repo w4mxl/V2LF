@@ -8,6 +8,7 @@ import 'dart:async';
 
 import 'dart:io';
 
+import 'package:flutter_app/models/web/item_recent_read_topic.dart';
 import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,21 +16,21 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   static final _databaseName = "MyReadHistory.db";
-  static final _databaseVersion = 1;
+  static final _databaseVersion = 2;
 
   static final table = 'recent_read_table';
 
   static final columnTopicId = 'topicId';
-  static final columnReadStatus = 'readStatus';
+  //static final columnReadStatus = 'readStatus';
   static final columnMemberId = 'memberId';
 
   static final columnAvatar = 'avatar';
   static final columnTopicContent = 'topicContent';
-  static final columnReplyCount = 'replyCount';
+  //static final columnReplyCount = 'replyCount';
   static final columnNodeId = 'nodeId';
   static final columnNodeName = 'nodeName';
-  static final columnLastReplyMId = 'lastReplyMId';
-  static final columnLastReplyTime = 'lastReplyTime';
+  //static final columnLastReplyMId = 'lastReplyMId';
+  //static final columnLastReplyTime = 'lastReplyTime';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -50,7 +51,7 @@ class DatabaseHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   // SQL code to create the database table
@@ -58,17 +59,35 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $table (
             $columnTopicId TEXT PRIMARY KEY,
-            $columnReadStatus TEXT NOT NULL,
             $columnMemberId TEXT NOT NULL,
             $columnAvatar TEXT NOT NULL,
             $columnTopicContent TEXT NOT NULL,
-            $columnReplyCount TEXT NOT NULL,
             $columnNodeId TEXT NOT NULL,
-            $columnNodeName TEXT NOT NULL,
-            $columnLastReplyMId TEXT NOT NULL,
-            $columnLastReplyTime TEXT NOT NULL
+            $columnNodeName TEXT NOT NULL
           )
           ''');
+  }
+
+  // 升级 recent_read_table 表，从 v1 到 v2 (删除 v1 中无用的列)
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion == 1) {
+      var batch = db.batch();
+      batch.execute('''
+          CREATE TABLE recent_read_table_back (
+            $columnTopicId TEXT PRIMARY KEY,
+            $columnMemberId TEXT NOT NULL,
+            $columnAvatar TEXT NOT NULL,
+            $columnTopicContent TEXT NOT NULL,
+            $columnNodeId TEXT NOT NULL,
+            $columnNodeName TEXT NOT NULL
+          )
+          ''');
+      batch.execute(
+          'INSERT INTO recent_read_table_back SELECT $columnTopicId,$columnMemberId,$columnAvatar,$columnTopicContent,$columnNodeId,$columnNodeName FROM $table');
+      batch.execute('DROP TABLE IF EXISTS $table');
+      batch.execute('ALTER TABLE recent_read_table_back RENAME TO $table');
+      await batch.commit();
+    }
   }
 
   // Helper methods
@@ -76,14 +95,14 @@ class DatabaseHelper {
   // Inserts a row in the database where each key in the Map is a column name
   // and the value is the column value. The return value is the id of the
   // inserted row.
-  Future<int> insert(TabTopicItem tabTopicItem) async {
+  Future<int> insert(RecentReadTopicItem item) async {
     // 判断如果已经有相同id的主题存在，则先删除后添加
-    if (await queryTopic(tabTopicItem.topicId)) {
+    if (await queryTopic(item.topicId)) {
       print("已存在，先移除");
-      delete(tabTopicItem.topicId);
+      delete(item.topicId);
     }
     Database db = await instance.database;
-    return await db.insert(table, tabTopicItem.toMap());
+    return await db.insert(table, item.toMap());
   }
 
   Future<bool> queryTopic(String topicId) async {
@@ -100,10 +119,10 @@ class DatabaseHelper {
   }
 
   // 获取近期已读列表
-  Future<List<TabTopicItem>> getRecentReadTopics() async {
+  Future<List<RecentReadTopicItem>> getRecentReadTopics() async {
     var mapList = await queryAllRows();
-    List<TabTopicItem> topicList = List<TabTopicItem>();
-    mapList.forEach((map) => topicList.insert(0, TabTopicItem.fromMap(map)));
+    List<RecentReadTopicItem> topicList = List<RecentReadTopicItem>();
+    mapList.forEach((map) => topicList.insert(0, RecentReadTopicItem.fromMap(map)));
     print("当前数据库共有${topicList.length}条记录");
     return topicList;
   }
@@ -128,7 +147,7 @@ class DatabaseHelper {
 
   // We are assuming here that the id column in the map is set. The other
   // column values will be used to update the row.
-  Future<int> update(TabTopicItem tabTopicItem) async {
+  Future<int> update(RecentReadTopicItem tabTopicItem) async {
     Database db = await instance.database;
     return await db.update(table, tabTopicItem.toMap(), where: '$columnTopicId = ?', whereArgs: [tabTopicItem.topicId]);
   }

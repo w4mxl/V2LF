@@ -122,15 +122,13 @@ class TopicItemView extends StatefulWidget {
 }
 
 class _TopicItemViewState extends State<TopicItemView> {
-  final dbHelper = DatabaseHelper.instance;
+  
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // 保存到数据库（新增或者修改之前记录到最前面）
-        // 添加到「近期已读」
-        dbHelper.insert(widget.topic);
+  
 
         setState(() {
           widget.topic.readStatus = 'read';

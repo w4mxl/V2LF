@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/components/circle_avatar.dart';
 import 'package:flutter_app/components/fullscreen_image_view.dart';
+import 'package:flutter_app/models/web/item_recent_read_topic.dart';
 import 'package:flutter_app/models/web/item_topic_reply.dart';
 import 'package:flutter_app/models/web/item_topic_subtle.dart';
 import 'package:flutter_app/models/web/model_topic_detail.dart';
@@ -256,11 +257,22 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       // 用来判断主题是否需要登录: 正常获取到的主题 title 是不能为空的
       if (topicDetailModel.topicTitle.isEmpty) {
         // 从「近期已读」移除
-        var databaseHelper = DatabaseHelper.instance;
-        await databaseHelper.delete(topicDetailModel.topicId);
+        //var databaseHelper = DatabaseHelper.instance;
+        //await databaseHelper.delete(topicDetailModel.topicId);
         Navigator.pop(context);
         return;
       }
+
+      // 保存到数据库（新增或者修改之前记录到最前面）
+      // 添加到「近期已读」
+      var dbHelper = DatabaseHelper.instance;
+      dbHelper.insert(RecentReadTopicItem(
+          topicId: topicDetailModel.topicId,
+          topicContent: topicDetailModel.topicTitle,
+          avatar: topicDetailModel.avatar,
+          memberId: topicDetailModel.createdId,
+          nodeName: topicDetailModel.nodeName,
+          nodeId: topicDetailModel.nodeId));
 
       setState(() {
         _detailModel = topicDetailModel;
