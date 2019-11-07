@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
-import 'package:flutter_app/components/switch_list_tile_cupertino.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/pages/page_reorderable_tabs.dart';
 import 'package:flutter_app/states/model_display.dart';
@@ -169,30 +168,18 @@ class _SettingPageState extends State<SettingPage> {
                     indent: 20.0,
                   ),
                   // 字体切换
-                  Platform.isIOS
-                      ? CupertinoSwitchListTile(
-                          value: SpHelper.getFontFamily() == 'System',
-                          onChanged: (value) {
-                            buildSwitchFontSetState(value, context);
-                          },
-                          title: Text(S.of(context).titleSystemFont),
-                          secondary: Icon(
-                            Icons.font_download,
-                          ),
-                          selected: false,
-                          activeColor: Theme.of(context).accentColor,
-                        )
-                      : SwitchListTile(
-                          value: SpHelper.getFontFamily() == 'System',
-                          onChanged: (value) {
-                            buildSwitchFontSetState(value, context);
-                          },
-                          title: Text(S.of(context).titleSystemFont),
-                          secondary: Icon(
-                            Icons.font_download,
-                          ),
-                          selected: false,
-                        ),
+                  SwitchListTile.adaptive(
+                    value: SpHelper.getFontFamily() == 'System',
+                    onChanged: (value) {
+                      buildSwitchFontSetState(value, context);
+                    },
+                    title: Text(S.of(context).titleSystemFont),
+                    secondary: Icon(
+                      Icons.font_download,
+                    ),
+                    selected: false,
+                    activeColor: Theme.of(context).accentColor,
+                  ),
                   Divider(
                     height: 0.0,
                   ),
@@ -258,36 +245,21 @@ class _SettingPageState extends State<SettingPage> {
                     indent: 20.0,
                   ),
                   // 自动签到
-                  Platform.isIOS
-                      ? CupertinoSwitchListTile(
-                          value: _switchAutoAward,
-                          onChanged: (value) {
-                            setState(() {
-                              _switchAutoAward = value;
-                              SpHelper.sp.setBool(SP_AUTO_AWARD, value);
-                            });
-                          },
-                          title: Text(S.of(context).titleAutoAward),
-                          secondary: Icon(
-                            Icons.monetization_on,
-                          ),
-                          selected: false,
-                          activeColor: Theme.of(context).accentColor,
-                        )
-                      : SwitchListTile(
-                          value: _switchAutoAward,
-                          onChanged: (value) {
-                            setState(() {
-                              _switchAutoAward = value;
-                              SpHelper.sp.setBool(SP_AUTO_AWARD, value);
-                            });
-                          },
-                          title: Text(S.of(context).titleAutoAward),
-                          secondary: Icon(
-                            Icons.monetization_on,
-                          ),
-                          selected: false,
-                        ),
+                  SwitchListTile.adaptive(
+                    value: _switchAutoAward,
+                    onChanged: (value) {
+                      setState(() {
+                        _switchAutoAward = value;
+                        SpHelper.sp.setBool(SP_AUTO_AWARD, value);
+                      });
+                    },
+                    title: Text(S.of(context).titleAutoAward),
+                    secondary: Icon(
+                      Icons.monetization_on,
+                    ),
+                    selected: false,
+                    activeColor: Theme.of(context).accentColor,
+                  ),
                   Divider(
                     height: 0.0,
                   ),
@@ -373,8 +345,7 @@ class _SettingPageState extends State<SettingPage> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL(
-                                          "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
+                                      onPressed: () => _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
                                     ),
                                     SimpleDialogOption(
                                       child: Row(
@@ -477,34 +448,21 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Widget _appAppearanceTile(BuildContext context) {
-    return Platform.isIOS
-        ? (int.parse(Utils.iosInfo.systemVersion.split('.')[0]) < 13
-            ? CupertinoSwitchListTile(
-                value: _currentAppearance == ThemeMode.dark,
-                onChanged: (newValue) {
-                  appearanceSwitchApply(newValue);
-                },
-                title: Text(S.of(context).darkMode),
-                secondary: Icon(
-                  Icons.brightness_4,
-                ),
-                selected: false,
-                activeColor: Theme.of(context).accentColor,
-              )
-            : expansionTileAppearance(context))
-        : (Utils.androidInfo.version.sdkInt < 29
-            ? SwitchListTile(
-                value: _currentAppearance == ThemeMode.dark,
-                onChanged: (newValue) {
-                  appearanceSwitchApply(newValue);
-                },
-                title: Text(S.of(context).darkMode),
-                secondary: Icon(
-                  Icons.brightness_4,
-                ),
-                selected: false,
-              )
-            : expansionTileAppearance(context));
+    return ((Platform.isIOS && int.parse(Utils.iosInfo.systemVersion.split('.')[0]) < 13) ||
+            (Platform.isAndroid && Utils.androidInfo.version.sdkInt < 29))
+        ? SwitchListTile.adaptive(
+            value: _currentAppearance == ThemeMode.dark,
+            onChanged: (newValue) {
+              appearanceSwitchApply(newValue);
+            },
+            title: Text(S.of(context).darkMode),
+            secondary: Icon(
+              Icons.brightness_4,
+            ),
+            selected: false,
+            activeColor: Theme.of(context).accentColor,
+          )
+        : expansionTileAppearance(context);
   }
 
   ExpansionTile expansionTileAppearance(BuildContext context) {
