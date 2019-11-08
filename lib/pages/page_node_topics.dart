@@ -6,18 +6,20 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/components/listview_node_topic.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/node.dart';
 import 'package:flutter_app/models/web/item_node_topic.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_topic_detail.dart';
+import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/event_bus.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:ovprogresshud/progresshud.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NodeTopics extends StatefulWidget {
@@ -214,7 +216,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                   linkStyle: TextStyle(
                     color: Theme.of(context).accentColor,
                   ),
-                  onLinkTap: (url) {
+                  onLinkTap: (url) { // todo 等 onLinkTap 支持传递 text 时，要调整
                     if (UrlHelper.canLaunchInApp(context, url)) {
                       return;
                     }
@@ -275,6 +277,107 @@ class _NodeTopicsState extends State<NodeTopics> {
   }
 }
 
+/// topic item view
+class TopicItemView extends StatelessWidget {
+  final NodeTopicItem topic;
+
+  TopicItemView(this.topic);
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => TopicDetails(
+                    topic.topicId,
+                    topicTitle: topic.title,
+                    createdId: topic.memberId,
+                    avatar: topic.avatar,
+                    replyCount: topic.replyCount,
+                  )),
+        );
+      },
+      child: new Container(
+        child: new Column(
+          children: <Widget>[
+            new Container(
+              padding: const EdgeInsets.all(10.0),
+              child: new Row(
+                children: <Widget>[
+                  /*// 头像
+                  new Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    width: 24.0,
+                    height: 24.0,
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(4.0),
+                      ),
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new NetworkImage(topic.avatar),
+                      ),
+                    ),
+                  ),*/
+                  new Expanded(
+                    child: new Container(
+                        margin: const EdgeInsets.only(right: 20.0),
+                        child: new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            /// title
+                            new Container(
+                              alignment: Alignment.centerLeft,
+                              child: new Text(
+                                topic.title,
+                                style: Theme.of(context).textTheme.subhead,
+                              ),
+                            ),
+                            new Container(
+                              margin: const EdgeInsets.only(top: 4.0),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(topic.memberId, textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
+                                  new Text(' • ${topic.characters} • ${topic.clickTimes}',
+                                      textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  Offstage(
+                    offstage: topic.replyCount == '0',
+                    child: Material(
+                      color: Provider.of<DisplayModel>(context).materialColor[400],
+                      shape: new StadiumBorder(),
+                      child: new Container(
+                        width: 35.0,
+                        height: 20.0,
+                        alignment: Alignment.center,
+                        child: new Text(
+                          topic.replyCount,
+                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            new Divider(
+              height: 6.0,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
@@ -283,3 +386,4 @@ _launchURL(String url) async {
     Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }
+
