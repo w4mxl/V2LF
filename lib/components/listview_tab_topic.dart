@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
@@ -122,21 +121,25 @@ class TopicItemView extends StatefulWidget {
 }
 
 class _TopicItemViewState extends State<TopicItemView> {
-  
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-  
-
         setState(() {
           widget.topic.readStatus = 'read';
         });
 
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(widget.topic.topicId)),
+          new MaterialPageRoute(
+              builder: (context) => new TopicDetails(
+                    widget.topic.topicId,
+                    topicTitle: widget.topic.topicContent,
+                    nodeName: widget.topic.nodeName,
+                    createdId: widget.topic.memberId,
+                    avatar: widget.topic.avatar,
+                    replyCount: widget.topic.replyCount,
+                  )),
         );
       },
       child: new Container(
@@ -187,7 +190,7 @@ class _TopicItemViewState extends State<TopicItemView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfilePage(widget.topic.memberId, 'https:$largeAvatar'),
+                                builder: (context) => ProfilePage(widget.topic.memberId, largeAvatar),
                               ),
                             );
                           },

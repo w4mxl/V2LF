@@ -293,7 +293,7 @@ class DioWeb {
       NodeTopicItem item = new NodeTopicItem();
       Match match4MidAvatar = new RegExp(reg4MidAvatar).firstMatch(regString);
       item.memberId = match4MidAvatar.group(1);
-      item.avatar = "https:${match4MidAvatar.group(2)}";
+      item.avatar = match4MidAvatar.group(2);
       Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
       item.topicId = match4TRC.group(1);
       item.replyCount = match4TRC.group(2);
@@ -880,8 +880,7 @@ class DioWeb {
             .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
             .attributes["href"]
             .replaceAll('/go/', '');
-        recentTopicItem.nodeName = document.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
-
+        recentTopicItem.nodeName = value.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
         if (recentTopicItem.replyCount != '0') {
           recentTopicItem.lastReplyTime =
               ' • ' + value.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
@@ -985,7 +984,7 @@ class DioWeb {
             .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
             .attributes["href"]
             .replaceAll('/go/', '');
-        item.nodeName = document.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
+        item.nodeName = aNode.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
 
         if (item.replyCount != '0') {
           item.lastReplyTime = ' • ' + aNode.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
@@ -1056,7 +1055,7 @@ class DioWeb {
     detailModel.smallGray = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div.header > small')
         .text
-        .split('at')[1]
+        .split(' at')[1]
         .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;
 
     detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
@@ -1101,7 +1100,7 @@ class DioWeb {
     if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
       // 表示有评论
       detailModel.replyCount =
-          document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0];
+          document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0].trim();
 
       if (p == 1) {
         // 只有第一页这样的解析才对

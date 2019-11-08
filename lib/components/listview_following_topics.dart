@@ -147,11 +147,19 @@ class TopicItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => TopicDetails(topic.topicId)),
+          MaterialPageRoute(
+              builder: (context) => TopicDetails(
+                    topic.topicId,
+                    topicTitle: topic.topicTitle,
+                    nodeName: topic.nodeName,
+                    createdId: topic.memberId,
+                    avatar: topic.avatar,
+                    replyCount: topic.replyCount,
+                  )),
         );
       },
       child: Card(
@@ -204,13 +212,14 @@ class TopicItemView extends StatelessWidget {
                                       // 圆形头像
                                       Container(
                                         margin: const EdgeInsets.only(left: 6.0, right: 4.0),
-                                        child: CircleAvatarWithPlaceholder(imageUrl: topic.avatar,size: 20,),
+                                        child: CircleAvatarWithPlaceholder(
+                                          imageUrl: topic.avatar,
+                                          size: 20,
+                                        ),
                                       ),
                                       Text(topic.memberId, style: Theme.of(context).textTheme.caption),
                                       Text('${topic.lastReplyTime}',
-                                          textAlign: TextAlign.left,
-                                          maxLines: 1,
-                                          style: Theme.of(context).textTheme.caption),
+                                          textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
                                       Text(topic.lastReplyMId, style: Theme.of(context).textTheme.caption),
                                     ],
                                   ),

@@ -138,9 +138,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                     imageUrl: widget.nodeImg != null
                         ? widget.nodeImg
                         : (_node != null
-                            ? ((_node.avatarLarge == '/static/img/node_large.png')
-                                ? Strings.nodeDefaultImag
-                                : "https:${_node.avatarLarge}")
+                            ? ((_node.avatarLarge == '/static/img/node_large.png') ? Strings.nodeDefaultImag : "https:${_node.avatarLarge}")
                             : ''),
                     fit: BoxFit.contain,
                     placeholder: (context, url) => CircularProgressIndicator(),
@@ -178,7 +176,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                 if (index == 0) {
                   return _buildHeader();
                 }
-                return new TopicItemView(items[index - 1]);
+                return new TopicItemView(items[index - 1], _node.title);
               }
             }, childCount: items.length + 2),
           ),
@@ -216,7 +214,8 @@ class _NodeTopicsState extends State<NodeTopics> {
                   linkStyle: TextStyle(
                     color: Theme.of(context).accentColor,
                   ),
-                  onLinkTap: (url) { // todo 等 onLinkTap 支持传递 text 时，要调整
+                  onLinkTap: (url) {
+                    // todo 等 onLinkTap 支持传递 text 时，要调整
                     if (UrlHelper.canLaunchInApp(context, url)) {
                       return;
                     }
@@ -280,13 +279,13 @@ class _NodeTopicsState extends State<NodeTopics> {
 /// topic item view
 class TopicItemView extends StatelessWidget {
   final NodeTopicItem topic;
+  final String nodeName;
 
-  TopicItemView(this.topic);
+  TopicItemView(this.topic, this.nodeName);
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
@@ -297,6 +296,7 @@ class TopicItemView extends StatelessWidget {
                     createdId: topic.memberId,
                     avatar: topic.avatar,
                     replyCount: topic.replyCount,
+                    nodeName: nodeName,
                   )),
         );
       },
@@ -386,4 +386,3 @@ _launchURL(String url) async {
     Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }
-

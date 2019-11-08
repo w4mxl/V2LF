@@ -58,7 +58,7 @@ class _FollowingUsersListViewState extends State<FollowingUsersListView> with Au
                       MaterialPageRoute(
                           builder: (context) => ProfilePage(
                                 snapshot.data[index].userName,
-                                "https:${snapshot.data[index].avatar}",
+                                snapshot.data[index].avatar,
                                 heroTag: 'avatar$index',
                               ))),
                 );

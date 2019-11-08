@@ -112,7 +112,14 @@ class _TopicItemViewState extends State<TopicItemView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => TopicDetails(widget.topic.topicId)),
+          MaterialPageRoute(
+              builder: (context) => TopicDetails(
+                    widget.topic.topicId,
+                    topicTitle: widget.topic.topicContent,
+                    nodeName: widget.topic.nodeName,
+                    createdId: widget.topic.memberId,
+                    avatar: widget.topic.avatar,
+                  )),
         );
       },
       child: new Container(

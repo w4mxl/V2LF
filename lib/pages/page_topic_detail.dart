@@ -36,7 +36,13 @@ bool isLogin = false;
 class TopicDetails extends StatefulWidget {
   final String topicId;
 
-  TopicDetails(this.topicId);
+  final String topicTitle;
+  final String nodeName;
+  final String createdId;
+  final String avatar;
+  final String replyCount;
+
+  TopicDetails(this.topicId, {this.topicTitle = '', this.nodeName = '', this.createdId = '', this.avatar = '', this.replyCount = '0'});
 
   @override
   _TopicDetailsState createState() => _TopicDetailsState();
@@ -57,7 +63,14 @@ class _TopicDetailsState extends State<TopicDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TopicDetailView(widget.topicId),
+      body: TopicDetailView(
+        widget.topicId,
+        topicTitle: widget.topicTitle,
+        nodeName: widget.nodeName,
+        createdId: widget.createdId,
+        avatar: widget.avatar,
+        replyCount: widget.replyCount,
+      ),
     );
   }
 }
@@ -172,7 +185,13 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
 class TopicDetailView extends StatefulWidget {
   final String topicId;
 
-  TopicDetailView(this.topicId);
+  final String topicTitle;
+  final String nodeName;
+  final String createdId;
+  final String avatar;
+  final String replyCount;
+
+  TopicDetailView(this.topicId, {this.topicTitle, this.nodeName, this.createdId, this.avatar, this.replyCount});
 
   @override
   _TopicDetailViewState createState() => _TopicDetailViewState();
@@ -208,7 +227,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   ScrollController _scrollController;
 
-//  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
+//  bool showToTopBtn = false; //是否显示�������返回到顶部”按钮
 
   @override
   void initState() {
@@ -577,27 +596,27 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           ),
         ],
       ),
-      //body: new TopicDetailView(key, widget.topicId,_select),
-      body: _detailModel != null
-          ? RefreshIndicator(
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  child: Column(
-                    children: <Widget>[
-                      // 详情view
-                      detailCard(context),
-                      // 评论view
-                      commentCard(_select),
-                    ],
-                  ),
-                  controller: _scrollController,
-                ),
+      body: RefreshIndicator(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  // 详情view
+                  detailCard(context),
+                  // 评论view
+                  _detailModel != null
+                      ? commentCard(_select)
+                      : Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                ],
               ),
-              onRefresh: _onRefresh)
-          : Center(
-              child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+              controller: _scrollController,
             ),
+          ),
+          onRefresh: _onRefresh),
     );
   }
 
@@ -618,17 +637,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     tag: 'avatar',
                     transitionOnUserGestures: true,
                     child: CircleAvatarWithPlaceholder(
-                      imageUrl: _detailModel.avatar,
+                      imageUrl: widget.avatar.isNotEmpty ? widget.avatar : _detailModel?.avatar,
                       size: 44,
                     ),
                   ),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(_detailModel != null ? _detailModel.createdId : widget.createdId,
+                            _detailModel != null ? _detailModel.avatar : widget.avatar)),
                   ),
                 ),
                 SizedBox(width: 10.0),
-                new Expanded(
+                Expanded(
                     child: new Column(
                   children: <Widget>[
                     new Row(
@@ -639,7 +660,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: new Text(
-                              _detailModel.createdId,
+                              _detailModel != null ? _detailModel.createdId : widget.createdId,
                               textAlign: TextAlign.left,
                               maxLines: 1,
                               style: new TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
@@ -647,7 +668,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           ),
                           onTap: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ProfilePage(_detailModel.createdId, 'https:${_detailModel.avatar}')),
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage(_detailModel != null ? _detailModel.createdId : widget.createdId,
+                                    _detailModel != null ? _detailModel.avatar : widget.avatar)),
                           ),
                         ),
                         new Icon(
@@ -655,13 +678,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           color: Colors.green,
                           size: 16.0,
                         ),
-                        // 节点名称
+                        // 节���名称
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: new Text(
-                              _detailModel.nodeName,
+                              _detailModel != null ? _detailModel.nodeName : (widget.nodeName != null ? widget.nodeName : '分享创造'),
                               textAlign: TextAlign.left,
                               maxLines: 1,
                               style: new TextStyle(fontSize: 15.0, color: Colors.green, fontWeight: FontWeight.bold),
@@ -671,8 +694,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                               context,
                               new MaterialPageRoute(
                                   builder: (context) => NodeTopics(
-                                        _detailModel.nodeId,
-                                        nodeName: _detailModel.nodeName,
+                                        _detailModel != null ? _detailModel.nodeId : '',
+                                        nodeName: _detailModel != null ? _detailModel.nodeName : widget.nodeName,
                                       ))),
                         ),
                       ],
@@ -687,7 +710,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         new Padding(
                           padding: const EdgeInsets.only(left: 4.0),
                           child: Text(
-                            _detailModel.smallGray,
+                            _detailModel != null ? _detailModel.smallGray : ' 7 小时 20 分钟前, 1314 次点击',
                             style: new TextStyle(fontSize: 13.0, color: Theme.of(context).disabledColor),
                           ),
                         )
@@ -695,17 +718,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     )
                   ],
                 )),
-                new Icon(
+                Icon(
                   FontAwesomeIcons.comment,
                   size: 16.0,
                   color: Colors.grey,
                 ),
-                new Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: new Text(
-                    _detailModel.replyCount,
-                    style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
-                  ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  _detailModel != null ? _detailModel.replyCount : widget.replyCount,
+                  style: new TextStyle(fontSize: 15.0, color: Theme.of(context).unselectedWidgetColor),
                 )
               ],
             ),
@@ -715,7 +738,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             padding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
             width: 500.0,
             child: SelectableText(
-              _detailModel.topicTitle,
+              _detailModel != null ? _detailModel.topicTitle : (widget.topicTitle != null ? widget.topicTitle : ''),
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -723,52 +746,61 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             ),
           ),
           // topic content
-          new Container(
-            padding: const EdgeInsets.all(10.0),
-            child: Html(
-              data: _detailModel.contentRendered,
-              linkStyle: TextStyle(
-                color: Theme.of(context).accentColor,
-                decoration: TextDecoration.underline,
-              ),
-              onLinkTap: (url) {
-                if (UrlHelper.canLaunchInApp(context, url)) {
-                  return;
-                }
-                Utils.launchURL(url);
-              },
-              onImageTap: (source) {
-                print(source);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FullScreenWrapper(
-                      imageProvider: NetworkImage(source),
+          _detailModel != null
+              ? Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Html(
+                    data: _detailModel.contentRendered,
+                    linkStyle: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      decoration: TextDecoration.underline,
                     ),
+                    onLinkTap: (url) {
+                      // todo
+                      if (UrlHelper.canLaunchInApp(context, url)) {
+                        return;
+                      }
+                      Utils.launchURL(url);
+                    },
+                    onImageTap: (source) {
+                      print(source);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FullScreenWrapper(
+                            imageProvider: NetworkImage(source),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-          // 附言
-          Offstage(
-            offstage: _detailModel.subtleList.length == 0,
-            child: Column(
-              children: <Widget>[
-                Column(
-                    children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
-                  return _buildSubtle(subtle);
-                }).toList()),
-                Container(
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
+                )
+              : Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CupertinoActivityIndicator(),
                   ),
                 ),
-              ],
+          // 附言
+          if (_detailModel != null)
+            Offstage(
+              offstage: _detailModel.subtleList.length == 0,
+              child: Column(
+                children: <Widget>[
+                  Column(
+                      children: _detailModel.subtleList.map((TopicSubtleItem subtle) {
+                    return _buildSubtle(subtle);
+                  }).toList()),
+                  Container(
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.black12 : const Color(0xFFFFFFF0),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -799,6 +831,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   decoration: TextDecoration.underline,
                 ),
                 onLinkTap: (url) {
+                  // todo
                   if (UrlHelper.canLaunchInApp(context, url)) {
                     return;
                   }
@@ -866,7 +899,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   MaterialPageRoute(
                                       builder: (context) => ProfilePage(
                                             reply.userName,
-                                            'https:${Utils.avatarLarge(reply.avatar)}',
+                                            Utils.avatarLarge(reply.avatar),
                                             heroTag: 'avatar$index',
                                           )),
                                 ),
@@ -963,6 +996,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         color: Theme.of(context).accentColor,
                                       ),
                                       onLinkTap: (url) {
+                                        // todo
                                         if (UrlHelper.canLaunchInApp(context, url)) {
                                           return;
                                         } else if (url.contains("/member/")) {
@@ -994,7 +1028,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                 onTap: () => Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) => ProfilePage(item.userName, 'https:${item.avatar}')),
+                                                                      builder: (context) => ProfilePage(item.userName, item.avatar)),
                                                                 ),
                                                               ),
                                                               Offstage(

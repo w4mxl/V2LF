@@ -8,8 +8,9 @@ import 'package:flutter_app/components/listview_all_topics.dart';
 
 class UserAllTopicsPage extends StatelessWidget {
   final String userName;
+  final String avatar;
 
-  UserAllTopicsPage(this.userName);
+  UserAllTopicsPage(this.userName, this.avatar);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class UserAllTopicsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('$userName › 全部主题'),
       ),
-      body: AllTopicsListView(userName),
+      body: AllTopicsListView(userName,avatar),
     );
   }
 }

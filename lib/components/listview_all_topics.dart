@@ -13,8 +13,9 @@ import 'package:flutter_app/pages/page_profile.dart';
 // 用户所有主题列表
 class AllTopicsListView extends StatefulWidget {
   final String userName;
+  final String avatar;
 
-  AllTopicsListView(this.userName);
+  AllTopicsListView(this.userName,this.avatar);
 
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
@@ -78,7 +79,7 @@ class TopicListViewState extends State<AllTopicsListView> with AutomaticKeepAliv
                   // 滑到了最后一个item
                   return _buildLoadText();
                 } else {
-                  return TopicItemView(items[index]);
+                  return TopicItemView(items[index],widget.userName,widget.avatar);
                 }
               },
               separatorBuilder: (BuildContext context, int index) => Divider(

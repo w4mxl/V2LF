@@ -152,7 +152,7 @@ class TopicItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return new InkWell(
       onTap: () {
         Navigator.push(
           context,
@@ -196,7 +196,7 @@ class TopicItemView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfilePage(notificationItem.userName, "https:${Utils.avatarLarge(notificationItem.avatar)}"),
+                        builder: (context) => ProfilePage(notificationItem.userName, Utils.avatarLarge(notificationItem.avatar)),
                       ),
                     ),
                   ),
@@ -215,7 +215,7 @@ class TopicItemView extends StatelessWidget {
                           linkStyle: TextStyle(
                             color: Theme.of(context).accentColor,
                           ),
-                          onLinkTap: (url) {
+                          onLinkTap: (url) { // todo
                             if (UrlHelper.canLaunchInApp(context, url)) {
                               return;
                             } else if (url.contains("/member/")) {
@@ -240,7 +240,7 @@ class TopicItemView extends StatelessWidget {
                             linkStyle: TextStyle(
                               color: Theme.of(context).accentColor,
                             ),
-                            onLinkTap: (url) {
+                            onLinkTap: (url) { // todo
                               if (UrlHelper.canLaunchInApp(context, url)) {
                                 return;
                               } else if (url.contains("/member/")) {

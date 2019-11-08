@@ -6,8 +6,14 @@ import 'package:flutter_app/pages/page_topic_detail.dart';
 
 class NavigatorInApp {
   // => 帖子详情页 TopicDetails
-  static toTopicDetails(BuildContext context, String topicId) {
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => TopicDetails(topicId)));
+  static toTopicDetails(BuildContext context, String topicId, {String topicTitle}) {
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (context) => TopicDetails(
+                  topicId,
+                  topicTitle: topicTitle,
+                )));
   }
 
   // => 特定节点话题列表页面 NodeTopics

@@ -74,7 +74,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                       linkStyle: TextStyle(
                         color: Theme.of(context).accentColor,
                       ),
-                      onLinkTap: (url) {
+                      onLinkTap: (url) { // todo
                         if (UrlHelper.canLaunchInApp(context, url)) {
                           return;
                         }

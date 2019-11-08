@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart' as prefix1;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/models/web/item_profile_recent_reply.dart';
@@ -117,9 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    _memberProfileModel != null
-                        ? _memberProfileModel.memberInfo.replaceFirst(' +08:00', '')
-                        : '', // 时间 去除+ 08:00;,
+                    _memberProfileModel != null ? _memberProfileModel.memberInfo.replaceFirst(' +08:00', '') : '', // 时间 去除+ 08:00;,
                     style: TextStyle(fontSize: 10),
                   )
                 ],
@@ -147,17 +144,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 visible: isLogin && widget.userName != SpHelper.sp.getString(SP_USERNAME),
                 child: Row(
                   children: <Widget>[
-                    prefix0.IconButton(
-                        icon: prefix1.Icon(
+                    IconButton(
+                        icon: Icon(
                           _memberProfileModel != null && _memberProfileModel.isFollow ? Icons.star : Icons.star_border,
                         ),
                         tooltip: '关注或取消关注',
                         onPressed: () => _follow()),
-                    prefix0.IconButton(
-                        icon: prefix1.Icon(
-                          _memberProfileModel != null && _memberProfileModel.isBlock
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                    IconButton(
+                        icon: Icon(
+                          _memberProfileModel != null && _memberProfileModel.isBlock ? Icons.visibility_off : Icons.visibility,
                         ),
                         tooltip: '屏蔽或取消屏蔽',
                         onPressed: () => _block()),
@@ -198,7 +193,7 @@ class _ProfilePageState extends State<ProfilePage> {
             shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
             child: CircleAvatar(
               radius: 50.0,
-              backgroundImage: CachedNetworkImageProvider(widget.avatar),
+              backgroundImage: CachedNetworkImageProvider('https:${widget.avatar}'),
             ),
           ),
         ),
@@ -209,9 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 12,
             height: 12,
             decoration: BoxDecoration(
-                color: (_memberProfileModel != null ? _memberProfileModel.online : false)
-                    ? Colors.greenAccent
-                    : Colors.redAccent,
+                color: (_memberProfileModel != null ? _memberProfileModel.online : false) ? Colors.greenAccent : Colors.redAccent,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
                   width: 1,
@@ -330,9 +323,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: _memberProfileModel != null &&
-                _memberProfileModel.topicList != null &&
-                _memberProfileModel.topicList.length > 0,
+            visible: _memberProfileModel != null && _memberProfileModel.topicList != null && _memberProfileModel.topicList.length > 0,
             child: InkWell(
               child: Text(
                 '查看所有',
@@ -340,7 +331,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onTap: () {
                 // 转到用户的所有主题页面
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserAllTopicsPage(widget.userName)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserAllTopicsPage(widget.userName, widget.avatar)));
               },
             ),
           ),
@@ -386,7 +377,7 @@ class _ProfilePageState extends State<ProfilePage> {
             // 禁用滚动事件
             itemCount: _memberProfileModel.topicList.length,
             itemBuilder: (context, index) {
-              return TopicItemView(_memberProfileModel.topicList[index]);
+              return TopicItemView(_memberProfileModel.topicList[index], widget.userName, widget.avatar);
             },
             separatorBuilder: (BuildContext context, int index) => Divider(
               height: 0,
@@ -411,7 +402,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
     return Center(
-      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+      child: CupertinoActivityIndicator(),
     );
   }
 
@@ -482,7 +473,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
     return Center(
-      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+      child: CupertinoActivityIndicator(),
     );
   }
 }
@@ -499,15 +490,26 @@ class Action {
 class TopicItemView extends StatelessWidget {
   final ProfileRecentTopicItem topic;
 
-  TopicItemView(this.topic);
+  final String userName;
+  final String avatar;
+
+  TopicItemView(this.topic, this.userName, this.avatar);
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => TopicDetails(topic.topicId)),
+          new MaterialPageRoute(
+              builder: (context) => TopicDetails(
+                    topic.topicId,
+                    topicTitle: topic.topicTitle,
+                    nodeName: topic.nodeName,
+                    createdId: userName,
+                    avatar: avatar,
+                    replyCount: topic.replyCount,
+                  )),
         );
       },
       child: Container(
@@ -628,6 +630,7 @@ class ReplyItemView extends StatelessWidget {
               color: Theme.of(context).accentColor,
             ),
             onLinkTap: (url) {
+              // todo
               if (UrlHelper.canLaunchInApp(context, url)) {
                 return;
               } else if (url.contains("/member/")) {
@@ -648,6 +651,7 @@ class ReplyItemView extends StatelessWidget {
               color: Theme.of(context).accentColor,
             ),
             onLinkTap: (url) {
+              // todo
               if (UrlHelper.canLaunchInApp(context, url)) {
                 return;
               } else if (url.contains("/member/")) {
