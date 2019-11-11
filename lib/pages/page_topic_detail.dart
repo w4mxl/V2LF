@@ -605,12 +605,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   // 详情view
                   detailCard(context),
                   // 评论view
-                  _detailModel != null
-                      ? commentCard(_select)
-                      : Padding(
-                          padding: EdgeInsets.all(20),
-                          child: CupertinoActivityIndicator(),
-                        ),
+                  if (_detailModel != null)
+                    commentCard(_select)
                 ],
               ),
               controller: _scrollController,
