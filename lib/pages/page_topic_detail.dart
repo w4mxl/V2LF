@@ -852,6 +852,64 @@ class _TopicDetailViewState extends State<TopicDetailView> {
     );
   }
 
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.green,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.forum,
+              color: Colors.white,
+            ),
+            Text(
+              " 查看会话",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+    );
+  }
+
+  Widget slideLeftBackground() {
+    return Container(
+      color: Colors.blueGrey,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(
+              FontAwesomeIcons.kissWinkHeart,
+              color: Colors.white,
+            ),
+            Text(
+              " 发送感谢",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
+    );
+  }
+
   StatelessWidget commentCard(void Function(Action action) select) {
     return replyList.length == 0
         ? Container(
@@ -872,320 +930,328 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   return _buildLoadText();
                 } else {
                   ReplyItem reply = replyList[index];
-                  return InkWell(
-                    child: new Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                      child: new Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              // 评论item头像
-                              GestureDetector(
-                                child: Hero(
-                                  tag: 'avatar$index',
-                                  transitionOnUserGestures: true,
-                                  child: CircleAvatarWithPlaceholder(
-                                    imageUrl: reply.avatar,
-                                    size: 28,
-                                  ),
-                                ),
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfilePage(
-                                            reply.userName,
-                                            Utils.avatarLarge(reply.avatar),
-                                            heroTag: 'avatar$index',
-                                          )),
-                                ),
-                              ),
-                              Offstage(
-                                offstage: reply.userName != _detailModel.createdId,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                                    decoration: BoxDecoration(
-                                      color: Colors.redAccent[100],
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      '楼主',
-                                      style: TextStyle(fontSize: 9, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          new Expanded(
-                              child: new Container(
-                            margin: const EdgeInsets.only(top: 2.0),
-                            child: new Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  return Dismissible(
+                    key: Key('$index'),
+                    // 未登录只能从左到右：查看会话；登录状态可以双向：查看会话 & 发送感谢
+                    direction: isLogin ? DismissDirection.horizontal : DismissDirection.startToEnd,
+                    background: slideRightBackground(),
+                    secondaryBackground: slideLeftBackground(),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.startToEnd) {
+                        print('wml#弹出会话');
+                        // todo
+                        return false;
+                      } else {
+                        print('wml#弹出发送感谢');
+                        select(Action(id: 'thank_reply', title: reply.replyId));
+                        return false;
+                      }
+                    },
+                    child: InkWell(
+                      child: new Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                        child: new Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
                               children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    // 评论用户ID
-                                    new Text(
-                                      reply.userName,
-                                      style: new TextStyle(fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                // 评论item头像
+                                GestureDetector(
+                                  child: Hero(
+                                    tag: 'avatar$index',
+                                    transitionOnUserGestures: true,
+                                    child: CircleAvatarWithPlaceholder(
+                                      imageUrl: reply.avatar,
+                                      size: 28,
                                     ),
-                                    // 评论时间和平台
-                                    new Padding(
-                                      padding: const EdgeInsets.only(left: 6.0, right: 8.0),
-                                      child: new Text(
-                                        reply.lastReplyTime,
-                                        style: new TextStyle(
-                                          color: const Color(0xFFcccccc),
-                                          fontSize: 13.0,
-                                        ),
-                                      ),
-                                    ),
-                                    // 获得感谢数
-                                    Offstage(
-                                      offstage: reply.favorites.isEmpty,
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.favorite,
-                                            color: Colors.red[100], // Color(0xFFcccccc)
-                                            size: 14.0,
-                                          ),
-                                          SizedBox(width: 2.0),
-                                          Text(
-                                            reply.favorites,
-                                            style: TextStyle(
-                                              color: const Color(0xFFcccccc),
-                                              fontSize: 13.0,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Material(
-                                      color: Color(0xFFf0f0f0),
-                                      shape: new StadiumBorder(),
-                                      child: new Container(
-                                        width: 20.0,
-                                        height: 14.0,
-                                        alignment: Alignment.center,
-                                        child: new Text(
-                                          reply.number,
-                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProfilePage(
+                                              reply.userName,
+                                              Utils.avatarLarge(reply.avatar),
+                                              heroTag: 'avatar$index',
+                                            )),
+                                  ),
                                 ),
-                                Container(
-                                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                                    // 评论内容
-                                    child: Html(
-                                      data: reply.contentRendered,
-                                      linkStyle: TextStyle(
-                                        color: Theme.of(context).accentColor,
+                                Offstage(
+                                  offstage: reply.userName != _detailModel.createdId,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color: Colors.redAccent[100],
+                                        borderRadius: BorderRadius.circular(4),
                                       ),
-                                      onLinkTap: (url) {
-                                        // todo
-                                        if (UrlHelper.canLaunchInApp(context, url)) {
-                                          return;
-                                        } else if (url.contains("/member/")) {
-                                          print(url.split("/member/")[1] + " $index");
-                                          // 找出这个用户的最近一条评论，也可能没有
-                                          var list = replyList.sublist(0, index);
-                                          var item = list.lastWhere((item) => item.userName == url.split("/member/")[1], orElse: () => null);
-                                          if (item == null) {
-                                            Fluttertoast.showToast(msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
-                                          } else {
-                                            // 弹出找到的此用户之前评论
-                                            showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return SimpleDialog(
-                                                    contentPadding: EdgeInsets.all(10),
-                                                    children: <Widget>[
-                                                      Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: <Widget>[
-                                                          Column(
-                                                            children: <Widget>[
-                                                              // 评论item头像
-                                                              GestureDetector(
-                                                                child: CircleAvatarWithPlaceholder(
-                                                                  imageUrl: item.avatar,
-                                                                  size: 28,
-                                                                ),
-                                                                onTap: () => Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => ProfilePage(item.userName, item.avatar)),
-                                                                ),
-                                                              ),
-                                                              Offstage(
-                                                                offstage: item.userName != _detailModel.createdId,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.only(top: 6.0),
-                                                                  child: Container(
-                                                                    padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                                                                    decoration: BoxDecoration(
-                                                                      color: Colors.redAccent[100],
-                                                                      borderRadius: BorderRadius.circular(4),
-                                                                    ),
-                                                                    child: Text(
-                                                                      '楼主',
-                                                                      style: TextStyle(fontSize: 9, color: Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            width: 10.0,
-                                                          ),
-                                                          Expanded(
-                                                              child: new Container(
-                                                            margin: const EdgeInsets.only(top: 2.0),
-                                                            child: new Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: <Widget>[
-                                                                new Row(
-                                                                  children: <Widget>[
-                                                                    // 评论用户ID
-                                                                    new Text(
-                                                                      item.userName,
-                                                                      style: new TextStyle(
-                                                                          fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
-                                                                    ),
-                                                                    // 评论时间和平台
-                                                                    new Padding(
-                                                                      padding: const EdgeInsets.only(left: 6.0, right: 4.0),
-                                                                      child: new Text(
-                                                                        item.lastReplyTime,
-                                                                        style: new TextStyle(
-                                                                          color: const Color(0xFFcccccc),
-                                                                          fontSize: 13.0,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    // 获得感谢数
-                                                                    Offstage(
-                                                                      offstage: item.favorites.isEmpty,
-                                                                      child: Row(
-                                                                        children: <Widget>[
-                                                                          Icon(
-                                                                            Icons.favorite,
-                                                                            color: Colors.red[100], // Color(0xFFcccccc)
-                                                                            size: 14.0,
-                                                                          ),
-                                                                          SizedBox(width: 2.0),
-                                                                          Text(
-                                                                            item.favorites,
-                                                                            style: TextStyle(
-                                                                              color: const Color(0xFFcccccc),
-                                                                              fontSize: 13.0,
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Spacer(),
-                                                                    Material(
-                                                                      color: Color(0xFFf0f0f0),
-                                                                      shape: new StadiumBorder(),
-                                                                      child: new Container(
-                                                                        width: 20.0,
-                                                                        height: 14.0,
-                                                                        alignment: Alignment.center,
-                                                                        child: new Text(
-                                                                          item.number,
-                                                                          style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                new Container(
-                                                                    padding: EdgeInsets.only(top: 5.0),
-                                                                    // 评论内容
-                                                                    child: Html(
-                                                                      data: item.contentRendered,
-                                                                      linkStyle: TextStyle(
-                                                                        color: Theme.of(context).accentColor,
-                                                                      ),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                          )),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  );
-                                                });
-                                          }
-                                          return;
-                                        }
-                                        Utils.launchURL(url);
-                                      },
-                                      onImageTap: (source) {
-                                        print(source);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => FullScreenWrapper(
-                                              imageProvider: NetworkImage(source),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    )),
-                                Divider(
-                                  height: 0,
+                                      child: Text(
+                                        '楼主',
+                                        style: TextStyle(fontSize: 9, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          )),
-                        ],
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            new Expanded(
+                                child: new Container(
+                              margin: const EdgeInsets.only(top: 2.0),
+                              child: new Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      // 评论用户ID
+                                      new Text(
+                                        reply.userName,
+                                        style: new TextStyle(fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                      ),
+                                      // 评论时间和平台
+                                      new Padding(
+                                        padding: const EdgeInsets.only(left: 6.0, right: 8.0),
+                                        child: new Text(
+                                          reply.lastReplyTime,
+                                          style: new TextStyle(
+                                            color: const Color(0xFFcccccc),
+                                            fontSize: 13.0,
+                                          ),
+                                        ),
+                                      ),
+                                      // 获得感谢数
+                                      Offstage(
+                                        offstage: reply.favorites.isEmpty,
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.favorite,
+                                              color: Colors.red[100], // Color(0xFFcccccc)
+                                              size: 14.0,
+                                            ),
+                                            SizedBox(width: 2.0),
+                                            Text(
+                                              reply.favorites,
+                                              style: TextStyle(
+                                                color: const Color(0xFFcccccc),
+                                                fontSize: 13.0,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Material(
+                                        color: Color(0xFFf0f0f0),
+                                        shape: new StadiumBorder(),
+                                        child: new Container(
+                                          width: 20.0,
+                                          height: 14.0,
+                                          alignment: Alignment.center,
+                                          child: new Text(
+                                            reply.number,
+                                            style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                                      // 评论内容
+                                      child: Html(
+                                        data: reply.contentRendered,
+                                        linkStyle: TextStyle(
+                                          color: Theme.of(context).accentColor,
+                                        ),
+                                        onLinkTap: (url) {
+                                          // todo
+                                          if (UrlHelper.canLaunchInApp(context, url)) {
+                                            return;
+                                          } else if (url.contains("/member/")) {
+                                            print(url.split("/member/")[1] + " $index");
+                                            // 找出这个用户的最近一条评论，也可能没有
+                                            var list = replyList.sublist(0, index);
+                                            var item = list.lastWhere((item) => item.userName == url.split("/member/")[1], orElse: () => null);
+                                            if (item == null) {
+                                              Fluttertoast.showToast(msg: '1层至$index层间未发现该用户回复', gravity: ToastGravity.CENTER);
+                                            } else {
+                                              // 弹出找到的此用户之前评论
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return SimpleDialog(
+                                                      contentPadding: EdgeInsets.all(10),
+                                                      children: <Widget>[
+                                                        Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: <Widget>[
+                                                            Column(
+                                                              children: <Widget>[
+                                                                // 评论item头像
+                                                                GestureDetector(
+                                                                  child: CircleAvatarWithPlaceholder(
+                                                                    imageUrl: item.avatar,
+                                                                    size: 28,
+                                                                  ),
+                                                                  onTap: () => Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => ProfilePage(item.userName, item.avatar)),
+                                                                  ),
+                                                                ),
+                                                                Offstage(
+                                                                  offstage: item.userName != _detailModel.createdId,
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.only(top: 6.0),
+                                                                    child: Container(
+                                                                      padding: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Colors.redAccent[100],
+                                                                        borderRadius: BorderRadius.circular(4),
+                                                                      ),
+                                                                      child: Text(
+                                                                        '楼主',
+                                                                        style: TextStyle(fontSize: 9, color: Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10.0,
+                                                            ),
+                                                            Expanded(
+                                                                child: new Container(
+                                                              margin: const EdgeInsets.only(top: 2.0),
+                                                              child: new Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: <Widget>[
+                                                                  new Row(
+                                                                    children: <Widget>[
+                                                                      // 评论用户ID
+                                                                      new Text(
+                                                                        item.userName,
+                                                                        style: new TextStyle(
+                                                                            fontSize: 15.0, color: Colors.grey, fontWeight: FontWeight.bold),
+                                                                      ),
+                                                                      // 评论时间和平台
+                                                                      new Padding(
+                                                                        padding: const EdgeInsets.only(left: 6.0, right: 4.0),
+                                                                        child: new Text(
+                                                                          item.lastReplyTime,
+                                                                          style: new TextStyle(
+                                                                            color: const Color(0xFFcccccc),
+                                                                            fontSize: 13.0,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      // 获得感谢数
+                                                                      Offstage(
+                                                                        offstage: item.favorites.isEmpty,
+                                                                        child: Row(
+                                                                          children: <Widget>[
+                                                                            Icon(
+                                                                              Icons.favorite,
+                                                                              color: Colors.red[100], // Color(0xFFcccccc)
+                                                                              size: 14.0,
+                                                                            ),
+                                                                            SizedBox(width: 2.0),
+                                                                            Text(
+                                                                              item.favorites,
+                                                                              style: TextStyle(
+                                                                                color: const Color(0xFFcccccc),
+                                                                                fontSize: 13.0,
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Spacer(),
+                                                                      Material(
+                                                                        color: Color(0xFFf0f0f0),
+                                                                        shape: new StadiumBorder(),
+                                                                        child: new Container(
+                                                                          width: 20.0,
+                                                                          height: 14.0,
+                                                                          alignment: Alignment.center,
+                                                                          child: new Text(
+                                                                            item.number,
+                                                                            style: new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  new Container(
+                                                                      padding: EdgeInsets.only(top: 5.0),
+                                                                      // 评论内容
+                                                                      child: Html(
+                                                                        data: item.contentRendered,
+                                                                        linkStyle: TextStyle(
+                                                                          color: Theme.of(context).accentColor,
+                                                                        ),
+                                                                      )),
+                                                                ],
+                                                              ),
+                                                            )),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    );
+                                                  });
+                                            }
+                                            return;
+                                          }
+                                          Utils.launchURL(url);
+                                        },
+                                        onImageTap: (source) {
+                                          print(source);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => FullScreenWrapper(
+                                                imageProvider: NetworkImage(source),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )),
+                                  Divider(
+                                    height: 0,
+                                  ),
+                                ],
+                              ),
+                            )),
+                          ],
+                        ),
                       ),
-                    ),
-                    onTap: () {
-                      if (isLogin) {
-                        // 点击评论列表item，弹出回复框
-                        select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
-                      } else {
-                        Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
-                      }
-                    },
-                    onLongPress: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                if (isLogin)
+                      onTap: () {
+                        if (isLogin) {
+                          // 点击评论列表item，弹出回复框
+                          select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
+                        } else {
+                          Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
+                        }
+                      },
+                      onLongPress: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
                                   ListTile(
-                                    leading: Icon(FontAwesomeIcons.kissWinkHeart),
-                                    title: Text('感谢评论'),
+                                    leading: Icon(Icons.content_copy),
+                                    title: Text('拷贝评论'),
                                     onTap: () {
                                       Navigator.pop(context);
-                                      select(Action(id: 'thank_reply', title: reply.replyId));
+                                      select(Action(id: 'reply_copy', title: reply.content));
                                     },
                                   ),
-                                ListTile(
-                                  leading: Icon(Icons.content_copy),
-                                  title: Text('拷贝评论'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    select(Action(id: 'reply_copy', title: reply.content));
-                                  },
-                                ),
 //                                    ListTile(
 //                                      leading: Icon(Icons.forum),
 //                                      title: Text('查看对话'),
@@ -1194,10 +1260,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 //                                        Fluttertoast.showToast(msg: 'Developing...');
 //                                      },
 //                                    ),
-                              ],
-                            );
-                          });
-                    },
+                                ],
+                              );
+                            });
+                      },
+                    ),
                   );
                 }
               },
