@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/drawer_left.dart';
@@ -44,10 +46,13 @@ void main() async {
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
   PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
-  dio.interceptors..add(CookieManager(cookieJar))..add(LogInterceptor());
+  dio.interceptors
+    ..add(CookieManager(cookieJar))
+    ..add(LogInterceptor())
+    ..add(DioCacheManager(CacheConfig(baseUrl: Strings.v2exHost)).interceptor);
   (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
-  dio.options.connectTimeout = 15000;
-  dio.options.receiveTimeout = 15000;
+  dio.options.connectTimeout = 12000;
+  dio.options.receiveTimeout = 12000;
   dio.options.baseUrl = Strings.v2exHost;
   dio.options.headers = {
     'user-agent': Platform.isIOS
@@ -97,12 +102,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     //监听是否有未读消息需要通知
     eventBus.on(MyEventHasNewNotification, (unreadNumber) async {
       // 展示本地通知
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails('notify', '有未读消息通知', 'v2ex平台的未读消息',
-          importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+      var androidPlatformChannelSpecifics =
+          AndroidNotificationDetails('notify', '有未读消息通知', 'v2ex平台的未读消息', importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin
-          .show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的未读消息，点击查看', platformChannelSpecifics, payload: '');
+      await flutterLocalNotificationsPlugin.show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的未读消息，点击查看', platformChannelSpecifics, payload: '');
     });
   }
 

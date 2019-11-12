@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/common/v2ex_client.dart';
 import 'package:flutter_app/models/web/item_fav_node.dart';
@@ -36,6 +37,29 @@ import 'package:xpath/xpath.dart';
 ///
 
 class DioWeb {
+  // Dio response error 统一处理
+  static void formatError(DioError e) {
+    switch (e.type) {
+      case DioErrorType.CANCEL:
+        break;
+      case DioErrorType.CONNECT_TIMEOUT:
+        Fluttertoast.showToast(msg: '连接超时...', gravity: ToastGravity.CENTER);
+        break;
+      case DioErrorType.SEND_TIMEOUT:
+        Fluttertoast.showToast(msg: '请求超时...', gravity: ToastGravity.CENTER);
+        break;
+      case DioErrorType.RECEIVE_TIMEOUT:
+        Fluttertoast.showToast(msg: '响应超时...', gravity: ToastGravity.CENTER);
+        break;
+      case DioErrorType.RESPONSE:
+        Fluttertoast.showToast(msg: '出现异常...', gravity: ToastGravity.CENTER);
+        break;
+      case DioErrorType.DEFAULT:
+        Fluttertoast.showToast(msg: '未知错误...', gravity: ToastGravity.CENTER);
+        break;
+    }
+  }
+
   // App 启动时，检查登录状态，若登录的则帮领取签到奖励
   static Future verifyLoginStatus() async {
     if (SpHelper.sp.containsKey(SP_USERNAME)) {
@@ -111,25 +135,7 @@ class DioWeb {
         }
       } on DioError catch (e) {
         if (e != null) {
-          switch (e.type) {
-            case DioErrorType.CANCEL:
-              break;
-            case DioErrorType.CONNECT_TIMEOUT:
-              Fluttertoast.showToast(msg: '连接超时...', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.SEND_TIMEOUT:
-              Fluttertoast.showToast(msg: '发送数据超时...', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.RECEIVE_TIMEOUT:
-              Fluttertoast.showToast(msg: '接收数据超时...', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.RESPONSE:
-              Fluttertoast.showToast(msg: '响应超时...', gravity: ToastGravity.CENTER);
-              break;
-            case DioErrorType.DEFAULT:
-              // Fluttertoast.showToast(msg: '未知错误...', gravity: ToastGravity.CENTER);
-              break;
-          }
+          formatError(e);
         }
         return topics;
       }
@@ -214,8 +220,7 @@ class DioWeb {
 
     final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
     final String reg4NodeItem = "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
-
-    var response = await dio.get('/');
+    var response = await dio.get('/', options: buildCacheOptions(Duration(days: 7), maxStale: Duration(days: 10)));
     content = response.data..replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
     RegExp exp = new RegExp(reg4Node);
@@ -317,15 +322,15 @@ class DioWeb {
         return false;
       }
 
-      dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+      dio.options.contentType = Headers.formUrlEncodedContentType;
 
-      FormData formData = new FormData.from({
+      FormData formData = FormData.fromMap({
         "once": once,
         "content": content,
       });
 
       var responseReply = await dio.post("/t/" + topicId, data: formData);
-      dio.options.contentType = ContentType.json; // 还原
+      dio.options.contentType = Headers.jsonContentType; // 还原
       var document = parse(responseReply.data);
       if (document.querySelector('#Wrapper > div > div > div.problem') != null) {
         // 回复失败
@@ -364,15 +369,15 @@ class DioWeb {
 
       print('wml：' + once);
 
-      dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-      FormData formData = new FormData.from({
+      dio.options.contentType = Headers.formUrlEncodedContentType;
+      FormData formData = FormData.fromMap({
         "once": once,
         "title": title,
         "content": content,
         "syntax": "1", // 文本标记语法，0: 默认 1: Markdown
       });
       var responsePostTopic = await dio.post("/new/" + nodeId, data: formData);
-      dio.options.contentType = ContentType.json; // 还原
+      dio.options.contentType = Headers.jsonContentType; // 还原
       var document = parse(responsePostTopic.data);
       if (document.querySelector('#Wrapper > div > div > div.problem > ul') != null) {
         // 发布话题失败: 可能有多条错误，这里只取第一条提示用户
@@ -434,10 +439,10 @@ class DioWeb {
       'user-agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
     };
-    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
+    dio.options.contentType = Headers.formUrlEncodedContentType;
     //dio.options.responseType = ResponseType.JSON;
 
-    FormData formData = new FormData.from({
+    FormData formData = FormData.fromMap({
       "once": loginFormData.once,
       "next": "/",
       loginFormData.username: loginFormData.usernameInput,
@@ -447,7 +452,7 @@ class DioWeb {
 
     try {
       var response = await dio.post("/signin", data: formData);
-      dio.options.contentType = ContentType.json; // 还原
+      dio.options.contentType = Headers.jsonContentType; // 还原
       if (response.statusCode == 302) {
         // 还原
         dio.options.headers = {
@@ -489,14 +494,14 @@ class DioWeb {
     if (once == null || once.isEmpty) {
       return false;
     }
-    dio.options.contentType = ContentType.parse("application/x-www-form-urlencoded");
-    FormData formData = new FormData.from({
+    dio.options.contentType = Headers.formUrlEncodedContentType;
+    FormData formData = FormData.fromMap({
       "once": once,
       "code": code,
     });
     print("wml: once = " + once + ",code = " + code);
     var response = await dio.post("/2fa", data: formData);
-    dio.options.contentType = ContentType.json; // 还原
+    dio.options.contentType = Headers.jsonContentType; // 还原
     if (response.statusCode == 302) {
       return true;
     }
@@ -987,13 +992,13 @@ class DioWeb {
     List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
-    var response = await dio.get("/t/" + topicId + "?p=" + p.toString());
+    var response = await dio.get("/t/" + topicId + "?p=" + p.toString(), options: buildCacheOptions(Duration(days: 4), forceRefresh: true));
     // Use html parser and query selector
     var document = parse(response.data);
 
     detailModel.topicId = topicId;
 
-    if (response.isRedirect || document.querySelector('#Main > div.box > div.message') != null) {
+    if ((response.isRedirect != null && response.isRedirect) || document.querySelector('#Main > div.box > div.message') != null) {
       Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
       return detailModel;
     }
