@@ -1147,7 +1147,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 });
                           }
                         } else {
-                          Fluttertoast.showToast(msg: '未在上面楼层中发现相关会话', gravity: ToastGravity.CENTER);
+                          Fluttertoast.showToast(msg: '未找到相关会话 🤪', gravity: ToastGravity.CENTER);
                         }
                         return false;
                       } else {

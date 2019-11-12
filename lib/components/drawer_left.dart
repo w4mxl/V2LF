@@ -89,8 +89,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                             ),
                       onTap: () {
                         if (userName.isEmpty) {
-                          var future = Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
+                          var future = Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
                           future.then((value) {
                             // 直接close登录页则value为null；登录成功 value 为 true
                             if (value != null && value) {
@@ -184,8 +183,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      var future = Navigator.push(
-                          context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
+                      var future =
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
                       future.then((value) {
                         // 直接close登录页则value为null；登录成功 value 为 true
                         if (value != null && value) {
@@ -225,8 +224,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   color: Provider.of<DisplayModel>(context).materialColor,
                   image: new DecorationImage(
                       fit: BoxFit.cover,
-                      image: new NetworkImage(GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()]
-                          [GoogleNowImg.getCurrentTimeIndex()])),
+                      image: new NetworkImage(
+                          GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()][GoogleNowImg.getCurrentTimeIndex()])),
                 ),
                 margin: null,
               ),
@@ -304,8 +303,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).create),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context, new MaterialPageRoute(builder: (context) => new NewTopicPage(), fullscreenDialog: true));
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage(), fullscreenDialog: true));
                 },
               ),
               new Divider(
@@ -323,7 +321,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(S.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.6",
+                applicationVersion: "v2019.7",
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
