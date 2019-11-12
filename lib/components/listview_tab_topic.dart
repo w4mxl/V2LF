@@ -280,10 +280,13 @@ class LoadingList extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: double.infinity,
-                              height: 18.0,
-                              color: Colors.white,
+                            ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                              child: Container(
+                                width: double.infinity,
+                                height: 18.0,
+                                color: Colors.white,
+                              ),
                             ),
                             SizedBox(
                               height: 14,
@@ -300,26 +303,35 @@ class LoadingList extends StatelessWidget {
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Container(
-                                  width: 40.0,
-                                  height: 12.0,
-                                  color: Colors.white,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 14.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Container(
-                                  width: 40.0,
-                                  height: 12.0,
-                                  color: Colors.white,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 14.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Container(
-                                  width: 40.0,
-                                  height: 12.0,
-                                  color: Colors.white,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  child: Container(
+                                    width: 40.0,
+                                    height: 14.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 Spacer(),
                                 Icon(
@@ -330,10 +342,13 @@ class LoadingList extends StatelessWidget {
                                 SizedBox(
                                   width: 4,
                                 ),
-                                Container(
-                                  width: 20.0,
-                                  height: 12.0,
-                                  color: Colors.white,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  child: Container(
+                                    width: 20.0,
+                                    height: 14.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
