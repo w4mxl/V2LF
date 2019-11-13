@@ -190,8 +190,10 @@ class WhatsNewPage extends StatelessWidget {
 
 class ChangeLogView extends StatefulWidget {
   const ChangeLogView({this.changes, this.path});
+
   final String changes;
   final String path;
+
   @override
   _ChangeLogViewState createState() => _ChangeLogViewState();
 }
@@ -218,7 +220,7 @@ class _ChangeLogViewState extends State<ChangeLogView> {
   @override
   Widget build(BuildContext context) {
     if (_changelog == null) {
-      return CircularProgressIndicator();
+      return Center(child: CupertinoActivityIndicator());
     }
     return Markdown(data: _changelog);
   }

@@ -984,7 +984,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 backgroundColor: Colors.transparent,
                                 builder: (context) {
                                   return ClipRRect(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     child: Container(
                                       color: Theme.of(context).cardColor,
                                       child: ListView.builder(
