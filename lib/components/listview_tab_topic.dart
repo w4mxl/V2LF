@@ -68,7 +68,13 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                           Text('暂无数据'),
                         ],
                       ),
-                onRefresh: _onRefresh);
+                onRefresh: () {
+                  // https://stackoverflow.com/questions/51775098/how-do-i-use-refreshindicator-with-a-futurebuilder-in-flutter
+                  setState(() {
+                    topicListFuture = getTopics();
+                  });
+                  return topicListFuture;
+                });
           } else if (snapshot.hasError) {
             print("wmllll:${snapshot.error}");
             return Column(

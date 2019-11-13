@@ -934,8 +934,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   ReplyItem reply = replyList[index];
                   return Dismissible(
                     key: Key('$index'),
-                    // 未登录只能从左到右：查看会话；登录状态可以双向：查看会话 & 发送感谢
-                    direction: isLogin ? DismissDirection.horizontal : DismissDirection.startToEnd,
+                    direction: DismissDirection.horizontal,
                     background: slideRightBackground(),
                     secondaryBackground: slideLeftBackground(),
                     confirmDismiss: (direction) async {
@@ -986,6 +985,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                   return ClipRRect(
                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
                                     child: Container(
+                                      padding: EdgeInsets.only(top: 10),
                                       color: Theme.of(context).cardColor,
                                       child: ListView.builder(
                                           itemCount: listToShow.length,
