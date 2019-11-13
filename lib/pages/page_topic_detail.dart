@@ -856,7 +856,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   Widget slideRightBackground() {
     return Container(
-      color: Colors.green,
+      color: Theme.of(context).accentColor,
       child: Align(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -869,7 +869,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               color: Colors.white,
             ),
             Text(
-              " 查看会话",
+              "  查看会话",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -885,17 +885,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   Widget slideLeftBackground() {
     return Container(
-      color: Colors.blueGrey,
+      color: Theme.of(context).accentColor,
       child: Align(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Icon(
-              FontAwesomeIcons.kissWinkHeart,
+              Icons.reply,
               color: Colors.white,
             ),
             Text(
-              " 发送感谢",
+              "  回复",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -1147,12 +1147,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 });
                           }
                         } else {
-                          Fluttertoast.showToast(msg: '未找到相关会话 🤪', gravity: ToastGravity.CENTER);
+                          Fluttertoast.showToast(msg: '未找到会话 🤪', gravity: ToastGravity.CENTER);
                         }
                         return false;
                       } else {
-                        print('wml#弹出发送感谢');
-                        select(Action(id: 'thank_reply', title: reply.replyId));
+                        print('wml#弹出回复');
+                        if (isLogin) {
+                          // 点击评论列表item，弹出回复框
+                          select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
+                        } else {
+                          Progresshud.showInfoWithStatus('请先登录\n ¯\\_(ツ)_/¯');
+                        }
                         return false;
                       }
                     },
@@ -1439,20 +1444,24 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         ),
                       ),
                       onTap: () {
-                        if (isLogin) {
-                          // 点击评论列表item，弹出回复框
-                          select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
-                        } else {
-                          Progresshud.showInfoWithStatus('登录后有更多操作\n ¯\\_(ツ)_/¯');
-                        }
-                      },
-                      onLongPress: () {
                         showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
+                                  ListTile(
+                                    leading: Icon(FontAwesomeIcons.kissWinkHeart),
+                                    title: Text('感谢评论'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      if (isLogin) {
+                                        select(Action(id: 'thank_reply', title: reply.replyId));
+                                      } else {
+                                        Progresshud.showInfoWithStatus('请先登录\n ¯\\_(ツ)_/¯');
+                                      }
+                                    },
+                                  ),
                                   ListTile(
                                     leading: Icon(Icons.content_copy),
                                     title: Text('拷贝评论'),
