@@ -44,7 +44,7 @@ class TopicDetails extends StatefulWidget {
   final String avatar;
   final String replyCount;
 
-  TopicDetails(this.topicId, {this.topicTitle = '', this.nodeName = '', this.createdId = '', this.avatar = '', this.replyCount = '0'});
+  TopicDetails(this.topicId, {this.topicTitle = '', this.nodeName = '分享创造', this.createdId = 'v2er', this.avatar = '', this.replyCount = '0'});
 
   @override
   _TopicDetailsState createState() => _TopicDetailsState();

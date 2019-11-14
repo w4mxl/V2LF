@@ -47,9 +47,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
             title: TabBar(
                 isScrollable: true,
                 indicator: BubbleTabIndicator(
-                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark
-                      ? Theme.of(context).focusColor
-                      : Colors.white,
+                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Theme.of(context).focusColor : Colors.white,
                 ),
                 tabs: tabs),
           ),
@@ -70,11 +68,12 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                     padding: const EdgeInsets.all(12),
                     child: Html(
                       data: atomItem.content.replaceFirst('<br />', ''),
-                      defaultTextStyle: TextStyle(fontSize: 14),
+                      defaultTextStyle: TextStyle(fontSize: 15),
                       linkStyle: TextStyle(
                         color: Theme.of(context).accentColor,
                       ),
-                      onLinkTap: (url) { // todo
+                      onLinkTap: (url) {
+                        // todo
                         if (UrlHelper.canLaunchInApp(context, url)) {
                           return;
                         }

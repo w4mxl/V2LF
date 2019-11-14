@@ -298,6 +298,7 @@ class _SettingPageState extends State<SettingPage> {
                   ListTile(
                     leading: Icon(
                       Icons.favorite,
+                      color: Colors.redAccent,
                     ),
                     title: Text(S.of(context).titleRecommend),
                     trailing: Icon(
