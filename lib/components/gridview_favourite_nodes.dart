@@ -10,12 +10,10 @@ import 'package:flutter_app/models/web/item_fav_node.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
 
-/**
- * @author: wml
- * @date  : 2019/3/30 6:20 PM
- * @email : mxl1989@gmail.com
- * @desc  : 收藏的节点
- */
+/// @author: wml
+/// @date  : 2019/3/30 6:20 PM
+/// @email : mxl1989@gmail.com
+/// @desc  : 收藏的节点
 
 class FavouriteNodesGrid extends StatefulWidget {
   @override
@@ -84,8 +82,7 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
                   width: 270,
                   margin: EdgeInsets.only(bottom: 114),
                   child: Text("Browse to a node and tap on the star icon to save something in this list.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17, height: 1.1, color: Colors.black.withOpacity(0.65))),
+                      textAlign: TextAlign.center, style: TextStyle(fontSize: 17, height: 1.1, color: Colors.black.withOpacity(0.65))),
                 ),
               ]);
             }

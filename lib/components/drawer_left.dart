@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/components/my_expansion_tile.dart';
 import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/jinrishici.dart';
@@ -24,7 +25,6 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -178,7 +178,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     ),
                     opacity: 0.9,
                   ),
-                ), // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
+                ),
+                // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
                 currentAccountPicture: new GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
@@ -268,6 +269,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
                 },
+              ),
+              // 自定义的 ExpansionTile
+              MyExpansionTile(
+                leading: new Icon(Icons.star),
+                title: Text(S.of(context).favorites),
+                children: <Widget>[
+                  // 显示收藏的节点列表
+                ],
               ),
               ListTile(
                 enabled: userName.isNotEmpty, // 登录后打开
