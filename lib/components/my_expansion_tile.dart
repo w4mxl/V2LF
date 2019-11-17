@@ -33,6 +33,7 @@ class MyExpansionTile extends StatefulWidget {
     Key key,
     this.leading,
     @required this.title,
+    @required this.isLogin,
     this.backgroundColor,
     this.onExpansionChanged,
     this.children = const <Widget>[],
@@ -50,6 +51,8 @@ class MyExpansionTile extends StatefulWidget {
   ///
   /// Typically a [Text] widget.
   final Widget title;
+
+  final bool isLogin;
 
   /// Called when the tile expands or collapses.
   ///
@@ -153,6 +156,7 @@ class _MyExpansionTileState extends State<MyExpansionTile> with SingleTickerProv
             iconColor: _iconColor.value,
             textColor: _headerColor.value,
             child: ListTile(
+              enabled: widget.isLogin,
               onTap: () {
                 // 跳转到"收藏"：主题、节点
                 Navigator.pop(context);
@@ -160,14 +164,15 @@ class _MyExpansionTileState extends State<MyExpansionTile> with SingleTickerProv
               },
               leading: widget.leading,
               title: widget.title,
-              trailing: widget.trailing ??
-                  RotationTransition(
-                    turns: _iconTurns,
-                    child: InkWell(
-                      child: const Icon(Icons.expand_more),
-                      onTap: _handleTap,
-                    ),
-                  ),
+              trailing: widget.trailing ?? widget.isLogin
+                  ? RotationTransition(
+                      turns: _iconTurns,
+                      child: InkWell(
+                        child: const Icon(Icons.expand_more),
+                        onTap: _handleTap,
+                      ),
+                    )
+                  : null,
             ),
           ),
           ClipRect(

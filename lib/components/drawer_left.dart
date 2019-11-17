@@ -10,6 +10,7 @@ import 'package:flutter_app/components/my_expansion_tile.dart';
 import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/jinrishici.dart';
+import 'package:flutter_app/models/web/item_fav_node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,6 +38,7 @@ class DrawerLeft extends StatefulWidget {
 class _DrawerLeftState extends State<DrawerLeft> {
   String userName = "", avatar = "", notificationCount = "";
   Poem poemOne;
+  List<FavNode> listFavNode; //收藏的节点
 
   @override
   void initState() {
@@ -272,10 +275,20 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               // 自定义的 ExpansionTile
               MyExpansionTile(
+                isLogin: userName.isNotEmpty,
                 leading: new Icon(Icons.star),
                 title: Text(S.of(context).favorites),
                 children: <Widget>[
                   // 显示收藏的节点列表
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: listFavNode != null ? listFavNode.length : 0,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(listFavNode[index].nodeName),
+                        );
+                      })
                 ],
               ),
               ListTile(
@@ -390,6 +403,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
       if (SpHelper.sp.getString(SP_NOTIFICATION_COUNT) != null) {
         notificationCount = SpHelper.sp.getString(SP_NOTIFICATION_COUNT);
       }
+      // 获取收藏的节点
+      getFavouriteNodes();
     }
   }
 
@@ -411,6 +426,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
         if (poem != null) poemOne = poem;
       });
     }
+  }
+
+  Future getFavouriteNodes() async {
+    var list = await DioWeb.getFavNodes();
+    if (!mounted) return;
+    setState(() {
+      if (list.length > 0) listFavNode = list;
+    });
   }
 }
 
