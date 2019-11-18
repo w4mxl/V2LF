@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/generated/i18n.dart';
@@ -141,7 +142,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                             ? ((_node.avatarLarge == '/static/img/node_large.png') ? Strings.nodeDefaultImag : "https:${_node.avatarLarge}")
                             : ''),
                     fit: BoxFit.contain,
-                    placeholder: (context, url) => CircularProgressIndicator(),
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
                   ),
                 ),
               ),
@@ -168,7 +169,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                   return new Center(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 40.0),
-                      child: new CircularProgressIndicator(),
+                      child: new CupertinoActivityIndicator(),
                     ),
                   );
                 }

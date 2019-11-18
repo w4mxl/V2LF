@@ -18,6 +18,7 @@ import 'package:flutter_app/pages/page_following.dart';
 import 'package:flutter_app/pages/page_history_hot_category.dart';
 import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
+import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_profile.dart';
@@ -26,7 +27,6 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -233,7 +233,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ),
                 margin: null,
               ),
-              new ListTile(
+              ListTile(
                 leading: new Icon(Icons.whatshot),
                 title: new Text(S.of(context).history),
                 onTap: () {
@@ -241,7 +241,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotCategory()));
                 },
               ),
-              new ListTile(
+              ListTile(
                 leading: new Icon(Icons.history),
                 title: new Text(S.of(context).recentRead),
                 onTap: () {
@@ -249,10 +249,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => RecentReadTopicsPage()));
                 },
               ),
-              new Divider(
+              Divider(
                 height: 0,
               ),
-              new ListTile(
+              ListTile(
                 enabled: userName.isNotEmpty,
                 // 登录后打开
                 leading: new Icon(Icons.notifications),
@@ -264,33 +264,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationPage()));
                 },
               ),
-              new ListTile(
-                enabled: userName.isNotEmpty, // 登录后打开
-                leading: new Icon(Icons.star),
-                title: new Text(S.of(context).favorites),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
-                },
-              ),
-              // 自定义的 ExpansionTile
-              MyExpansionTile(
-                isLogin: userName.isNotEmpty,
-                leading: new Icon(Icons.star),
-                title: Text(S.of(context).favorites),
-                children: <Widget>[
-                  // 显示收藏的节点列表
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: listFavNode != null ? listFavNode.length : 0,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(listFavNode[index].nodeName),
-                        );
-                      })
-                ],
-              ),
               ListTile(
                 enabled: userName.isNotEmpty, // 登录后打开
                 leading: new Icon(Icons.child_care),
@@ -300,7 +273,58 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => FollowingPage()));
                 },
               ),
-              new ListTile(
+              // 自定义的 ExpansionTile
+              MyExpansionTile(
+                isLogin: userName.isNotEmpty,
+                leading: new Icon(Icons.star),
+                title: Text(S.of(context).favorites),
+                onExpansionChanged: (bool isExpanded) {
+                  if (isExpanded && listFavNode == null) {
+                    // 获取收藏的节点
+                    getFavouriteNodes();
+                  }
+                },
+                children: <Widget>[
+                  (listFavNode != null && listFavNode.length > 0)
+                      ? ListView.separated(
+                          padding: EdgeInsets.all(0),
+                          separatorBuilder: (context, index) => Divider(
+                                height: 0,
+                                indent: 12,
+                                endIndent: 12,
+                              ),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: listFavNode != null ? listFavNode.length : 0,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: CachedNetworkImage(
+                                imageUrl: listFavNode[index].img,
+                                fit: BoxFit.fill,
+                                width: 30,
+                                height: 30,
+                              ),
+                              title: Text(listFavNode[index].nodeName),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 14,
+                              ),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NodeTopics(
+                                            listFavNode[index].nodeId,
+                                            nodeName: listFavNode[index].nodeName,
+                                            nodeImg: listFavNode[index].img,
+                                          ))),
+                            );
+                          })
+                      : Text('您暂无收藏的节点～')
+
+                  // 显示收藏的节点列表
+                ],
+              ),
+              ListTile(
                 leading: new Icon(Icons.apps),
                 title: new Text(S.of(context).nodes),
                 onTap: () {
@@ -308,7 +332,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
                 },
               ),
-              new ListTile(
+              ListTile(
                 leading: new Icon(Icons.search),
                 title: new Text(S.of(context).search),
                 onTap: () {
@@ -316,10 +340,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   showSearch(context: context, delegate: SearchSov2exDelegate());
                 },
               ),
-              new Divider(
+              Divider(
                 height: 0,
               ),
-              new ListTile(
+              ListTile(
                 enabled: userName.isNotEmpty,
                 leading: new Icon(Icons.add),
                 title: new Text(S.of(context).create),
@@ -328,10 +352,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage(), fullscreenDialog: true));
                 },
               ),
-              new Divider(
+              Divider(
                 height: 0,
               ),
-              new ListTile(
+              ListTile(
                 leading: new Icon(Icons.settings),
                 title: new Text(S.of(context).settings),
                 onTap: () {
@@ -339,7 +363,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
                 },
               ),
-              new AboutListTile(
+              AboutListTile(
                 icon: new Icon(Icons.info),
                 child: new Text(S.of(context).about),
                 applicationName: "V2LF",
@@ -403,8 +427,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
       if (SpHelper.sp.getString(SP_NOTIFICATION_COUNT) != null) {
         notificationCount = SpHelper.sp.getString(SP_NOTIFICATION_COUNT);
       }
-      // 获取收藏的节点
-      getFavouriteNodes();
     }
   }
 
