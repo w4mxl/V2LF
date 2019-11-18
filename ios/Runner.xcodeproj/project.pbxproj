@@ -286,7 +286,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${PODS_ROOT}/../.symlinks/flutter/ios/Flutter.framework",
+				"${PODS_ROOT}/../.symlinks/flutter/ios-release/Flutter.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -480,7 +480,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = A2NV7LPV2N;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 2019.7;
+				FLUTTER_BUILD_NAME = 2019.8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -491,7 +491,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2019.7;
+				MARKETING_VERSION = 2019.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.w4mxl.v2lf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -509,7 +509,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = A2NV7LPV2N;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 2019.7;
+				FLUTTER_BUILD_NAME = 2019.8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -520,7 +520,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2019.7;
+				MARKETING_VERSION = 2019.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.w4mxl.v2lf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

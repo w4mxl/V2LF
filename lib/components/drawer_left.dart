@@ -253,6 +253,51 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => RecentReadTopicsPage()));
                 },
               ),
+              ExpansionTileDrawerNodes(
+                leading: new Icon(Icons.apps),
+                title: new Text(S.of(context).nodes),
+                onExpansionChanged: (bool isExpanded) {
+                  if (isExpanded && listHotNode == null) {
+                    // 获取最热节点
+                    getHotNodes();
+                  }
+                },
+                children: <Widget>[
+                  (listHotNode != null && listHotNode.length > 0)
+                      ? Wrap(
+                          children: listHotNode.map((NodeItem node) {
+                            return ActionChip(
+                                label: Text(node.nodeName),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NodeTopics(
+                                              node.nodeId,
+                                              nodeName: node.nodeName,
+                                            ))));
+                          }).toList(),
+                          spacing: 5,
+                          runSpacing: -5,
+                        )
+                      : Column(
+                          children: <Widget>[
+                            CupertinoActivityIndicator(),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text('最热节点...'),
+                            ),
+                          ],
+                        ),
+                ],
+              ),
+              ListTile(
+                leading: new Icon(Icons.search),
+                title: new Text(S.of(context).search),
+                onTap: () {
+                  Navigator.pop(context);
+                  showSearch(context: context, delegate: SearchSov2exDelegate());
+                },
+              ),
               Divider(
                 height: 0,
               ),
@@ -266,15 +311,6 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
                   Navigator.pop(context);
                   Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationPage()));
-                },
-              ),
-              ListTile(
-                enabled: userName.isNotEmpty, // 登录后打开
-                leading: new Icon(Icons.child_care),
-                title: new Text(S.of(context).following),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => FollowingPage()));
                 },
               ),
               // 自定义的 ExpansionTile
@@ -328,53 +364,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   // 显示收藏的节点列表
                 ],
               ),
-              ExpansionTileDrawerNodes(
-                leading: new Icon(Icons.apps),
-                title: new Text(S.of(context).nodes),
-                onExpansionChanged: (bool isExpanded) {
-                  if (isExpanded && listHotNode == null) {
-                    // 获取最热节点
-                    getHotNodes();
-                  }
-                },
-                children: <Widget>[
-                  (listHotNode != null && listHotNode.length > 0)
-                      ? Wrap(
-                          children: listHotNode.map((NodeItem node) {
-                            return ActionChip(
-                                label: Text(node.nodeName),
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => NodeTopics(
-                                              node.nodeId,
-                                              nodeName: node.nodeName,
-                                            ))));
-                          }).toList(),
-                          spacing: 5,
-                          runSpacing: -5,
-                        )
-                      : Column(
-                          children: <Widget>[
-                            CupertinoActivityIndicator(),
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text('最热节点...'),
-                            ),
-                          ],
-                        ),
-                ],
-              ),
               ListTile(
-                leading: new Icon(Icons.search),
-                title: new Text(S.of(context).search),
+                enabled: userName.isNotEmpty, // 登录后打开
+                leading: new Icon(Icons.child_care),
+                title: new Text(S.of(context).following),
                 onTap: () {
                   Navigator.pop(context);
-                  showSearch(context: context, delegate: SearchSov2exDelegate());
+                  Navigator.push(context, new MaterialPageRoute(builder: (context) => FollowingPage()));
                 },
-              ),
-              Divider(
-                height: 0,
               ),
               ListTile(
                 enabled: userName.isNotEmpty,
@@ -400,7 +397,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(S.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.7",
+                applicationVersion: "v2019.8",
                 applicationLegalese: '© 2019 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
