@@ -167,8 +167,12 @@ class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav> with Si
               trailing: widget.trailing ?? widget.isLogin
                   ? RotationTransition(
                       turns: _iconTurns,
-                      child: InkWell(
-                        child: const Icon(Icons.expand_more),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: const Icon(Icons.expand_more),
+                        ),
                         onTap: _handleTap,
                       ),
                     )

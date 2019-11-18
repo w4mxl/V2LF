@@ -547,27 +547,37 @@ class DioWeb {
   // 获取关注的人 [user-agent 要先换到桌面的再还原到 mobile]
   static Future<List<FollowingUser>> getFollowingUsers() async {
     List<FollowingUser> followingUsers = List<FollowingUser>();
-    dio.options.headers = {};
-    var response = await dio.get("/my/following");
-    // 还原
-    dio.options.headers = {
-      'user-agent': Platform.isIOS
-          ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-          : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
-    };
-    if (response.statusCode == 200) {
-      // Use html parser and query selector
-      var document = parse(response.data);
-      List<dom.Element> aRootNode = document.querySelectorAll('div.box > div > a > img.avatar');
-      if (aRootNode != null) {
-        for (var aNode in aRootNode) {
-          FollowingUser followingUser = FollowingUser();
-          followingUser.avatar = Utils.avatarLarge(aNode.attributes['src']);
-          followingUser.userName = aNode.parent.attributes["href"].replaceFirst('/member/', '');
-          followingUsers.add(followingUser);
+    try {
+      dio.options.headers = {};
+      var response = await dio.get("/my/following");
+      // 还原
+      dio.options.headers = {
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+      };
+      if (response.statusCode == 200) {
+        // Use html parser and query selector
+        var document = parse(response.data);
+        List<dom.Element> aRootNode = document.querySelectorAll('div.box > div > a > img.avatar');
+        if (aRootNode != null) {
+          for (var aNode in aRootNode) {
+            FollowingUser followingUser = FollowingUser();
+            followingUser.avatar = Utils.avatarLarge(aNode.attributes['src']);
+            followingUser.userName = aNode.parent.attributes["href"].replaceFirst('/member/', '');
+            followingUsers.add(followingUser);
+          }
+          print("wml::${followingUsers.length}");
         }
-        print("wml::${followingUsers.length}");
       }
+    } on DioError catch (e) {
+      // 还原
+      dio.options.headers = {
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+      };
+      formatError(e);
     }
     return followingUsers;
   }
@@ -576,14 +586,14 @@ class DioWeb {
   static Future<List<NodeItem>> getHotNodes() async {
     List<NodeItem> listOfHotNodes = List<NodeItem>();
     dio.options.headers = {}; // 桌面版请求
-    var response = await dio.get('/');
-    // 还原
-    dio.options.headers = {
-      'user-agent': Platform.isIOS
-          ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-          : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
-    };
-    if (response.statusCode == 200) {
+    try {
+      var response = await dio.get('/');
+      // 还原
+      dio.options.headers = {
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+      };
       // Use html parser and query selector
       var document = parse(response.data);
       List<dom.Element> aRootNode = document.querySelectorAll('div.box > div.cell > a.item_node');
@@ -594,7 +604,16 @@ class DioWeb {
         }
         print("wml:最热节点的数目:${listOfHotNodes.length}");
       }
+    } on DioError catch (e) {
+      // 还原
+      dio.options.headers = {
+        'user-agent': Platform.isIOS
+            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+      };
+      formatError(e);
     }
+
     return listOfHotNodes;
   }
 
@@ -660,33 +679,33 @@ class DioWeb {
   // 获取「节点收藏」 [xpath 解析的]
   static Future<List<FavNode>> getFavNodes() async {
     List<FavNode> nodes = new List<FavNode>();
-    var response = await dio.get("/my/nodes");
-    var tree = ETree.fromString(response.data);
+    try {
+      var response = await dio.get("/my/nodes");
+      var tree = ETree.fromString(response.data);
 
-    var aRootNode = tree.xpath("//*[@class='grid_item']");
-    if (aRootNode != null) {
-      for (var aNode in aRootNode) {
-        FavNode favNode = new FavNode();
-        // //*[@id="n_195868"]/div/img
-        // 这里需要注意，如果解析出来的是 '/static/img/node_large.png' 则拼上前缀 'https://www.v2ex.com'；其它则拼上 https:
-        String imgUrl = aNode.xpath("/div/img").first.attributes["src"];
-        if (imgUrl == '/static/img/node_large.png') {
-          favNode.img = "https://www.v2ex.com" + imgUrl;
-        } else {
-          favNode.img = "https:" + imgUrl;
+      var aRootNode = tree.xpath("//*[@class='grid_item']");
+      if (aRootNode != null) {
+        for (var aNode in aRootNode) {
+          FavNode favNode = new FavNode();
+          // //*[@id="n_195868"]/div/img
+          // 这里需要注意，如果解析出来的是 '/static/img/node_large.png' 则拼上前缀 'https://www.v2ex.com'；其它则拼上 https:
+          String imgUrl = aNode.xpath("/div/img").first.attributes["src"];
+          if (imgUrl == '/static/img/node_large.png') {
+            favNode.img = "https://www.v2ex.com" + imgUrl;
+          } else {
+            favNode.img = "https:" + imgUrl;
+          }
+          favNode.nodeId = aNode.attributes['href'].toString().replaceAll('/go/', '');
+          favNode.nodeName = aNode.xpath("/div/text()")[0].name;
+          //*[@id="n_195868"]/div/span
+          favNode.replyCount = aNode.xpath("/div/span/text()")[0].name;
+          // print(favNode.img + "  " + favNode.nodeId + "  " + favNode.nodeName + "  " + favNode.replyCount);
+          nodes.add(favNode);
         }
-        favNode.nodeId = aNode.attributes['href'].toString().replaceAll('/go/', '');
-        favNode.nodeName = aNode.xpath("/div/text()")[0].name;
-        //*[@id="n_195868"]/div/span
-        favNode.replyCount = aNode.xpath("/div/span/text()")[0].name;
-        // print(favNode.img + "  " + favNode.nodeId + "  " + favNode.nodeName + "  " + favNode.replyCount);
-        nodes.add(favNode);
       }
-    } else {
-      // todo 可能未登录或者没有
-      // Fluttertoast.showToast(msg: '获取收藏失败');
+    } on DioError catch (e) {
+      formatError(e);
     }
-
     return nodes;
   }
 

@@ -279,15 +279,20 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           spacing: 5,
                           runSpacing: -5,
                         )
-                      : Column(
-                          children: <Widget>[
-                            CupertinoActivityIndicator(),
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text('最热节点...'),
+                      : (listHotNode == null)
+                          ? Column(
+                              children: <Widget>[
+                                CupertinoActivityIndicator(),
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text('最热节点...'),
+                                ),
+                              ],
+                            )
+                          : Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('获取失败... 😞'),
                             ),
-                          ],
-                        ),
                 ],
               ),
               ListTile(
@@ -325,43 +330,54 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   }
                 },
                 children: <Widget>[
-                  (listFavNode != null && listFavNode.length > 0)
-                      ? ListView.separated(
-                          padding: EdgeInsets.all(0),
-                          separatorBuilder: (context, index) => Divider(
-                                height: 0,
-                                indent: 12,
-                                endIndent: 12,
-                              ),
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: listFavNode != null ? listFavNode.length : 0,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              leading: CachedNetworkImage(
-                                imageUrl: listFavNode[index].img,
-                                fit: BoxFit.fill,
-                                width: 30,
-                                height: 30,
-                              ),
-                              title: Text(listFavNode[index].nodeName),
-                              trailing: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 14,
-                              ),
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NodeTopics(
-                                            listFavNode[index].nodeId,
-                                            nodeName: listFavNode[index].nodeName,
-                                            nodeImg: listFavNode[index].img,
-                                          ))),
-                            );
-                          })
-                      : Text('您暂无收藏的节点～')
-
-                  // 显示收藏的节点列表
+                  listFavNode == null
+                      ? Column(
+                          children: <Widget>[
+                            CupertinoActivityIndicator(),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text('获取收藏节点...'),
+                            ),
+                          ],
+                        )
+                      : (listFavNode.length > 0)
+                          ? ListView.separated(
+                              padding: EdgeInsets.all(0),
+                              separatorBuilder: (context, index) => Divider(
+                                    height: 0,
+                                    indent: 12,
+                                    endIndent: 12,
+                                  ),
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: listFavNode != null ? listFavNode.length : 0,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  leading: CachedNetworkImage(
+                                    imageUrl: listFavNode[index].img,
+                                    fit: BoxFit.fill,
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                  title: Text(listFavNode[index].nodeName),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 14,
+                                  ),
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NodeTopics(
+                                                listFavNode[index].nodeId,
+                                                nodeName: listFavNode[index].nodeName,
+                                                nodeImg: listFavNode[index].img,
+                                              ))),
+                                );
+                              })
+                          : Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('未获取到收藏的节点～'),
+                            ),
                 ],
               ),
               ListTile(
@@ -484,7 +500,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     var list = await DioWeb.getFavNodes();
     if (!mounted) return;
     setState(() {
-      if (list.length > 0) listFavNode = list;
+      listFavNode = list;
     });
   }
 
@@ -492,7 +508,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     var list = await DioWeb.getHotNodes();
     if (!mounted) return;
     setState(() {
-      if (list.length > 0) listHotNode = list;
+      listHotNode = list;
     });
   }
 }

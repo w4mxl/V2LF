@@ -167,8 +167,12 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> wit
               trailing: widget.trailing ??
                   RotationTransition(
                     turns: _iconTurns,
-                    child: InkWell(
-                      child: const Icon(Icons.expand_more),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: const Icon(Icons.expand_more),
+                      ),
                       onTap: _handleTap,
                     ),
                   ),
