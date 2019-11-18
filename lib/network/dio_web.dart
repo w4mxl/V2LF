@@ -549,13 +549,13 @@ class DioWeb {
     List<FollowingUser> followingUsers = List<FollowingUser>();
     dio.options.headers = {};
     var response = await dio.get("/my/following");
+    // 还原
+    dio.options.headers = {
+      'user-agent': Platform.isIOS
+          ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+          : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+    };
     if (response.statusCode == 200) {
-      // 还原
-      dio.options.headers = {
-        'user-agent': Platform.isIOS
-            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
-            : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
-      };
       // Use html parser and query selector
       var document = parse(response.data);
       List<dom.Element> aRootNode = document.querySelectorAll('div.box > div > a > img.avatar');
@@ -570,6 +570,32 @@ class DioWeb {
       }
     }
     return followingUsers;
+  }
+
+  // 获取 v2ex.com 首页右边栏"最热节点"的数据 [user-agent 要先换到桌面的再还原到 mobile]
+  static Future<List<NodeItem>> getHotNodes() async {
+    List<NodeItem> listOfHotNodes = List<NodeItem>();
+    dio.options.headers = {}; // 桌面版请求
+    var response = await dio.get('/');
+    // 还原
+    dio.options.headers = {
+      'user-agent': Platform.isIOS
+          ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
+          : 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Mobile Safari/537.36'
+    };
+    if (response.statusCode == 200) {
+      // Use html parser and query selector
+      var document = parse(response.data);
+      List<dom.Element> aRootNode = document.querySelectorAll('div.box > div.cell > a.item_node');
+      if (aRootNode != null) {
+        for (var aNode in aRootNode) {
+          NodeItem nodeItem = NodeItem(aNode.attributes["href"].replaceFirst('/go/', ''), aNode.text);
+          listOfHotNodes.add(nodeItem);
+        }
+        print("wml:最热节点的数目:${listOfHotNodes.length}");
+      }
+    }
+    return listOfHotNodes;
   }
 
   // 获取「主题收藏」或者 「特别关注」下的topics [xpath 解析的]

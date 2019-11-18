@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_app/models/web/item_profile_recent_reply.dart';
 import 'package:flutter_app/models/web/item_profile_recent_topic.dart';
 import 'package:flutter_app/models/web/model_member_profile.dart';

@@ -3,14 +3,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/components/my_expansion_tile.dart';
+import 'package:flutter_app/components/expansion_tile_drawer_fav.dart';
+import 'package:flutter_app/components/expansion_tile_drawer_nodes.dart';
 import 'package:flutter_app/components/search_delegate.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/jinrishici.dart';
 import 'package:flutter_app/models/web/item_fav_node.dart';
+import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_favourite.dart';
@@ -39,6 +42,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
   String userName = "", avatar = "", notificationCount = "";
   Poem poemOne;
   List<FavNode> listFavNode; //收藏的节点
+  List<NodeItem> listHotNode; //最热节点
 
   @override
   void initState() {
@@ -274,7 +278,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               // 自定义的 ExpansionTile
-              MyExpansionTile(
+              ExpansionTileDrawerFav(
                 isLogin: userName.isNotEmpty,
                 leading: new Icon(Icons.star),
                 title: Text(S.of(context).favorites),
@@ -324,13 +328,42 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   // 显示收藏的节点列表
                 ],
               ),
-              ListTile(
+              ExpansionTileDrawerNodes(
                 leading: new Icon(Icons.apps),
                 title: new Text(S.of(context).nodes),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NodesPage()));
+                onExpansionChanged: (bool isExpanded) {
+                  if (isExpanded && listHotNode == null) {
+                    // 获取最热节点
+                    getHotNodes();
+                  }
                 },
+                children: <Widget>[
+                  (listHotNode != null && listHotNode.length > 0)
+                      ? Wrap(
+                          children: listHotNode.map((NodeItem node) {
+                            return ActionChip(
+                                label: Text(node.nodeName),
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NodeTopics(
+                                              node.nodeId,
+                                              nodeName: node.nodeName,
+                                            ))));
+                          }).toList(),
+                          spacing: 5,
+                          runSpacing: -5,
+                        )
+                      : Column(
+                          children: <Widget>[
+                            CupertinoActivityIndicator(),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text('最热节点...'),
+                            ),
+                          ],
+                        ),
+                ],
               ),
               ListTile(
                 leading: new Icon(Icons.search),
@@ -455,6 +488,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
     if (!mounted) return;
     setState(() {
       if (list.length > 0) listFavNode = list;
+    });
+  }
+
+  Future getHotNodes() async {
+    var list = await DioWeb.getHotNodes();
+    if (!mounted) return;
+    setState(() {
+      if (list.length > 0) listHotNode = list;
     });
   }
 }
