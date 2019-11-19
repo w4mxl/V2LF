@@ -16,13 +16,11 @@ import 'package:flutter_app/models/web/item_fav_node.dart';
 import 'package:flutter_app/models/web/node.dart';
 import 'package:flutter_app/network/api_network.dart';
 import 'package:flutter_app/network/dio_web.dart';
-import 'package:flutter_app/pages/page_favourite.dart';
 import 'package:flutter_app/pages/page_following.dart';
 import 'package:flutter_app/pages/page_history_hot_category.dart';
 import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
-import 'package:flutter_app/pages/page_nodes.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_profile.dart';
 import 'package:flutter_app/pages/page_recent_read_topics.dart';
@@ -311,7 +309,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 // 登录后打开
                 leading: new Icon(Icons.notifications),
                 title: new Text(S.of(context).notifications),
-                trailing: Text(notificationCount),
+                trailing: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    notificationCount,
+                  ),
+                ),
                 onTap: () {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
                   Navigator.pop(context);

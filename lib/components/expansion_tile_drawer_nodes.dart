@@ -170,7 +170,7 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> wit
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: const Icon(Icons.expand_more),
                       ),
                       onTap: _handleTap,

@@ -1,7 +1,7 @@
 name: flutter_app
 description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love flutter'.
 
-version: 2019.8+29
+version: 2019.8+30
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -14,14 +14,14 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   http: ^0.12.0
-  shared_preferences: ^0.5.3+5
+  shared_preferences: ^0.5.4+5
   url_launcher: ^5.2.5
   cached_network_image: ^1.1.3 # https://pub.dartlang.org/packages/cached_network_image
   html: ^0.14.0+3 # https://pub.flutter-io.cn/packages/html
   xpath: ^0.1.0 # https://pub.flutter-io.cn/packages/xpath     还不支持 ETree.toString(Element) :(
-  dio: ^3.0.4 # https://pub.dartlang.org/packages/dio
+  dio: ^3.0.5 # https://pub.dartlang.org/packages/dio
   dio_cookie_manager: ^1.0.0 # https://pub.dev/packages/dio_cookie_manager#-installing-tab-
-  dio_http_cache: ^0.2.1 # https://github.com/hurshi/dio-http-cache
+  dio_http_cache: ^0.2.4 # https://github.com/hurshi/dio-http-cache
   # flutter_html_view: ^0.5.10 # https://pub.flutter-io.cn/packages/flutter_html_view "Thus, flutter_html_view ^0.5.10 requires url_launcher ^3.0.0."
   flutter_html: ^0.11.0 # https://github.com/Sub6Resources/flutter_html
   fluttertoast: ^3.1.3 # https://pub.dartlang.org/packages/fluttertoast
@@ -38,9 +38,9 @@ dependencies:
       url: https://github.com/2d-inc/Flare-Flutter.git
       path: flare_flutter
       ref: dev
-  share: ^0.6.2+1 # https://pub.dartlang.org/packages/share#-installing-tab-
+  share: ^0.6.3+1 # https://pub.dartlang.org/packages/share#-installing-tab-
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
-  font_awesome_flutter: ^8.4.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
+  font_awesome_flutter: ^8.5.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
   # flutter_whatsnew: ^1.0.2+2 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
   # flutter_whatsnew 目前存在问题，fork 后修改源码了
@@ -58,7 +58,7 @@ dependencies:
   flutter_local_notifications: ^0.7.1+3 # https://pub.dev/packages/flutter_local_notifications#-installing-tab-
   provider: ^3.1.0 # https://pub.dev/packages/provider
   device_info: ^0.4.0+3
-  liquid_pull_to_refresh: ^1.1.1
+  # liquid_pull_to_refresh: ^1.1.1
 
 dev_dependencies:
   flutter_test:
