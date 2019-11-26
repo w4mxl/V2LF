@@ -1463,6 +1463,18 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                     },
                                   ),
                                   ListTile(
+                                    leading: Icon(Icons.reply),
+                                    title: Text('回复评论'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      if (isLogin) {
+                                        select(Action(id: 'reply_comment', title: " @" + reply.userName + " #" + reply.number + " "));
+                                      } else {
+                                        Progresshud.showInfoWithStatus('请先登录\n ¯\\_(ツ)_/¯');
+                                      }
+                                    },
+                                  ),
+                                  ListTile(
                                     leading: Icon(Icons.content_copy),
                                     title: Text('拷贝评论'),
                                     onTap: () {
