@@ -59,7 +59,6 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                     ? ListView.builder(
                         // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
                         controller: _scrollController,
-                        physics: ClampingScrollPhysics(), // iOS 上默认是 BouncingScrollPhysics，体验和下拉刷新有点冲突
                         itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
                         itemCount: snapshot.data.length)
                     : Column(
