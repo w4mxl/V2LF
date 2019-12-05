@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_info/device_info.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_app/generated/i18n.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,8 +36,14 @@ class Utils {
 
   // 外链跳转
   static launchURL(String url) async {
+    // 处理有些链接是 //xxxx 形式
+    if (url.startsWith('//')) {
+      url = 'https:$url';
+    }
+
     if (await canLaunch(url)) {
-      await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+      await launch(url,
+          statusBarBrightness: Platform.isIOS ? Brightness.light : null);
     } else {
       Progresshud.showErrorWithStatus('Could not launch $url');
     }
