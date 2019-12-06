@@ -52,7 +52,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final TextStyle aboutTextStyle = themeData.textTheme.body2;
-    final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
+    final TextStyle linkStyle =
+        themeData.textTheme.body2.copyWith(color: themeData.accentColor);
 
     return SizedBox(
       child: new Drawer(
@@ -94,7 +95,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                             ),
                       onTap: () {
                         if (userName.isEmpty) {
-                          var future = Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
+                          var future = Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                  fullscreenDialog: true));
                           future.then((value) {
                             // 直接close登录页则value为null；登录成功 value 为 true
                             if (value != null && value) {
@@ -110,7 +115,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(userName, avatar),
+                              builder: (context) =>
+                                  ProfilePage(userName, avatar),
                             ),
                           );
                         }
@@ -131,34 +137,48 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                     child: Column(
                                       children: <Widget>[
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 4, right: 4),
+                                          padding: const EdgeInsets.only(
+                                              left: 4, right: 4),
                                           child: Text(
                                             poemOne.data.origin.title,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                         SizedBox(height: 10.0),
                                         Text(
-                                          '[' + poemOne.data.origin.dynasty + "] " + poemOne.data.origin.author,
+                                          '[' +
+                                              poemOne.data.origin.dynasty +
+                                              "] " +
+                                              poemOne.data.origin.author,
                                           style: TextStyle(
-                                            color: Theme.of(context).accentColor,
+                                            color:
+                                                Theme.of(context).accentColor,
                                           ),
                                         ),
                                         Container(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Column(
-                                            children: poemOne.data.origin.content
-                                                .map((value) => Text(
-                                                      value
-                                                          .replaceAll('。', '。\n')
-                                                          .replaceAll('，', '，\n')
-                                                          .replaceAll('？', '？\n')
-                                                          .replaceAll('！', '！\n'),
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(fontSize: 16.0),
-                                                    ))
-                                                .toList(),
+                                            children:
+                                                poemOne.data.origin.content
+                                                    .map((value) => Text(
+                                                          value
+                                                              .replaceAll(
+                                                                  '。', '。\n')
+                                                              .replaceAll(
+                                                                  '，', '，\n')
+                                                              .replaceAll(
+                                                                  '？', '？\n')
+                                                              .replaceAll(
+                                                                  '！', '！\n'),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 16.0),
+                                                        ))
+                                                    .toList(),
                                           ),
                                         ),
                                       ],
@@ -189,8 +209,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
-                      var future =
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => new LoginPage(), fullscreenDialog: true));
+                      var future = Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new LoginPage(),
+                              fullscreenDialog: true));
                       future.then((value) {
                         // 直接close登录页则value为null；登录成功 value 为 true
                         if (value != null && value) {
@@ -205,7 +228,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       // _launchURL(Strings.v2exHost + '/member/' + userName);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProfilePage(userName, avatar)),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProfilePage(userName, avatar)),
                       );
                     }
                   },
@@ -213,7 +238,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                     tag: 'avatar',
                     transitionOnUserGestures: true,
                     child: Material(
-                      shape: CircleBorder(side: BorderSide(color: Colors.white, width: 2)),
+                      shape: CircleBorder(
+                          side: BorderSide(color: Colors.white, width: 2)),
                       child: CircleAvatar(
                         radius: 36,
                         backgroundImage: avatar.isNotEmpty
@@ -230,8 +256,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   color: Provider.of<DisplayModel>(context).materialColor,
                   image: new DecorationImage(
                       fit: BoxFit.cover,
-                      image: new NetworkImage(
-                          GoogleNowImg.allLocation[GoogleNowImg.getRandomLocationIndex()][GoogleNowImg.getCurrentTimeIndex()])),
+                      image: new NetworkImage(GoogleNowImg.allLocation[
+                              GoogleNowImg.getRandomLocationIndex()]
+                          [GoogleNowImg.getCurrentTimeIndex()])),
                 ),
                 margin: null,
               ),
@@ -240,7 +267,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).history),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new HistoryHotCategory()));
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new HistoryHotCategory()));
                 },
               ),
               ListTile(
@@ -248,7 +278,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).recentRead),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => RecentReadTopicsPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RecentReadTopicsPage()));
                 },
               ),
               ExpansionTileDrawerNodes(
@@ -298,7 +331,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).search),
                 onTap: () {
                   Navigator.pop(context);
-                  showSearch(context: context, delegate: SearchSov2exDelegate());
+                  showSearch(
+                      context: context, delegate: SearchSov2exDelegate());
                 },
               ),
               Divider(
@@ -318,7 +352,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 onTap: () {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NotificationPage()));
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new NotificationPage()));
                 },
               ),
               // 自定义的 ExpansionTile
@@ -353,7 +390,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                   ),
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: listFavNode != null ? listFavNode.length : 0,
+                              itemCount:
+                                  listFavNode != null ? listFavNode.length : 0,
                               itemBuilder: (context, index) {
                                 return ListTile(
                                   leading: CachedNetworkImage(
@@ -372,7 +410,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                                       MaterialPageRoute(
                                           builder: (context) => NodeTopics(
                                                 listFavNode[index].nodeId,
-                                                nodeName: listFavNode[index].nodeName,
+                                                nodeName:
+                                                    listFavNode[index].nodeName,
                                                 nodeImg: listFavNode[index].img,
                                               ))),
                                 );
@@ -389,7 +428,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).following),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => FollowingPage()));
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => FollowingPage()));
                 },
               ),
               ListTile(
@@ -398,7 +440,11 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).create),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new NewTopicPage(), fullscreenDialog: true));
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new NewTopicPage(),
+                          fullscreenDialog: true));
                 },
               ),
               Divider(
@@ -409,7 +455,10 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).settings),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, new MaterialPageRoute(builder: (context) => new SettingPage()));
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new SettingPage()));
                 },
               ),
               AboutListTile(
@@ -491,7 +540,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
       var poem = await NetworkApi.getPoem();
       // 存入 sp
       print(json.encode(poem.toJson()));
-      SpHelper.sp.setStringList(SP_TODAY_POEM, [today, json.encode(poem.toJson())]);
+      SpHelper.sp
+          .setStringList(SP_TODAY_POEM, [today, json.encode(poem.toJson())]);
       if (!mounted) return;
       setState(() {
         if (poem != null) poemOne = poem;
@@ -523,6 +573,8 @@ class _LinkTextSpan extends TextSpan {
             text: text ?? url,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+                launch(url,
+                    statusBarBrightness:
+                        Platform.isIOS ? Brightness.light : null);
               });
 }
