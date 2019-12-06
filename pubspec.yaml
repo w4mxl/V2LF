@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_cupertino_localizations: ^1.0.1
 
   cupertino_icons: ^0.1.2
   http: ^0.12.0
@@ -74,7 +75,6 @@ flutter_icons:
   adaptive_icon_background: "#607D8B"
   adaptive_icon_foreground: assets/images/icon/ic_launcher_foreground.png
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
@@ -89,19 +89,16 @@ flutter:
   uses-material-design: true
 
   assets:
-     - assets/
-     - assets/images/icon/ic_launcher.png
-     - assets/images/ic_person.png
-     - assets/images/ic_sync_white_24dp.png
-     - assets/images/minotaur.png
-     - assets/images/lock.png
-     - CHANGELOG.md
-
+    - assets/
+    - assets/images/icon/ic_launcher.png
+    - assets/images/ic_person.png
+    - assets/images/ic_sync_white_24dp.png
+    - assets/images/minotaur.png
+    - assets/images/lock.png
+    - CHANGELOG.md
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.io/assets-and-images/#from-packages
-
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

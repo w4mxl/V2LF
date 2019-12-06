@@ -8,6 +8,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/components/drawer_left.dart';
 import 'package:flutter_app/components/listview_tab_topic.dart';
 import 'package:flutter_app/models/tab.dart';
@@ -16,7 +17,6 @@ import 'package:flutter_app/network/http.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/states/model_locale.dart';
-import 'package:flutter_app/utils/chinese_localization.dart';
 import 'package:flutter_app/utils/constants.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
@@ -45,7 +45,8 @@ void main() async {
   // 配置 dio
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
-  PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath); // 持久化 cookie
+  PersistCookieJar cookieJar =
+      new PersistCookieJar(dir: cookiePath); // 持久化 cookie
   dio.interceptors
     ..add(CookieManager(cookieJar))
     ..add(LogInterceptor())
@@ -67,6 +68,13 @@ void main() async {
   SpHelper.sp = await SharedPreferences.getInstance();
 
   runApp(MyApp());
+
+  // 在 Android 上设置沉浸式状态栏
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -102,11 +110,17 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     //监听是否有未读消息需要通知
     eventBus.on(MyEventHasNewNotification, (unreadNumber) async {
       // 展示本地通知
-      var androidPlatformChannelSpecifics =
-          AndroidNotificationDetails('notify', '有未读消息通知', 'v2ex平台的未读消息', importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          'notify', '有未读消息通知', 'v2ex平台的未读消息',
+          importance: Importance.Max,
+          priority: Priority.High,
+          ticker: 'ticker');
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-      var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(0, 'V2LF 提醒您', '您有$unreadNumber条 V2EX 的未读消息，点击查看', platformChannelSpecifics, payload: '');
+      var platformChannelSpecifics = NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(0, 'V2LF 提醒您',
+          '您有$unreadNumber条 V2EX 的未读消息，点击查看', platformChannelSpecifics,
+          payload: '');
     });
   }
 
@@ -145,7 +159,8 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     var android = AndroidInitializationSettings('ic_stat_v');
     var ios = IOSInitializationSettings();
     var initializationSettings = InitializationSettings(android, ios);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
   }
 
   Future onSelectNotification(String payload) async {
@@ -172,7 +187,10 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: DisplayModel()), ChangeNotifierProvider.value(value: LocaleModel())],
+      providers: [
+        ChangeNotifierProvider.value(value: DisplayModel()),
+        ChangeNotifierProvider.value(value: LocaleModel())
+      ],
       child: Consumer2<DisplayModel, LocaleModel>(
         builder: (context, displayModel, localeModel, _) {
           return MaterialApp(
@@ -181,9 +199,12 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             locale: localeModel.locale,
             localizationsDelegates: [
               S.delegate,
-              ChineseCupertinoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate, // 为Material Components库提供了本地化的字符串和其他值
-              GlobalWidgetsLocalizations.delegate, // 定义widget默认的文本方向，从左到右或从右到左
+              // 为 Cupertino Components 库提供了本地化的字符串和其他值
+              GlobalCupertinoLocalizations.delegate,
+              // 为 Material Components 库提供了本地化的字符串和其他值
+              GlobalMaterialLocalizations.delegate,
+              // 定义 widget 默认的文本方向，从左到右或从右到左
+              GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
             theme: displayModel.themeDate(),
@@ -203,17 +224,23 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                         );
                       }).toList(),
                     ),
-                    elevation: defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+                    elevation: defaultTargetPlatform == TargetPlatform.android
+                        ? 5.0
+                        : 0.0,
                   ),
                   body: new TabBarView(
                     controller: _tabController,
                     children: tabs.map((TabModel choice) {
-                      return choice.key == 'all' ? TabAllListView('all') : TopicListView(choice.key);
+                      return choice.key == 'all'
+                          ? TabAllListView('all')
+                          : TopicListView(choice.key);
                     }).toList(),
                   ),
                   drawer: new DrawerLeft()),
               onWillPop: () async {
-                if (_lastPressedAt == null || DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+                if (_lastPressedAt == null ||
+                    DateTime.now().difference(_lastPressedAt) >
+                        Duration(seconds: 1)) {
                   // 1秒内连续按两次返回键退出
                   // 两次点击间隔超过1秒则重新计时
                   _lastPressedAt = DateTime.now();
