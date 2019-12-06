@@ -12,7 +12,7 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 **'V2LF' means 'way to love flutter'.**
 The original intention of developing this app is to learn flutter.
 
-[![Get it from iTunes](https://lisk.io/assets/svg/download_on_the_app_store_badge.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://lisk.io/assets/svg/download_on_the_play_store_badge.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
+[![Get it from iTunes](https://upload.wikimedia.org/wikipedia/commons/f/f8/Download_on_the_App_Store_Badge_NL_RGB_blk.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://upload.wikimedia.org/wikipedia/commons/archive/7/78/20190802123605%21Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
 
 [iOS TestFlight](https://testflight.apple.com/join/cvx4MQuh)
 
