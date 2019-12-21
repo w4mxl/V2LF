@@ -65,7 +65,7 @@ class DioWeb {
     if (SpHelper.sp.containsKey(SP_USERNAME)) {
       // 验证登录状态：尝试请求发帖，根据是否跳转到登录页判断
       var response = await dio.get("/new");
-      if (response.isRedirect) {
+      if (response.redirects.isNotEmpty) {
         // 登录已经失效，注销数据
         print('登录已经失效，注销数据');
         // 需要再次两步验证了
