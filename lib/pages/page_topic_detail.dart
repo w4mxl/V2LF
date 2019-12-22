@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/common/database_helper.dart';
 import 'package:flutter_app/components/circle_avatar.dart';
-import 'package:flutter_app/components/fullscreen_image_view.dart';
 import 'package:flutter_app/models/web/item_recent_read_topic.dart';
 import 'package:flutter_app/models/web/item_topic_reply.dart';
 import 'package:flutter_app/models/web/item_topic_subtle.dart';
@@ -25,6 +24,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html/parser.dart';
 import 'package:ovprogresshud/progresshud.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:share/share.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -542,6 +542,24 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             ));
   }
 
+  // 打开大图预览
+  void openImageDialog(String imgUrl)  {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                child: PhotoView(
+                  tightMode: true,
+                  imageProvider: NetworkImage(imgUrl),
+                  heroAttributes: const PhotoViewHeroAttributes(tag: "someTag"),
+                ),
+              ),
+            );
+          },
+        );
+      }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -759,17 +777,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       }
                       Utils.launchURL(url);
                     },
-                    onImageTap: (source) {
-                      print(source);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FullScreenWrapper(
-                            imageProvider: NetworkImage(source),
-                          ),
-                        ),
-                      );
-                    },
+                    onImageTap: (url) => openImageDialog(url),
                   ),
                 )
               : Center(
@@ -834,17 +842,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   }
                   Utils.launchURL(url);
                 },
-                onImageTap: (source) {
-                  print(source);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FullScreenWrapper(
-                        imageProvider: NetworkImage(source),
-                      ),
-                    ),
-                  );
-                },
+                onImageTap: (url) => openImageDialog(url),
               ),
             ],
           ),
@@ -1119,17 +1117,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                 }
                                                                 Utils.launchURL(url);
                                                               },
-                                                              onImageTap: (source) {
-                                                                print(source);
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder: (context) => FullScreenWrapper(
-                                                                      imageProvider: NetworkImage(source),
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
+                                                              onImageTap: (url) => openImageDialog(url),
                                                             )),
                                                         Divider(
                                                           height: 0,
@@ -1421,17 +1409,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           }
                                           Utils.launchURL(url);
                                         },
-                                        onImageTap: (source) {
-                                          print(source);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => FullScreenWrapper(
-                                                imageProvider: NetworkImage(source),
-                                              ),
-                                            ),
-                                          );
-                                        },
+                                        onImageTap: (url) => openImageDialog(url),
                                       )),
                                   Divider(
                                     height: 0,
