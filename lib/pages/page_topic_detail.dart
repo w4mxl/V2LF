@@ -956,7 +956,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           print("wml::${userNames.length}");
                           if (userNames.length > 0) {
                             // 罗列出要在 BottomSheet 中展示的列表数据
-                            userNames.add(reply.userName); // 加上当前评论用户
+                            // 过滤掉评论中自己@自己的情况
+                            if(!userNames.contains(reply.userName)){
+                              userNames.add(reply.userName); // 加上当前评论用户
+                            }
                             List<ReplyItem> listToShow = List();
                             var list = replyList.sublist(0, index + 1);
                             for (var item in list) {
