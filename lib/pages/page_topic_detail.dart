@@ -649,7 +649,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 // 头像
                 GestureDetector(
                   child: Hero(
-                    tag: 'avatar',
+                    tag: 'avatar_'+ (_detailModel != null ? _detailModel.createdId : widget.createdId),
                     transitionOnUserGestures: true,
                     child: CircleAvatarWithPlaceholder(
                       imageUrl: widget.avatar.isNotEmpty ? widget.avatar : _detailModel?.avatar,
@@ -660,7 +660,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProfilePage(_detailModel != null ? _detailModel.createdId : widget.createdId,
-                            _detailModel != null ? _detailModel.avatar : widget.avatar)),
+                            _detailModel != null ? _detailModel.avatar : widget.avatar,
+                            heroTag: 'avatar_'+ (_detailModel != null ? _detailModel.createdId : widget.createdId),)),
                   ),
                 ),
                 SizedBox(width: 10.0),
@@ -998,7 +999,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                       // 评论item头像
                                                       GestureDetector(
                                                         child: Hero(
-                                                          tag: 'avatar$index',
+                                                          tag: 'avatar_'+ reply.replyId,
                                                           transitionOnUserGestures: true,
                                                           child: CircleAvatarWithPlaceholder(
                                                             imageUrl: reply.avatar,
@@ -1011,7 +1012,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                               builder: (context) => ProfilePage(
                                                                     reply.userName,
                                                                     Utils.avatarLarge(reply.avatar),
-                                                                    heroTag: 'avatar$index',
+                                                                    heroTag: 'avatar_'+ reply.replyId,
                                                                   )),
                                                         ),
                                                       ),
@@ -1159,7 +1160,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 // 评论item头像
                                 GestureDetector(
                                   child: Hero(
-                                    tag: 'avatar$index',
+                                    tag: 'avatar_'+ reply.replyId,
                                     transitionOnUserGestures: true,
                                     child: CircleAvatarWithPlaceholder(
                                       imageUrl: reply.avatar,
@@ -1172,7 +1173,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         builder: (context) => ProfilePage(
                                               reply.userName,
                                               Utils.avatarLarge(reply.avatar),
-                                              heroTag: 'avatar$index',
+                                              heroTag: 'avatar_'+ reply.replyId,
                                             )),
                                   ),
                                 ),

@@ -74,3 +74,4 @@ build/
 android/app/release/app.aab
 ios/Flutter/flutter_export_environment.sh
 /ios/Runner.xcodeproj/project.pbxproj
+.flutter-plugins-dependencies
