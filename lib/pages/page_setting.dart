@@ -27,6 +27,7 @@ class _SettingPageState extends State<SettingPage> {
   ThemeMode _currentAppearance = SpHelper.getThemeMode(); // 当前外观
   Locale _currentLocale = SpHelper.getLocale();
   bool _switchAutoAward = true; // 是否自动签到；默认是
+  String _currentFontSize = SpHelper.sp.getString(SP_CONTENT_FONT_SIZE)??'normal'; // 正文（和评论）字号大小
 
   @override
   void initState() {
@@ -179,6 +180,54 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     selected: false,
                     activeColor: Theme.of(context).accentColor,
+                  ),
+                  Divider(
+                    height: 0.0,
+                    indent: 20.0,
+                  ),
+                  // 正文（和评论）字号
+                  ExpansionTile(
+                    leading: Icon(
+                      Icons.format_size,
+                    ),
+                    title: Row(
+                      children: <Widget>[
+                        Text(S.of(context).titleContentFontSize),
+                        Expanded(
+                          child: Text(
+                            _currentFontSize,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                    children: <Widget>[
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return RadioListTile(
+                              title: Text(
+                                index == 0 ? 'smaller' : (index == 1 ? 'normal' : 'larger'),
+                                style: TextStyle(fontSize: 14.0),
+                              ),
+                              value: index == 0 ? 'smaller' : (index == 1 ? 'normal' : 'larger'),
+                              groupValue: _currentFontSize,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _currentFontSize = newValue;
+                                  SpHelper.sp.setString('SP_CONTENT_FONT_SIZE', _currentFontSize);
+                                });
+                              },
+                              controlAffinity: ListTileControlAffinity.trailing,
+                            );
+                          }),
+                    ],
                   ),
                   Divider(
                     height: 0.0,

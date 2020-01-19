@@ -29,6 +29,7 @@
     "placeholders": {}
   },
   "titleAppearance": "Appearance",
+  "titleContentFontSize": "Content FontSize",
   "titleSystemFont": "System Font",
   "@titleSystemFont": {
     "type": "text",

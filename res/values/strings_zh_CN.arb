@@ -29,6 +29,7 @@
     "placeholders": {}
   },
   "titleAppearance": "外观模式",
+  "titleContentFontSize": "正文字号",
   "titleSystemFont": "系统字体",
   "@titleSystemFont": {
     "type": "text",

@@ -68,6 +68,7 @@ class S implements WidgetsLocalizations {
   String get thank => "Thank";
   String get titleAppearance => "Appearance";
   String get titleAutoAward => "Auto Daily Award";
+  String get titleContentFontSize => "Content FontSize";
   String get titleLanguage => "Language";
   String get titlePersonalityHome => "Manage Homepage";
   String get titleRecommend => "Recommend to friends";
@@ -152,6 +153,8 @@ class $zh_CN extends S {
   String get titleToRate => "评分鼓励";
   @override
   String get createTitle => "创建新主题";
+  @override
+  String get titleContentFontSize => "正文字号";
   @override
   String get hintPersonalityHome => "对主页显示的节点重新选择及排序";
   @override

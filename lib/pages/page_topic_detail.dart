@@ -33,6 +33,7 @@ import 'package:html/dom.dart' as dom; // Contains DOM related classes for extra
 //final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
+int customFontSize;
 
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
@@ -60,6 +61,21 @@ class _TopicDetailsState extends State<TopicDetails> {
 
     // check login state
     isLogin = SpHelper.sp.containsKey(SP_USERNAME);
+
+    // 获取正文（评论）字号
+    switch (SpHelper.sp.getString(SP_CONTENT_FONT_SIZE)) {
+      case 'smaller':
+        customFontSize = 14;
+        break;
+        case 'normal':
+        customFontSize = 16;
+        break;
+        case 'larger':
+        customFontSize = 18;
+        break;
+      default:
+    }
+    
   }
 
   @override
