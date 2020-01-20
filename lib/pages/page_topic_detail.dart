@@ -33,7 +33,7 @@ import 'package:html/dom.dart' as dom; // Contains DOM related classes for extra
 //final key = GlobalKey<_TopicDetailViewState>();
 
 bool isLogin = false;
-int customFontSize;
+double customFontSize;
 
 // 话题详情页+评论列表
 class TopicDetails extends StatefulWidget {
@@ -63,19 +63,8 @@ class _TopicDetailsState extends State<TopicDetails> {
     isLogin = SpHelper.sp.containsKey(SP_USERNAME);
 
     // 获取正文（评论）字号
-    switch (SpHelper.sp.getString(SP_CONTENT_FONT_SIZE)) {
-      case 'smaller':
-        customFontSize = 14;
-        break;
-        case 'normal':
-        customFontSize = 16;
-        break;
-        case 'larger':
-        customFontSize = 18;
-        break;
-      default:
-    }
-    
+    customFontSize = SpHelper.sp.getDouble(SP_CONTENT_FONT_SIZE) ?? 15.0; // 正文（和评论）字号大小, 默认是 15
+
   }
 
   @override
@@ -559,22 +548,22 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   // 打开大图预览
-  void openImageDialog(String imgUrl)  {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              child: Container(
-                child: PhotoView(
-                  tightMode: true,
-                  imageProvider: NetworkImage(imgUrl),
-                  heroAttributes: const PhotoViewHeroAttributes(tag: "someTag"),
-                ),
-              ),
-            );
-          },
+  void openImageDialog(String imgUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            child: PhotoView(
+              tightMode: true,
+              imageProvider: NetworkImage(imgUrl),
+              heroAttributes: const PhotoViewHeroAttributes(tag: "someTag"),
+            ),
+          ),
         );
-      }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -665,7 +654,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 // 头像
                 GestureDetector(
                   child: Hero(
-                    tag: 'avatar_'+ (_detailModel != null ? _detailModel.createdId : widget.createdId),
+                    tag: 'avatar_' + (_detailModel != null ? _detailModel.createdId : widget.createdId),
                     transitionOnUserGestures: true,
                     child: CircleAvatarWithPlaceholder(
                       imageUrl: widget.avatar.isNotEmpty ? widget.avatar : _detailModel?.avatar,
@@ -675,9 +664,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ProfilePage(_detailModel != null ? _detailModel.createdId : widget.createdId,
-                            _detailModel != null ? _detailModel.avatar : widget.avatar,
-                            heroTag: 'avatar_'+ (_detailModel != null ? _detailModel.createdId : widget.createdId),)),
+                        builder: (context) => ProfilePage(
+                              _detailModel != null ? _detailModel.createdId : widget.createdId,
+                              _detailModel != null ? _detailModel.avatar : widget.avatar,
+                              heroTag: 'avatar_' + (_detailModel != null ? _detailModel.createdId : widget.createdId),
+                            )),
                   ),
                 ),
                 SizedBox(width: 10.0),
@@ -783,6 +774,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   padding: const EdgeInsets.all(10.0),
                   child: Html(
                     data: _detailModel.contentRendered,
+                    defaultTextStyle: TextStyle(fontSize: customFontSize),
                     linkStyle: TextStyle(
                       color: Theme.of(context).accentColor,
                       decoration: TextDecoration.underline,
@@ -847,7 +839,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               Html(
                 data: subtle.content,
                 padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(fontSize: 14.0),
+                defaultTextStyle: TextStyle(fontSize: customFontSize),
                 linkStyle: TextStyle(
                   color: Theme.of(context).accentColor,
                   decoration: TextDecoration.underline,
@@ -973,7 +965,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           if (userNames.length > 0) {
                             // 罗列出要在 BottomSheet 中展示的列表数据
                             // 过滤掉评论中自己@自己的情况
-                            if(!userNames.contains(reply.userName)){
+                            if (!userNames.contains(reply.userName)) {
                               userNames.add(reply.userName); // 加上当前评论用户
                             }
                             List<ReplyItem> listToShow = List();
@@ -1018,7 +1010,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                       // 评论item头像
                                                       GestureDetector(
                                                         child: Hero(
-                                                          tag: 'avatar_'+ reply.replyId,
+                                                          tag: 'avatar_' + reply.replyId,
                                                           transitionOnUserGestures: true,
                                                           child: CircleAvatarWithPlaceholder(
                                                             imageUrl: reply.avatar,
@@ -1031,7 +1023,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                               builder: (context) => ProfilePage(
                                                                     reply.userName,
                                                                     Utils.avatarLarge(reply.avatar),
-                                                                    heroTag: 'avatar_'+ reply.replyId,
+                                                                    heroTag: 'avatar_' + reply.replyId,
                                                                   )),
                                                         ),
                                                       ),
@@ -1124,6 +1116,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                             // 评论内容
                                                             child: Html(
                                                               data: reply.contentRendered,
+                                                              defaultTextStyle: TextStyle(fontSize: customFontSize),
                                                               linkStyle: TextStyle(
                                                                 color: Theme.of(context).accentColor,
                                                               ),
@@ -1179,7 +1172,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                 // 评论item头像
                                 GestureDetector(
                                   child: Hero(
-                                    tag: 'avatar_'+ reply.replyId,
+                                    tag: 'avatar_' + reply.replyId,
                                     transitionOnUserGestures: true,
                                     child: CircleAvatarWithPlaceholder(
                                       imageUrl: reply.avatar,
@@ -1192,7 +1185,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         builder: (context) => ProfilePage(
                                               reply.userName,
                                               Utils.avatarLarge(reply.avatar),
-                                              heroTag: 'avatar_'+ reply.replyId,
+                                              heroTag: 'avatar_' + reply.replyId,
                                             )),
                                   ),
                                 ),
@@ -1284,6 +1277,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
+                                        defaultTextStyle: TextStyle(fontSize: customFontSize),
                                         linkStyle: TextStyle(
                                           color: Theme.of(context).accentColor,
                                         ),
@@ -1412,6 +1406,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       // 评论内容
                                                                       child: Html(
                                                                         data: item.contentRendered,
+                                                                        defaultTextStyle: TextStyle(fontSize: customFontSize),
                                                                         linkStyle: TextStyle(
                                                                           color: Theme.of(context).accentColor,
                                                                         ),

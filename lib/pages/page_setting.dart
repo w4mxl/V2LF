@@ -27,7 +27,7 @@ class _SettingPageState extends State<SettingPage> {
   ThemeMode _currentAppearance = SpHelper.getThemeMode(); // 当前外观
   Locale _currentLocale = SpHelper.getLocale();
   bool _switchAutoAward = true; // 是否自动签到；默认是
-  String _currentFontSize = SpHelper.sp.getString(SP_CONTENT_FONT_SIZE)??'normal'; // 正文（和评论）字号大小
+  double _currentFontSize = SpHelper.sp.getDouble(SP_CONTENT_FONT_SIZE) ?? 15.0; // 正文（和评论）字号大小, 默认是 15
 
   @override
   void initState() {
@@ -186,48 +186,32 @@ class _SettingPageState extends State<SettingPage> {
                     indent: 20.0,
                   ),
                   // 正文（和评论）字号
-                  ExpansionTile(
+                  ListTile(
                     leading: Icon(
                       Icons.format_size,
                     ),
-                    title: Row(
-                      children: <Widget>[
-                        Text(S.of(context).titleContentFontSize),
-                        Expanded(
-                          child: Text(
-                            _currentFontSize,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
+                    title: Text(S.of(context).titleContentFontSize),
+                    trailing: Container(
+                      width: 110,
+                      child: SliderTheme(
+                        data: SliderThemeData(
+                          trackShape: CustomTrackShape(),
                         ),
-                      ],
+                        child: Slider(
+                          value: _currentFontSize,
+                          divisions: 4,
+                          label: '$_currentFontSize',
+                          min: 13.0,
+                          max: 17.0,
+                          onChanged: (newFontSize) {
+                            setState(() {
+                              _currentFontSize = newFontSize;
+                              SpHelper.sp.setDouble(SP_CONTENT_FONT_SIZE, _currentFontSize);
+                            });
+                          },
+                        ),
+                      ),
                     ),
-                    children: <Widget>[
-                      ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return RadioListTile(
-                              title: Text(
-                                index == 0 ? 'smaller' : (index == 1 ? 'normal' : 'larger'),
-                                style: TextStyle(fontSize: 14.0),
-                              ),
-                              value: index == 0 ? 'smaller' : (index == 1 ? 'normal' : 'larger'),
-                              groupValue: _currentFontSize,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _currentFontSize = newValue;
-                                  SpHelper.sp.setString('SP_CONTENT_FONT_SIZE', _currentFontSize);
-                                });
-                              },
-                              controlAffinity: ListTileControlAffinity.trailing,
-                            );
-                          }),
-                    ],
                   ),
                   Divider(
                     height: 0.0,
@@ -576,5 +560,22 @@ _launchURL(String url) async {
     await launch(url);
   } else {
     Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
+  }
+}
+
+/// https://github.com/flutter/flutter/issues/37057 用于移除 Slider 的 margin
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    @required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    @required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight;
+    final double trackLeft = offset.dx;
+    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }

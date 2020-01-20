@@ -14,7 +14,7 @@ const String KEY_MAIN_TABS = 'key_main_tabs';
 // font
 const String SP_FONT_FAMILY = "font_family";
 
-// 正文（和评论）字号大小： smaller normal larger
+// 正文（和评论）字号大小
 const String SP_CONTENT_FONT_SIZE = "content_font_size";
 
 const String SP_JINRISHICI_TOKEN = "jinrishici_token";
