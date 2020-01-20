@@ -172,7 +172,9 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
 
   // Triggered when text is submitted (send button pressed).
   Future<Null> _onTextMsgSubmitted(String text) async {
+    Progresshud.show();
     bool loginResult = await DioWeb.replyTopic(widget.topicId, text);
+    Progresshud.dismiss();
     if (loginResult) {
       Progresshud.showSuccessWithStatus('回复成功!');
       // Clear input text field.
@@ -185,6 +187,7 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
     } else {
       print('帖子详情页面：回复失败');
       Navigator.of(context, rootNavigator: true).pop();
+       Progresshud.showErrorWithStatus('操作失败');
     }
   }
 }
