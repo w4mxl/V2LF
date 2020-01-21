@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/bubble_tab_indicator.dart';
-import 'package:flutter_app/components/gridview_favourite_nodes.dart';
-import 'package:flutter_app/components/listview_favourite_topics.dart';
 import 'package:flutter_app/components/listview_following_topics.dart';
 import 'package:flutter_app/components/listview_following_users.dart';
 
@@ -28,6 +26,7 @@ class _FollowingPageState extends State<FollowingPage> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
         length: 2,
         child: Scaffold(

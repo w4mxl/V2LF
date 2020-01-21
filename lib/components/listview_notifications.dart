@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class NotificationsListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<NotificationsListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<NotificationsListView> {
   int p = 1;
   int maxPage = 1;
 
@@ -133,9 +132,6 @@ class TopicListViewState extends State<NotificationsListView> with AutomaticKeep
       items.addAll(newEntries);
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void dispose() {

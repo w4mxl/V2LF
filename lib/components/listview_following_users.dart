@@ -33,6 +33,7 @@ class _FollowingUsersListViewState extends State<FollowingUsersListView> with Au
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<List<FollowingUser>>(
       future: _future,
       builder: (context, snapshot) {

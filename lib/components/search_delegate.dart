@@ -178,6 +178,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
             return Sov2exResultListView(sov2ex.hits);
           }
         }
+        return Container();
       },
     );
   }

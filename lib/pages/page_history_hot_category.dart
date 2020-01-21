@@ -39,6 +39,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
         length: tabs.length,
         child: Scaffold(

@@ -26,6 +26,7 @@ class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
         length: 2,
         child: Scaffold(

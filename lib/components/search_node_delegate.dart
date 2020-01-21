@@ -109,6 +109,7 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
             );
           }
         }
+        return Container();
       },
     );
   }

@@ -66,6 +66,7 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (items.length > 0) {
       return RefreshIndicator(
           child: Container(

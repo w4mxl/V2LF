@@ -21,7 +21,7 @@ class AllTopicsListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<AllTopicsListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<AllTopicsListView> {
   int p = 1;
   int maxPage = 1;
 
@@ -135,9 +135,6 @@ class TopicListViewState extends State<AllTopicsListView> with AutomaticKeepAliv
       items.addAll(newEntries);
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
