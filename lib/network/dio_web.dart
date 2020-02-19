@@ -519,12 +519,11 @@ class DioWeb {
       }
     }
     var tree = ETree.fromString(response.data);
-    var elementOfAvatarImg = tree.xpath("//*[@id='Top']/div/div/table/tr/td[3]/a[1]/img[1]")?.first;
+    var elementOfAvatarImg = tree.xpath("//*[@id='menu-entry']/img")?.first;
     if (elementOfAvatarImg != null) {
       // 获取用户头像
       String avatar = Utils.avatarLarge(elementOfAvatarImg.attributes["src"]);
-      String href = elementOfAvatarImg.parent.attributes["href"]; // "/member/w4mxl"
-      var username = href.substring('/member/'.length);
+      String username = elementOfAvatarImg.attributes["alt"]; // "w4mxl"
       // 保存 username avatar
       SpHelper.sp.setString(SP_AVATAR, avatar);
       SpHelper.sp.setString(SP_USERNAME, username);
