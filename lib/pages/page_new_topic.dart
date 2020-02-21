@@ -200,7 +200,7 @@ class _NewTopicPageState extends State<NewTopicPage> {
 
   Widget buildEditor() {
     final theme = new ZefyrThemeData(
-      toolbarTheme: ZefyrToolbarTheme.fallback(context).copyWith(
+      toolbarTheme: ToolbarTheme.fallback(context).copyWith(
         color: Colors.grey.shade800,
         toggleColor: Colors.grey.shade900,
         iconColor: Colors.white,

@@ -145,7 +145,7 @@ class _SettingPageState extends State<SettingPage> {
                           Color value = themeColorMap[key];
                           return new InkWell(
                             onTap: () {
-                              Provider.of<DisplayModel>(context).switchColor(key);
+                              Provider.of<DisplayModel>(context,listen: false).switchColor(key);
                             },
                             child: new Container(
                               margin: EdgeInsets.all(5.0),
@@ -265,7 +265,7 @@ class _SettingPageState extends State<SettingPage> {
                               onChanged: (newValue) {
                                 setState(() {
                                   _currentLocale = newValue;
-                                  Provider.of<LocaleModel>(context).switchLocale(newValue);
+                                  Provider.of<LocaleModel>(context,listen: false).switchLocale(newValue);
                                 });
                               },
                               controlAffinity: ListTileControlAffinity.trailing,
@@ -474,9 +474,9 @@ class _SettingPageState extends State<SettingPage> {
   void buildSwitchFontSetState(bool value, BuildContext context) {
     return setState(() {
       if (value) {
-        Provider.of<DisplayModel>(context).switchFont('System');
+        Provider.of<DisplayModel>(context, listen: false).switchFont('System');
       } else {
-        Provider.of<DisplayModel>(context).switchFont('Whitney');
+        Provider.of<DisplayModel>(context,listen: false).switchFont('Whitney');
       }
     });
   }
@@ -536,7 +536,7 @@ class _SettingPageState extends State<SettingPage> {
               onChanged: (newValue) {
                 setState(() {
                   _currentAppearance = newValue;
-                  Provider.of<DisplayModel>(context).switchThemeMode(newValue);
+                  Provider.of<DisplayModel>(context,listen: false).switchThemeMode(newValue);
                 });
               },
               controlAffinity: ListTileControlAffinity.trailing,
@@ -550,7 +550,7 @@ class _SettingPageState extends State<SettingPage> {
   void appearanceSwitchApply(bool value) {
     setState(() {
       _currentAppearance = value ? ThemeMode.dark : ThemeMode.light;
-      Provider.of<DisplayModel>(context).switchThemeMode(_currentAppearance);
+      Provider.of<DisplayModel>(context,listen: false).switchThemeMode(_currentAppearance);
     });
   }
 }
