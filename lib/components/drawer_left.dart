@@ -465,8 +465,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 icon: new Icon(Icons.info),
                 child: new Text(S.of(context).about),
                 applicationName: "V2LF",
-                applicationVersion: "v2019.11",
-                applicationLegalese: '© 2019 Wml',
+                applicationVersion: "v2020.1",
+                applicationLegalese: '© 2020 Wml',
                 applicationIcon: new Image.asset(
                   "assets/images/icon/ic_launcher.png",
                   width: 64.0,
