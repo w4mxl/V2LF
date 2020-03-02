@@ -1097,7 +1097,7 @@ class DioWeb {
     print(detailModel.isThank == true ? 'yes' : 'no');
 
     // 判断是否有评论
-    if (document.querySelector('#Wrapper > div > div.box.transparent') == null) {
+    if (document.querySelector('#no-comments-yet') == null) {
       // 表示有评论
       detailModel.replyCount = document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0].trim();
 
