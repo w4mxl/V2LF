@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -253,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 7,
                           ),
                           Html(
-                            shrinkToFit: true,
+                            shrinkWrap: true,
                             data: _memberProfileModel.company.split(' &nbsp; ')[1],
                           ),
                         ],
@@ -269,9 +268,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            _memberProfileModel.memberIntro.trimLeft().trimRight(),
-                            style: TextStyle(fontSize: 14),
+                          Expanded(
+                            child: Text(
+                              _memberProfileModel.memberIntro.trimLeft().trimRight(),
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
                         ],
                       ),
