@@ -252,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 7,
                           ),
                           Html(
-                            shrinkWrap: true,
+                            shrinkToFit: true,
                             data: _memberProfileModel.company.split(' &nbsp; ')[1],
                           ),
                         ],

@@ -201,8 +201,8 @@ class _SettingPageState extends State<SettingPage> {
                           value: _currentFontSize,
                           divisions: 4,
                           label: '$_currentFontSize',
-                          min: 13.0,
-                          max: 17.0,
+                          min: 14.0,
+                          max: 18.0,
                           onChanged: (newFontSize) {
                             setState(() {
                               _currentFontSize = newFontSize;
