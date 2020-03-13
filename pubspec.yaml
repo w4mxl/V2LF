@@ -46,9 +46,12 @@ dependencies:
   launch_review: ^2.0.0 # https://pub.dartlang.org/packages/launch_review#-installing-tab-
   font_awesome_flutter: ^8.7.0 # https://pub.dartlang.org/packages/font_awesome_flutter#-installing-tab-
   webfeed: ^0.4.2 # https://github.com/witochandra/webfeed
-  # flutter_whatsnew: ^1.0.2+2 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
+  # flutter_whatsnew: ^1.0.3 # https://pub.dartlang.org/packages/flutter_whatsnew#-installing-tab-
   # flutter_whatsnew 目前存在问题，fork 后修改源码了
-  flutter_markdown: ^0.3.3
+  flutter_whatsnew:
+    git:
+      url: https://github.com/w4mxl/flutter_whatsnew.git
+  # flutter_markdown: ^0.3.3
   shimmer: ^1.0.1
   # https://github.com/memspace/zefyr/issues/210
   # https://github.com/memspace/zefyr/issues/214
