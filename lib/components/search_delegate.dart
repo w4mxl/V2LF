@@ -21,9 +21,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 /// 原因是每次回来会新buildResults -> 原先会再给一个新的请求数据的Future，现在改成如果query不变，用旧的Future
 
 class SearchSov2exDelegate extends SearchDelegate<String> {
-  final List<String> _history = SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
-      ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
-      : []; // ['v2er', 'AirPods']
+  final List<String> _history =
+      SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY) : []; // ['v2er', 'AirPods']
 
   String _sortSelected = '权重';
   final _sorts = ['权重', '发帖时间']; // sumup（权重）, created（发帖时间）
@@ -87,8 +86,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+    return BackButton(
       onPressed: () {
         close(context, null);
       },
@@ -106,8 +104,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
     }
 
-    var currentFilter =
-        _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
+    var currentFilter = _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
     if (query.trim() != lastQ || currentFilter != lastFiter) {
       _future = getSov2exData(query.trim());
       lastQ = query.trim();

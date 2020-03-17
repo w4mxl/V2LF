@@ -62,8 +62,7 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+    return BackButton(
       onPressed: () {
         close(context, null);
       },
@@ -116,8 +115,7 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionNodes =
-        query.isEmpty ? hotNodes : hotNodes.where((p) => p.nodeName.toLowerCase().contains(query.toLowerCase())).toList();
+    final suggestionNodes = query.isEmpty ? hotNodes : hotNodes.where((p) => p.nodeName.toLowerCase().contains(query.toLowerCase())).toList();
 
     return ListView.separated(
       itemBuilder: (context, index) => ListTile(
