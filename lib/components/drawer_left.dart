@@ -28,6 +28,7 @@ import 'package:flutter_app/pages/page_setting.dart';
 import 'package:flutter_app/states/model_display.dart';
 import 'package:flutter_app/utils/google_now_images.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
+import 'package:flutter_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -518,7 +519,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
     print('wml：checkLoginState');
     if (SpHelper.sp.containsKey(SP_USERNAME)) {
       userName = SpHelper.sp.getString(SP_USERNAME);
-      avatar = SpHelper.sp.getString(SP_AVATAR);
+      avatar = Utils.avatarLarge(SpHelper.sp.getString(SP_AVATAR));
       // 显示诗词
       getOnePoem();
       // 显示未读通知数目

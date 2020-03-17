@@ -42,8 +42,7 @@ class Utils {
     }
 
     if (await canLaunch(url)) {
-      await launch(url,
-          statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+      await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
     } else {
       Progresshud.showErrorWithStatus('Could not launch $url');
     }
@@ -51,11 +50,12 @@ class Utils {
 
   // 头像转成大图
   static String avatarLarge(String avatar) {
-    // 获取到的是24*24大小，改成73*73
-    //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
+    //// 获取到的是24*24大小，改成73*73
+    ////cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=24&d=retro%0A
+    //cdn.v2ex.com/gravatar/3896b6baf91ec1933c38f370964647b7?s=32&d=retro 登录后获取的头像（移动端样式下）
     //cdn.v2ex.com/avatar/d8fe/ee94/193847_normal.png?m=1477551256
     //cdn.v2ex.com/avatar/d0df/5707/71698_mini.png?m=1408718789
-    var regExp1 = RegExp(r's=24');
+    var regExp1 = RegExp(r's=24|s=32');
     var regExp2 = RegExp(r'normal');
     var regExp3 = RegExp(r'mini');
     if (avatar.contains(regExp1)) {
