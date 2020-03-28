@@ -1,4 +1,4 @@
-// Tab all listview
+// recent listview
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -11,39 +11,30 @@ import 'package:ovprogresshud/progresshud.dart';
 
 import 'listview_tab_topic.dart';
 
-class TabAllListView extends StatefulWidget {
-  final String tabKey;
-
-  TabAllListView(this.tabKey);
-
+class ListViewRecentTopics extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveClientMixin {
-  int p = 0; // 0 代表主页Tab all下的； > 0 则是 https://www.v2ex.com/recent 下的数据
+class TopicListViewState extends State<ListViewRecentTopics> with AutomaticKeepAliveClientMixin {
+  int p = 1;
   bool isUpLoading = false;
   bool hasError = false;
   List<TabTopicItem> items = new List();
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     // 获取数据
     getTopics();
-
-    // todo
-    // 检查是否有新的通知（登录状态下）
-    // 设置定时检查
   }
 
   @override
   void didChangeDependencies() {
-    _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (_scrollController.positions.elementAt(0).pixels == _scrollController.positions.elementAt(0).maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
         if (SpHelper.sp.containsKey(SP_USERNAME)) {
           print('加载recent');
@@ -60,7 +51,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   Future getTopics() async {
     if (!isUpLoading) {
       isUpLoading = true;
-      List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey(widget.tabKey, p++);
+      List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey('recent', p++);
       if (newEntries.isEmpty) {
         // 应该是网络错误
         print('wml!!!!!');
@@ -120,7 +111,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(SpHelper.sp.containsKey(SP_USERNAME) ? S.of(context).loadingPage((p + 1).toString()) : "请登录后查看更多"),
+        child: Text(SpHelper.sp.containsKey(SP_USERNAME) ? S.of(context).loadingPage(p.toString()) : "请登录后查看更多"),
       ),
     );
   }
@@ -129,7 +120,7 @@ class TopicListViewState extends State<TabAllListView> with AutomaticKeepAliveCl
   Future _onRefresh() async {
     print("刷新数据...");
     p = 0;
-    List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey(widget.tabKey, p);
+    List<TabTopicItem> newEntries = await DioWeb.getTopicsByTabKey('recent', p);
     setState(() {
       print("刷新数据..........");
       items.clear();

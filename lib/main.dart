@@ -26,7 +26,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/listview_tab_all.dart';
 import 'generated/i18n.dart';
 import 'utils/event_bus.dart';
 
@@ -231,9 +230,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                   body: new TabBarView(
                     controller: _tabController,
                     children: tabs.map((TabModel choice) {
-                      return choice.key == 'all'
-                          ? TabAllListView('all')
-                          : TopicListView(choice.key);
+                      return TopicListView(choice.key);
                     }).toList(),
                   ),
                   drawer: new DrawerLeft()),

@@ -8,8 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/generated/i18n.dart';
 import 'package:flutter_app/models/web/item_tab_topic.dart';
 import 'package:flutter_app/network/dio_web.dart';
+import 'package:flutter_app/pages/page_login.dart';
 import 'package:flutter_app/pages/page_profile.dart';
+import 'package:flutter_app/pages/page_recent_topics.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
+import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
@@ -34,6 +37,10 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
   @override
   void initState() {
     super.initState();
+
+    // 设置默认操作进度加载背景
+    Progresshud.setDefaultMaskTypeBlack();
+
     // 获取数据
     topicListFuture = getTopics();
     _scrollController.addListener(() {
@@ -45,6 +52,33 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
   Future<List<TabTopicItem>> getTopics() async {
     return await DioWeb.getTopicsByTabKey(widget.tabKey, 0);
+  }
+
+  Widget _widgetLoadMore() {
+    return InkWell(
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Text('»  更多新主题'),
+      ),
+      onTap: () {
+        // https://www.v2ex.com/recent 需要登录后才能查看的
+        print(SpHelper.sp.containsKey(SP_USERNAME));
+        if (SpHelper.sp.containsKey(SP_USERNAME)) {
+          // =》「最近的主题」页面
+          Navigator.push(context, MaterialPageRoute(builder: (context) => RecentTopicsPage()));
+        } else {
+          // =》 跳到登录页面
+          Progresshud.showInfoWithStatus('你要查看的页面需要先登录');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -59,8 +93,15 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
                     ? ListView.builder(
                         // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
                         controller: _scrollController,
-                        itemBuilder: (context, index) => TopicItemView(snapshot.data[index]),
-                        itemCount: snapshot.data.length)
+                        itemCount: snapshot.data.length + 1, // »  更多新主题
+                        itemBuilder: (context, index) {
+                          if (index == snapshot.data.length) {
+                            // 滑到了最后一个itme
+                            return _widgetLoadMore();
+                          } else {
+                            return TopicItemView(snapshot.data[index]);
+                          }
+                        })
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[

@@ -126,13 +126,9 @@ class DioWeb {
     List<TabTopicItem> topics = new List<TabTopicItem>();
 
     var response;
-    if (tabKey == 'all') {
+    if (tabKey == 'recent') {
       try {
-        if (p == 0) {
-          response = await dio.get('/?tab=' + tabKey);
-        } else {
-          response = await dio.get('/recent?p=' + p.toString());
-        }
+        response = await dio.get('/recent?p=' + p.toString());
       } on DioError catch (e) {
         if (e != null) {
           formatError(e);
