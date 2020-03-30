@@ -25,6 +25,7 @@ class TopicDetailModel {
   // class="op" style="user-select: auto;">忽略主题</a>
   // String once = ''; // 用于操作：对忽略主题、给主题发送感谢、对评论发送感谢
   bool isFavorite = false; // 是否已收藏
+  int favoriteCount = 0; // 收藏的人数
   bool isThank = false; // 是否已感谢
 
   int maxPage = 1; // 共有多少页数评论

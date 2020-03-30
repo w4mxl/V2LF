@@ -1083,6 +1083,13 @@ class DioWeb {
       detailModel.isFavorite = collect.startsWith('/unfavorite');
     }
 
+    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > span") != null) {
+      String count = document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > span").text;
+      if (count.contains('人收藏')) {
+        detailModel.favoriteCount = int.parse(count.trim().split('人收藏')[0]);
+      }
+    }
+
     // <a href="#;" onclick="if (confirm('确定不想再看到这个主题？')) { location.href = '/ignore/topic/583319?once=62479'; }"
     //    class="op" style="user-select: auto;">忽略主题</a>
     // #Wrapper > div > div:nth-child(1) > div.inner > div > a:nth-child(5)
@@ -1095,7 +1102,8 @@ class DioWeb {
     // 判断是否有评论
     if (document.querySelector('#no-comments-yet') == null) {
       // 表示有评论
-      detailModel.replyCount = document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('回复')[0].trim();
+      detailModel.replyCount =
+          document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('条回复')[0].trim();
 
       if (p == 1) {
         // 只有第一页这样的解析才对

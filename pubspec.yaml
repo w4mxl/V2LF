@@ -67,6 +67,7 @@ dependencies:
   provider: ^4.0.4 # https://pub.dev/packages/provider
   device_info: ^0.4.1+5
   # liquid_pull_to_refresh: ^1.1.1
+  like_button: ^0.2.0
 
 dev_dependencies:
   flutter_test:

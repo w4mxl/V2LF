@@ -123,7 +123,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   // 主题设置
                   ExpansionTile(
-                    leading: Icon(Icons.color_lens, color: ListTileTheme.of(context).iconColor),
+                    leading: Icon(Icons.color_lens),
                     title: Row(
                       children: <Widget>[
                         Text(S.of(context).titleTheme),

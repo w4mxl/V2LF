@@ -23,6 +23,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html/parser.dart';
+import 'package:like_button/like_button.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share/share.dart';
@@ -64,7 +65,6 @@ class _TopicDetailsState extends State<TopicDetails> {
 
     // 获取正文（评论）字号
     customFontSize = SpHelper.sp.getDouble(SP_CONTENT_FONT_SIZE) ?? 15.0; // 正文（和评论）字号大小, 默认是 15
-
   }
 
   @override
@@ -187,7 +187,7 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
     } else {
       print('帖子详情页面：回复失败');
       Navigator.of(context, rootNavigator: true).pop();
-       Progresshud.showErrorWithStatus('操作失败');
+      Progresshud.showErrorWithStatus('操作失败');
     }
   }
 }
@@ -211,7 +211,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   List<Action> actions = <Action>[
     Action(id: 'thank', title: '感谢', icon: FontAwesomeIcons.kissWinkHeart),
     Action(id: 'favorite', title: '收藏', icon: FontAwesomeIcons.star),
-    Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.reply),
+    Action(id: 'reply', title: '回复', icon: FontAwesomeIcons.comment),
     Action(id: 'only_up', title: '楼主 / 全部', icon: Icons.visibility),
     Action(id: 'link', title: '复制链接', icon: Icons.link),
     Action(id: 'copy', title: '复制内容', icon: Icons.content_copy),
@@ -333,15 +333,20 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   Future _favoriteTopic() async {
-    Progresshud.show();
+    // Progresshud.show();
     bool isSuccess = await DioWeb.favoriteTopic(_detailModel.isFavorite, widget.topicId, _detailModel.token);
-    Progresshud.dismiss();
+    // Progresshud.dismiss();
     if (isSuccess) {
-      Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
+      // Progresshud.showSuccessWithStatus(_detailModel.isFavorite ? '已取消收藏！' : '收藏成功！');
       eventBus.emit(MyEventRefreshTopic);
     } else {
       Progresshud.showErrorWithStatus('操作失败');
     }
+  }
+
+  Future<bool> _onFavoriteButtonTapped(bool isFavorited) async {
+    _select(actions[1]);
+    return !isFavorited;
   }
 
   Future _ignoreTopic() async {
@@ -586,15 +591,33 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       }),
                 ),
                 IconButton(
-                    icon: Icon(_detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
-                    onPressed: () {
-                      _select(actions[1]);
-                    }),
-                IconButton(
                     icon: Icon(actions[2].icon),
                     onPressed: () {
                       _select(actions[2]);
                     }),
+                // IconButton(
+                //     icon: Icon(_detailModel != null && _detailModel.isFavorite ? FontAwesomeIcons.solidStar : actions[1].icon),
+                //     onPressed: () {
+                //       _select(actions[1]);
+                //     }),
+                LikeButton(
+                  isLiked: _detailModel != null && _detailModel.isFavorite,
+                  likeBuilder: (bool isFavorited) {
+                    return Icon(
+                      isFavorited ? FontAwesomeIcons.solidStar : actions[1].icon,
+                      color: isFavorited ? Colors.yellow : null,
+                    );
+                  },
+                  likeCount: _detailModel != null ? _detailModel.favoriteCount : 0,
+                  countBuilder: (int count, bool isFavorite, String text) {
+                    var color = isFavorite ? Colors.yellowAccent : Colors.grey;
+                    return Text(
+                      count == 0 ? '' : text,
+                      style: TextStyle(color: color),
+                    );
+                  },
+                  onTap: _onFavoriteButtonTapped,
+                )
               ],
             ),
             offstage: !isLogin,
@@ -613,7 +636,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(right: 10.0),
-                              child: Icon(action.icon),
+                              child: Icon(action.icon, color: Theme.of(context).brightness == Brightness.light ? Colors.black45 : Colors.white),
                             ),
                             Text(action.title)
                           ],
