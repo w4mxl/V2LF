@@ -230,17 +230,17 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                     if (twoFAResult) {
                                                       Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
-                                                          msg: S
-                                                              .of(context)
-                                                              .toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                                          timeInSecForIos: 2,
-                                                          gravity: ToastGravity.CENTER);
+                                                        msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                        timeInSecForIos: 2,
+                                                        gravity: ToastGravity.CENTER,
+                                                      );
                                                       Navigator.of(context).pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
-                                                          msg: '验证失败，请重新输入验证码',
-                                                          timeInSecForIos: 2,
-                                                          gravity: ToastGravity.CENTER);
+                                                        msg: '验证失败，请重新输入验证码',
+                                                        timeInSecForIos: 2,
+                                                        gravity: ToastGravity.CENTER,
+                                                      );
                                                     }
                                                   }),
                                             ],
@@ -281,17 +281,17 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                     if (twoFAResult) {
                                                       Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
-                                                          msg: S
-                                                              .of(context)
-                                                              .toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                                          timeInSecForIos: 2,
-                                                          gravity: ToastGravity.CENTER);
+                                                        msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                        timeInSecForIos: 2,
+                                                        gravity: ToastGravity.CENTER,
+                                                      );
                                                       Navigator.of(context).pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
-                                                          msg: '验证失败，请重新输入验证码',
-                                                          timeInSecForIos: 2,
-                                                          gravity: ToastGravity.CENTER);
+                                                        msg: '验证失败，请重新输入验证码',
+                                                        timeInSecForIos: 2,
+                                                        gravity: ToastGravity.CENTER,
+                                                      );
                                                     }
                                                   }),
                                             ],
@@ -322,8 +322,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             style: Theme.of(context).textTheme.caption,
                           ),
                           // 注册 -> 跳转到注册web页面
-                          onTap: () => launch("https://www.v2ex.com/signup",
-                              statusBarBrightness: Platform.isIOS ? Brightness.light : null),
+                          onTap: () => launch(
+                            "https://www.v2ex.com/signup",
+                            statusBarBrightness: Platform.isIOS ? Brightness.light : null,
+                          ),
                         ),
                         InkWell(
                           child: Text(
@@ -331,8 +333,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             style: Theme.of(context).textTheme.caption,
                           ),
                           // 忘记密码 -> 跳转到重置密码web页面
-                          onTap: () => launch("https://www.v2ex.com/forgot",
-                              statusBarBrightness: Platform.isIOS ? Brightness.light : null),
+                          onTap: () => launch(
+                            "https://www.v2ex.com/forgot",
+                            statusBarBrightness: Platform.isIOS ? Brightness.light : null,
+                          ),
                         ),
                       ],
                     ),
@@ -344,8 +348,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       onPressed: () async {
                         if (loginFormData != null) {
                           var future = Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                WebviewPage('https://www.v2ex.com/auth/google?once=' + loginFormData.once),
+                            builder: (context) => WebviewPage('https://www.v2ex.com/auth/google?once=' + loginFormData.once),
                           ));
                           future.then((value) {
                             // 直接close登录页则value为null；登录成功 value 为 true
@@ -405,7 +408,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     _pwdController.dispose();
     _captchaController.dispose();
     _2faController.dispose();
-    _controller.dispose();
+    if (_controller != null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 }
