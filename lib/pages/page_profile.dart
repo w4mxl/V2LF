@@ -190,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
             shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
             child: CircleAvatar(
               radius: 50.0,
-              backgroundImage: CachedNetworkImageProvider('https:${widget.avatar}'),
+              backgroundImage: CachedNetworkImageProvider(widget.avatar),
             ),
           ),
         ),

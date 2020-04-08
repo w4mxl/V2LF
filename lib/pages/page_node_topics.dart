@@ -139,7 +139,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                     imageUrl: widget.nodeImg != null
                         ? widget.nodeImg
                         : (_node != null
-                            ? ((_node.avatarLarge == '/static/img/node_large.png') ? Strings.nodeDefaultImag : "https:${_node.avatarLarge}")
+                            ? ((_node.avatarLarge == '/static/img/node_large.png') ? Strings.nodeDefaultImag : _node.avatarLarge)
                             : ''),
                     fit: BoxFit.contain,
                     placeholder: (context, url) => CupertinoActivityIndicator(),

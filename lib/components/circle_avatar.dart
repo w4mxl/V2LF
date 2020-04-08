@@ -14,7 +14,7 @@ class CircleAvatarWithPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: CachedNetworkImage(
-        imageUrl: 'https:$imageUrl',
+        imageUrl: imageUrl,
         height: size,
         width: size,
         fit: BoxFit.cover,

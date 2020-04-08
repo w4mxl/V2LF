@@ -244,9 +244,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                       child: CircleAvatar(
                         radius: 36,
                         backgroundImage: avatar.isNotEmpty
-                            ? CachedNetworkImageProvider(
-                                "https:" + avatar,
-                              )
+                            ? CachedNetworkImageProvider(avatar)
                             : AssetImage("assets/images/ic_person.png"),
                       ),
                     ),
@@ -519,7 +517,9 @@ class _DrawerLeftState extends State<DrawerLeft> {
     print('wml：checkLoginState');
     if (SpHelper.sp.containsKey(SP_USERNAME)) {
       userName = SpHelper.sp.getString(SP_USERNAME);
-      avatar = Utils.avatarLarge(SpHelper.sp.getString(SP_AVATAR));
+      var avatarUrl = SpHelper.sp.getString(SP_AVATAR);
+      avatar = Utils.avatarLarge(
+          avatarUrl.startsWith('https:') ? avatarUrl : 'https:' + avatarUrl);
       // 显示诗词
       getOnePoem();
       // 显示未读通知数目
