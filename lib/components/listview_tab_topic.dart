@@ -32,7 +32,7 @@ class TopicListView extends StatefulWidget {
 class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveClientMixin {
   Future<List<TabTopicItem>> topicListFuture;
 
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
 
   @override
   void initState() {
@@ -43,11 +43,18 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
 
     // 获取数据
     topicListFuture = getTopics();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _scrollController = PrimaryScrollController.of(context);
+    // 监听是否滑到了页面底部
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         HapticFeedback.heavyImpact(); // 震动反馈（暗示已经滑到底部了）
       }
     });
+    super.didChangeDependencies();
   }
 
   Future<List<TabTopicItem>> getTopics() async {

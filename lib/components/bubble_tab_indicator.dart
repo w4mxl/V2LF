@@ -1,9 +1,7 @@
-/**
- * @author: wml
- * @date  : 2019/3/24 9:15 PM
- * @email : mxl1989@gmail.com
- * @desc  : 自定义 Tab Indicator ： https://github.com/vipulasri/flutter_bubble_tab_indicator
- */
+/// @author: wml
+/// @date  : 2019/3/24 9:15 PM
+/// @email : mxl1989@gmail.com
+/// @desc  : 自定义 Tab Indicator ： https://github.com/vipulasri/flutter_bubble_tab_indicator
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
