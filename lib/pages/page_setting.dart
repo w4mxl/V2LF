@@ -17,6 +17,9 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../states/model_display.dart';
+import '../utils/sp_helper.dart';
+
 // 设置页面
 class SettingPage extends StatefulWidget {
   @override
@@ -27,7 +30,8 @@ class _SettingPageState extends State<SettingPage> {
   ThemeMode _currentAppearance = SpHelper.getThemeMode(); // 当前外观
   Locale _currentLocale = SpHelper.getLocale();
   bool _switchAutoAward = true; // 是否自动签到；默认是
-  double _currentFontSize = SpHelper.sp.getDouble(SP_CONTENT_FONT_SIZE) ?? 15.0; // 正文（和评论）字号大小, 默认是 15
+  double _currentFontSize = SpHelper.sp.getDouble(SP_CONTENT_FONT_SIZE) ??
+      15.0; // 正文（和评论）字号大小, 默认是 15
 
   @override
   void initState() {
@@ -59,11 +63,14 @@ class _SettingPageState extends State<SettingPage> {
                           actions: <Widget>[
                             FlatButton(
                               child: Text(S.of(context).cancel),
-                              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                              onPressed: () =>
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop(),
                             ),
                             FlatButton(
                                 onPressed: () async {
-                                  Navigator.of(context, rootNavigator: true).pop();
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
                                   await V2exClient.logout();
                                   Navigator.pop(context);
                                 },
@@ -74,7 +81,10 @@ class _SettingPageState extends State<SettingPage> {
               child: Text(
                 S.of(context).logout,
                 semanticsLabel: 'logout',
-                style: Theme.of(context).primaryTextTheme.title.copyWith(fontSize: 18),
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .title
+                    .copyWith(fontSize: 18),
               ),
             ),
           )
@@ -104,7 +114,8 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReorderableListTabs()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ReorderableListTabs()));
                     },
                   ),
                   Divider(
@@ -143,15 +154,20 @@ class _SettingPageState extends State<SettingPage> {
                       Wrap(
                         children: themeColorMap.keys.map((key) {
                           Color value = themeColorMap[key];
-                          return new InkWell(
+                          return InkWell(
                             onTap: () {
-                              Provider.of<DisplayModel>(context,listen: false).switchColor(key);
+                              Provider.of<DisplayModel>(context, listen: false)
+                                  .switchColor(key);
                             },
-                            child: new Container(
+                            child: Container(
                               margin: EdgeInsets.all(5.0),
                               width: 36.0,
                               height: 36.0,
                               color: value,
+                              child: value ==
+                                      themeColorMap[SpHelper.getThemeColor()]
+                                  ? Icon(Icons.done, color: Colors.white)
+                                  : null,
                             ),
                           );
                         }).toList(),
@@ -206,7 +222,8 @@ class _SettingPageState extends State<SettingPage> {
                           onChanged: (newFontSize) {
                             setState(() {
                               _currentFontSize = newFontSize;
-                              SpHelper.sp.setDouble(SP_CONTENT_FONT_SIZE, _currentFontSize);
+                              SpHelper.sp.setDouble(
+                                  SP_CONTENT_FONT_SIZE, _currentFontSize);
                             });
                           },
                         ),
@@ -239,7 +256,9 @@ class _SettingPageState extends State<SettingPage> {
                           child: Text(
                             _currentLocale == null
                                 ? S.of(context).followSystem
-                                : (_currentLocale.languageCode == LOCALE_ZH ? '简体中文' : 'English'),
+                                : (_currentLocale.languageCode == LOCALE_ZH
+                                    ? '简体中文'
+                                    : 'English'),
                             style: TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey,
@@ -257,15 +276,23 @@ class _SettingPageState extends State<SettingPage> {
                           itemBuilder: (context, index) {
                             return RadioListTile(
                               title: Text(
-                                index == 0 ? S.of(context).followSystem : (index == 1 ? '简体中文' : 'English'),
+                                index == 0
+                                    ? S.of(context).followSystem
+                                    : (index == 1 ? '简体中文' : 'English'),
                                 style: TextStyle(fontSize: 14.0),
                               ),
-                              value: index == 0 ? null : (index == 1 ? Locale('zh', 'CN') : Locale('en')),
+                              value: index == 0
+                                  ? null
+                                  : (index == 1
+                                      ? Locale('zh', 'CN')
+                                      : Locale('en')),
                               groupValue: _currentLocale,
                               onChanged: (newValue) {
                                 setState(() {
                                   _currentLocale = newValue;
-                                  Provider.of<LocaleModel>(context,listen: false).switchLocale(newValue);
+                                  Provider.of<LocaleModel>(context,
+                                          listen: false)
+                                      .switchLocale(newValue);
                                 });
                               },
                               controlAffinity: ListTileControlAffinity.trailing,
@@ -320,7 +347,9 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     onTap: () {
                       // Fluttertoast.showToast(msg: '上架后可用～', timeInSecForIos: 2,gravity: ToastGravity.CENTER);
-                      LaunchReview.launch(androidAppId: 'io.github.w4mxl.v2lf', iOSAppId: '1455778208'); // todo 配置信息
+                      LaunchReview.launch(
+                          androidAppId: 'io.github.w4mxl.v2lf',
+                          iOSAppId: '1455778208'); // todo 配置信息
                     },
                   ),
                   Divider(
@@ -339,7 +368,8 @@ class _SettingPageState extends State<SettingPage> {
                       size: 16.0,
                     ),
                     onTap: () {
-                      Share.share('V2LF - A new way to explore v2ex!  ${Strings.storeUrl}'); // todo 配置信息
+                      Share.share(
+                          'V2LF - A new way to explore v2ex!  ${Strings.storeUrl}'); // todo 配置信息
                     },
                   ),
                   Divider(
@@ -374,29 +404,34 @@ class _SettingPageState extends State<SettingPage> {
                                         children: <Widget>[
                                           Icon(Icons.alternate_email),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
                                             child: Text('Email'),
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
+                                      onPressed: () => _launchURL(
+                                          "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
                                     ),
                                     SimpleDialogOption(
                                       child: Row(
                                         children: <Widget>[
                                           Icon(Icons.message),
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 8.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
                                             child: Text('iMessage'),
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL("sms:745871698@qq.com&body=New%20feedback"),
+                                      onPressed: () => _launchURL(
+                                          "sms:745871698@qq.com&body=New%20feedback"),
                                     )
                                   ],
                                 ));
                       } else if (Platform.isAndroid) {
-                        _launchURL("mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
+                        _launchURL(
+                            "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
                       }
                     },
                     trailing: Icon(
@@ -476,13 +511,14 @@ class _SettingPageState extends State<SettingPage> {
       if (value) {
         Provider.of<DisplayModel>(context, listen: false).switchFont('System');
       } else {
-        Provider.of<DisplayModel>(context,listen: false).switchFont('Whitney');
+        Provider.of<DisplayModel>(context, listen: false).switchFont('Whitney');
       }
     });
   }
 
   Widget _appAppearanceTile(BuildContext context) {
-    return ((Platform.isIOS && int.parse(Utils.iosInfo.systemVersion.split('.')[0]) < 13) ||
+    return ((Platform.isIOS &&
+                int.parse(Utils.iosInfo.systemVersion.split('.')[0]) < 13) ||
             (Platform.isAndroid && Utils.androidInfo.version.sdkInt < 29))
         ? SwitchListTile.adaptive(
             value: _currentAppearance == ThemeMode.dark,
@@ -509,7 +545,9 @@ class _SettingPageState extends State<SettingPage> {
             child: Text(
               _currentAppearance == ThemeMode.system
                   ? S.of(context).followSystem
-                  : (_currentAppearance == ThemeMode.light ? S.of(context).day : S.of(context).night),
+                  : (_currentAppearance == ThemeMode.light
+                      ? S.of(context).day
+                      : S.of(context).night),
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.grey,
@@ -529,14 +567,20 @@ class _SettingPageState extends State<SettingPage> {
           itemCount: 3,
           itemBuilder: (context, index) {
             return RadioListTile(
-              title: Text(index == 0 ? S.of(context).followSystem : (index == 1 ? S.of(context).day : S.of(context).night),
+              title: Text(
+                  index == 0
+                      ? S.of(context).followSystem
+                      : (index == 1 ? S.of(context).day : S.of(context).night),
                   style: TextStyle(fontSize: 14.0)),
-              value: index == 0 ? ThemeMode.system : (index == 1 ? ThemeMode.light : ThemeMode.dark),
+              value: index == 0
+                  ? ThemeMode.system
+                  : (index == 1 ? ThemeMode.light : ThemeMode.dark),
               groupValue: _currentAppearance,
               onChanged: (newValue) {
                 setState(() {
                   _currentAppearance = newValue;
-                  Provider.of<DisplayModel>(context,listen: false).switchThemeMode(newValue);
+                  Provider.of<DisplayModel>(context, listen: false)
+                      .switchThemeMode(newValue);
                 });
               },
               controlAffinity: ListTileControlAffinity.trailing,
@@ -550,7 +594,8 @@ class _SettingPageState extends State<SettingPage> {
   void appearanceSwitchApply(bool value) {
     setState(() {
       _currentAppearance = value ? ThemeMode.dark : ThemeMode.light;
-      Provider.of<DisplayModel>(context,listen: false).switchThemeMode(_currentAppearance);
+      Provider.of<DisplayModel>(context, listen: false)
+          .switchThemeMode(_currentAppearance);
     });
   }
 }
@@ -559,7 +604,8 @@ _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    Fluttertoast.showToast(msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(
+        msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
   }
 }
 
@@ -574,7 +620,8 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
   }) {
     final double trackHeight = sliderTheme.trackHeight;
     final double trackLeft = offset.dx;
-    final double trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
     final double trackWidth = parentBox.size.width;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
