@@ -290,9 +290,9 @@ _launchURL(String url) async {
         statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Fluttertoast.showToast(
-        msg: 'Could not launch $url',
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIos: 1,
-        gravity: ToastGravity.CENTER);
+      msg: 'Could not launch $url',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+    );
   }
 }

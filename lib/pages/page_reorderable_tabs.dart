@@ -85,7 +85,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
               eventBus.emit(MyEventTabsChange);
               Navigator.of(context).pop();
             } else {
-              Fluttertoast.showToast(msg: '保存出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+              Fluttertoast.showToast(msg: '保存出错了...', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
             }
           },
           child: Text(

@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   Navigator.of(context).pop(true);
                                   Fluttertoast.showToast(
                                       msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                      timeInSecForIos: 2,
+                                      timeInSecForIosWeb: 2,
                                       gravity: ToastGravity.CENTER);
                                 });
                               } else if (loginResult == "2fa") {
@@ -231,14 +231,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                       Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
                                                         msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                                        timeInSecForIos: 2,
+                                                        timeInSecForIosWeb: 2,
                                                         gravity: ToastGravity.CENTER,
                                                       );
                                                       Navigator.of(context).pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
                                                         msg: '验证失败，请重新输入验证码',
-                                                        timeInSecForIos: 2,
+                                                        timeInSecForIosWeb: 2,
                                                         gravity: ToastGravity.CENTER,
                                                       );
                                                     }
@@ -282,14 +282,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                       Navigator.pop(contextDialog);
                                                       Fluttertoast.showToast(
                                                         msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                                                        timeInSecForIos: 2,
+                                                        timeInSecForIosWeb: 2,
                                                         gravity: ToastGravity.CENTER,
                                                       );
                                                       Navigator.of(context).pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
                                                         msg: '验证失败，请重新输入验证码',
-                                                        timeInSecForIos: 2,
+                                                        timeInSecForIosWeb: 2,
                                                         gravity: ToastGravity.CENTER,
                                                       );
                                                     }
@@ -357,7 +357,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             }
                           });
                         } else {
-                          Fluttertoast.showToast(msg: '登录遇到一些问题...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+                          Fluttertoast.showToast(msg: '登录遇到一些问题...', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
                         }
                       },
                       icon: Icon(

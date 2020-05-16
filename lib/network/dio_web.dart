@@ -70,7 +70,7 @@ class DioWeb {
         print('登录已经失效，注销数据');
         // 需要再次两步验证了
         if (response.redirects[0].location.path == "/2fa") {
-          Fluttertoast.showToast(msg: '两步验证到期了，请重新登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
+          Fluttertoast.showToast(msg: '两步验证到期了，请重新登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
         }
         await V2exClient.logout();
       } else {
@@ -112,12 +112,12 @@ class DioWeb {
       print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
       } else {
         print(missionResponse.data);
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
     }
   }
 
@@ -264,7 +264,7 @@ class DioWeb {
     var response = await dio.get('/go/' + tabKey + "?p=" + p.toString());
     var document = parse(response.data);
     if (document.querySelector('#Main > div.box > div.cell > form') != null) {
-      Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
+      Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
       return topics;
     }
 
@@ -314,7 +314,7 @@ class DioWeb {
     try {
       String once = await getOnce();
       if (once == null || once.isEmpty) {
-        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
         return false;
       }
 
@@ -332,14 +332,14 @@ class DioWeb {
         // 回复失败
         String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
 
-        Fluttertoast.showToast(msg: '$problem', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: '$problem', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
         return false;
       }
 
       // 回复成功
       return true;
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '回复失败', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '回复失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -470,11 +470,11 @@ class DioWeb {
           errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[2]/ul/li/text()')[0].name;
         }
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: errorInfo, timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(msg: errorInfo, timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
         return "false";
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '登录失败', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '登录失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -1039,7 +1039,7 @@ class DioWeb {
     detailModel.topicId = topicId;
 
     if (response.redirects.isNotEmpty || document.querySelector('#Main > div.box > div.message') != null) {
-      Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIos: 2);
+      Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
       return detailModel;
     }
 

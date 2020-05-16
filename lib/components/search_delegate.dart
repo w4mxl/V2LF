@@ -204,7 +204,9 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
       Fluttertoast.showToast(
-          msg: '搜索出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+        msg: '搜索出错了...',
+        gravity: ToastGravity.CENTER,
+      );
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
@@ -269,7 +271,8 @@ class Sov2exResultItem extends StatelessWidget {
                 Html(
                   data: title,
                   style: {
-                    "a": Style(color: Colors.red, textDecoration: TextDecoration.none),
+                    "a": Style(
+                        color: Colors.red, textDecoration: TextDecoration.none),
                     "html": Style.fromTextStyle(
                       Theme.of(context).textTheme.subtitle1,
                     )
@@ -283,7 +286,8 @@ class Sov2exResultItem extends StatelessWidget {
                   style: {
                     "html": Style(
                         fontSize: FontSize(14), whiteSpace: WhiteSpace.PRE),
-                    "a": Style(color: Colors.red, textDecoration: TextDecoration.none)
+                    "a": Style(
+                        color: Colors.red, textDecoration: TextDecoration.none)
                   },
                 ),
                 SizedBox(

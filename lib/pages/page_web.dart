@@ -43,7 +43,7 @@ class _WebviewPageState extends State<WebviewPage> {
     // 输入完账号密码后请勿关闭网页, 加载成功后会自动关闭
     Fluttertoast.showToast(
         msg: '请确保能正常访问 Google\n请手动点击 "Sign in with Google"\n输入完账号密码后请勿关闭网页, 加载成功后会自动关闭',
-        timeInSecForIos: 6,
+        timeInSecForIosWeb: 6,
         gravity: ToastGravity.CENTER);
 
     print(widget.webUrl);
@@ -82,7 +82,7 @@ class _WebviewPageState extends State<WebviewPage> {
             if (result == "true") {
               Fluttertoast.showToast(
                   msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
-                  timeInSecForIos: 2,
+                  timeInSecForIosWeb: 2,
                   gravity: ToastGravity.CENTER);
               Navigator.of(context).pop(true);
             }
