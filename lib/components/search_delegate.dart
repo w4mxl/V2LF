@@ -9,6 +9,7 @@ import 'package:flutter_app/models/sov2ex.dart';
 import 'package:flutter_app/pages/page_topic_detail.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 /// @author: wml
@@ -22,7 +23,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchSov2exDelegate extends SearchDelegate<String> {
   final List<String> _history =
-      SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY) : []; // ['v2er', 'AirPods']
+      SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
+          ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
+          : []; // ['v2er', 'AirPods']
 
   String _sortSelected = '权重';
   final _sorts = ['权重', '发帖时间']; // sumup（权重）, created（发帖时间）
@@ -104,7 +107,11 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
       SpHelper.sp.setStringList(SP_SEARCH_HISTORY, _history);
     }
 
-    var currentFilter = _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
+    var currentFilter = _sortSelected == '发帖时间'
+        ? (_sortSelectedCreated == '升序'
+            ? '&order=1&sort=created'
+            : '&sort=created')
+        : '';
     if (query.trim() != lastQ || currentFilter != lastFiter) {
       _future = getSov2exData(query.trim());
       lastQ = query.trim();
@@ -159,9 +166,12 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
     return new FutureBuilder<Sov2ex>(
       future: _future,
       builder: (context, AsyncSnapshot<Sov2ex> async) {
-        if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
+        if (async.connectionState == ConnectionState.active ||
+            async.connectionState == ConnectionState.waiting) {
           return new Center(
-            child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+            child: Platform.isIOS
+                ? CupertinoActivityIndicator()
+                : CircularProgressIndicator(),
           );
         }
 
@@ -184,11 +194,17 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
     var dio = Dio();
     dio.interceptors..add(LogInterceptor());
     try {
-      lastFiter = _sortSelected == '发帖时间' ? (_sortSelectedCreated == '升序' ? '&order=1&sort=created' : '&sort=created') : '';
-      var response = await dio.get('https://www.sov2ex.com/api/search?size=50&q=' + q + lastFiter);
+      lastFiter = _sortSelected == '发帖时间'
+          ? (_sortSelectedCreated == '升序'
+              ? '&order=1&sort=created'
+              : '&sort=created')
+          : '';
+      var response = await dio
+          .get('https://www.sov2ex.com/api/search?size=50&q=' + q + lastFiter);
       return Sov2ex.fromMap(response.data);
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '搜索出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: '搜索出错了...', timeInSecForIos: 2, gravity: ToastGravity.CENTER);
       print(e.response.data);
       print(e.response.headers);
       print(e.response.request);
@@ -222,15 +238,23 @@ class Sov2exResultItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title = hitsListBean.highlight.title != null
-        ? hitsListBean.highlight.title[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
+        ? hitsListBean.highlight.title[0]
+            .replaceAll('<em>', '<a>')
+            .replaceAll('<\/em>', '<\/a>')
         : hitsListBean.source.title;
 
     String content = hitsListBean.highlight.content != null
-        ? hitsListBean.highlight.content[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
+        ? hitsListBean.highlight.content[0]
+            .replaceAll('<em>', '<a>')
+            .replaceAll('<\/em>', '<\/a>')
         : (hitsListBean.highlight.postscript_list != null
-            ? hitsListBean.highlight.postscript_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
+            ? hitsListBean.highlight.postscript_list[0]
+                .replaceAll('<em>', '<a>')
+                .replaceAll('<\/em>', '<\/a>')
             : (hitsListBean.highlight.reply_list != null
-                ? hitsListBean.highlight.reply_list[0].replaceAll('<em>', '<a>').replaceAll('<\/em>', '<\/a>')
+                ? hitsListBean.highlight.reply_list[0]
+                    .replaceAll('<em>', '<a>')
+                    .replaceAll('<\/em>', '<\/a>')
                 : hitsListBean.source.content));
 
     return InkWell(
@@ -244,23 +268,23 @@ class Sov2exResultItem extends StatelessWidget {
               children: <Widget>[
                 Html(
                   data: title,
-                  defaultTextStyle: Theme.of(context).textTheme.subhead,
-                  linkStyle: TextStyle(
-                    color: Colors.red,
-                    decoration: null,
-                  ),
+                  style: {
+                    "a": Style(color: Colors.red, textDecoration: TextDecoration.none),
+                    "html": Style.fromTextStyle(
+                      Theme.of(context).textTheme.subtitle1,
+                    )
+                  },
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
                 Html(
                   data: content,
-                  renderNewlines: true,
-                  defaultTextStyle: TextStyle(fontSize: 14.0),
-                  linkStyle: TextStyle(
-                    color: Colors.red,
-                    decoration: null,
-                  ),
+                  style: {
+                    "html": Style(
+                        fontSize: FontSize(14), whiteSpace: WhiteSpace.PRE),
+                    "a": Style(color: Colors.red, textDecoration: TextDecoration.none)
+                  },
                 ),
                 SizedBox(
                   height: 8.0,
@@ -272,7 +296,9 @@ class Sov2exResultItem extends StatelessWidget {
                       " 发表，共计 " +
                       hitsListBean.source.replies.toString() +
                       " 个回复",
-                  style: TextStyle(color: Theme.of(context).textTheme.caption.color, fontSize: 12.0),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.caption.color,
+                      fontSize: 12.0),
                 )
               ],
             ),
@@ -284,7 +310,9 @@ class Sov2exResultItem extends StatelessWidget {
       ),
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => TopicDetails(hitsListBean.source.id.toString())),
+        MaterialPageRoute(
+            builder: (context) =>
+                TopicDetails(hitsListBean.source.id.toString())),
       ),
     );
   }

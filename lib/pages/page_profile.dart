@@ -15,6 +15,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +72,8 @@ class _ProfilePageState extends State<ProfilePage> {
     bool isSuccess = await DioWeb.follow(_memberProfileModel.isFollow, userId);
     Progresshud.dismiss();
     if (isSuccess) {
-      Progresshud.showSuccessWithStatus(_memberProfileModel.isFollow ? '已取消关注' : '已加入特别关注');
+      Progresshud.showSuccessWithStatus(
+          _memberProfileModel.isFollow ? '已取消关注' : '已加入特别关注');
       setState(() {
         _memberProfileModel.isFollow = !_memberProfileModel.isFollow;
       });
@@ -83,10 +85,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Future _block() async {
     Progresshud.show();
     String userId = _memberProfileModel.memberInfo.split(' ')[1].split(' ')[0];
-    bool isSuccess = await DioWeb.block(_memberProfileModel.isBlock, userId, _memberProfileModel.token);
+    bool isSuccess = await DioWeb.block(
+        _memberProfileModel.isBlock, userId, _memberProfileModel.token);
     Progresshud.dismiss();
     if (isSuccess) {
-      Progresshud.showSuccessWithStatus(_memberProfileModel.isBlock ? '已取消屏蔽' : '已屏蔽');
+      Progresshud.showSuccessWithStatus(
+          _memberProfileModel.isBlock ? '已取消屏蔽' : '已屏蔽');
       setState(() {
         _memberProfileModel.isBlock = !_memberProfileModel.isBlock;
       });
@@ -113,7 +117,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    _memberProfileModel != null ? _memberProfileModel.memberInfo.replaceFirst(' +08:00', '') : '', // 时间 去除+ 08:00;,
+                    _memberProfileModel != null
+                        ? _memberProfileModel.memberInfo
+                            .replaceFirst(' +08:00', '')
+                        : '', // 时间 去除+ 08:00;,
                     style: TextStyle(fontSize: 10),
                   )
                 ],
@@ -138,18 +145,25 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             actions: <Widget>[
               Visibility(
-                visible: isLogin && widget.userName != SpHelper.sp.getString(SP_USERNAME),
+                visible: isLogin &&
+                    widget.userName != SpHelper.sp.getString(SP_USERNAME),
                 child: Row(
                   children: <Widget>[
                     IconButton(
                         icon: Icon(
-                          _memberProfileModel != null && _memberProfileModel.isFollow ? Icons.star : Icons.star_border,
+                          _memberProfileModel != null &&
+                                  _memberProfileModel.isFollow
+                              ? Icons.star
+                              : Icons.star_border,
                         ),
                         tooltip: '关注或取消关注',
                         onPressed: () => _follow()),
                     IconButton(
                         icon: Icon(
-                          _memberProfileModel != null && _memberProfileModel.isBlock ? Icons.visibility_off : Icons.visibility,
+                          _memberProfileModel != null &&
+                                  _memberProfileModel.isBlock
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
                         tooltip: '屏蔽或取消屏蔽',
                         onPressed: () => _block()),
@@ -187,7 +201,8 @@ class _ProfilePageState extends State<ProfilePage> {
           transitionOnUserGestures: true,
           child: Material(
             elevation: 8.0,
-            shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
+            shape:
+                CircleBorder(side: BorderSide(color: Colors.white, width: 3)),
             child: CircleAvatar(
               radius: 50.0,
               backgroundImage: CachedNetworkImageProvider(widget.avatar),
@@ -201,7 +216,11 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 12,
             height: 12,
             decoration: BoxDecoration(
-                color: (_memberProfileModel != null ? _memberProfileModel.online : false) ? Colors.greenAccent : Colors.redAccent,
+                color: (_memberProfileModel != null
+                        ? _memberProfileModel.online
+                        : false)
+                    ? Colors.greenAccent
+                    : Colors.redAccent,
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
                   width: 1,
@@ -252,9 +271,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 7,
                           ),
                           Html(
-                            shrinkToFit: true,
-                            data: _memberProfileModel.company.split(' &nbsp; ')[1],
-                          ),
+                              // shrinkToFit: true,
+                              shrinkWrap: true,
+                              data: _memberProfileModel.company
+                                  .split(' &nbsp; ')[1],
+                              style: {
+                                "body": Style(margin: EdgeInsets.zero),
+                              }),
                         ],
                       ),
                     ),
@@ -270,7 +293,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Expanded(
                             child: Text(
-                              _memberProfileModel.memberIntro.trimLeft().trimRight(),
+                              _memberProfileModel.memberIntro
+                                  .trimLeft()
+                                  .trimRight(),
                               style: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -284,13 +309,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       runSpacing: -5,
                       children: _memberProfileModel.clips.map((Clip clip) {
                         return ActionChip(
-                          avatar: CachedNetworkImage(imageUrl: Strings.v2exHost + clip.icon),
+                          avatar: CachedNetworkImage(
+                              imageUrl: Strings.v2exHost + clip.icon),
                           label: Text(
                             clip.name,
                           ),
                           onPressed: () {
-                            Utils.launchURL(clip.url.startsWith('http://www.google.com/maps?q=')
-                                ? 'http://www.google.com/maps?q=' + Uri.encodeComponent(clip.url.split('maps?q=')[1])
+                            Utils.launchURL(clip.url
+                                    .startsWith('http://www.google.com/maps?q=')
+                                ? 'http://www.google.com/maps?q=' +
+                                    Uri.encodeComponent(
+                                        clip.url.split('maps?q=')[1])
                                 : clip.url);
                           },
                         );
@@ -322,7 +351,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: _memberProfileModel != null && _memberProfileModel.topicList != null && _memberProfileModel.topicList.length > 0,
+            visible: _memberProfileModel != null &&
+                _memberProfileModel.topicList != null &&
+                _memberProfileModel.topicList.length > 0,
             child: InkWell(
               child: Text(
                 '查看所有',
@@ -330,7 +361,11 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onTap: () {
                 // 转到用户的所有主题页面
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserAllTopicsPage(widget.userName, widget.avatar)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UserAllTopicsPage(widget.userName, widget.avatar)));
               },
             ),
           ),
@@ -376,7 +411,8 @@ class _ProfilePageState extends State<ProfilePage> {
             // 禁用滚动事件
             itemCount: _memberProfileModel.topicList.length,
             itemBuilder: (context, index) {
-              return TopicItemView(_memberProfileModel.topicList[index], widget.userName, widget.avatar);
+              return TopicItemView(_memberProfileModel.topicList[index],
+                  widget.userName, widget.avatar);
             },
             separatorBuilder: (BuildContext context, int index) => Divider(
               height: 0,
@@ -419,7 +455,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: _memberProfileModel != null && _memberProfileModel.replyList.length > 0,
+            visible: _memberProfileModel != null &&
+                _memberProfileModel.replyList.length > 0,
             child: InkWell(
               child: Text(
                 '查看所有',
@@ -427,7 +464,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserAllRepliesPage(widget.userName)),
+                MaterialPageRoute(
+                    builder: (context) => UserAllRepliesPage(widget.userName)),
               ),
             ),
           ),
@@ -540,16 +578,24 @@ class TopicItemView extends StatelessWidget {
                                   children: <Widget>[
                                     InkWell(
                                       child: Container(
-                                        padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                                        padding: EdgeInsets.only(
+                                            top: 1,
+                                            bottom: 1,
+                                            left: 4,
+                                            right: 4),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Theme.of(context).dividerColor),
-                                          borderRadius: BorderRadius.circular(4),
+                                          border: Border.all(
+                                              color: Theme.of(context)
+                                                  .dividerColor),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
                                         ),
                                         child: Text(
                                           topic.nodeName,
                                           style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Theme.of(context).disabledColor,
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -591,7 +637,9 @@ class TopicItemView extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 4.0),
                           child: new Text(
                             topic.replyCount,
-                            style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                            style: new TextStyle(
+                                fontSize: 13.0,
+                                color: Theme.of(context).unselectedWidgetColor),
                           ),
                         ),
                       ],
@@ -622,12 +670,20 @@ class ReplyItemView extends StatelessWidget {
         children: <Widget>[
           Html(
             data: reply.dockAreaText,
-            defaultTextStyle: TextStyle(color: Theme.of(context).unselectedWidgetColor, fontSize: 13.0),
-            backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.grey[800] : Color(0xffedf3f5),
-            padding: EdgeInsets.all(4.0),
-            linkStyle: TextStyle(
-              color: Theme.of(context).accentColor,
-            ),
+            style: {
+              "html": Style(
+                backgroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[800]
+                    : Color(0xffedf3f5),
+                color: Theme.of(context).unselectedWidgetColor,
+                fontSize: FontSize(13),
+                padding: EdgeInsets.all(4.0),
+              ),
+              "a": Style(
+                color: Theme.of(context).accentColor,
+                textDecoration: TextDecoration.none
+              )
+            },
             onLinkTap: (url) {
               // todo
               if (UrlHelper.canLaunchInApp(context, url)) {
@@ -645,10 +701,12 @@ class ReplyItemView extends StatelessWidget {
           ),
           Html(
             data: reply.replyContent,
-            defaultTextStyle: TextStyle(fontSize: 15.0),
-            linkStyle: TextStyle(
-              color: Theme.of(context).accentColor,
-            ),
+            style: {
+              "html": Style(fontSize: FontSize(15)),
+              "a": Style(
+                color: Theme.of(context).accentColor,
+              )
+            },
             onLinkTap: (url) {
               // todo
               if (UrlHelper.canLaunchInApp(context, url)) {

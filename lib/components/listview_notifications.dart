@@ -15,6 +15,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,7 +42,8 @@ class TopicListViewState extends State<NotificationsListView> {
     getTopics();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         print("加载更多...");
         if (items.length > 0 && p <= maxPage) {
           getTopics();
@@ -94,7 +96,8 @@ class TopicListViewState extends State<NotificationsListView> {
             width: 128.0,
             height: 114.0,
             margin: EdgeInsets.only(bottom: 30),
-            child: FlareActor("assets/Broken Heart.flr", animation: "Heart Break", shouldClip: false)),
+            child: FlareActor("assets/Broken Heart.flr",
+                animation: "Heart Break", shouldClip: false)),
         Container(
           margin: EdgeInsets.only(bottom: 114),
           width: 250,
@@ -109,7 +112,9 @@ class TopicListViewState extends State<NotificationsListView> {
     }
     // By default, show a loading spinner
     return new Center(
-      child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+      child: Platform.isIOS
+          ? CupertinoActivityIndicator()
+          : CircularProgressIndicator(),
     );
   }
 
@@ -117,7 +122,9 @@ class TopicListViewState extends State<NotificationsListView> {
     return Container(
       padding: const EdgeInsets.all(18.0),
       child: Center(
-        child: Text(p <= maxPage ? S.of(context).loadingPage(p.toString()) : "---- 🙄 ----"),
+        child: Text(p <= maxPage
+            ? S.of(context).loadingPage(p.toString())
+            : "---- 🙄 ----"),
       ),
     );
   }
@@ -152,7 +159,8 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(builder: (context) => new TopicDetails(notificationItem.topicId)),
+          new MaterialPageRoute(
+              builder: (context) => new TopicDetails(notificationItem.topicId)),
         );
       },
       child: new Container(
@@ -192,7 +200,9 @@ class TopicItemView extends StatelessWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfilePage(notificationItem.userName, Utils.avatarLarge(notificationItem.avatar)),
+                        builder: (context) => ProfilePage(
+                            notificationItem.userName,
+                            Utils.avatarLarge(notificationItem.avatar)),
                       ),
                     ),
                   ),
@@ -207,11 +217,16 @@ class TopicItemView extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Html(
                           data: notificationItem.title,
-                          defaultTextStyle: TextStyle(color: Theme.of(context).hintColor, fontSize: 13.0),
-                          linkStyle: TextStyle(
-                            color: Theme.of(context).accentColor,
-                          ),
-                          onLinkTap: (url) { // todo
+                          style: {
+                            "html": Style(
+                                fontSize: FontSize(13),
+                                color: Theme.of(context).hintColor),
+                            "a": Style(
+                                color: Theme.of(context).accentColor,
+                                textDecoration: TextDecoration.none)
+                          },
+                          onLinkTap: (url) {
+                            // todo
                             if (UrlHelper.canLaunchInApp(context, url)) {
                               return;
                             } else if (url.contains("/member/")) {
@@ -228,15 +243,19 @@ class TopicItemView extends StatelessWidget {
                         offstage: notificationItem.reply.isEmpty,
                         child: new Container(
                           margin: const EdgeInsets.only(top: 8.0),
+                          color: Theme.of(context).hoverColor,
                           child: Html(
                             data: notificationItem.reply,
-                            defaultTextStyle: TextStyle(fontSize: 15.0),
-                            backgroundColor: Theme.of(context).hoverColor,
-                            padding: EdgeInsets.all(4.0),
-                            linkStyle: TextStyle(
-                              color: Theme.of(context).accentColor,
-                            ),
-                            onLinkTap: (url) { // todo
+                            style: {
+                              "html": Style(
+                                fontSize: FontSize(15),
+                              ),
+                              "a": Style(
+                                  color: Theme.of(context).accentColor,
+                                  textDecoration: TextDecoration.none),
+                            },
+                            onLinkTap: (url) {
+                              // todo
                               if (UrlHelper.canLaunchInApp(context, url)) {
                                 return;
                               } else if (url.contains("/member/")) {
@@ -267,8 +286,13 @@ class TopicItemView extends StatelessWidget {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+    await launch(url,
+        statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Fluttertoast.showToast(msg: 'Could not launch $url', toastLength: Toast.LENGTH_SHORT, timeInSecForIos: 1, gravity: ToastGravity.CENTER);
+    Fluttertoast.showToast(
+        msg: 'Could not launch $url',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIos: 1,
+        gravity: ToastGravity.CENTER);
   }
 }

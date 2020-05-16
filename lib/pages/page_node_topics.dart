@@ -19,6 +19,7 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -58,7 +59,9 @@ class _NodeTopicsState extends State<NodeTopics> {
     getTopics();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (p != 1 && _scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (p != 1 &&
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
         print("加载更多...");
         getTopics();
       }
@@ -78,7 +81,8 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      List<NodeTopicItem> newEntries = await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
+      List<NodeTopicItem> newEntries =
+          await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
         Navigator.pop(context);
@@ -130,7 +134,9 @@ class _NodeTopicsState extends State<NodeTopics> {
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.nodeName != null ? widget.nodeName : (_node == null ? '' : _node.title)),
+              title: Text(widget.nodeName != null
+                  ? widget.nodeName
+                  : (_node == null ? '' : _node.title)),
               centerTitle: true,
               background: SafeArea(
                 child: Hero(
@@ -139,7 +145,10 @@ class _NodeTopicsState extends State<NodeTopics> {
                     imageUrl: widget.nodeImg != null
                         ? widget.nodeImg
                         : (_node != null
-                            ? ((_node.avatarLarge == '/static/img/node_large.png') ? Strings.nodeDefaultImag : _node.avatarLarge)
+                            ? ((_node.avatarLarge ==
+                                    '/static/img/node_large.png')
+                                ? Strings.nodeDefaultImag
+                                : _node.avatarLarge)
                             : ''),
                     fit: BoxFit.contain,
                     placeholder: (context, url) => CupertinoActivityIndicator(),
@@ -204,17 +213,26 @@ class _NodeTopicsState extends State<NodeTopics> {
                 // Android
                 // "header": 来自 <a href=\"/go/google\">Google</a> 的开放源代码智能手机平台。
                 // 自言自语的是："header": "&nbsp;",
-                offstage: (_node.header == null || _node.header.isEmpty || _node.header == '&nbsp;'),
+                offstage: (_node.header == null ||
+                    _node.header.isEmpty ||
+                    _node.header == '&nbsp;'),
                 child: Html(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  data: _node.header == null ? '' : _node.header,
-                  defaultTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  customTextAlign: (node) {
-                    return TextAlign.center;
+                  style: {
+                    "html": Style(
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      fontSize: FontSize(20),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    "a": Style(
+                      color: Theme.of(context).accentColor,
+                    )
                   },
-                  linkStyle: TextStyle(
-                    color: Theme.of(context).accentColor,
-                  ),
+
+                  data: _node.header == null ? '' : _node.header,
+                  // TODO Not yet available
+                  // customTextAlign: (node) {
+                  //   return TextAlign.center;
+                  // },
                   onLinkTap: (url) {
                     // todo 等 onLinkTap 支持传递 text 时，要调整
                     if (UrlHelper.canLaunchInApp(context, url)) {
@@ -341,9 +359,17 @@ class TopicItemView extends StatelessWidget {
                               margin: const EdgeInsets.only(top: 4.0),
                               child: new Row(
                                 children: <Widget>[
-                                  new Text(topic.memberId, textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
-                                  new Text(' • ${topic.characters} • ${topic.clickTimes}',
-                                      textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
+                                  new Text(topic.memberId,
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      style:
+                                          Theme.of(context).textTheme.caption),
+                                  new Text(
+                                      ' • ${topic.characters} • ${topic.clickTimes}',
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      style:
+                                          Theme.of(context).textTheme.caption),
                                 ],
                               ),
                             ),
@@ -353,7 +379,8 @@ class TopicItemView extends StatelessWidget {
                   Offstage(
                     offstage: topic.replyCount == '0',
                     child: Material(
-                      color: Provider.of<DisplayModel>(context).materialColor[400],
+                      color:
+                          Provider.of<DisplayModel>(context).materialColor[400],
                       shape: new StadiumBorder(),
                       child: new Container(
                         width: 35.0,
@@ -361,7 +388,8 @@ class TopicItemView extends StatelessWidget {
                         alignment: Alignment.center,
                         child: new Text(
                           topic.replyCount,
-                          style: new TextStyle(fontSize: 12.0, color: Colors.white),
+                          style: new TextStyle(
+                              fontSize: 12.0, color: Colors.white),
                         ),
                       ),
                     ),
@@ -382,7 +410,8 @@ class TopicItemView extends StatelessWidget {
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+    await launch(url,
+        statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Progresshud.showErrorWithStatus('Could not launch $url');
   }

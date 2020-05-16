@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/bubble_tab_indicator.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:http/http.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,8 @@ class HistoryHotCategory extends StatefulWidget {
   _HistoryHotCategoryState createState() => _HistoryHotCategoryState();
 }
 
-class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticKeepAliveClientMixin {
+class _HistoryHotCategoryState extends State<HistoryHotCategory>
+    with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
     new Tab(text: "最热"),
     new Tab(text: "最热"),
@@ -48,7 +50,10 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
             title: TabBar(
                 isScrollable: true,
                 indicator: BubbleTabIndicator(
-                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Theme.of(context).focusColor : Colors.white,
+                  indicatorColor: Theme.of(context).primaryColorBrightness ==
+                          Brightness.dark
+                      ? Theme.of(context).focusColor
+                      : Colors.white,
                 ),
                 tabs: tabs),
           ),
@@ -69,10 +74,14 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
                     padding: const EdgeInsets.all(12),
                     child: Html(
                       data: atomItem.content.replaceFirst('<br />', ''),
-                      defaultTextStyle: TextStyle(fontSize: 15),
-                      linkStyle: TextStyle(
-                        color: Theme.of(context).accentColor,
-                      ),
+                      style: {
+                        "html": Style(
+                          fontSize: FontSize(15),
+                        ),
+                        "a": Style(
+                          color: Theme.of(context).accentColor,
+                        )
+                      },
                       onLinkTap: (url) {
                         // todo
                         if (UrlHelper.canLaunchInApp(context, url)) {
@@ -91,7 +100,9 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
             );
           }
           return Center(
-            child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+            child: Platform.isIOS
+                ? CupertinoActivityIndicator()
+                : CircularProgressIndicator(),
           );
         });
   }
@@ -107,10 +118,26 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
       AtomFeed feed = new AtomFeed.parse(bodyString);
       setState(() {
         tabs.clear();
-        tabs.add(Tab(text: feed.items[0].title.replaceFirst('-', 'xxx').split('xxx')[1].replaceAll(']V2ex', ' ')));
-        tabs.add(Tab(text: feed.items[1].title.replaceFirst('-', 'xxx').split('xxx')[1].replaceAll(']V2ex', ' ')));
-        tabs.add(Tab(text: feed.items[2].title.replaceFirst('-', 'xxx').split('xxx')[1].replaceAll(']V2ex', ' ')));
-        tabs.add(Tab(text: feed.items[3].title.replaceFirst('-', 'xxx').split('xxx')[1].replaceAll(']V2ex', ' ')));
+        tabs.add(Tab(
+            text: feed.items[0].title
+                .replaceFirst('-', 'xxx')
+                .split('xxx')[1]
+                .replaceAll(']V2ex', ' ')));
+        tabs.add(Tab(
+            text: feed.items[1].title
+                .replaceFirst('-', 'xxx')
+                .split('xxx')[1]
+                .replaceAll(']V2ex', ' ')));
+        tabs.add(Tab(
+            text: feed.items[2].title
+                .replaceFirst('-', 'xxx')
+                .split('xxx')[1]
+                .replaceAll(']V2ex', ' ')));
+        tabs.add(Tab(
+            text: feed.items[3].title
+                .replaceFirst('-', 'xxx')
+                .split('xxx')[1]
+                .replaceAll(']V2ex', ' ')));
       });
       return feed;
     });
@@ -123,7 +150,8 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory> with AutomaticK
 // 外链跳转
 _launchURL(String url) async {
   if (await canLaunch(url)) {
-    await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+    await launch(url,
+        statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
     Progresshud.showErrorWithStatus('Could not launch $url');
   }

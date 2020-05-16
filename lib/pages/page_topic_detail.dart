@@ -20,6 +20,7 @@ import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/url_helper.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:html/parser.dart';
@@ -894,11 +895,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   padding: const EdgeInsets.all(10.0),
                   child: Html(
                     data: _detailModel.contentRendered,
-                    defaultTextStyle: TextStyle(fontSize: customFontSize),
-                    linkStyle: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      decoration: TextDecoration.underline,
-                    ),
+                    style: {
+                      "html": Style(
+                        fontSize: FontSize(customFontSize),
+                      ),
+                      "a": Style(
+                        color: Theme.of(context).accentColor,
+                        textDecoration: TextDecoration.underline,
+                      )
+                    },
                     onLinkTap: (url) {
                       // todo
                       if (UrlHelper.canLaunchInApp(context, url)) {
@@ -966,12 +971,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
               ),
               Html(
                 data: subtle.content,
-                padding: EdgeInsets.only(top: 4.0),
-                defaultTextStyle: TextStyle(fontSize: customFontSize),
-                linkStyle: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  decoration: TextDecoration.underline,
-                ),
+                style: {
+                  "html": Style(
+                      padding: EdgeInsets.only(top: 4.0),
+                      fontSize: FontSize(customFontSize)),
+                  "a": Style(
+                    color: Theme.of(context).accentColor,
+                    textDecoration: TextDecoration.underline,
+                  )
+                },
                 onLinkTap: (url) {
                   // todo
                   if (UrlHelper.canLaunchInApp(context, url)) {
@@ -1331,16 +1339,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                             child: Html(
                                                               data: reply
                                                                   .contentRendered,
-                                                              defaultTextStyle:
-                                                                  TextStyle(
-                                                                      fontSize:
-                                                                          customFontSize),
-                                                              linkStyle:
-                                                                  TextStyle(
-                                                                color: Theme.of(
-                                                                        context)
-                                                                    .accentColor,
-                                                              ),
+                                                              style: {
+                                                                "html": Style(
+                                                                    fontSize:
+                                                                        FontSize(
+                                                                            customFontSize)),
+                                                                "a": Style(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .accentColor,
+                                                                )
+                                                              },
                                                               onLinkTap: (url) {
                                                                 // todo
                                                                 if (UrlHelper
@@ -1528,11 +1537,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       // 评论内容
                                       child: Html(
                                         data: reply.contentRendered,
-                                        defaultTextStyle:
-                                            TextStyle(fontSize: customFontSize),
-                                        linkStyle: TextStyle(
-                                          color: Theme.of(context).accentColor,
-                                        ),
+                                        style: {
+                                          "html": Style(
+                                              fontSize:
+                                                  FontSize(customFontSize)),
+                                          "a": Style(
+                                            color:
+                                                Theme.of(context).accentColor,
+                                          )
+                                        },
                                         onLinkTap: (url) {
                                           // todo
                                           if (UrlHelper.canLaunchInApp(
@@ -1734,13 +1747,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                           Html(
                                                                         data: item
                                                                             .contentRendered,
-                                                                        defaultTextStyle:
-                                                                            TextStyle(fontSize: customFontSize),
-                                                                        linkStyle:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Theme.of(context).accentColor,
-                                                                        ),
+                                                                        style: {
+                                                                          "html":
+                                                                              Style(fontSize: FontSize(customFontSize)),
+                                                                          "a":
+                                                                              Style(
+                                                                            color:
+                                                                                Theme.of(context).accentColor,
+                                                                          )
+                                                                        },
                                                                       )),
                                                                 ],
                                                               ),
