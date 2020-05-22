@@ -29,7 +29,8 @@ class TopicListView extends StatefulWidget {
   State<StatefulWidget> createState() => new TopicListViewState();
 }
 
-class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveClientMixin {
+class TopicListViewState extends State<TopicListView>
+    with AutomaticKeepAliveClientMixin {
   Future<List<TabTopicItem>> topicListFuture;
 
   ScrollController _scrollController;
@@ -52,7 +53,8 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
     _scrollController.addListener(() {
       ///  help link:
       /// https://www.reddit.com/r/Flutter/comments/bsi789/im_having_an_issue_with_using_the/
-      if (_scrollController.positions.elementAt(0).pixels == _scrollController.positions.elementAt(0).maxScrollExtent) {
+      if (_scrollController.positions.elementAt(0).pixels ==
+          _scrollController.positions.elementAt(0).maxScrollExtent) {
         HapticFeedback.heavyImpact(); // 震动反馈（暗示已经滑到底部了）
       }
     });
@@ -74,7 +76,8 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
         print(SpHelper.sp.containsKey(SP_USERNAME));
         if (SpHelper.sp.containsKey(SP_USERNAME)) {
           // =》「最近的主题」页面
-          Navigator.push(context, MaterialPageRoute(builder: (context) => RecentTopicsPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => RecentTopicsPage()));
         } else {
           // =》 跳到登录页面
           Progresshud.showInfoWithStatus('你要查看的页面需要先登录');
@@ -206,7 +209,10 @@ class _TopicItemViewState extends State<TopicItemView> {
             new Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读
-              style: TextStyle(fontSize: 17, color: widget.topic.readStatus == 'read' ? Colors.grey : null),
+              style: TextStyle(
+                  fontSize: 17,
+                  color:
+                      widget.topic.readStatus == 'read' ? Colors.grey : null),
             ),
             SizedBox(
               height: 10,
@@ -237,16 +243,21 @@ class _TopicItemViewState extends State<TopicItemView> {
                                 widget.topic.memberId,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                                style: new TextStyle(
+                                    fontSize: 13.0,
+                                    color: Theme.of(context)
+                                        .unselectedWidgetColor),
                               ),
                             ],
                           ),
                           onTap: () {
-                            var largeAvatar = Utils.avatarLarge(widget.topic.avatar);
+                            var largeAvatar =
+                                Utils.avatarLarge(widget.topic.avatar);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ProfilePage(widget.topic.memberId, largeAvatar),
+                                builder: (context) => ProfilePage(
+                                    widget.topic.memberId, largeAvatar),
                               ),
                             );
                           },
@@ -255,9 +266,11 @@ class _TopicItemViewState extends State<TopicItemView> {
                           width: 6,
                         ),
                         Container(
-                          padding: EdgeInsets.only(top: 1, bottom: 1, left: 4, right: 4),
+                          padding: EdgeInsets.only(
+                              top: 1, bottom: 1, left: 4, right: 4),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).dividerColor),
+                            border: Border.all(
+                                color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: new Text(
@@ -275,7 +288,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                           offstage: widget.topic.lastReplyTime == '',
                           child: Text(
                             widget.topic.lastReplyTime,
-                            style: new TextStyle(color: Theme.of(context).disabledColor, fontSize: 12.0),
+                            style: new TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontSize: 12.0),
                           ),
                         ),
                       ],
@@ -298,7 +313,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                         padding: const EdgeInsets.only(left: 4.0),
                         child: new Text(
                           widget.topic.replyCount,
-                          style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                          style: new TextStyle(
+                              fontSize: 13.0,
+                              color: Theme.of(context).unselectedWidgetColor),
                         ),
                       ),
                     ],
@@ -327,8 +344,12 @@ class LoadingList extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15.0),
           child: Shimmer.fromColors(
-            baseColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[300] : Colors.black12,
-            highlightColor: Theme.of(context).brightness == Brightness.light ? Colors.grey[100] : Colors.white70,
+            baseColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey[300]
+                : Colors.black12,
+            highlightColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey[100]
+                : Colors.white70,
             child: Column(
               children: [0, 1, 2, 3, 4, 5, 6]
                   .map((_) => Padding(
@@ -337,7 +358,8 @@ class LoadingList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
                               child: Container(
                                 width: double.infinity,
                                 height: 18.0,
@@ -360,7 +382,8 @@ class LoadingList extends StatelessWidget {
                                   width: 8,
                                 ),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
                                   child: Container(
                                     width: 40.0,
                                     height: 14.0,
@@ -371,7 +394,8 @@ class LoadingList extends StatelessWidget {
                                   width: 8,
                                 ),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
                                   child: Container(
                                     width: 40.0,
                                     height: 14.0,
@@ -382,7 +406,8 @@ class LoadingList extends StatelessWidget {
                                   width: 8,
                                 ),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
                                   child: Container(
                                     width: 40.0,
                                     height: 14.0,
@@ -399,7 +424,8 @@ class LoadingList extends StatelessWidget {
                                   width: 4,
                                 ),
                                 ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4)),
                                   child: Container(
                                     width: 20.0,
                                     height: 14.0,
