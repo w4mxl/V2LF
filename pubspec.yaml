@@ -1,7 +1,7 @@
 name: flutter_app
 description: Another v2ex unoffical app in flutter.And 'V2lf' means 'way to love flutter'.
 
-version: 2020.5+39
+version: 2020.6+41
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
