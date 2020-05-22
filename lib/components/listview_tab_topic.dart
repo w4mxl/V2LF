@@ -50,7 +50,9 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
     _scrollController = PrimaryScrollController.of(context);
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      ///  help link:
+      /// https://www.reddit.com/r/Flutter/comments/bsi789/im_having_an_issue_with_using_the/
+      if (_scrollController.positions.elementAt(0).pixels == _scrollController.positions.elementAt(0).maxScrollExtent) {
         HapticFeedback.heavyImpact(); // 震动反馈（暗示已经滑到底部了）
       }
     });
@@ -153,11 +155,12 @@ class TopicListViewState extends State<TopicListView> with AutomaticKeepAliveCli
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-  }
+  // TODO temporary fix error "A ScrollController was used after being desposed."
+  // @override
+  // void dispose() {
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   bool get wantKeepAlive => true;
