@@ -209,6 +209,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
             theme: displayModel.themeDate(),
             darkTheme: displayModel.themeDate(darkTheme: true),
             themeMode: displayModel.themeMode,
+            // flutter_html: ^1.0.0 存在字号缩放的 bug，为了解决这个问题，
+            // 临时将 App 的全局字号设置为不跟随系统字号变动而变动
+            builder: (context, child) => MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                child: child),
             home: WillPopScope(
               child: new Scaffold(
                   appBar: AppBar(
