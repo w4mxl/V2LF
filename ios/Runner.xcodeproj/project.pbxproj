@@ -473,7 +473,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2020.6;
+				MARKETING_VERSION = 2020.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.w4mxl.v2lf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -502,7 +502,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 2020.6;
+				MARKETING_VERSION = 2020.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.w4mxl.v2lf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
