@@ -34,6 +34,7 @@ class TopicListViewState extends State<TopicListView>
   Future<List<TabTopicItem>> topicListFuture;
 
   ScrollController _scrollController;
+  bool showToTopBtn = false; //是否显示“返回到顶部”按钮
 
   @override
   void initState() {
@@ -44,21 +45,25 @@ class TopicListViewState extends State<TopicListView>
 
     // 获取数据
     topicListFuture = getTopics();
-  }
 
-  @override
-  void didChangeDependencies() {
-    _scrollController = PrimaryScrollController.of(context);
+    _scrollController = ScrollController();
     // 监听是否滑到了页面底部
     _scrollController.addListener(() {
-      ///  help link:
-      /// https://www.reddit.com/r/Flutter/comments/bsi789/im_having_an_issue_with_using_the/
-      if (_scrollController.positions.elementAt(0).pixels ==
-          _scrollController.positions.elementAt(0).maxScrollExtent) {
+      if (_scrollController.offset ==
+          _scrollController.position.maxScrollExtent) {
         HapticFeedback.heavyImpact(); // 震动反馈（暗示已经滑到底部了）
       }
+
+      if (_scrollController.offset >= 400 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      } else if (_scrollController.offset < 400 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      }
     });
-    super.didChangeDependencies();
   }
 
   Future<List<TabTopicItem>> getTopics() async {
@@ -96,57 +101,78 @@ class TopicListViewState extends State<TopicListView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return new FutureBuilder<List<TabTopicItem>>(
-        future: topicListFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return RefreshIndicator(
-                child: snapshot.data.length > 0
-                    ? ListView.builder(
-                        // primary: false,  // 这样会导致 iOS 上点击状态栏没办法滑到顶部
-                        controller: _scrollController,
-                        itemCount: snapshot.data.length + 1, // »  更多新主题
-                        itemBuilder: (context, index) {
-                          if (index == snapshot.data.length) {
-                            // 滑到了最后一个itme
-                            return _widgetLoadMore();
-                          } else {
-                            return TopicItemView(snapshot.data[index]);
-                          }
-                        })
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text('暂无数据'),
-                        ],
-                      ),
-                onRefresh: () {
-                  // https://stackoverflow.com/questions/51775098/how-do-i-use-refreshindicator-with-a-futurebuilder-in-flutter
-                  setState(() {
-                    topicListFuture = getTopics();
+    return Scaffold(
+      body: new FutureBuilder<List<TabTopicItem>>(
+          future: topicListFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return RefreshIndicator(
+                  child: snapshot.data.length > 0
+                      ? Stack(
+                          children: <Widget>[
+                            ListView.builder(
+                                controller: _scrollController,
+                                itemCount: snapshot.data.length + 1, // »  更多新主题
+                                itemBuilder: (context, index) {
+                                  if (index == snapshot.data.length) {
+                                    // 滑到了最后一个itme
+                                    return _widgetLoadMore();
+                                  } else {
+                                    return TopicItemView(snapshot.data[index]);
+                                  }
+                                }),
+                            Visibility(
+                                visible: showToTopBtn,
+                                child: Positioned(
+                                  right: 20,
+                                  bottom: 20,
+                                  child: FloatingActionButton(
+                                      mini: true,
+                                      child: Icon(Icons.arrow_upward),
+                                      onPressed: () {
+                                        _scrollController.animateTo(0,
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            curve: Curves.ease);
+                                      }),
+                                ))
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text('暂无数据'),
+                          ],
+                        ),
+                  onRefresh: () {
+                    // https://stackoverflow.com/questions/51775098/how-do-i-use-refreshindicator-with-a-futurebuilder-in-flutter
+                    setState(() {
+                      topicListFuture = getTopics();
+                    });
+                    return topicListFuture;
                   });
-                  return topicListFuture;
-                });
-          } else if (snapshot.hasError) {
-            print("wmllll:${snapshot.error}");
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(S.of(context).oops),
-                RaisedButton.icon(
-                  onPressed: () {
-                    Progresshud.show();
-                    _onRefresh().then((_) => Progresshud.dismiss());
-                  },
-                  icon: Icon(Icons.refresh),
-                  label: Text(S.of(context).retry),
-                )
-              ],
-            );
-          }
-          // By default, show a loading skeleton
-          return LoadingList();
-        });
+            } else if (snapshot.hasError) {
+              print("wmllll:${snapshot.error}");
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(S.of(context).oops),
+                  RaisedButton.icon(
+                    onPressed: () {
+                      Progresshud.show();
+                      _onRefresh().then((_) => Progresshud.dismiss());
+                    },
+                    icon: Icon(Icons.refresh),
+                    label: Text(S.of(context).retry),
+                  )
+                ],
+              );
+            }
+            // By default, show a loading skeleton
+            return LoadingList();
+          }),
+    );
   }
 
   //刷新数据,重新设置future就行了
@@ -158,12 +184,11 @@ class TopicListViewState extends State<TopicListView>
     });
   }
 
-  // TODO temporary fix error "A ScrollController was used after being desposed."
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   bool get wantKeepAlive => true;
