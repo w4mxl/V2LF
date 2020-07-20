@@ -128,7 +128,7 @@ class TopicListViewState extends State<TopicListView>
                                   bottom: 20,
                                   child: FloatingActionButton(
                                       mini: true,
-                                      child: Icon(Icons.arrow_upward),
+                                      child: Icon(FontAwesomeIcons.angleUp),
                                       onPressed: () {
                                         _scrollController.animateTo(0,
                                             duration:
@@ -154,19 +154,22 @@ class TopicListViewState extends State<TopicListView>
                   });
             } else if (snapshot.hasError) {
               print("wmllll:${snapshot.error}");
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(S.of(context).oops),
-                  RaisedButton.icon(
-                    onPressed: () {
-                      Progresshud.show();
-                      _onRefresh().then((_) => Progresshud.dismiss());
-                    },
-                    icon: Icon(Icons.refresh),
-                    label: Text(S.of(context).retry),
-                  )
-                ],
+              return Container(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(S.of(context).oops),
+                    RaisedButton.icon(
+                      onPressed: () {
+                        Progresshud.show();
+                        _onRefresh().then((_) => Progresshud.dismiss());
+                      },
+                      icon: Icon(Icons.refresh),
+                      label: Text(S.of(context).retry),
+                    )
+                  ],
+                ),
               );
             }
             // By default, show a loading skeleton
