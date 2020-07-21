@@ -26,7 +26,9 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:html/dom.dart' as dom; // Contains DOM related classes for extracting data from elements
+import 'package:html/dom.dart'
+    as dom; // Contains DOM related classes for extracting data from elements
+import 'package:html/dom.dart';
 import 'package:html/parser.dart'; // Contains HTML parsers to generate a Document object
 import 'package:xpath/xpath.dart';
 
@@ -70,7 +72,10 @@ class DioWeb {
         print('登录已经失效，注销数据');
         // 需要再次两步验证了
         if (response.redirects[0].location.path == "/2fa") {
-          Fluttertoast.showToast(msg: '两步验证到期了，请重新登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
+          Fluttertoast.showToast(
+              msg: '两步验证到期了，请重新登录 😞',
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 2);
         }
         await V2exClient.logout();
       } else {
@@ -105,24 +110,35 @@ class DioWeb {
     try {
       var response = await dio.get("/signin");
       var tree = ETree.fromString(response.data);
-      String once = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']").first.attributes["value"];
+      String once = tree
+          .xpath(
+              "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+          .first
+          .attributes["value"];
       print('领取每日奖励:$once');
 
       var missionResponse = await dio.get("/mission/daily/redeem?once=" + once);
       print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
-        Fluttertoast.showToast(msg: '已帮您领取每日奖励 😉', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+            msg: '已帮您领取每日奖励 😉',
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.CENTER);
       } else {
         print(missionResponse.data);
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '领取每日奖励失败：${e.message}', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: '领取每日奖励失败：${e.message}',
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.CENTER);
     }
   }
 
   // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]，p > 0 则通过 recent 获取数据
-  static Future<List<TabTopicItem>> getTopicsByTabKey(String tabKey, int p) async {
+  static Future<List<TabTopicItem>> getTopicsByTabKey(
+      String tabKey, int p) async {
     List<TabTopicItem> topics = new List<TabTopicItem>();
 
     var response;
@@ -144,9 +160,11 @@ class DioWeb {
     // 首页tab请求数据的时候 check 是否有未读提醒
     // 没有未读提醒  //*[@class='gray']
     // 有未读提醒    //*[@id="Wrapper"]/div/div[1]/div[1]/table/tr/td[1]/input
-    var elements = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[1]/table/tr/td[1]/input");
+    var elements =
+        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[1]/table/tr/td[1]/input");
     if (elements != null) {
-      String notificationInfo = elements.first.attributes["value"]; // value="1 条未读提醒"
+      String notificationInfo =
+          elements.first.attributes["value"]; // value="1 条未读提醒"
       var unreadNumber = notificationInfo.split(' ')[0];
       print('未读数：' + unreadNumber);
 
@@ -156,7 +174,8 @@ class DioWeb {
         eventBus.emit(MyEventHasNewNotification, unreadNumber);
       }
 
-      SpHelper.sp.setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
+      SpHelper.sp
+          .setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 
     var aRootNode = tree.xpath("//*[@class='cell item']");
@@ -164,11 +183,18 @@ class DioWeb {
       for (var aNode in aRootNode) {
         TabTopicItem item = new TabTopicItem();
         // //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/strong/a
-        item.memberId = aNode.xpath("/table/tr/td[3]/span[1]/strong/a/text()")[0].name;
+        item.memberId =
+            aNode.xpath("/table/tr/td[3]/span[1]/strong/a/text()")[0].name;
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[1]/a/img
-        item.avatar = aNode.xpath("/table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
+        item.avatar = aNode
+            .xpath("/table/tr/td[1]/a[1]/img[@class='avatar']")
+            .first
+            .attributes["src"];
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[2]/a
-        String topicUrl = aNode.xpath("/table/tr/td[3]/span[2]/a").first.attributes["href"]; // 得到是 /t/522540#reply17
+        String topicUrl = aNode
+            .xpath("/table/tr/td[3]/span[2]/a")
+            .first
+            .attributes["href"]; // 得到是 /t/522540#reply17
         item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
         //*[@id="Wrapper"]/div/div[3]/div[23]/table/tbody/tr/td[4]
         if (aNode.xpath("/table/tr/td[4]/a/text()") != null) {
@@ -177,12 +203,16 @@ class DioWeb {
           item.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
 
           //*[@id="Wrapper"]/div/div[3]/div[22]/table/tbody/tr/td[3]/span[3]
-          item.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[3]/text()[1]")[0].name.split(' &nbsp;')[0];
+          item.lastReplyTime = aNode
+              .xpath("/table/tr/td[3]/span[3]/text()[1]")[0]
+              .name
+              .split(' &nbsp;')[0];
 
           //*[@id="Wrapper"]/div/div[3]/div[22]/table/tbody/tr/td[3]/span[3]/strong/a
           if (aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()") != null) {
             // 遇到有评论数，但是没有最后回复id的情况，这里多加一个判断
-            item.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()")[0].name;
+            item.lastReplyMId =
+                aNode.xpath("/table/tr/td[3]/span[3]/strong/a/text()")[0].name;
           }
         }
         //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[2]/a
@@ -215,9 +245,13 @@ class DioWeb {
         "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"right\" width=\"80\"><span class=\"fade\">(.*?)</td></tr></table>";
 
     final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
-    final String reg4NodeItem = "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
-    var response = await dio.get('/', options: buildCacheOptions(Duration(days: 7), maxStale: Duration(days: 10)));
-    content = response.data..replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+    final String reg4NodeItem =
+        "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
+    var response = await dio.get('/',
+        options:
+            buildCacheOptions(Duration(days: 7), maxStale: Duration(days: 10)));
+    content = response.data
+      ..replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
     RegExp exp = new RegExp(reg4Node);
     Iterable<Match> matches = exp.allMatches(content);
@@ -231,7 +265,8 @@ class DioWeb {
       RegExp exp4Node = new RegExp(reg4NodeItem);
       Iterable<Match> matchNodes = exp4Node.allMatches(match.group(0));
       for (Match matchNode in matchNodes) {
-        NodeItem nodeItem = new NodeItem(matchNode.group(1), matchNode.group(2));
+        NodeItem nodeItem =
+            new NodeItem(matchNode.group(1), matchNode.group(2));
         /*nodeItem.nodeId = matchNode.group(1);
         nodeItem.nodeName = matchNode.group(2);*/
         nodeGroup.nodes.add(nodeItem);
@@ -243,7 +278,8 @@ class DioWeb {
   }
 
   // 节点导航页 -> 获取特定节点下的topics
-  static Future<List<NodeTopicItem>> getNodeTopicsByTabKey(String tabKey, int p) async {
+  static Future<List<NodeTopicItem>> getNodeTopicsByTabKey(
+      String tabKey, int p) async {
     String content = '';
 
     List<NodeTopicItem> topics = new List<NodeTopicItem>();
@@ -252,11 +288,14 @@ class DioWeb {
     final String reg4tag = "<div class=\"cell\">(.*?)</table></div>";
 //    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
 
-    final String reg4MidAvatar = "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
+    final String reg4MidAvatar =
+        "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
 
-    final String reg4TRC = "<a href=\"/t/(.*?)#reply(.*?)\" class=\"topic-link\">(.*?)</a></span>";
+    final String reg4TRC =
+        "<a href=\"/t/(.*?)#reply(.*?)\" class=\"topic-link\">(.*?)</a></span>";
 
-    final String reg4CharactersClickTimes = "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
+    final String reg4CharactersClickTimes =
+        "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
     final String reg4inner = "<div class=\"inner\">(.*?)</table></div>";
     final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
@@ -264,25 +303,31 @@ class DioWeb {
     var response = await dio.get('/go/' + tabKey + "?p=" + p.toString());
     var document = parse(response.data);
     if (document.querySelector('#Main > div.box > div.cell > form') != null) {
-      Fluttertoast.showToast(msg: '查看本节点需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
+      Fluttertoast.showToast(
+          msg: '查看本节点需要先登录 😞',
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2);
       return topics;
     }
 
     // <a href="/favorite/node/17?once=68177">加入收藏</a>
     // <a href="/unfavorite/node/39?once=68177">取消收藏</a>
     // #Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a
-    var element = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a');
+    var element = document.querySelector(
+        '#Wrapper > div > div:nth-child(1) > div.header > div.fr.f12 > a');
     if (element != null) {
       String isFavWithOnce = element.attributes["href"];
       eventBus.emit(MyEventNodeIsFav, isFavWithOnce);
     }
 
-    content = response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+    content =
+        response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
     RegExp expInner = new RegExp(reg4inner);
     Iterable<Match> matchesInner = expInner.allMatches(content);
     Match match = matchesInner.first;
-    print("当前页/总页数： " + new RegExp(reg4pages).firstMatch(match.group(0)).group(1));
+    print("当前页/总页数： " +
+        new RegExp(reg4pages).firstMatch(match.group(0)).group(1));
 
     RegExp exp = new RegExp(reg4tag);
     Iterable<Match> matches = exp.allMatches(content);
@@ -297,7 +342,8 @@ class DioWeb {
       item.replyCount = match4TRC.group(2);
       item.title = match4TRC.group(3);
       if (regString.contains("个字符")) {
-        Match match4CharactersClickTimes = new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+        Match match4CharactersClickTimes =
+            new RegExp(reg4CharactersClickTimes).firstMatch(regString);
         item.characters = match4CharactersClickTimes.group(1);
         item.clickTimes = match4CharactersClickTimes.group(2);
       }
@@ -314,7 +360,10 @@ class DioWeb {
     try {
       String once = await getOnce();
       if (once == null || once.isEmpty) {
-        Fluttertoast.showToast(msg: '操作失败,无法获取到 once 😞', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+            msg: '操作失败,无法获取到 once 😞',
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.CENTER);
         return false;
       }
 
@@ -328,18 +377,24 @@ class DioWeb {
       var responseReply = await dio.post("/t/" + topicId, data: formData);
       dio.options.contentType = Headers.jsonContentType; // 还原
       var document = parse(responseReply.data);
-      if (document.querySelector('#Wrapper > div > div > div.problem') != null) {
+      if (document.querySelector('#Wrapper > div > div > div.problem') !=
+          null) {
         // 回复失败
-        String problem = document.querySelector('#Wrapper > div > div > div.problem').text;
+        String problem =
+            document.querySelector('#Wrapper > div > div > div.problem').text;
 
-        Fluttertoast.showToast(msg: '$problem', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+            msg: '$problem',
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.CENTER);
         return false;
       }
 
       // 回复成功
       return true;
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '回复失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: '回复失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -349,7 +404,8 @@ class DioWeb {
   }
 
   // 创建主题：先用节点ID去获取 once，然后组装字段 POST 发帖
-  static Future<String> createTopic(String nodeId, String title, String content) async {
+  static Future<String> createTopic(
+      String nodeId, String title, String content) async {
     try {
       var response = await dio.get('/new/' + nodeId);
       String resp = response.data as String;
@@ -358,7 +414,11 @@ class DioWeb {
       }
 
       var tree = ETree.fromString(resp);
-      String once = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td/input[@name='once']").first.attributes["value"];
+      String once = tree
+          .xpath(
+              "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td/input[@name='once']")
+          .first
+          .attributes["value"];
       if (once == null || once.isEmpty) {
         return '操作失败,无法获取到 once!';
       }
@@ -375,9 +435,12 @@ class DioWeb {
       var responsePostTopic = await dio.post("/new/" + nodeId, data: formData);
       dio.options.contentType = Headers.jsonContentType; // 还原
       var document = parse(responsePostTopic.data);
-      if (document.querySelector('#Wrapper > div > div > div.problem > ul') != null) {
+      if (document.querySelector('#Wrapper > div > div > div.problem > ul') !=
+          null) {
         // 发布话题失败: 可能有多条错误，这里只取第一条提示用户
-        String problem = document.querySelector('#Wrapper > div > div > div.problem > ul > li').text;
+        String problem = document
+            .querySelector('#Wrapper > div > div > div.problem > ul > li')
+            .text;
         return problem;
       }
       // 发布话题成功
@@ -393,8 +456,13 @@ class DioWeb {
   // 获取 once
   static Future<String> getOnce() async {
     var response = await dio.get("/signin");
-    var tree = ETree.fromString(response.data); //*[@id="Wrapper"]/div/div/div[2]/form/table/tbody/tr[3]/td/input[1]
-    String once = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']").first.attributes["value"];
+    var tree = ETree.fromString(response
+        .data); //*[@id="Wrapper"]/div/div/div[2]/form/table/tbody/tr[3]/td/input[1]
+    String once = tree
+        .xpath(
+            "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
     print(once);
     return once;
   }
@@ -407,21 +475,41 @@ class DioWeb {
     //dio.options.responseType = ResponseType.JSON;
     var response = await dio.get("/signin");
     var tree = ETree.fromString(response.data);
-    loginFormData.username =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.password =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.captcha =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']").first.attributes["name"];
-    loginFormData.once =
-        tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']").first.attributes["value"];
+    loginFormData.username = tree
+        .xpath(
+            "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[1]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.password = tree
+        .xpath(
+            "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.captcha = tree
+        .xpath(
+            "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[4]/td[2]/input[@class='sl']")
+        .first
+        .attributes["name"];
+    loginFormData.once = tree
+        .xpath(
+            "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[2]/td[2]/input[@name='once']")
+        .first
+        .attributes["value"];
 
-    print(" \n" + loginFormData.username + "\n" + loginFormData.password + "\n" + loginFormData.captcha + "\n" + loginFormData.once);
+    print(" \n" +
+        loginFormData.username +
+        "\n" +
+        loginFormData.password +
+        "\n" +
+        loginFormData.captcha +
+        "\n" +
+        loginFormData.once);
 
     dio.options.responseType = ResponseType.bytes;
     response = await dio.get("/_captcha?once=" + loginFormData.once);
     dio.options.responseType = ResponseType.json; // 还原
-    if ((response.data as List<int>).length == 0) throw new Exception('NetworkImage is an empty file');
+    if ((response.data as List<int>).length == 0)
+      throw new Exception('NetworkImage is an empty file');
     loginFormData.bytes = Uint8List.fromList(response.data);
     return loginFormData;
   }
@@ -464,17 +552,26 @@ class DioWeb {
         // //*[@id="Wrapper"]/div/div[1]/div[3]/ul/li "输入的验证码不正确"
         // //*[@id="Wrapper"]/div/div[1]/div[2]/ul/li "用户名和密码无法匹配" 等
         var errorInfo;
-        if (tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()') != null) {
-          errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0].name;
+        if (tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()') !=
+            null) {
+          errorInfo = tree
+              .xpath('//*[@id="Wrapper"]/div/div[1]/div[3]/ul/li/text()')[0]
+              .name;
         } else {
-          errorInfo = tree.xpath('//*[@id="Wrapper"]/div/div[1]/div[2]/ul/li/text()')[0].name;
+          errorInfo = tree
+              .xpath('//*[@id="Wrapper"]/div/div[1]/div[2]/ul/li/text()')[0]
+              .name;
         }
         print("wml error!!!!：$errorInfo");
-        Fluttertoast.showToast(msg: errorInfo, timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+        Fluttertoast.showToast(
+            msg: errorInfo,
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.CENTER);
         return "false";
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(msg: '登录失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(
+          msg: '登录失败', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
@@ -529,7 +626,11 @@ class DioWeb {
       if (response.request.path == "/2fa") {
         var tree = ETree.fromString(response.data);
         // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[3]/td[2]/input[1]
-        String once = tree.xpath("//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td[2]/input[@name='once']").first.attributes["value"];
+        String once = tree
+            .xpath(
+                "//*[@id='Wrapper']/div/div[1]/div[2]/form/table/tr[3]/td[2]/input[@name='once']")
+            .first
+            .attributes["value"];
         print('两步验证前保存once:$once');
         SpHelper.sp.setString(SP_ONCE, once);
         return "2fa";
@@ -554,12 +655,14 @@ class DioWeb {
       if (response.statusCode == 200) {
         // Use html parser and query selector
         var document = parse(response.data);
-        List<dom.Element> aRootNode = document.querySelectorAll('div.box > div > a > img.avatar');
+        List<dom.Element> aRootNode =
+            document.querySelectorAll('div.box > div > a > img.avatar');
         if (aRootNode != null) {
           for (var aNode in aRootNode) {
             FollowingUser followingUser = FollowingUser();
             followingUser.avatar = Utils.avatarLarge(aNode.attributes['src']);
-            followingUser.userName = aNode.parent.attributes["href"].replaceFirst('/member/', '');
+            followingUser.userName =
+                aNode.parent.attributes["href"].replaceFirst('/member/', '');
             followingUsers.add(followingUser);
           }
           print("wml::${followingUsers.length}");
@@ -591,10 +694,12 @@ class DioWeb {
       };
       // Use html parser and query selector
       var document = parse(response.data);
-      List<dom.Element> aRootNode = document.querySelectorAll('div.box > div.cell > a.item_node');
+      List<dom.Element> aRootNode =
+          document.querySelectorAll('div.box > div.cell > a.item_node');
       if (aRootNode != null) {
         for (var aNode in aRootNode) {
-          NodeItem nodeItem = NodeItem(aNode.attributes["href"].replaceFirst('/go/', ''), aNode.text);
+          NodeItem nodeItem = NodeItem(
+              aNode.attributes["href"].replaceFirst('/go/', ''), aNode.text);
           listOfHotNodes.add(nodeItem);
         }
         print("wml:最热节点的数目:${listOfHotNodes.length}");
@@ -623,7 +728,9 @@ class DioWeb {
 //      var count = tree.xpath("//*[@class='gray']").first.xpath("/text()")[0].name;
 //      eventBus.emit(MyEventFavCounts,count);
 //    }
-    var page = tree.xpath("//*[@class='page_normal']") != null ? tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name : '1';
+    var page = tree.xpath("//*[@class='page_normal']") != null
+        ? tree.xpath("//*[@class='page_normal']").last.xpath("/text()")[0].name
+        : '1';
 
     // Fluttertoast.showToast(msg: '收藏总数：$count，页数：$page');
 
@@ -640,25 +747,39 @@ class DioWeb {
             .replaceAll('&quot;', '"')
             .replaceAll('&amp;', '&')
             .replaceAll('&lt;', '<')
-            .replaceAll('&gt;', '>'); //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
+            .replaceAll('&gt;',
+                '>'); //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[1]/a
 
-        String topicUrl = aNode.xpath("/table/tr/td[3]/span[1]/a").first.attributes["href"]; // 得到是 /t/522540#reply17
+        String topicUrl = aNode
+            .xpath("/table/tr/td[3]/span[1]/a")
+            .first
+            .attributes["href"]; // 得到是 /t/522540#reply17
         favTopicItem.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
 
-        favTopicItem.nodeName = aNode.xpath("/table/tr/td[3]/span[2]/a[1]/text()")[0].name;
-        favTopicItem.avatar = aNode.xpath("/table/tr/td[1]/a[1]/img[@class='avatar']").first.attributes["src"];
-        favTopicItem.memberId = aNode.xpath("/table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
+        favTopicItem.nodeName =
+            aNode.xpath("/table/tr/td[3]/span[2]/a[1]/text()")[0].name;
+        favTopicItem.avatar = aNode
+            .xpath("/table/tr/td[1]/a[1]/img[@class='avatar']")
+            .first
+            .attributes["src"];
+        favTopicItem.memberId =
+            aNode.xpath("/table/tr/td[3]/span[2]/strong[1]/a/text()")[0].name;
 
         if (aNode.xpath("/table/tr/td[4]/a/text()") != null) {
           // 有评论数
           //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[4]/a
-          favTopicItem.replyCount = aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
+          favTopicItem.replyCount =
+              aNode.xpath("/table/tr/td[4]/a/text()")[0].name;
 
           //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/text()[2]
-          favTopicItem.lastReplyTime = aNode.xpath("/table/tr/td[3]/span[2]/text()[2]")[0].name.replaceAll('&nbsp;', "");
+          favTopicItem.lastReplyTime = aNode
+              .xpath("/table/tr/td[3]/span[2]/text()[2]")[0]
+              .name
+              .replaceAll('&nbsp;', "");
 
           //*[@id="Wrapper"]/div/div/div[3]/table/tbody/tr/td[3]/span[2]/strong[2]/a
-          favTopicItem.lastReplyMId = aNode.xpath("/table/tr/td[3]/span[2]/strong[2]/a/text()")[0].name;
+          favTopicItem.lastReplyMId =
+              aNode.xpath("/table/tr/td[3]/span[2]/strong[2]/a/text()")[0].name;
         }
 
         topics.add(favTopicItem);
@@ -690,7 +811,8 @@ class DioWeb {
           } else {
             favNode.img = imgUrl;
           }
-          favNode.nodeId = aNode.attributes['href'].toString().replaceAll('/go/', '');
+          favNode.nodeId =
+              aNode.attributes['href'].toString().replaceAll('/go/', '');
           favNode.nodeName = aNode.xpath("/div/text()")[0].name;
           //*[@id="n_195868"]/div/span
           favNode.replyCount = aNode.xpath("/div/span/text()")[0].name;
@@ -711,9 +833,12 @@ class DioWeb {
     var response = await dio.get("/notifications" + "?p=" + p.toString());
     var document = parse(response.data);
 
-    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+    var page = document.querySelector('strong.fade') != null
+        ? document.querySelector('strong.fade').text
+        : null;
 
-    List<dom.Element> aRootNode = document.querySelectorAll('div.cell[id]'); // 2019.10.4 发现v2ex网站页面有改动，需要过滤
+    List<dom.Element> aRootNode = document
+        .querySelectorAll('div.cell[id]'); // 2019.10.4 发现v2ex网站页面有改动，需要过滤
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         NotificationItem item = new NotificationItem();
@@ -723,31 +848,47 @@ class DioWeb {
         }
 
         //#n_9690800 > table > tbody > tr > td:nth-child(1) > a > img
-        item.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > a > img').attributes["src"];
+        item.avatar = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > a > img')
+            .attributes["src"];
         // #n_9690800 > table > tbody > tr > td:nth-child(2) > span.snow
         // 可能得到 '44 天前' 或者 '2017-06-14 16:33:13 +08:00  '
-        String date = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.snow').text;
+        String date = aNode
+            .querySelector('table > tbody > tr > td:nth-child(3) > span.snow')
+            .text;
 //        if (!date.contains('天')) {
 //          date = date.split(' ')[0];
 //        }
         item.date = date;
 
-        item.userName = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade > a > strong').text;
+        item.userName = aNode
+            .querySelector(
+                'table > tbody > tr > td:nth-child(3) > span.fade > a > strong')
+            .text;
 
         // document.querySelector('#n_9690800 > table > tbody > tr > td:nth-child(2) > span.fade')
         // 明明是 td:nth-child(2) ，可是取出来是 null，而 td:nth-child(3) 才对
         // <span class="fade"><a href="/member/jokyme"><strong>jokyme</strong></a> 在回复 <a href="/t/556167#reply64">千呼万唤使出来， V2EX 非官方小程序发布啦！</a> 时提到了你</span>
         // #n_10262034 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(1) > strong
-        item.title = aNode.querySelector('table > tbody > tr > td:nth-child(3) > span.fade').innerHtml.split('</strong></a>')[1];
+        item.title = aNode
+            .querySelector('table > tbody > tr > td:nth-child(3) > span.fade')
+            .innerHtml
+            .split('</strong></a>')[1];
 
         // document.querySelector('#n_9472572 > table > tbody > tr > td:nth-child(2) > div.payload')
-        if (aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload') != null) {
-          item.reply = aNode.querySelector('table > tbody > tr > td:nth-child(3) > div.payload').innerHtml;
+        if (aNode.querySelector(
+                'table > tbody > tr > td:nth-child(3) > div.payload') !=
+            null) {
+          item.reply = aNode
+              .querySelector(
+                  'table > tbody > tr > td:nth-child(3) > div.payload')
+              .innerHtml;
         }
         // document.querySelector('#n_6036816 > table > tbody > tr > td:nth-child(2) > span.fade > a:nth-child(2)')
 
         String topicUrl = aNode
-            .querySelector('table > tbody > tr > td:nth-child(3) > span.fade > a:nth-child(2)')
+            .querySelector(
+                'table > tbody > tr > td:nth-child(3) > span.fade > a:nth-child(2)')
             .attributes["href"]; // 得到是 /t/522540#reply17
         item.topicId = topicUrl.replaceAll("/t/", "").split("#")[0];
         print(item.topicId);
@@ -775,10 +916,12 @@ class DioWeb {
     var document = parse(response.data);
 
     // 登录状态且不是本人，才获取关注和屏蔽状态
-    if (SpHelper.sp.containsKey(SP_USERNAME) && userName != SpHelper.sp.getString(SP_USERNAME)) {
+    if (SpHelper.sp.containsKey(SP_USERNAME) &&
+        userName != SpHelper.sp.getString(SP_USERNAME)) {
       // onclick="if (confirm('确认要开始关注 wuqingdzx？')) { location.href = '/follow/278271?once=68661'; }"
       String followStr = document
-          .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5)  > div.fr > input')
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5)  > div.fr > input')
           .attributes["value"];
       print("!!!!::::" + followStr);
       // 取消特别关注 加入特别关注
@@ -819,15 +962,18 @@ class DioWeb {
         document.querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > h1').text;*/
     // 用户加入信息
     profileModel.memberInfo = document
-        .querySelector('#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span.gray')
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div > table > tbody > tr > td:nth-child(5) > span.gray')
         .text
         .replaceFirst('V2EX ', '');
 
     // 签名
-    if (document.querySelector('#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger') !=
+    if (document.querySelector(
+            '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger') !=
         null) {
       profileModel.sign = document
-          .querySelector('#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger')
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span.bigger')
           .text;
     }
 
@@ -835,11 +981,13 @@ class DioWeb {
             '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8) > li') !=
         null) {
       profileModel.company = document
-          .querySelector('#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8)')
+          .querySelector(
+              '#Wrapper > div > div:nth-child(1) > div:nth-child(1) > table > tbody > tr > td:nth-child(5) > span:nth-child(8)')
           .innerHtml;
     }
 
-    List<dom.Element> nodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div.widgets > a");
+    List<dom.Element> nodes = document.querySelectorAll(
+        "#Wrapper > div > div:nth-child(1) > div.widgets > a");
     if (nodes != null && nodes.length > 0) {
       for (var node in nodes) {
         Clip clip = Clip();
@@ -852,13 +1000,23 @@ class DioWeb {
       profileModel.clips = clips;
 
       // 个人简介
-      if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
-        profileModel.memberIntro = document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(5)").text;
+      if (document.querySelector(
+              "#Wrapper > div > div:nth-child(1) > div[class='cell']") !=
+          null) {
+        profileModel.memberIntro = document
+            .querySelector(
+                "#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(5)")
+            .text;
       }
     } else {
       // 个人简介
-      if (document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']") != null) {
-        profileModel.memberIntro = document.querySelector("#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(3)").text;
+      if (document.querySelector(
+              "#Wrapper > div > div:nth-child(1) > div[class='cell']") !=
+          null) {
+        profileModel.memberIntro = document
+            .querySelector(
+                "#Wrapper > div > div:nth-child(1) > div[class='cell']:nth-child(3)")
+            .text;
       }
     }
 
@@ -871,31 +1029,46 @@ class DioWeb {
       for (var value in rootNode) {
         ProfileRecentTopicItem recentTopicItem = ProfileRecentTopicItem();
         recentTopicItem.topicId = value
-            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
             .attributes["href"]
             .replaceAll("/t/", "")
             .split("#")[0]; // 得到是 /t/522540#reply17
         recentTopicItem.replyCount = value
-            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
             .attributes["href"]
             .replaceAll("/t/", "")
             .split("#")[1]
             .replaceFirst('reply', '');
 
-        recentTopicItem.topicTitle = value.querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a').text;
+        recentTopicItem.topicTitle = value
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .text;
         print("wml::${recentTopicItem.topicTitle}");
 
         // #Wrapper > div > div:nth-child(3) > div:nth-child(2) > table > tbody > tr > td:nth-child(1) > span:nth-child(1) > a
-        recentTopicItem.nodeId =
-            value.querySelector('table > tbody > tr > td:nth-child(1) > span > a').attributes["href"].replaceAll('/go/', '');
-        recentTopicItem.nodeName = value.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
+        recentTopicItem.nodeId = value
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .attributes["href"]
+            .replaceAll('/go/', '');
+        recentTopicItem.nodeName = value
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .text;
         if (recentTopicItem.replyCount != '0') {
-          recentTopicItem.lastReplyTime = ' • ' + value.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
+          recentTopicItem.lastReplyTime = ' • ' +
+              value
+                  .querySelector(
+                      "table > tbody > tr > td:nth-child(1) > span:nth-child(8)")
+                  .text;
         }
         topicList.add(recentTopicItem);
       }
       print("wml::${rootNode.length}");
-    } else if (document.querySelector("#Wrapper > div > div:nth-child(5) > div.inner") != null) {
+    } else if (document
+            .querySelector("#Wrapper > div > div:nth-child(5) > div.inner") !=
+        null) {
       // 用户设置为隐藏
       topicList = null;
     }
@@ -910,9 +1083,13 @@ class DioWeb {
       var replyContentList = document.querySelectorAll('div.reply_content');
       for (int i = 0; i < dockAreaList.length; i++) {
         ProfileRecentReplyItem recentReplyItem = ProfileRecentReplyItem();
-        recentReplyItem.replyTime =
-            dockAreaList[i].querySelector('table > tbody > tr > td > div > span.fade').text.replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
-        recentReplyItem.dockAreaText = dockAreaList[i].querySelector('table > tbody > tr > td > span').innerHtml;
+        recentReplyItem.replyTime = dockAreaList[i]
+            .querySelector('table > tbody > tr > td > div > span.fade')
+            .text
+            .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
+        recentReplyItem.dockAreaText = dockAreaList[i]
+            .querySelector('table > tbody > tr > td > span')
+            .innerHtml;
         recentReplyItem.replyContent = replyContentList[i].innerHtml;
         replyList.add(recentReplyItem);
       }
@@ -932,7 +1109,9 @@ class DioWeb {
       print('wml::follow:: once error');
       return false;
     }
-    String url = isFollow ? ("/unfollow/" + userId + "?once=" + once) : ("/follow/" + userId + "?once=" + once);
+    String url = isFollow
+        ? ("/unfollow/" + userId + "?once=" + once)
+        : ("/follow/" + userId + "?once=" + once);
     print('wml::follow:: $url');
     var response = await dio.get(url);
     if (response.statusCode == 200) {
@@ -945,7 +1124,9 @@ class DioWeb {
   // if (confirm('确认要屏蔽 wmllll？')) { location.href = '/block/391045?t=1399527187'; }
   // if (confirm('确认要解除对 wmllll 的屏蔽？')) { location.href = '/unblock/391045?t=1399527187'; }
   static Future<bool> block(bool isBlock, String userId, String token) async {
-    String url = isBlock ? ("/unblock/" + userId + "?t=" + token) : ("/block/" + userId + "?t=" + token);
+    String url = isBlock
+        ? ("/unblock/" + userId + "?t=" + token)
+        : ("/block/" + userId + "?t=" + token);
     print('wml::block:: $url');
     var response = await dio.get(url);
     if (response.statusCode == 200) {
@@ -955,14 +1136,19 @@ class DioWeb {
   }
 
   // 获取用户的所有主题列表信息 https://www.v2ex.com/member/w4mxl/topics?p=1
-  static Future<List<ProfileRecentTopicItem>> getAllTopics(String userName, int p) async {
+  static Future<List<ProfileRecentTopicItem>> getAllTopics(
+      String userName, int p) async {
     List<ProfileRecentTopicItem> topics = List<ProfileRecentTopicItem>();
-    var response = await dio.get("/member/" + userName + "/topics?p=" + p.toString());
+    var response =
+        await dio.get("/member/" + userName + "/topics?p=" + p.toString());
     var document = parse(response.data);
 
-    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+    var page = document.querySelector('strong.fade') != null
+        ? document.querySelector('strong.fade').text
+        : null;
 
-    List<dom.Element> aRootNode = document.querySelectorAll("div[class='cell item']");
+    List<dom.Element> aRootNode =
+        document.querySelectorAll("div[class='cell item']");
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
         ProfileRecentTopicItem item = new ProfileRecentTopicItem();
@@ -972,24 +1158,38 @@ class DioWeb {
         }
 
         item.topicId = aNode
-            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
             .attributes["href"]
             .replaceAll("/t/", "")
             .split("#")[0]; // 得到是 /t/522540#reply17
         item.replyCount = aNode
-            .querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
             .attributes["href"]
             .replaceAll("/t/", "")
             .split("#")[1]
             .replaceFirst('reply', '');
 
-        item.topicTitle = aNode.querySelector('table > tbody > tr > td:nth-child(1) > span.item_title > a').text;
+        item.topicTitle = aNode
+            .querySelector(
+                'table > tbody > tr > td:nth-child(1) > span.item_title > a')
+            .text;
 
-        item.nodeId = aNode.querySelector('table > tbody > tr > td:nth-child(1) > span > a').attributes["href"].replaceAll('/go/', '');
-        item.nodeName = aNode.querySelector('table > tbody > tr > td:nth-child(1) > span > a').text;
+        item.nodeId = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .attributes["href"]
+            .replaceAll('/go/', '');
+        item.nodeName = aNode
+            .querySelector('table > tbody > tr > td:nth-child(1) > span > a')
+            .text;
 
         if (item.replyCount != '0') {
-          item.lastReplyTime = ' • ' + aNode.querySelector("table > tbody > tr > td:nth-child(1) > span:nth-child(8)").text;
+          item.lastReplyTime = ' • ' +
+              aNode
+                  .querySelector(
+                      "table > tbody > tr > td:nth-child(1) > span:nth-child(8)")
+                  .text;
         }
         topics.add(item);
       }
@@ -999,12 +1199,16 @@ class DioWeb {
   }
 
   // 获取用户的所有回复列表信息 https://www.v2ex.com/member/w4mxl/replies
-  static Future<List<ProfileRecentReplyItem>> getAllReplies(String userName, int p) async {
+  static Future<List<ProfileRecentReplyItem>> getAllReplies(
+      String userName, int p) async {
     List<ProfileRecentReplyItem> replies = List<ProfileRecentReplyItem>();
-    var response = await dio.get("/member/" + userName + "/replies?p=" + p.toString());
+    var response =
+        await dio.get("/member/" + userName + "/replies?p=" + p.toString());
     var document = parse(response.data);
 
-    var page = document.querySelector('strong.fade') != null ? document.querySelector('strong.fade').text : null;
+    var page = document.querySelector('strong.fade') != null
+        ? document.querySelector('strong.fade').text
+        : null;
 
     var dockAreaList = document.querySelectorAll('div.dock_area');
     var replyContentList = document.querySelectorAll('div.reply_content');
@@ -1016,9 +1220,13 @@ class DioWeb {
         item.maxPage = int.parse(page.split('/')[1]);
       }
 
-      item.replyTime =
-          dockAreaList[i].querySelector('table > tbody > tr > td > div > span.fade').text.replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
-      item.dockAreaText = dockAreaList[i].querySelector('table > tbody > tr > td > span').innerHtml;
+      item.replyTime = dockAreaList[i]
+          .querySelector('table > tbody > tr > td > div > span.fade')
+          .text
+          .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;*/;
+      item.dockAreaText = dockAreaList[i]
+          .querySelector('table > tbody > tr > td > span')
+          .innerHtml;
       item.replyContent = replyContentList[i].innerHtml;
       replies.add(item);
     }
@@ -1026,28 +1234,46 @@ class DioWeb {
   }
 
   // 获取帖子详情及下面的评论信息 [html 解析的] todo 关注 html 库 nth-child
-  static Future<TopicDetailModel> getTopicDetailAndReplies(String topicId, int p) async {
+  static Future<TopicDetailModel> getTopicDetailAndReplies(
+      String topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
     List<TopicSubtleItem> subtleList = List(); // 附言
     List<ReplyItem> replies = List();
 
-    var response = await dio.get("/t/" + topicId + "?p=" + p.toString(), options: buildCacheOptions(Duration(days: 4), forceRefresh: true));
+    var response = await dio.get("/t/" + topicId + "?p=" + p.toString(),
+        options: buildCacheOptions(Duration(days: 4), forceRefresh: true));
     // Use html parser and query selector
     var document = parse(response.data);
 
     detailModel.topicId = topicId;
 
-    if (response.redirects.isNotEmpty || document.querySelector('#Main > div.box > div.message') != null) {
-      Fluttertoast.showToast(msg: '查看本主题需要先登录 😞', gravity: ToastGravity.CENTER, timeInSecForIosWeb: 2);
+    if (response.redirects.isNotEmpty ||
+        document.querySelector('#Main > div.box > div.message') != null) {
+      Fluttertoast.showToast(
+          msg: '查看本主题需要先登录 😞',
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2);
       return detailModel;
     }
 
-    detailModel.avatar = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img').attributes["src"];
-    detailModel.createdId = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > small > a').text;
-    detailModel.nodeId =
-        document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').attributes["href"].replaceAll('/go/', '');
-    detailModel.nodeName = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)').text;
+    detailModel.avatar = document
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div.header > div.fr > a > img')
+        .attributes["src"];
+    detailModel.createdId = document
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div.header > small > a')
+        .text;
+    detailModel.nodeId = document
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)')
+        .attributes["href"]
+        .replaceAll('/go/', '');
+    detailModel.nodeName = document
+        .querySelector(
+            '#Wrapper > div > div:nth-child(1) > div.header > a:nth-child(6)')
+        .text;
     //  at 9 小时 26 分钟前，1608 次点击
     detailModel.smallGray = document
         .querySelector('#Wrapper > div > div:nth-child(1) > div.header > small')
@@ -1055,19 +1281,41 @@ class DioWeb {
         .split(' at')[1]
         .replaceFirst(' +08:00', ''); // 时间 去除+ 08:00;
 
-    detailModel.topicTitle = document.querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1').text;
+    detailModel.topicTitle = document
+        .querySelector('#Wrapper > div > div:nth-child(1) > div.header > h1')
+        .text;
+
+    // [email_protected] 转码回到正确的邮件字符串
+    List<dom.Element> aRootNode =
+        document.querySelectorAll("a[class='__cf_email__']");
+    if (aRootNode != null) {
+      for (var aNode in aRootNode) {
+        String encodedCf = aNode.attributes["data-cfemail"].toString();
+        aNode.replaceWith(Text(Utils.cfDecodeEmail(encodedCf)));
+      }
+    }
 
     // 判断是否有正文
-    if (document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div') != null) {
-      detailModel.content = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').text;
-      detailModel.contentRendered = document.querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div').innerHtml;
+    if (document.querySelector(
+            '#Wrapper > div > div:nth-child(1) > div.cell > div') !=
+        null) {
+      detailModel.content = document
+          .querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div')
+          .text;
+      detailModel.contentRendered = document
+          .querySelector('#Wrapper > div > div:nth-child(1) > div.cell > div')
+          .innerHtml;
     }
     // 附言
-    List<dom.Element> appendNodes = document.querySelectorAll("#Wrapper > div > div:nth-child(1) > div[class='subtle']");
+    List<dom.Element> appendNodes = document.querySelectorAll(
+        "#Wrapper > div > div:nth-child(1) > div[class='subtle']");
     if (appendNodes != null && appendNodes.length > 0) {
       for (var node in appendNodes) {
         TopicSubtleItem subtleItem = TopicSubtleItem();
-        subtleItem.fade = node.querySelector('span.fade').text.replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）;
+        subtleItem.fade = node
+            .querySelector('span.fade')
+            .text
+            .replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）;
         subtleItem.content = node.querySelector('div.topic_content').innerHtml;
         subtleList.add(subtleItem);
       }
@@ -1077,14 +1325,24 @@ class DioWeb {
     // token 是否收藏
     // <a href="/unfavorite/topic/541492?t=lqstjafahqohhptitvcrplmjbllwqsxc" class="op">取消收藏</a>
     // #Wrapper > div > div:nth-child(1) > div.inner > div > a:nth-child(2)
-    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']") != null) {
-      String collect = document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']").attributes["href"];
+    if (document.querySelector(
+            "#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']") !=
+        null) {
+      String collect = document
+          .querySelector(
+              "#Wrapper > div > div:nth-child(1) > div.inner > div > a[class='op']")
+          .attributes["href"];
       detailModel.token = collect.split('?t=')[1];
       detailModel.isFavorite = collect.startsWith('/unfavorite');
     }
 
-    if (document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > span") != null) {
-      String count = document.querySelector("#Wrapper > div > div:nth-child(1) > div.inner > div > span").text;
+    if (document.querySelector(
+            "#Wrapper > div > div:nth-child(1) > div.inner > div > span") !=
+        null) {
+      String count = document
+          .querySelector(
+              "#Wrapper > div > div:nth-child(1) > div.inner > div > span")
+          .text;
       if (count.contains('人收藏')) {
         detailModel.favoriteCount = int.parse(count.trim().split('人收藏')[0]);
       }
@@ -1102,32 +1360,62 @@ class DioWeb {
     // 判断是否有评论
     if (document.querySelector('#no-comments-yet') == null) {
       // 表示有评论
-      detailModel.replyCount =
-          document.querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)').text.trim().split('条回复')[0].trim();
+      detailModel.replyCount = document
+          .querySelector('#Wrapper > div > div:nth-child(5) > div:nth-child(1)')
+          .text
+          .trim()
+          .split('条回复')[0]
+          .trim();
 
       if (p == 1) {
         // 只有第一页这样的解析才对
-        if (document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') != null) {
-          detailModel.maxPage = int.parse(document.querySelector('#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child').text);
+        if (document.querySelector(
+                '#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child') !=
+            null) {
+          detailModel.maxPage = int.parse(document
+              .querySelector(
+                  '#Wrapper > div > div:nth-child(5) > div:last-child > a:last-child')
+              .text);
         }
       }
-      List<dom.Element> rootNode = document.querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
+      List<dom.Element> rootNode = document
+          .querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
       if (rootNode != null) {
         for (var aNode in rootNode) {
           ReplyItem replyItem = new ReplyItem();
-          replyItem.avatar = aNode.querySelector('table > tbody > tr > td:nth-child(1) > img').attributes["src"];
-          replyItem.userName = aNode.querySelector('table > tbody > tr > td:nth-child(5) > strong > a').text;
+          replyItem.avatar = aNode
+              .querySelector('table > tbody > tr > td:nth-child(1) > img')
+              .attributes["src"];
+          replyItem.userName = aNode
+              .querySelector(
+                  'table > tbody > tr > td:nth-child(5) > strong > a')
+              .text;
           replyItem.lastReplyTime = aNode
               .querySelector('table > tbody > tr > td:nth-child(5) > span')
               .text
               .replaceFirst(' +08:00', ''); // 时间（去除+ 08:00）和平台（Android/iPhone）
-          if (aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']") != null) {
-            replyItem.favorites = aNode.querySelector("table > tbody > tr > td:nth-child(5) > span[class='small fade']").text.split(" ")[1];
+          if (aNode.querySelector(
+                  "table > tbody > tr > td:nth-child(5) > span[class='small fade']") !=
+              null) {
+            replyItem.favorites = aNode
+                .querySelector(
+                    "table > tbody > tr > td:nth-child(5) > span[class='small fade']")
+                .text
+                .split(" ")[1];
           }
-          replyItem.number = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.fr > span').text;
-          replyItem.contentRendered = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').innerHtml;
+          replyItem.number = aNode
+              .querySelector(
+                  'table > tbody > tr > td:nth-child(5) > div.fr > span')
+              .text;
+          replyItem.contentRendered = aNode
+              .querySelector(
+                  'table > tbody > tr > td:nth-child(5) > div.reply_content')
+              .innerHtml;
           print("wml20191112:${replyItem.contentRendered}");
-          replyItem.content = aNode.querySelector('table > tbody > tr > td:nth-child(5) > div.reply_content').text;
+          replyItem.content = aNode
+              .querySelector(
+                  'table > tbody > tr > td:nth-child(5) > div.reply_content')
+              .text;
           replyItem.replyId = aNode.attributes["id"].substring(2);
           //print(replyItem.replyId);
           replies.add(replyItem);
@@ -1154,8 +1442,11 @@ class DioWeb {
   }
 
   // 收藏/取消收藏 主题 todo 发现操作过其中一次后，再次请求虽然也返回200，但是并没有实际成功！！
-  static Future<bool> favoriteTopic(bool isFavorite, String topicId, String token) async {
-    String url = isFavorite ? ("/unfavorite/topic/" + topicId + "?t=" + token) : ("/favorite/topic/" + topicId + "?t=" + token);
+  static Future<bool> favoriteTopic(
+      bool isFavorite, String topicId, String token) async {
+    String url = isFavorite
+        ? ("/unfavorite/topic/" + topicId + "?t=" + token)
+        : ("/favorite/topic/" + topicId + "?t=" + token);
     var response = await dio.get(url);
     if (response.statusCode == 200) {
       return true;
@@ -1182,7 +1473,8 @@ class DioWeb {
   // 报告主题
   // https://www.v2ex.com/report/topic/36307?t=1399527187
   static Future<bool> reportTopic(String topicId) async {
-    String url = "/report/topic/" + topicId + "?t=1399527187"; // todo 目前看 t 是固定值
+    String url =
+        "/report/topic/" + topicId + "?t=1399527187"; // todo 目前看 t 是固定值
     var response = await dio.get(url);
     if (response.statusCode == 200) {
       return true;
@@ -1206,8 +1498,11 @@ class DioWeb {
 
   // 收藏/取消收藏 节点 https://www.v2ex.com/favorite/node/39?once=87770
   // 测试发现 [ 这里操作收藏节点和取消收藏用同一个 token 却是可以的 ]
-  static Future<bool> favoriteNode(bool isFavorite, String nodeIdWithOnce) async {
-    String url = isFavorite ? ("/unfavorite/node/" + nodeIdWithOnce) : ("/favorite/node/" + nodeIdWithOnce);
+  static Future<bool> favoriteNode(
+      bool isFavorite, String nodeIdWithOnce) async {
+    String url = isFavorite
+        ? ("/unfavorite/node/" + nodeIdWithOnce)
+        : ("/favorite/node/" + nodeIdWithOnce);
     var response = await dio.get(url);
     if (response.statusCode == 200) {
       return true;

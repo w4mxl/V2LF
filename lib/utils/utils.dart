@@ -42,7 +42,8 @@ class Utils {
     }
 
     if (await canLaunch(url)) {
-      await launch(url, statusBarBrightness: Platform.isIOS ? Brightness.light : null);
+      await launch(url,
+          statusBarBrightness: Platform.isIOS ? Brightness.light : null);
     } else {
       Progresshud.showErrorWithStatus('Could not launch $url');
     }
@@ -67,5 +68,19 @@ class Utils {
     }
 
     return avatar;
+  }
+
+  // https://usamaejaz.com/cloudflare-email-decoding/
+  // cloudflare email 转码
+  static String cfDecodeEmail(String encodedString) {
+    var email = "",
+        r = int.parse(encodedString.substring(0, 2), radix: 16),
+        n,
+        i;
+    for (n = 2; encodedString.length - n > 0; n += 2) {
+      i = int.parse(encodedString.substring(n, n + 2), radix: 16) ^ r;
+      email += String.fromCharCode(i);
+    }
+    return email;
   }
 }
