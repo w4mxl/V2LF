@@ -44,8 +44,7 @@ void main() async {
   // 配置 dio
   // add interceptors
   String cookiePath = await Utils.getCookiePath();
-  PersistCookieJar cookieJar =
-      new PersistCookieJar(dir: cookiePath); // 持久化 cookie
+  PersistCookieJar cookieJar = PersistCookieJar(dir: cookiePath); // 持久化 cookie
   dio.interceptors
     ..add(CookieManager(cookieJar))
     ..add(LogInterceptor())
@@ -215,15 +214,15 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: child),
             home: WillPopScope(
-              child: new Scaffold(
+              child: Scaffold(
                   appBar: AppBar(
-                    title: new TabBar(
+                    title: TabBar(
                       controller: _tabController,
                       isScrollable: true,
                       indicatorColor: Colors.white,
                       indicatorSize: TabBarIndicatorSize.label,
                       tabs: tabs.map((TabModel choice) {
-                        return new Tab(
+                        return Tab(
                           text: choice.title,
                         );
                       }).toList(),
@@ -232,13 +231,13 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                         ? 5.0
                         : 0.0,
                   ),
-                  body: new TabBarView(
+                  body: TabBarView(
                     controller: _tabController,
                     children: tabs.map((TabModel choice) {
                       return TopicListView(choice.key);
                     }).toList(),
                   ),
-                  drawer: new DrawerLeft()),
+                  drawer: DrawerLeft()),
               onWillPop: () async {
                 if (_lastPressedAt == null ||
                     DateTime.now().difference(_lastPressedAt) >

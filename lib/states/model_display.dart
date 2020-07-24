@@ -22,7 +22,7 @@ class DisplayModel extends ChangeNotifier {
 
   get fontName => _fontName;
 
-  ThemeData themeDate({bool darkTheme: false}) => ThemeData(
+  ThemeData themeDate({bool darkTheme = false}) => ThemeData(
         primarySwatch: _materialColor,
         fontFamily: _fontName,
         brightness: darkTheme ? Brightness.dark : Brightness.light,
@@ -41,7 +41,9 @@ class DisplayModel extends ChangeNotifier {
         SP_THEME_MODE,
         (_themeMode == ThemeMode.system)
             ? THEME_MODE_SYSTEM
-            : (_themeMode == ThemeMode.light ? THEME_MODE_LIGHT : THEME_MODE_DARK));
+            : (_themeMode == ThemeMode.light
+                ? THEME_MODE_LIGHT
+                : THEME_MODE_DARK));
   }
 
   switchFont(String newFontName) {
