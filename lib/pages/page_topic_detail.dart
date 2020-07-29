@@ -741,7 +741,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     child: CircleAvatarWithPlaceholder(
                       imageUrl: widget.avatar.isNotEmpty
                           ? widget.avatar
-                          : _detailModel?.avatar,
+                          : (_detailModel != null ? _detailModel.avatar : ''),
                       size: 44,
                     ),
                   ),
