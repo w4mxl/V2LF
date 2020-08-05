@@ -26,7 +26,7 @@ class TopicListView extends StatefulWidget {
   TopicListView(this.tabKey);
 
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<TopicListView>
@@ -102,7 +102,7 @@ class TopicListViewState extends State<TopicListView>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: new FutureBuilder<List<TabTopicItem>>(
+      body: FutureBuilder<List<TabTopicItem>>(
           future: topicListFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -218,8 +218,8 @@ class _TopicItemViewState extends State<TopicItemView> {
 
         Navigator.push(
           context,
-          new MaterialPageRoute(
-              builder: (context) => new TopicDetails(
+          MaterialPageRoute(
+              builder: (context) => TopicDetails(
                     widget.topic.topicId,
                     topicTitle: widget.topic.topicContent,
                     nodeName: widget.topic.nodeName,
@@ -229,12 +229,12 @@ class _TopicItemViewState extends State<TopicItemView> {
                   )),
         );
       },
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读
               style: TextStyle(
@@ -271,7 +271,7 @@ class _TopicItemViewState extends State<TopicItemView> {
                                 widget.topic.memberId,
                                 textAlign: TextAlign.left,
                                 maxLines: 1,
-                                style: new TextStyle(
+                                style: TextStyle(
                                     fontSize: 13.0,
                                     color: Theme.of(context)
                                         .unselectedWidgetColor),
@@ -301,9 +301,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                                 color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: new Text(
+                          child: Text(
                             widget.topic.nodeName,
-                            style: new TextStyle(
+                            style: TextStyle(
                               fontSize: 12.0,
                               color: Theme.of(context).disabledColor,
                             ),
@@ -316,7 +316,7 @@ class _TopicItemViewState extends State<TopicItemView> {
                           offstage: widget.topic.lastReplyTime == '',
                           child: Text(
                             widget.topic.lastReplyTime,
-                            style: new TextStyle(
+                            style: TextStyle(
                                 color: Theme.of(context).disabledColor,
                                 fontSize: 12.0),
                           ),
@@ -332,16 +332,16 @@ class _TopicItemViewState extends State<TopicItemView> {
                   offstage: widget.topic.replyCount == '',
                   child: Row(
                     children: <Widget>[
-                      new Icon(
+                      Icon(
                         FontAwesomeIcons.comment,
                         size: 14.0,
                         color: Colors.grey,
                       ),
-                      new Padding(
+                      Padding(
                         padding: const EdgeInsets.only(left: 4.0),
-                        child: new Text(
+                        child: Text(
                           widget.topic.replyCount,
-                          style: new TextStyle(
+                          style: TextStyle(
                               fontSize: 13.0,
                               color: Theme.of(context).unselectedWidgetColor),
                         ),

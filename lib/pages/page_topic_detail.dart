@@ -613,11 +613,11 @@ class _TopicDetailViewState extends State<TopicDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? Colors.black
           : CupertinoColors.lightBackgroundGray,
-      appBar: new AppBar(
+      appBar: AppBar(
         actions: <Widget>[
           Offstage(
             child: Row(
@@ -726,9 +726,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Container(
+          Container(
             padding: const EdgeInsets.all(10.0),
-            child: new Row(
+            child: Row(
               children: <Widget>[
                 // 头像
                 GestureDetector(
@@ -764,22 +764,22 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                 ),
                 SizedBox(width: 10.0),
                 Expanded(
-                    child: new Column(
+                    child: Column(
                   children: <Widget>[
-                    new Row(
+                    Row(
                       children: <Widget>[
                         // 用户ID
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: new Text(
+                            child: Text(
                               _detailModel != null
                                   ? _detailModel.createdId
                                   : widget.createdId,
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: new TextStyle(
+                              style: TextStyle(
                                   fontSize: 15.0, fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -795,7 +795,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                         : widget.avatar)),
                           ),
                         ),
-                        new Icon(
+                        Icon(
                           Icons.keyboard_arrow_right,
                           color: Colors.green,
                           size: 16.0,
@@ -805,7 +805,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           behavior: HitTestBehavior.opaque,
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: new Text(
+                            child: Text(
                               _detailModel != null
                                   ? _detailModel.nodeName
                                   : (widget.nodeName != null
@@ -813,7 +813,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       : '分享创造'),
                               textAlign: TextAlign.left,
                               maxLines: 1,
-                              style: new TextStyle(
+                              style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold),
@@ -821,7 +821,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                           ),
                           onTap: () => Navigator.push(
                               context,
-                              new MaterialPageRoute(
+                              MaterialPageRoute(
                                   builder: (context) => NodeTopics(
                                         _detailModel != null
                                             ? _detailModel.nodeId
@@ -835,18 +835,18 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     ),
                     Row(
                       children: <Widget>[
-                        new Icon(
+                        Icon(
                           Icons.keyboard,
                           size: 16.0,
                           color: Theme.of(context).disabledColor,
                         ),
-                        new Padding(
+                        Padding(
                           padding: const EdgeInsets.only(left: 4.0),
                           child: Text(
                             _detailModel != null
                                 ? _detailModel.smallGray
                                 : ' 7 小时 20 分钟前, 1314 次点击',
-                            style: new TextStyle(
+                            style: TextStyle(
                                 fontSize: 13.0,
                                 color: Theme.of(context).disabledColor),
                           ),
@@ -867,7 +867,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   _detailModel != null
                       ? _detailModel.replyCount
                       : widget.replyCount,
-                  style: new TextStyle(
+                  style: TextStyle(
                       fontSize: 15.0,
                       color: Theme.of(context).unselectedWidgetColor),
                 )
@@ -875,7 +875,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             ),
           ),
           // topic title
-          new Container(
+          Container(
             padding: const EdgeInsets.only(
                 left: 10.0, top: 10.0, bottom: 5.0, right: 10.0),
             width: 500.0,
@@ -1061,7 +1061,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
             child: Center(
               child: Text(isOnlyUp ? '楼主尚未回复' : '目前尚无回复',
-                  style: new TextStyle(color: Colors.grey[600])),
+                  style: TextStyle(color: Colors.grey[600])),
             ))
         : Card(
             elevation: 0.0,
@@ -1147,7 +1147,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                   left: 10.0,
                                                   right: 10.0,
                                                   top: 10.0),
-                                              child: new Row(
+                                              child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
@@ -1226,12 +1226,12 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                   SizedBox(
                                                     width: 10.0,
                                                   ),
-                                                  new Expanded(
-                                                      child: new Container(
+                                                  Expanded(
+                                                      child: Container(
                                                     margin:
                                                         const EdgeInsets.only(
                                                             top: 2.0),
-                                                    child: new Column(
+                                                    child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
@@ -1239,9 +1239,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                         Row(
                                                           children: <Widget>[
                                                             // 评论用户ID
-                                                            new Text(
+                                                            Text(
                                                               reply.userName,
-                                                              style: new TextStyle(
+                                                              style: TextStyle(
                                                                   fontSize:
                                                                       15.0,
                                                                   color: Colors
@@ -1251,18 +1251,18 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                           .bold),
                                                             ),
                                                             // 评论时间和平台
-                                                            new Padding(
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
                                                                       left: 6.0,
                                                                       right:
                                                                           8.0),
-                                                              child: new Text(
+                                                              child: Text(
                                                                 reply
                                                                     .lastReplyTime,
                                                                 style:
-                                                                    new TextStyle(
+                                                                    TextStyle(
                                                                   color: const Color(
                                                                       0xFFcccccc),
                                                                   fontSize:
@@ -1308,17 +1308,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                               color: Color(
                                                                   0xFFf0f0f0),
                                                               shape:
-                                                                  new StadiumBorder(),
-                                                              child:
-                                                                  new Container(
+                                                                  StadiumBorder(),
+                                                              child: Container(
                                                                 width: 20.0,
                                                                 height: 14.0,
                                                                 alignment:
                                                                     Alignment
                                                                         .center,
-                                                                child: new Text(
+                                                                child: Text(
                                                                   reply.number,
-                                                                  style: new TextStyle(
+                                                                  style: TextStyle(
                                                                       fontSize:
                                                                           9.0,
                                                                       color: Color(
@@ -1409,10 +1408,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                       }
                     },
                     child: InkWell(
-                      child: new Container(
+                      child: Container(
                         padding: const EdgeInsets.only(
                             left: 10.0, right: 10.0, top: 10.0),
-                        child: new Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Column(
@@ -1463,29 +1462,29 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             SizedBox(
                               width: 10.0,
                             ),
-                            new Expanded(
-                                child: new Container(
+                            Expanded(
+                                child: Container(
                               margin: const EdgeInsets.only(top: 2.0),
-                              child: new Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
                                       // 评论用户ID
-                                      new Text(
+                                      Text(
                                         reply.userName,
-                                        style: new TextStyle(
+                                        style: TextStyle(
                                             fontSize: 15.0,
                                             color: Colors.grey,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       // 评论时间和平台
-                                      new Padding(
+                                      Padding(
                                         padding: const EdgeInsets.only(
                                             left: 6.0, right: 8.0),
-                                        child: new Text(
+                                        child: Text(
                                           reply.lastReplyTime,
-                                          style: new TextStyle(
+                                          style: TextStyle(
                                             color: const Color(0xFFcccccc),
                                             fontSize: 13.0,
                                           ),
@@ -1516,14 +1515,14 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                       Spacer(),
                                       Material(
                                         color: Color(0xFFf0f0f0),
-                                        shape: new StadiumBorder(),
-                                        child: new Container(
+                                        shape: StadiumBorder(),
+                                        child: Container(
                                           width: 20.0,
                                           height: 14.0,
                                           alignment: Alignment.center,
-                                          child: new Text(
+                                          child: Text(
                                             reply.number,
-                                            style: new TextStyle(
+                                            style: TextStyle(
                                                 fontSize: 9.0,
                                                 color: Color(0xFFa2a2a2)),
                                           ),
@@ -1646,24 +1645,24 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                             ),
                                                             Expanded(
                                                                 child:
-                                                                    new Container(
+                                                                    Container(
                                                               margin:
                                                                   const EdgeInsets
                                                                           .only(
                                                                       top: 2.0),
-                                                              child: new Column(
+                                                              child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: <
                                                                     Widget>[
-                                                                  new Row(
+                                                                  Row(
                                                                     children: <
                                                                         Widget>[
                                                                       // 评论用户ID
-                                                                      new Text(
+                                                                      Text(
                                                                         item.userName,
-                                                                        style: new TextStyle(
+                                                                        style: TextStyle(
                                                                             fontSize:
                                                                                 15.0,
                                                                             color:
@@ -1671,17 +1670,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                             fontWeight: FontWeight.bold),
                                                                       ),
                                                                       // 评论时间和平台
-                                                                      new Padding(
+                                                                      Padding(
                                                                         padding: const EdgeInsets.only(
                                                                             left:
                                                                                 6.0,
                                                                             right:
                                                                                 4.0),
                                                                         child:
-                                                                            new Text(
+                                                                            Text(
                                                                           item.lastReplyTime,
                                                                           style:
-                                                                              new TextStyle(
+                                                                              TextStyle(
                                                                             color:
                                                                                 const Color(0xFFcccccc),
                                                                             fontSize:
@@ -1719,9 +1718,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         color: Color(
                                                                             0xFFf0f0f0),
                                                                         shape:
-                                                                            new StadiumBorder(),
+                                                                            StadiumBorder(),
                                                                         child:
-                                                                            new Container(
+                                                                            Container(
                                                                           width:
                                                                               20.0,
                                                                           height:
@@ -1729,16 +1728,16 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                           alignment:
                                                                               Alignment.center,
                                                                           child:
-                                                                              new Text(
+                                                                              Text(
                                                                             item.number,
                                                                             style:
-                                                                                new TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
+                                                                                TextStyle(fontSize: 9.0, color: Color(0xFFa2a2a2)),
                                                                           ),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  new Container(
+                                                                  Container(
                                                                       padding: EdgeInsets.only(
                                                                           top:
                                                                               5.0),
