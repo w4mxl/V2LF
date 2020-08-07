@@ -26,6 +26,10 @@ class DisplayModel extends ChangeNotifier {
         primarySwatch: _materialColor,
         fontFamily: _fontName,
         brightness: darkTheme ? Brightness.dark : Brightness.light,
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
       );
 
   switchColor(String newColor) {

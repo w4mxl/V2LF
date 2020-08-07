@@ -127,8 +127,9 @@ class TopicListViewState extends State<TopicListView>
                                   right: 20,
                                   bottom: 20,
                                   child: FloatingActionButton(
-                                      mini: true,
-                                      child: Icon(FontAwesomeIcons.angleUp),
+                                      // mini: true,
+                                      child:
+                                          Icon(FontAwesomeIcons.angleDoubleUp),
                                       onPressed: () {
                                         _scrollController.animateTo(0,
                                             duration:
