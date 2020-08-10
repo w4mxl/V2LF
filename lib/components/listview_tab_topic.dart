@@ -127,7 +127,7 @@ class TopicListViewState extends State<TopicListView>
                                   right: 20,
                                   bottom: 20,
                                   child: FloatingActionButton(
-                                      // mini: true,
+                                      heroTag: null,
                                       child:
                                           Icon(FontAwesomeIcons.angleDoubleUp),
                                       onPressed: () {
