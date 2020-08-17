@@ -35,7 +35,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   TextEditingController _2faController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState<String>> _passwordFieldKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> _passwordFieldKey =
+      GlobalKey<FormFieldState<String>>();
 
   FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
@@ -75,15 +76,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               key: _formKey, //设置globalKey，用于后面获取FormState
               autovalidate: false, //开启自动校验
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 40.0),
                 child: Column(
                   children: <Widget>[
                     // 用户名
                     TextFormField(
+                        autofillHints: [AutofillHints.username],
                         autofocus: true,
                         controller: _accountController,
                         textInputAction: TextInputAction.next,
-                        onEditingComplete: () => FocusScope.of(context).requestFocus(passwordTextFieldNode),
+                        onEditingComplete: () => FocusScope.of(context)
+                            .requestFocus(passwordTextFieldNode),
                         decoration: InputDecoration(
                           labelText: S.of(context).account,
 
@@ -96,7 +100,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     SizedBox(
                       height: 18.0,
                     ),
-                    PasswordField(_passwordFieldKey, _pwdController, passwordTextFieldNode, captchaTextFieldNode),
+                    PasswordField(_passwordFieldKey, _pwdController,
+                        passwordTextFieldNode, captchaTextFieldNode),
                     SizedBox(
                       height: 18.0,
                     ),
@@ -106,7 +111,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           child: TextFormField(
                               controller: _captchaController,
                               focusNode: captchaTextFieldNode,
-                              onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
+                              onEditingComplete: () => FocusScope.of(context)
+                                  .requestFocus(FocusNode()),
                               decoration: InputDecoration(
                                 labelText: S.of(context).captcha,
                                 // hintText: S.of(context).enterCaptcha,
@@ -118,7 +124,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         ),
                         Padding(
                             padding: const EdgeInsets.only(left: 6.0),
-                            child: loginFormData != null && loginFormData.bytes.length > 0
+                            child: loginFormData != null &&
+                                    loginFormData.bytes.length > 0
                                 ? GestureDetector(
                                     child: new ClipRRect(
                                       child: Image.memory(
@@ -170,12 +177,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 _loginState = 1;
                               });
 
-                              loginFormData.usernameInput = _accountController.text;
+                              loginFormData.usernameInput =
+                                  _accountController.text;
                               loginFormData.passwordInput = _pwdController.text;
-                              loginFormData.captchaInput = _captchaController.text;
+                              loginFormData.captchaInput =
+                                  _captchaController.text;
                               //var formData = bloc.submit(loginFormData);
                               print(loginFormData.toString());
-                              String loginResult = await DioWeb.loginPost(loginFormData);
+                              String loginResult =
+                                  await DioWeb.loginPost(loginFormData);
                               if (loginResult == "true") {
                                 // 登录成功
                                 // 让登录按钮有完成✅效果
@@ -185,7 +195,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 Timer(Duration(milliseconds: 800), () {
                                   Navigator.of(context).pop(true);
                                   Fluttertoast.showToast(
-                                      msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                      msg: S.of(context).toastLoginSuccess(
+                                          SpHelper.sp.getString(SP_USERNAME)),
                                       timeInSecForIosWeb: 2,
                                       gravity: ToastGravity.CENTER);
                                 });
@@ -204,12 +215,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
-                                                Text('你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
+                                                Text(
+                                                    '你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
                                                 SizedBox(
                                                   height: 10,
                                                 ),
                                                 CupertinoTextField(
-                                                  keyboardType: TextInputType.number,
+                                                  keyboardType:
+                                                      TextInputType.number,
                                                   maxLength: 6,
                                                   placeholder: '验证码',
                                                   controller: _2faController,
@@ -220,26 +233,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                               CupertinoButton(
                                                   child: Text('取消'),
                                                   onPressed: () async {
-                                                    Navigator.pop(contextDialog);
+                                                    Navigator.pop(
+                                                        contextDialog);
                                                     await V2exClient.logout();
                                                   }),
                                               CupertinoButton(
                                                   child: Text('确定'),
                                                   onPressed: () async {
-                                                    bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
+                                                    bool twoFAResult =
+                                                        await DioWeb.twoFALogin(
+                                                            _2faController
+                                                                .text);
                                                     if (twoFAResult) {
-                                                      Navigator.pop(contextDialog);
+                                                      Navigator.pop(
+                                                          contextDialog);
                                                       Fluttertoast.showToast(
-                                                        msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                        msg: S
+                                                            .of(context)
+                                                            .toastLoginSuccess(
+                                                                SpHelper.sp
+                                                                    .getString(
+                                                                        SP_USERNAME)),
                                                         timeInSecForIosWeb: 2,
-                                                        gravity: ToastGravity.CENTER,
+                                                        gravity:
+                                                            ToastGravity.CENTER,
                                                       );
-                                                      Navigator.of(context).pop(true);
+                                                      Navigator.of(context)
+                                                          .pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
                                                         msg: '验证失败，请重新输入验证码',
                                                         timeInSecForIosWeb: 2,
-                                                        gravity: ToastGravity.CENTER,
+                                                        gravity:
+                                                            ToastGravity.CENTER,
                                                       );
                                                     }
                                                   }),
@@ -255,12 +281,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
-                                                Text('你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
+                                                Text(
+                                                    '你的 V2EX 账号已经开启了两步验证，请输入验证码继续'),
                                                 SizedBox(
                                                   height: 10,
                                                 ),
                                                 CupertinoTextField(
-                                                  keyboardType: TextInputType.number,
+                                                  keyboardType:
+                                                      TextInputType.number,
                                                   maxLength: 6,
                                                   placeholder: '验证码',
                                                   controller: _2faController,
@@ -271,26 +299,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                               CupertinoButton(
                                                   child: Text('取消'),
                                                   onPressed: () async {
-                                                    Navigator.pop(contextDialog);
+                                                    Navigator.pop(
+                                                        contextDialog);
                                                     await V2exClient.logout();
                                                   }),
                                               CupertinoButton(
                                                   child: Text('确定'),
                                                   onPressed: () async {
-                                                    bool twoFAResult = await DioWeb.twoFALogin(_2faController.text);
+                                                    bool twoFAResult =
+                                                        await DioWeb.twoFALogin(
+                                                            _2faController
+                                                                .text);
                                                     if (twoFAResult) {
-                                                      Navigator.pop(contextDialog);
+                                                      Navigator.pop(
+                                                          contextDialog);
                                                       Fluttertoast.showToast(
-                                                        msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                                                        msg: S
+                                                            .of(context)
+                                                            .toastLoginSuccess(
+                                                                SpHelper.sp
+                                                                    .getString(
+                                                                        SP_USERNAME)),
                                                         timeInSecForIosWeb: 2,
-                                                        gravity: ToastGravity.CENTER,
+                                                        gravity:
+                                                            ToastGravity.CENTER,
                                                       );
-                                                      Navigator.of(context).pop(true);
+                                                      Navigator.of(context)
+                                                          .pop(true);
                                                     } else {
                                                       Fluttertoast.showToast(
                                                         msg: '验证失败，请重新输入验证码',
                                                         timeInSecForIosWeb: 2,
-                                                        gravity: ToastGravity.CENTER,
+                                                        gravity:
+                                                            ToastGravity.CENTER,
                                                       );
                                                     }
                                                   }),
@@ -324,7 +365,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           // 注册 -> 跳转到注册web页面
                           onTap: () => launch(
                             "https://www.v2ex.com/signup",
-                            statusBarBrightness: Platform.isIOS ? Brightness.light : null,
+                            statusBarBrightness:
+                                Platform.isIOS ? Brightness.light : null,
                           ),
                         ),
                         InkWell(
@@ -335,7 +377,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           // 忘记密码 -> 跳转到重置密码web页面
                           onTap: () => launch(
                             "https://www.v2ex.com/forgot",
-                            statusBarBrightness: Platform.isIOS ? Brightness.light : null,
+                            statusBarBrightness:
+                                Platform.isIOS ? Brightness.light : null,
                           ),
                         ),
                       ],
@@ -344,11 +387,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       height: 12.0,
                     ),
                     RaisedButton.icon(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0)),
                       onPressed: () async {
                         if (loginFormData != null) {
-                          var future = Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => WebviewPage('https://www.v2ex.com/auth/google?once=' + loginFormData.once),
+                          var future =
+                              Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => WebviewPage(
+                                'https://www.v2ex.com/auth/google?once=' +
+                                    loginFormData.once),
                           ));
                           future.then((value) {
                             // 直接close登录页则value为null；登录成功 value 为 true
@@ -357,7 +404,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             }
                           });
                         } else {
-                          Fluttertoast.showToast(msg: '登录遇到一些问题...', timeInSecForIosWeb: 2, gravity: ToastGravity.CENTER);
+                          Fluttertoast.showToast(
+                              msg: '登录遇到一些问题...',
+                              timeInSecForIosWeb: 2,
+                              gravity: ToastGravity.CENTER);
                         }
                       },
                       icon: Icon(
@@ -391,7 +441,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void animateButton() {
     double initialWidth = _globalKey.currentContext.size.width;
 
-    _controller = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+    _controller =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
     _animation = Tween(begin: 0.0, end: 1).animate(_controller)
       ..addListener(() {
@@ -418,7 +469,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 // 去除拖拽时的波纹效果
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildViewportChrome(BuildContext context, Widget child, AxisDirection axisDirection) {
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
 }
@@ -428,7 +480,8 @@ class PasswordField extends StatefulWidget {
   final TextEditingController _pwdController;
   final FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
-  PasswordField(this.fieldKey, this._pwdController, this.passwordTextFieldNode, this.captchaTextFieldNode);
+  PasswordField(this.fieldKey, this._pwdController, this.passwordTextFieldNode,
+      this.captchaTextFieldNode);
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -440,11 +493,13 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        autofillHints: [AutofillHints.password],
         key: widget.fieldKey,
         controller: widget._pwdController,
         focusNode: widget.passwordTextFieldNode,
         textInputAction: TextInputAction.next,
-        onEditingComplete: () => FocusScope.of(context).requestFocus(widget.captchaTextFieldNode),
+        onEditingComplete: () =>
+            FocusScope.of(context).requestFocus(widget.captchaTextFieldNode),
         decoration: InputDecoration(
             labelText: S.of(context).password,
             // hintText: S.of(context).enterPassword,
