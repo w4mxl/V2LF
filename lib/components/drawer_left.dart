@@ -265,7 +265,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.whatshot),
                 title: new Text(S.of(context).history),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
@@ -276,7 +276,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.history),
                 title: new Text(S.of(context).recentRead),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -329,7 +329,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.search),
                 title: new Text(S.of(context).search),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   showSearch(
                       context: context, delegate: SearchSov2exDelegate());
                 },
@@ -350,7 +350,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ),
                 onTap: () {
                   SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
@@ -426,7 +426,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.child_care),
                 title: new Text(S.of(context).following),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
@@ -438,7 +438,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.add),
                 title: new Text(S.of(context).create),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
@@ -453,7 +453,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 leading: new Icon(Icons.settings),
                 title: new Text(S.of(context).settings),
                 onTap: () {
-                  Navigator.pop(context);
+                  if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
                       new MaterialPageRoute(

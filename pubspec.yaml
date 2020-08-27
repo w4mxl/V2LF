@@ -61,6 +61,7 @@ dependencies:
   provider: ^4.0.4 # https://pub.dev/packages/provider
   device_info: ^0.4.1+5
   like_button: ^0.2.0
+  responsive_builder: ^0.2.0+2
 
 dev_dependencies:
   flutter_test:

@@ -25,6 +25,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import 'generated/i18n.dart';
 import 'utils/event_bus.dart';
@@ -191,6 +192,67 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       ],
       child: Consumer2<DisplayModel, LocaleModel>(
         builder: (context, displayModel, localeModel, _) {
+          var homeMobilePortrait = Scaffold(
+              appBar: AppBar(
+                title: TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  indicatorColor: Colors.white,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: tabs.map((TabModel choice) {
+                    return Tab(
+                      text: choice.title,
+                    );
+                  }).toList(),
+                ),
+                elevation:
+                    defaultTargetPlatform == TargetPlatform.android ? 5.0 : 0.0,
+              ),
+              body: TabBarView(
+                controller: _tabController,
+                children: tabs.map((TabModel choice) {
+                  return TopicListView(choice.key);
+                }).toList(),
+              ),
+              drawer: DrawerLeft());
+
+          var homeTablet = Scaffold(
+            body: Row(
+              children: [
+                DrawerLeft(),
+                VerticalDivider(
+                  color: Colors.black,
+                  width: 0,
+                ),
+                Expanded(
+                    child: Scaffold(
+                  appBar: AppBar(
+                    title: TabBar(
+                      controller: _tabController,
+                      isScrollable: true,
+                      indicatorColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      tabs: tabs.map((TabModel choice) {
+                        return Tab(
+                          text: choice.title,
+                        );
+                      }).toList(),
+                    ),
+                    elevation: defaultTargetPlatform == TargetPlatform.android
+                        ? 5.0
+                        : 0.0,
+                  ),
+                  body: TabBarView(
+                    controller: _tabController,
+                    children: tabs.map((TabModel choice) {
+                      return TopicListView(choice.key);
+                    }).toList(),
+                  ),
+                ))
+              ],
+            ),
+          );
+
           return MaterialApp(
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
@@ -214,30 +276,18 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: child),
             home: WillPopScope(
-              child: Scaffold(
-                  appBar: AppBar(
-                    title: TabBar(
-                      controller: _tabController,
-                      isScrollable: true,
-                      indicatorColor: Colors.white,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      tabs: tabs.map((TabModel choice) {
-                        return Tab(
-                          text: choice.title,
-                        );
-                      }).toList(),
-                    ),
-                    elevation: defaultTargetPlatform == TargetPlatform.android
-                        ? 5.0
-                        : 0.0,
-                  ),
-                  body: TabBarView(
-                    controller: _tabController,
-                    children: tabs.map((TabModel choice) {
-                      return TopicListView(choice.key);
-                    }).toList(),
-                  ),
-                  drawer: DrawerLeft()),
+              child: ScreenTypeLayout(
+                breakpoints:
+                    ScreenBreakpoints(desktop: 900, tablet: 720, watch: 250),
+                mobile: OrientationLayoutBuilder(
+                  portrait: (context) => homeMobilePortrait,
+                  landscape: (context) =>
+                      MediaQuery.of(context).size.width > 720
+                          ? homeTablet
+                          : homeMobilePortrait,
+                ),
+                tablet: homeTablet,
+              ),
               onWillPop: () async {
                 if (_lastPressedAt == null ||
                     DateTime.now().difference(_lastPressedAt) >

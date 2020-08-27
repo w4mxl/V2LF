@@ -77,13 +77,18 @@ class ExpansionTileDrawerNodes extends StatefulWidget {
   final bool initiallyExpanded;
 
   @override
-  _ExpansionTileDrawerNodesState createState() => _ExpansionTileDrawerNodesState();
+  _ExpansionTileDrawerNodesState createState() =>
+      _ExpansionTileDrawerNodesState();
 }
 
-class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeOutTween = CurveTween(curve: Curves.easeOut);
-  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
+class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes>
+    with SingleTickerProviderStateMixin {
+  static final Animatable<double> _easeOutTween =
+      CurveTween(curve: Curves.easeOut);
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -109,9 +114,11 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> wit
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
-    _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
+    _backgroundColor =
+        _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
-    _isExpanded = PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+    _isExpanded =
+        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -136,7 +143,8 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> wit
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null) widget.onExpansionChanged(_isExpanded);
+    if (widget.onExpansionChanged != null)
+      widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -159,8 +167,9 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes> wit
             child: ListTile(
               onTap: () {
                 // 跳转到节点组页面
-                Navigator.pop(context);
-                Navigator.push(context, new MaterialPageRoute(builder: (context) => NodesPage()));
+                if (Navigator.canPop(context)) Navigator.pop(context);
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => NodesPage()));
               },
               leading: widget.leading,
               title: widget.title,
