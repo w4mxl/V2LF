@@ -79,10 +79,14 @@ class ExpansionTileDrawerFav extends StatefulWidget {
   _ExpansionTileDrawerFavState createState() => _ExpansionTileDrawerFavState();
 }
 
-class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav> with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeOutTween = CurveTween(curve: Curves.easeOut);
-  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
+class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav>
+    with SingleTickerProviderStateMixin {
+  static final Animatable<double> _easeOutTween =
+      CurveTween(curve: Curves.easeOut);
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -108,9 +112,11 @@ class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav> with Si
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
     _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
     _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
-    _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
+    _backgroundColor =
+        _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
-    _isExpanded = PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+    _isExpanded =
+        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -135,7 +141,8 @@ class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav> with Si
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null) widget.onExpansionChanged(_isExpanded);
+    if (widget.onExpansionChanged != null)
+      widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -159,8 +166,11 @@ class _ExpansionTileDrawerFavState extends State<ExpansionTileDrawerFav> with Si
               enabled: widget.isLogin,
               onTap: () {
                 // 跳转到"收藏"：主题、节点
-                Navigator.pop(context);
-                Navigator.push(context, new MaterialPageRoute(builder: (context) => new FavouritePage()));
+                if (Navigator.canPop(context)) Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new FavouritePage()));
               },
               leading: widget.leading,
               title: widget.title,
