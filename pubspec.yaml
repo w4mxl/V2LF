@@ -24,7 +24,7 @@ dependencies:
   dio_cookie_manager: ^1.0.0 # https://pub.dev/packages/dio_cookie_manager#-installing-tab-
   dio_http_cache: ^0.2.6 # https://github.com/hurshi/dio-http-cache
   flutter_html: ^1.0.2 # https://pub.dev/packages/flutter_html#-installing-tab-
-  fluttertoast: ^4.0.1 # https://pub.dartlang.org/packages/fluttertoast
+  fluttertoast: ^7.0.4 # https://pub.dartlang.org/packages/fluttertoast
   path_provider: ^1.6.8 # https://pub.dartlang.org/packages/path_provider#-installing-tab-
   sqflite: ^1.3.0+1 # https://pub.dev/packages/sqflite#-installing-tab-
   # ovprogresshud: ^0.2.5 # https://github.com/mjl0602/OVProgressHUD
