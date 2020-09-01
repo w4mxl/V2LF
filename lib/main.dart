@@ -192,7 +192,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       ],
       child: Consumer2<DisplayModel, LocaleModel>(
         builder: (context, displayModel, localeModel, _) {
-          var homeMobilePortrait = Scaffold(
+          var homeMobile = Scaffold(
               appBar: AppBar(
                 title: TabBar(
                   controller: _tabController,
@@ -279,13 +279,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               child: ScreenTypeLayout(
                 breakpoints:
                     ScreenBreakpoints(desktop: 900, tablet: 720, watch: 250),
-                mobile: OrientationLayoutBuilder(
-                  portrait: (context) => homeMobilePortrait,
-                  landscape: (context) =>
-                      MediaQuery.of(context).size.width > 720
-                          ? homeTablet
-                          : homeMobilePortrait,
-                ),
+                mobile: homeMobile,
                 tablet: homeTablet,
               ),
               onWillPop: () async {
