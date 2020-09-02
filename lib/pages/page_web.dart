@@ -42,8 +42,9 @@ class _WebviewPageState extends State<WebviewPage> {
     // 请手动点击 "Sign in with Google"
     // 输入完账号密码后请勿关闭网页, 加载成功后会自动关闭
     Fluttertoast.showToast(
-        msg: '请确保能正常访问 Google\n请手动点击 "Sign in with Google"\n输入完账号密码后请勿关闭网页, 加载成功后会自动关闭',
-        timeInSecForIosWeb: 6,
+        msg:
+            '请确保能正常访问 Google\n请手动点击 "Sign in with Google"\n输入完账号密码后请勿关闭网页, 加载成功后会自动关闭',
+        timeInSecForIosWeb: 10,
         gravity: ToastGravity.CENTER);
 
     print(widget.webUrl);
@@ -71,17 +72,21 @@ class _WebviewPageState extends State<WebviewPage> {
 
             //{"V2EX_LANG: zhcn,  _ga: GA1.2.1289876692.1572076174,  _gid: GA1.2.1961659963.1572076174,  _gat: 1,
             //    A2: \"2|1:0|10:1572080066|2:A2|56:M2IyZmU2Y2Q3ZWRjMzk0MjczYjk5YzdkY2FkNDZlZTRkNmJiNjgxNg==|c51d1ad4f4d2fcdb0175739e8232027120152f8d82d7467360adabed7f8f807f\""}
-            Cookie cookie = new Cookie(m.keys.elementAt(0), m.values.elementAt(0));
+            Cookie cookie =
+                new Cookie(m.keys.elementAt(0), m.values.elementAt(0));
             print("A2 cookie: " + cookie.toString());
             String cookiePath = await Utils.getCookiePath();
             PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
-            cookieJar.saveFromResponse(Uri.parse("https://www.v2ex.com/"), <Cookie>[cookie]);
+            cookieJar.saveFromResponse(
+                Uri.parse("https://www.v2ex.com/"), <Cookie>[cookie]);
 
             // 获取用户信息，保存
             String result = await DioWeb.getUserInfo();
             if (result == "true") {
               Fluttertoast.showToast(
-                  msg: S.of(context).toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
+                  msg: S
+                      .of(context)
+                      .toastLoginSuccess(SpHelper.sp.getString(SP_USERNAME)),
                   timeInSecForIosWeb: 2,
                   gravity: ToastGravity.CENTER);
               Navigator.of(context).pop(true);
@@ -138,16 +143,21 @@ class _WebviewPageState extends State<WebviewPage> {
 
   /// 重写 flutter_webview_plugin 库 base.dart 218 行的 getCookies 方法
   Future<Map<String, String>> getCookies() async {
-    final cookiesString = await flutterWebViewPlugin.evalJavascript('document.cookie');
+    final cookiesString =
+        await flutterWebViewPlugin.evalJavascript('document.cookie');
     print("wml:\n$cookiesString");
     // 移除多余的空格和 " \ 符号
-    final cookiesStringNew = cookiesString.replaceAll('"', '').replaceAll('\\', '').replaceAll(' ', '');
+    final cookiesStringNew = cookiesString
+        .replaceAll('"', '')
+        .replaceAll('\\', '')
+        .replaceAll(' ', '');
     print("wmllll:\n$cookiesStringNew");
     final cookies = <String, String>{};
 
     if (cookiesStringNew?.isNotEmpty == true) {
       cookiesStringNew.split(';').forEach((String cookie) {
-        final split = cookie.replaceFirst('=', 'wmlwmlwmlwml').split('wmlwmlwmlwml');
+        final split =
+            cookie.replaceFirst('=', 'wmlwmlwmlwml').split('wmlwmlwmlwml');
         if (split[0] == "A2") {
           cookies[split[0]] = split[1];
         }

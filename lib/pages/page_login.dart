@@ -349,6 +349,27 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             }
                           }
                         },
+                        onLongPress: () {
+                          if (loginFormData != null) {
+                            var future =
+                                Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => WebviewPage(
+                                  'https://www.v2ex.com/auth/google?once=' +
+                                      loginFormData.once),
+                            ));
+                            future.then((value) {
+                              // 直接close登录页则value为null；登录成功 value 为 true
+                              if (value != null && value) {
+                                Navigator.of(context).pop(true);
+                              }
+                            });
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: '登录遇到一些问题...',
+                                timeInSecForIosWeb: 2,
+                                gravity: ToastGravity.CENTER);
+                          }
+                        },
                       ),
                     ),
                     SizedBox(
@@ -382,39 +403,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 12.0,
-                    ),
-                    RaisedButton.icon(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0)),
-                      onPressed: () async {
-                        if (loginFormData != null) {
-                          var future =
-                              Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => WebviewPage(
-                                'https://www.v2ex.com/auth/google?once=' +
-                                    loginFormData.once),
-                          ));
-                          future.then((value) {
-                            // 直接close登录页则value为null；登录成功 value 为 true
-                            if (value != null && value) {
-                              Navigator.of(context).pop(true);
-                            }
-                          });
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: '登录遇到一些问题...',
-                              timeInSecForIosWeb: 2,
-                              gravity: ToastGravity.CENTER);
-                        }
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.google,
-                        size: 16.0,
-                      ),
-                      label: Text("Google"),
                     ),
                   ],
                 ),
