@@ -22,16 +22,26 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 - 只看楼主
 
 
-[![Get it from iTunes](https://upload.wikimedia.org/wikipedia/commons/f/f8/Download_on_the_App_Store_Badge_NL_RGB_blk.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8) [![Get it on Google Play](https://upload.wikimedia.org/wikipedia/commons/archive/7/78/20190802123605%21Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
+ 🆓**Completely Free**
+- [iOS TestFlight (1500 位上限)](https://testflight.apple.com/join/cvx4MQuh)
 
-[iOS TestFlight](https://testflight.apple.com/join/cvx4MQuh)
+- [CoolApk](https://www.coolapk.com/apk/221879)
 
-[酷安](https://www.coolapk.com/apk/221879)
+ 💹**Paid Support ($1.99)**
+- [![Get it from iTunes](https://upload.wikimedia.org/wikipedia/commons/f/f8/Download_on_the_App_Store_Badge_NL_RGB_blk.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8)
+
+- [![Get it on Google Play](https://upload.wikimedia.org/wikipedia/commons/archive/7/78/20190802123605%21Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
 
 ## 截图预览
 
+- iPhone 上
 ![](https://i.loli.net/2019/08/19/NQVUa8p13GZdSxt.jpg)
 ![](https://i.loli.net/2019/08/19/CTg61O7XNWtb9V2.jpg)
+
+- iPad 上 (我最常用的方式)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gic60gzt63j31410u0jwj.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gic61arpirj316y0u0djo.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gic61nzclgj316y0u0jtq.jpg)
 
 
 ## 编译运行
@@ -71,12 +81,12 @@ flutter.buildMode=release
 
 ### 开发环境
 
-这个项目目前是在 Flutter Dev 分支 + Dart 2 环境下开发的，每次 Flutter SDK 升级后也会做相应的适配和兼容。
+这个项目目前是在 Flutter `beta` 分支环境下开发的，每次 Flutter SDK 升级后也会做相应的适配和兼容。
 想正常编译运行此项目，请先确定您已经正确配置好 Flutter 开发环境。
 
 ## 后续开发
 
-如您对此项目进展有兴趣，请通过关注 [trello](https://trello.com/b/YPOJsfQx/v2lf) 来追踪最新动态。
+如果您对此项目的后续进展有兴趣，请通过关注这个 [notion 页面](https://www.notion.so/f6328282617a4b76b56ceeef83883a3e?v=739b62f32b7e4f58a81b8ace87105b3a) 来追踪最新动态。你也可以在那个页面留下您的评论或者建议。
 
 ## 相关链接
 
