@@ -22,12 +22,12 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 - 只看楼主
 
 
- 🆓**Completely Free**
+ 🆓 **Completely Free**
 - [iOS TestFlight (1500 位上限)](https://testflight.apple.com/join/cvx4MQuh)
 
 - [CoolApk](https://www.coolapk.com/apk/221879)
 
- 💹**Paid Support ($1.99)**
+ 💹 **Paid Support (¥12)**
 - [![Get it from iTunes](https://upload.wikimedia.org/wikipedia/commons/f/f8/Download_on_the_App_Store_Badge_NL_RGB_blk.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8)
 
 - [![Get it on Google Play](https://upload.wikimedia.org/wikipedia/commons/archive/7/78/20190802123605%21Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
@@ -93,6 +93,13 @@ flutter.buildMode=release
 - [邀请体验： V2LF - 用 Flutter 开发的 V2EX App](https://www.v2ex.com/t/548936#reply169)
 - [V2LF - 使用 Flutter 开发的开源的 V2EX 客户端](https://www.v2ex.com/t/563913#reply57)
 - [V2LF - 更新支持了 iOS（iPadOS）13 / Android 10 Dark Mode](https://www.v2ex.com/t/613127)
+
+## 我想赞赏
+
+如果你喜欢用 `V2LF` ，或者感觉这个项目对你有帮助，可以点右上角 ⭐Star 支持一下，谢谢 ^_^ <br />
+你 happy 的话也可以扫描下面的二维码，请我吃一个棒冰，瞬间 double happy ；）
+
+<p align="center"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gid7jerzz1j30m40xkaaf.jpg"  width="240" ></p>
 
 ## 代码许可
 

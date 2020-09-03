@@ -12,12 +12,12 @@ Language: [English](README.md) | [中文简体](README-ZH.md)
 **'V2LF' means 'way to love flutter'.**
 The original intention of developing this app is to learn flutter.
 
-🆓**Completely Free**
+🆓 **Completely Free**
 - [iOS TestFlight (1500 maximum number of people)](https://testflight.apple.com/join/cvx4MQuh)
 
 - [CoolApk](https://www.coolapk.com/apk/221879)
 
-💹**Paid Support ($1.99)**
+💹 **Paid Support ($1.99)**
 - [![Get it from iTunes](https://upload.wikimedia.org/wikipedia/commons/f/f8/Download_on_the_App_Store_Badge_NL_RGB_blk.svg)](https://apps.apple.com/cn/app/v2lf/id1455778208?mt=8)
 
 - [![Get it on Google Play](https://upload.wikimedia.org/wikipedia/commons/archive/7/78/20190802123605%21Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=io.github.w4mxl.v2lf)
@@ -83,6 +83,14 @@ If you are interested in this project, please pay attention to the project progr
 - [邀请体验： V2LF - 用 Flutter 开发的 V2EX App](https://www.v2ex.com/t/548936#reply169)
 - [V2LF - 使用 Flutter 开发的开源的 V2EX 客户端](https://www.v2ex.com/t/563913#reply57)
 - [V2LF - 更新支持了 iOS（iPadOS）13 / Android 10 Dark Mode](https://www.v2ex.com/t/613127)
+
+## Reward
+
+If you like to use `V2LF`, or feel that this project is helpful to you, you can click on the upper right corner ⭐Star to support me, thank you ^_^ <br />
+
+If you are happy, you can also scan the QR code below and reward me to have a pop-ice and double happy instantly ; )
+
+<p align="center"><img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gid7jerzz1j30m40xkaaf.jpg"  width="240" ></p>
 
 ## License
 
