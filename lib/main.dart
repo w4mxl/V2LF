@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -31,11 +32,11 @@ import 'generated/i18n.dart';
 import 'utils/event_bus.dart';
 
 // Must be top-level function
-_parseAndDecode(String response) {
+dynamic _parseAndDecode(String response) {
   return jsonDecode(response);
 }
 
-parseJson(String text) {
+Future parseJson(String text) {
   return compute(_parseAndDecode, text);
 }
 
@@ -44,8 +45,9 @@ void main() async {
 
   // 配置 dio
   // add interceptors
-  String cookiePath = await Utils.getCookiePath();
-  PersistCookieJar cookieJar = PersistCookieJar(dir: cookiePath); // 持久化 cookie
+  var cookiePath = await Utils.getCookiePath();
+  var cookieJar = PersistCookieJar(
+      ignoreExpires: true, storage: FileStorage(cookiePath)); // 持久化 cookie
   dio.interceptors
     ..add(CookieManager(cookieJar))
     ..add(LogInterceptor())
@@ -62,6 +64,18 @@ void main() async {
   dio.options.validateStatus = (int status) {
     return status >= 200 && status < 300 || status == 304 || status == 302;
   };
+  (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+      (client) {
+    // config the http client
+    client.findProxy = (uri) {
+      // proxy all request to localhost:8888
+      return 'PROXY localhost:7890';
+      // 不设置代理 TODO 打包前关闭代理
+      // return 'DIRECT';
+    };
+    // you can also create a HttpClient to dio
+    // return HttpClient();
+  };
 
   // 实例 sp
   SpHelper.sp = await SharedPreferences.getInstance();
@@ -70,7 +84,7 @@ void main() async {
 
   // 在 Android 上设置沉浸式状态栏
   if (Platform.isAndroid) {
-    SystemUiOverlayStyle systemUiOverlayStyle =
+    var systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
@@ -123,7 +137,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     });
   }
 
-  _init() {
+  void _init() {
     _loadCustomTabs();
     _initializeNotify();
     // 如果sp中存有用户ID，去验证登录状态是否过期 -> 领取每日奖励
@@ -132,11 +146,11 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     Utils.deviceInfo();
   }
 
-  _loadCustomTabs() {
-    List<TabModel> allTabs = SpHelper.getMainTabs();
+  void _loadCustomTabs() {
+    var allTabs = SpHelper.getMainTabs();
 
     if (allTabs != null) {
-      List<TabModel> mainTabs = [];
+      var mainTabs = <TabModel>[];
 
       for (var tab in allTabs) {
         if (tab.checked) {
@@ -153,7 +167,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
     }
   }
 
-  _initializeNotify() {
+  void _initializeNotify() {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var android = AndroidInitializationSettings('ic_stat_v');
     var ios = IOSInitializationSettings();
@@ -167,7 +181,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       debugPrint('notification payload: ' + payload);
     }
 
-    SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
+    await SpHelper.sp.setString(SP_NOTIFICATION_COUNT, '');
 
     await navigatorKey.currentState.push(
       MaterialPageRoute(builder: (context) => NotificationPage()),
@@ -276,12 +290,6 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
                 child: child),
             home: WillPopScope(
-              child: ScreenTypeLayout(
-                breakpoints:
-                    ScreenBreakpoints(desktop: 900, tablet: 720, watch: 250),
-                mobile: homeMobile,
-                tablet: homeTablet,
-              ),
               onWillPop: () async {
                 if (_lastPressedAt == null ||
                     DateTime.now().difference(_lastPressedAt) >
@@ -293,6 +301,12 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 }
                 return true;
               },
+              child: ScreenTypeLayout(
+                breakpoints:
+                    ScreenBreakpoints(desktop: 900, tablet: 720, watch: 250),
+                mobile: homeMobile,
+                tablet: homeTablet,
+              ),
             ),
           );
         },
