@@ -10,6 +10,7 @@ import 'package:flutter_app/states/model_locale.dart';
 import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
+
 // import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
@@ -459,33 +460,8 @@ class _SettingPageState extends State<SettingPage> {
                       Icons.flag,
                     ),
                     title: new Text(S.of(context).versions),
-                    onTap: () {
-                      // TODO
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => WhatsNewPage.changelog(
-                      //       title: Text(
-                      //         "What's New",
-                      //         textScaleFactor: 1.2,
-                      //         textAlign: TextAlign.center,
-                      //         style: TextStyle(
-                      //           // Text Style Needed to Look like iOS 11
-                      //           fontSize: 22.0,
-                      //           fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //       buttonText: Text(
-                      //         'Close',
-                      //         //textScaleFactor: textScaleFactor,
-                      //         style: TextStyle(color: Colors.white),
-                      //       ),
-                      //       buttonColor: Theme.of(context).accentColor,
-                      //     ),
-                      //     fullscreenDialog: true,
-                      //   ),
-                      // );
-                    },
+                    onTap: () => Utils.launchURL(
+                        'https://mulin.notion.site/V2LF-App-CHANGELOG-a1a9fa4984d947bc96084cebd66cbcb3'),
                     trailing: Icon(
                       Icons.arrow_forward_ios,
                       size: 16.0,
