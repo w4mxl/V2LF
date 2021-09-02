@@ -11,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webfeed/webfeed.dart';
+import 'package:html/dom.dart' as dom;
 
 /// @author: wml
 /// @date  : 2019-05-21 11:41
@@ -82,7 +83,8 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
                           color: Theme.of(context).accentColor,
                         )
                       },
-                      onLinkTap: (url) {
+                      onLinkTap: (String url, RenderContext renderContext,
+                          Map<String, String> attributes, dom.Element element) {
                         // todo
                         if (UrlHelper.canLaunchInApp(context, url)) {
                           return;
@@ -111,7 +113,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
     // Atom feed
     Utf8Decoder utf8decoder = Utf8Decoder(); // 需要转码一下，不然中文出现乱码
     return get(
-      "https://v2exday.com/allinone.xml",
+      Uri.parse("https://v2exday.com/allinone.xml"),
     ).then((response) {
       return utf8decoder.convert(response.bodyBytes);
     }).then((bodyString) {

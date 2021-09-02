@@ -42,21 +42,21 @@ class DioWeb {
   // Dio response error 统一处理
   static void formatError(DioError e) {
     switch (e.type) {
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
         break;
-      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.connectTimeout:
         Fluttertoast.showToast(msg: '连接超时...', gravity: ToastGravity.CENTER);
         break;
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.sendTimeout:
         Fluttertoast.showToast(msg: '请求超时...', gravity: ToastGravity.CENTER);
         break;
-      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.receiveTimeout:
         Fluttertoast.showToast(msg: '响应超时...', gravity: ToastGravity.CENTER);
         break;
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         Fluttertoast.showToast(msg: '出现异常...', gravity: ToastGravity.CENTER);
         break;
-      case DioErrorType.DEFAULT:
+      case DioErrorType.other:
         Fluttertoast.showToast(msg: '未知错误...', gravity: ToastGravity.CENTER);
         break;
     }
@@ -139,7 +139,7 @@ class DioWeb {
   // 主页获取特定节点下的topics  [ 最近的主题 https://www.v2ex.com/recent?p=1 ]，p > 0 则通过 recent 获取数据
   static Future<List<TabTopicItem>> getTopicsByTabKey(
       String tabKey, int p) async {
-    List<TabTopicItem> topics = new List<TabTopicItem>();
+    var topics = <TabTopicItem>[];
 
     var response;
     if (tabKey == 'recent') {
@@ -174,14 +174,14 @@ class DioWeb {
         eventBus.emit(MyEventHasNewNotification, unreadNumber);
       }
 
-      SpHelper.sp
+      await SpHelper.sp
           .setString(SP_NOTIFICATION_COUNT, notificationInfo.split(' ')[0]);
     }
 
     var aRootNode = tree.xpath("//*[@class='cell item']");
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
-        TabTopicItem item = new TabTopicItem();
+        var item = TabTopicItem();
         // //*[@id="Wrapper"]/div/div[3]/div[3]/table/tbody/tr/td[3]/span[1]/strong/a
         item.memberId =
             aNode.xpath("/table/tr/td[3]/span[1]/strong/a/text()")[0].name;
@@ -398,7 +398,7 @@ class DioWeb {
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
-      print(e.response.request);
+      // print(e.response.request);
       return false;
     }
   }
@@ -448,7 +448,7 @@ class DioWeb {
     } on DioError catch (e) {
       print(e.response.data);
       print(e.response.headers);
-      print(e.response.request);
+      // print(e.response.request);
       return '主题发布失败';
     }
   }
@@ -575,7 +575,7 @@ class DioWeb {
       //cookieJar.deleteAll();
       print(e.response.data);
       print(e.response.headers);
-      print(e.response.request);
+      // print(e.response.request);
       return "false";
     }
   }
@@ -623,7 +623,7 @@ class DioWeb {
       // todo 判断用户是否开启了两步验证
 
       // 需要两步验证
-      if (response.request.path == "/2fa") {
+      if (response.requestOptions.path == "/2fa") {
         var tree = ETree.fromString(response.data);
         // //*[@id="Wrapper"]/div/div[1]/div[2]/form/table/tbody/tr[3]/td[2]/input[1]
         String once = tree

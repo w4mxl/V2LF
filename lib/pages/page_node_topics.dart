@@ -23,6 +23,7 @@ import 'package:flutter_html/style.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:html/dom.dart' as dom;
 
 class NodeTopics extends StatefulWidget {
   final String nodeId;
@@ -233,7 +234,8 @@ class _NodeTopicsState extends State<NodeTopics> {
                   // customTextAlign: (node) {
                   //   return TextAlign.center;
                   // },
-                  onLinkTap: (url) {
+                  onLinkTap: (String url, RenderContext renderContext,
+                      Map<String, String> attributes, dom.Element element) {
                     // todo 等 onLinkTap 支持传递 text 时，要调整
                     if (UrlHelper.canLaunchInApp(context, url)) {
                       return;

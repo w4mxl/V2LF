@@ -18,6 +18,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:html/dom.dart' as dom;
 
 // 通知列表页面
 class NotificationsListView extends StatefulWidget {
@@ -155,7 +156,7 @@ class TopicItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new InkWell(
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,
@@ -225,7 +226,10 @@ class TopicItemView extends StatelessWidget {
                                 color: Theme.of(context).accentColor,
                                 textDecoration: TextDecoration.none)
                           },
-                          onLinkTap: (url) {
+                          onLinkTap: (String url,
+                              RenderContext renderContext,
+                              Map<String, String> attributes,
+                              dom.Element element) {
                             // todo
                             if (UrlHelper.canLaunchInApp(context, url)) {
                               return;
@@ -254,7 +258,10 @@ class TopicItemView extends StatelessWidget {
                                   color: Theme.of(context).accentColor,
                                   textDecoration: TextDecoration.none),
                             },
-                            onLinkTap: (url) {
+                            onLinkTap: (String url,
+                                RenderContext renderContext,
+                                Map<String, String> attributes,
+                                dom.Element element) {
                               // todo
                               if (UrlHelper.canLaunchInApp(context, url)) {
                                 return;

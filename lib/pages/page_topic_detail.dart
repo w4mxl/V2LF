@@ -32,6 +32,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart'
     as dom; // Contains DOM related classes for extracting data from elements
+import 'package:html/dom.dart' as dom;
 
 //final key = GlobalKey<_TopicDetailViewState>();
 
@@ -708,8 +709,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                   // 详情view
                   detailCard(context),
                   // 评论view
-                  if (_detailModel != null)
-                    commentCard(_select)
+                  if (_detailModel != null) commentCard(_select)
                 ],
               ),
               controller: _scrollController,
@@ -904,14 +904,19 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         textDecoration: TextDecoration.underline,
                       )
                     },
-                    onLinkTap: (url) {
+                    onLinkTap: (String url, RenderContext renderContext,
+                        Map<String, String> attributes, dom.Element element) {
                       // todo
                       if (UrlHelper.canLaunchInApp(context, url)) {
                         return;
                       }
                       Utils.launchURL(url);
                     },
-                    onImageTap: (url) => openImageDialog(url),
+                    onImageTap: (String url,
+                            RenderContext renderContext,
+                            Map<String, String> attributes,
+                            dom.Element element) =>
+                        openImageDialog(url),
                   ),
                 )
               : Center(
@@ -980,14 +985,17 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                     textDecoration: TextDecoration.underline,
                   )
                 },
-                onLinkTap: (url) {
+                onLinkTap: (String url, RenderContext renderContext,
+                    Map<String, String> attributes, dom.Element element) {
                   // todo
                   if (UrlHelper.canLaunchInApp(context, url)) {
                     return;
                   }
                   Utils.launchURL(url);
                 },
-                onImageTap: (url) => openImageDialog(url),
+                onImageTap: (String url, RenderContext renderContext,
+                        Map<String, String> attributes, dom.Element element) =>
+                    openImageDialog(url),
               ),
             ],
           ),
@@ -1283,7 +1291,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                         .favorite,
                                                                     color: Colors
                                                                             .red[
-                                                                        100], // Color(0xFFcccccc)
+                                                                        100],
+                                                                    // Color(0xFFcccccc)
                                                                     size: 14.0,
                                                                   ),
                                                                   SizedBox(
@@ -1349,7 +1358,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                       .accentColor,
                                                                 )
                                                               },
-                                                              onLinkTap: (url) {
+                                                              onLinkTap: (String
+                                                                      url,
+                                                                  RenderContext
+                                                                      renderContext,
+                                                                  Map<String,
+                                                                          String>
+                                                                      attributes,
+                                                                  dom.Element
+                                                                      element) {
                                                                 // todo
                                                                 if (UrlHelper
                                                                     .canLaunchInApp(
@@ -1367,7 +1384,15 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                 Utils.launchURL(
                                                                     url);
                                                               },
-                                                              onImageTap: (url) =>
+                                                              onImageTap: (String
+                                                                          url,
+                                                                      RenderContext
+                                                                          renderContext,
+                                                                      Map<String,
+                                                                              String>
+                                                                          attributes,
+                                                                      dom.Element
+                                                                          element) =>
                                                                   openImageDialog(
                                                                       url),
                                                             )),
@@ -1545,7 +1570,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                 Theme.of(context).accentColor,
                                           )
                                         },
-                                        onLinkTap: (url) {
+                                        onLinkTap: (String url,
+                                            RenderContext renderContext,
+                                            Map<String, String> attributes,
+                                            dom.Element element) {
                                           // todo
                                           if (UrlHelper.canLaunchInApp(
                                               context, url)) {
@@ -1699,7 +1727,8 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                                                               Widget>[
                                                                             Icon(
                                                                               Icons.favorite,
-                                                                              color: Colors.red[100], // Color(0xFFcccccc)
+                                                                              color: Colors.red[100],
+                                                                              // Color(0xFFcccccc)
                                                                               size: 14.0,
                                                                             ),
                                                                             SizedBox(width: 2.0),
@@ -1769,7 +1798,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                                           }
                                           Utils.launchURL(url);
                                         },
-                                        onImageTap: (url) =>
+                                        onImageTap: (String url,
+                                                RenderContext renderContext,
+                                                Map<String, String> attributes,
+                                                dom.Element element) =>
                                             openImageDialog(url),
                                       )),
                                   Divider(

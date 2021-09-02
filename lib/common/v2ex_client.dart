@@ -9,15 +9,14 @@ import 'package:flutter_app/utils/utils.dart';
 /// @email : mxl1989@gmail.com
 /// @desc  : 存放 app 通用方法
 
-class V2exClient{
-
+class V2exClient {
   static Future logout() async {
     // 清除 cookie
-    String cookiePath = await Utils.getCookiePath();
-    PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
-    cookieJar.deleteAll();
+    var cookiePath = await Utils.getCookiePath();
+    var cookieJar = PersistCookieJar(storage: FileStorage(cookiePath));
+    await cookieJar.deleteAll();
     // 清除用户信息
-    SpHelper.sp.remove(SP_USERNAME);
-    SpHelper.sp.remove(SP_AVATAR);
+    await SpHelper.sp.remove(SP_USERNAME);
+    await SpHelper.sp.remove(SP_AVATAR);
   }
 }

@@ -19,7 +19,7 @@ import 'package:flutter_app/network/dio_web.dart';
 import 'package:flutter_app/pages/page_following.dart';
 import 'package:flutter_app/pages/page_history_hot_category.dart';
 import 'package:flutter_app/pages/page_login.dart';
-import 'package:flutter_app/pages/page_new_topic.dart';
+// import 'package:flutter_app/pages/page_new_topic.dart';
 import 'package:flutter_app/pages/page_node_topics.dart';
 import 'package:flutter_app/pages/page_notifications.dart';
 import 'package:flutter_app/pages/page_profile.dart';
@@ -439,11 +439,12 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 title: new Text(S.of(context).create),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new NewTopicPage(),
-                          fullscreenDialog: true));
+                  // TODO
+                  // Navigator.push(
+                  //     context,
+                  //     new MaterialPageRoute(
+                  //         builder: (context) => new NewTopicPage(),
+                  //         fullscreenDialog: true));
                 },
               ),
               Divider(

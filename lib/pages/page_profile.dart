@@ -19,6 +19,7 @@ import 'package:flutter_html/style.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ovprogresshud/progresshud.dart';
 import 'package:provider/provider.dart';
+import 'package:html/dom.dart' as dom;
 
 /// @author: wml
 /// @date  : 2019-09-05 18:01
@@ -680,11 +681,11 @@ class ReplyItemView extends StatelessWidget {
                 padding: EdgeInsets.all(4.0),
               ),
               "a": Style(
-                color: Theme.of(context).accentColor,
-                textDecoration: TextDecoration.none
-              )
+                  color: Theme.of(context).accentColor,
+                  textDecoration: TextDecoration.none)
             },
-            onLinkTap: (url) {
+            onLinkTap: (String url, RenderContext renderContext,
+                Map<String, String> attributes, dom.Element element) {
               // todo
               if (UrlHelper.canLaunchInApp(context, url)) {
                 return;
@@ -707,7 +708,8 @@ class ReplyItemView extends StatelessWidget {
                 color: Theme.of(context).accentColor,
               )
             },
-            onLinkTap: (url) {
+            onLinkTap: (String url, RenderContext renderContext,
+                Map<String, String> attributes, dom.Element element) {
               // todo
               if (UrlHelper.canLaunchInApp(context, url)) {
                 return;

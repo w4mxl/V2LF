@@ -72,10 +72,6 @@ class TopicListViewState extends State<TopicListView>
 
   Widget _widgetLoadMore() {
     return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Text('»  更多新主题'),
-      ),
       onTap: () {
         // https://www.v2ex.com/recent 需要登录后才能查看的
         print(SpHelper.sp.containsKey(SP_USERNAME));
@@ -95,6 +91,10 @@ class TopicListViewState extends State<TopicListView>
           );
         }
       },
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Text('»  更多新主题'),
+      ),
     );
   }
 

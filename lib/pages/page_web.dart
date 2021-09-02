@@ -76,7 +76,8 @@ class _WebviewPageState extends State<WebviewPage> {
                 new Cookie(m.keys.elementAt(0), m.values.elementAt(0));
             print("A2 cookie: " + cookie.toString());
             String cookiePath = await Utils.getCookiePath();
-            PersistCookieJar cookieJar = new PersistCookieJar(dir: cookiePath);
+            PersistCookieJar cookieJar = PersistCookieJar(
+                ignoreExpires: true, storage: FileStorage(cookiePath));
             cookieJar.saveFromResponse(
                 Uri.parse("https://www.v2ex.com/"), <Cookie>[cookie]);
 

@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 
 class NetworkApi {
   static Future _read(String url) {
-    return http.read(url);
+    return http.read(Uri.parse(url));
   }
 
   static dynamic _get(String url) async {
@@ -32,11 +32,13 @@ class NetworkApi {
   }
 
   static Future<TopicsResp> getTopicDetails(int id) async {
-    return TopicsResp.fromJson(await _get(Constants.API_TOPIC_DETAILS + '?id=' + id.toString()));
+    return TopicsResp.fromJson(
+        await _get(Constants.API_TOPIC_DETAILS + '?id=' + id.toString()));
   }
 
   static Future<RepliesResp> getReplies(int topicId) async {
-    return RepliesResp.fromJson(await _get(Constants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
+    return RepliesResp.fromJson(await _get(
+        Constants.API_TOPIC_REPLY + '?topic_id=' + topicId.toString()));
   }
 
   static Future<SiteInfoResp> getSiteInfo() async {
@@ -57,10 +59,12 @@ class NetworkApi {
   static Future<Poem> getPoem() async {
     var spJinrishiciToken = SpHelper.sp.getString(SP_JINRISHICI_TOKEN);
     Map<String, String> headers = {'X-User-Token': spJinrishiciToken};
-    String response = await http.read(Constants.API_JINRISHICI_ONE, headers: spJinrishiciToken != null ? headers : null);
+    String response = await http.read(Uri.parse(Constants.API_JINRISHICI_ONE),
+        headers: spJinrishiciToken != null ? headers : null);
     var poem = Poem.fromJson(json.decode(response));
     if (poem.status == 'success') {
-      if (spJinrishiciToken == null) SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);
+      if (spJinrishiciToken == null)
+        SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);
       return poem;
     }
     return null;
