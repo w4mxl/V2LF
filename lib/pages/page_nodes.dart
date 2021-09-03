@@ -48,7 +48,9 @@ class _NodePageState extends State<NodesPage> {
                 itemBuilder: itemBuilder,
                 itemCount: nodeGroups.length,
               )
-            : Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+            : Platform.isIOS
+                ? CupertinoActivityIndicator()
+                : CircularProgressIndicator(),
       )),
     );
   }
@@ -128,7 +130,8 @@ class NodeGroupWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
         child: Text(
           node.nodeName,
-          style: TextStyle(color: Theme.of(context).accentColor, fontSize: 14.0),
+          style:
+              TextStyle(color: Theme.of(context).accentColor, fontSize: 14.0),
         ),
       ),
     );
@@ -193,17 +196,22 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionNodes = query.isEmpty ? meLikeNodes : allNodes.where((p) => p.nodeName.startsWith(query)).toList();
+    final suggestionNodes = query.isEmpty
+        ? meLikeNodes
+        : allNodes.where((p) => p.nodeName.startsWith(query)).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         title: RichText(
             text: TextSpan(
-                text: suggestionNodes[index].nodeName.substring(0, query.length),
-                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                text:
+                    suggestionNodes[index].nodeName.substring(0, query.length),
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.bold),
                 children: [
               TextSpan(
-                  text: suggestionNodes[index].nodeName.substring(query.length), style: DefaultTextStyle.of(context).style)
+                  text: suggestionNodes[index].nodeName.substring(query.length),
+                  style: DefaultTextStyle.of(context).style)
             ])),
         trailing: Icon(Icons.navigate_next),
         onTap: () => Navigator.push(

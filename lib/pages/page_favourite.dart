@@ -13,7 +13,8 @@ class FavouritePage extends StatefulWidget {
   _FavouritePageState createState() => _FavouritePageState();
 }
 
-class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveClientMixin {
+class _FavouritePageState extends State<FavouritePage>
+    with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
     Tab(text: '主题收藏'),
     Tab(text: '节点收藏'),
@@ -35,13 +36,15 @@ class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveCl
             title: TabBar(
                 isScrollable: true,
                 indicator: BubbleTabIndicator(
-                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark
+                  indicatorColor: Theme.of(context).primaryColorBrightness ==
+                          Brightness.dark
                       ? Theme.of(context).focusColor
                       : Colors.white,
                 ),
                 tabs: tabs),
           ),
-          body: TabBarView(children: [FavTopicListView(), FavouriteNodesGrid()]),
+          body:
+              TabBarView(children: [FavTopicListView(), FavouriteNodesGrid()]),
         ));
   }
 

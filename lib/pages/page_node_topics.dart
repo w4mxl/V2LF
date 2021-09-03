@@ -82,8 +82,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      var newEntries =
-          await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
+      var newEntries = await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
         Navigator.pop(context);
@@ -135,13 +134,15 @@ class _NodeTopicsState extends State<NodeTopics> {
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.nodeName ?? (_node == null ? '' : _node.title)),
+              title:
+                  Text(widget.nodeName ?? (_node == null ? '' : _node.title)),
               centerTitle: true,
               background: SafeArea(
                 child: Hero(
                   tag: 'node_${widget.nodeId}',
                   child: CachedNetworkImage(
-                    imageUrl: widget.nodeImg ?? (_node != null
+                    imageUrl: widget.nodeImg ??
+                        (_node != null
                             ? ((_node.avatarLarge ==
                                     '/static/img/node_large.png')
                                 ? Strings.nodeDefaultImag
@@ -386,8 +387,7 @@ class TopicItemView extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           topic.replyCount,
-                          style: TextStyle(
-                              fontSize: 12.0, color: Colors.white),
+                          style: TextStyle(fontSize: 12.0, color: Colors.white),
                         ),
                       ),
                     ),

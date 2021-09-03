@@ -13,7 +13,8 @@ class FollowingPage extends StatefulWidget {
   _FollowingPageState createState() => _FollowingPageState();
 }
 
-class _FollowingPageState extends State<FollowingPage> with AutomaticKeepAliveClientMixin {
+class _FollowingPageState extends State<FollowingPage>
+    with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
     Tab(text: '关注的人的最新主题'),
     Tab(text: '关注的人'),
@@ -35,13 +36,15 @@ class _FollowingPageState extends State<FollowingPage> with AutomaticKeepAliveCl
             title: TabBar(
                 isScrollable: true,
                 indicator: BubbleTabIndicator(
-                  indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark
+                  indicatorColor: Theme.of(context).primaryColorBrightness ==
+                          Brightness.dark
                       ? Theme.of(context).focusColor
                       : Colors.white,
                 ),
                 tabs: tabs),
           ),
-          body: TabBarView(children: [FollowTopicListView(), FollowingUsersListView()]),
+          body: TabBarView(
+              children: [FollowTopicListView(), FollowingUsersListView()]),
         ));
   }
 
