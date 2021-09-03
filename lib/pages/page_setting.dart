@@ -11,7 +11,6 @@ import 'package:flutter_app/utils/sp_helper.dart';
 import 'package:flutter_app/utils/strings.dart';
 import 'package:flutter_app/utils/utils.dart';
 
-// import 'package:flutter_whatsnew/flutter_whatsnew.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +37,11 @@ class _SettingPageState extends State<SettingPage> {
   void initState() {
     super.initState();
 
-    bool _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
+    var _spAutoAward = SpHelper.sp.getBool(SP_AUTO_AWARD);
     if (_spAutoAward != null) {
       _switchAutoAward = _spAutoAward;
     }
-    print("wml:" + _spAutoAward.toString());
+    print('wml:' + _spAutoAward.toString());
   }
 
   @override
@@ -63,10 +62,10 @@ class _SettingPageState extends State<SettingPage> {
                           content: Text(S.of(context).sureLogout),
                           actions: <Widget>[
                             FlatButton(
-                              child: Text(S.of(context).cancel),
                               onPressed: () =>
                                   Navigator.of(context, rootNavigator: true)
                                       .pop(),
+                              child: Text(S.of(context).cancel),
                             ),
                             FlatButton(
                                 onPressed: () async {
@@ -392,7 +391,7 @@ class _SettingPageState extends State<SettingPage> {
                     leading: Icon(
                       Icons.alternate_email,
                     ),
-                    title: new Text(S.of(context).feedback),
+                    title: Text(S.of(context).feedback),
                     onTap: () {
                       if (Platform.isIOS) {
                         showDialog(
@@ -401,6 +400,8 @@ class _SettingPageState extends State<SettingPage> {
                                   title: Text('您的反馈我会认真考虑'),
                                   children: <Widget>[
                                     SimpleDialogOption(
+                                      onPressed: () => _launchURL(
+                                          'mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback'),
                                       child: Row(
                                         children: <Widget>[
                                           Icon(Icons.alternate_email),
@@ -411,10 +412,10 @@ class _SettingPageState extends State<SettingPage> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL(
-                                          "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback"),
                                     ),
                                     SimpleDialogOption(
+                                      onPressed: () => _launchURL(
+                                          'sms:745871698@qq.com&body=V2LF%20feedback'),
                                       child: Row(
                                         children: <Widget>[
                                           Icon(Icons.message),
@@ -425,14 +426,12 @@ class _SettingPageState extends State<SettingPage> {
                                           ),
                                         ],
                                       ),
-                                      onPressed: () => _launchURL(
-                                          "sms:745871698@qq.com&body=New%20feedback"),
                                     )
                                   ],
                                 ));
                       } else if (Platform.isAndroid) {
                         _launchURL(
-                            "mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback");
+                            'mailto:mxl1989@gmail.com?subject=V2LF%20Feedback&body=New%20feedback');
                       }
                     },
                     trailing: Icon(
@@ -459,7 +458,7 @@ class _SettingPageState extends State<SettingPage> {
                     leading: Icon(
                       Icons.flag,
                     ),
-                    title: new Text(S.of(context).versions),
+                    title: Text(S.of(context).versions),
                     onTap: () => Utils.launchURL(
                         'https://mulin.notion.site/V2LF-App-CHANGELOG-a1a9fa4984d947bc96084cebd66cbcb3'),
                     trailing: Icon(
@@ -577,17 +576,20 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
-_launchURL(String url) async {
+/// open user's mail client
+void _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {
-    Fluttertoast.showToast(
-        msg: '您似乎没在手机上安装邮件客户端 ?', gravity: ToastGravity.CENTER);
+    await Fluttertoast.showToast(
+        msg: '您似乎没在手机上安装邮件客户端 ?\n这是我的邮箱：mxl1989@gmail.com',
+        gravity: ToastGravity.CENTER);
   }
 }
 
 /// https://github.com/flutter/flutter/issues/37057 用于移除 Slider 的 margin
 class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
   Rect getPreferredRect({
     @required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -595,11 +597,10 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     bool isDiscrete = false,
   }) {
-    final double trackHeight = sliderTheme.trackHeight;
-    final double trackLeft = offset.dx;
-    final double trackTop =
-        offset.dy + (parentBox.size.height - trackHeight) / 2;
-    final double trackWidth = parentBox.size.width;
+    final trackHeight = sliderTheme.trackHeight;
+    final trackLeft = offset.dx;
+    final trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final trackWidth = parentBox.size.width;
     return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
   }
 }
