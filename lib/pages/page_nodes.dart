@@ -12,7 +12,7 @@ import 'package:flutter_app/pages/page_node_topics.dart';
 class NodesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new _NodePageState();
+    return _NodePageState();
   }
 }
 
@@ -28,8 +28,8 @@ class _NodePageState extends State<NodesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(S.of(context).nodes),
         actions: <Widget>[
           IconButton(
@@ -39,11 +39,11 @@ class _NodePageState extends State<NodesPage> {
               })
         ],
       ),
-      body: new Container(
+      body: Container(
 //          color: MyTheme.isDark ? Colors.black : CupertinoColors.lightBackgroundGray,
-          child: new Center(
-        child: nodeGroups.length > 0
-            ? new ListView.builder(
+          child: Center(
+        child: nodeGroups.isNotEmpty
+            ? ListView.builder(
                 padding: const EdgeInsets.only(bottom: 15.0),
                 itemBuilder: itemBuilder,
                 itemCount: nodeGroups.length,
@@ -54,13 +54,13 @@ class _NodePageState extends State<NodesPage> {
   }
 
   Future getAllNodes() async {
-    List<NodeGroup> tmpGroups = await DioWeb.getNodes();
+    var tmpGroups = await DioWeb.getNodes();
     if (mounted) {
-      this.setState(() {
+      setState(() {
         nodeGroups.clear();
         nodeGroups.addAll(tmpGroups);
 
-        if (nodeGroups.length > 0) {
+        if (nodeGroups.isNotEmpty) {
           for (var nodeGroup in nodeGroups) {
             for (var nodeItem in nodeGroup.nodes) {
               allNodes.add(nodeItem);
@@ -72,7 +72,7 @@ class _NodePageState extends State<NodesPage> {
   }
 
   Widget itemBuilder(BuildContext context, int index) {
-    return new NodeGroupWidget(nodeGroups[index], context);
+    return NodeGroupWidget(nodeGroups[index], context);
   }
 }
 
@@ -84,17 +84,16 @@ class NodeGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Container _container = new Container(
+    var _container = Container(
       padding: const EdgeInsets.all(10.0),
-      child: new Column(
+      child: Column(
         children: <Widget>[
-          new Text(
+          Text(
             nodeGroup.nodeGroupName,
-            style: new TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
           ),
-          new Padding(padding: const EdgeInsets.only(bottom: 10.0)),
-          new Wrap(
-            children: nodeGroup.nodes.map((node) => renderNode(node)).toList(),
+          Padding(padding: const EdgeInsets.only(bottom: 10.0)),
+          Wrap(
             runAlignment: WrapAlignment.center,
             alignment: WrapAlignment.center,
             direction: Axis.horizontal,
@@ -102,35 +101,36 @@ class NodeGroupWidget extends StatelessWidget {
             runSpacing: 5.0,
             crossAxisAlignment: WrapCrossAlignment.center,
             textDirection: TextDirection.ltr,
+            children: nodeGroup.nodes.map((node) => renderNode(node)).toList(),
           ),
-          new Padding(padding: const EdgeInsets.only(bottom: 5.0)),
+          Padding(padding: const EdgeInsets.only(bottom: 5.0)),
         ],
       ),
     );
 
-    return new Card(
+    return Card(
       elevation: 4,
-      child: _container,
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: _container,
     );
   }
 
   Widget renderNode(NodeItem node) {
-    return new InkWell(
-      child: new Container(
-        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
-        child: new Text(
-          node.nodeName,
-          style: new TextStyle(color: Theme.of(context).accentColor, fontSize: 14.0),
-        ),
-      ),
+    return InkWell(
       onTap: () => Navigator.push(
           context,
-          new MaterialPageRoute(
+          MaterialPageRoute(
               builder: (context) => NodeTopics(
                     node.nodeId,
                     nodeName: node.nodeName,
                   ))),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+        child: Text(
+          node.nodeName,
+          style: TextStyle(color: Theme.of(context).accentColor, fontSize: 14.0),
+        ),
+      ),
     );
   }
 }
@@ -152,7 +152,7 @@ class DataSearch extends SearchDelegate<String> {
   ThemeData appBarTheme(BuildContext context) {
     // todo 还需理解，找出更好的解决方式
     if (Theme.of(context).brightness == Brightness.dark) {
-      final ThemeData theme = Theme.of(context);
+      final theme = Theme.of(context);
       return theme.copyWith(
         primaryColor: theme.primaryColor,
         primaryIconTheme: theme.primaryIconTheme,
@@ -170,7 +170,7 @@ class DataSearch extends SearchDelegate<String> {
       IconButton(
         icon: Icon(CupertinoIcons.clear_circled_solid),
         onPressed: () {
-          query = "";
+          query = '';
         },
       )
     ];

@@ -44,9 +44,9 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   int p = 1;
   bool isUpLoading = false;
-  List<NodeTopicItem> items = new List();
+  List<NodeTopicItem> items = [];
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _NodeTopicsState extends State<NodeTopics> {
       if (p != 1 &&
           _scrollController.position.pixels ==
               _scrollController.position.maxScrollExtent) {
-        print("加载更多...");
+        print('加载更多...');
         getTopics();
       }
     });
@@ -82,7 +82,7 @@ class _NodeTopicsState extends State<NodeTopics> {
     if (!isUpLoading) {
       isUpLoading = true;
 
-      List<NodeTopicItem> newEntries =
+      var newEntries =
           await DioWeb.getNodeTopicsByTabKey(widget.nodeId, p++);
       // 用来判断节点是否需要登录后查看
       if (newEntries.isEmpty) {
@@ -99,18 +99,18 @@ class _NodeTopicsState extends State<NodeTopics> {
 
   Future _favouriteNode() async {
     if (nodeIdWithOnce.isNotEmpty) {
-      bool isSuccess = await DioWeb.favoriteNode(isFavorite, nodeIdWithOnce);
+      var isSuccess = await DioWeb.favoriteNode(isFavorite, nodeIdWithOnce);
       if (isSuccess) {
-        HapticFeedback.heavyImpact(); // 震动反馈
-        Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
+        await HapticFeedback.heavyImpact(); // 震动反馈
+        await Progresshud.showSuccessWithStatus(isFavorite ? '已取消收藏' : '收藏成功');
         setState(() {
           isFavorite = !isFavorite;
         });
       } else {
-        Progresshud.showErrorWithStatus('操作失败');
+        await Progresshud.showErrorWithStatus('操作失败');
       }
     } else {
-      Progresshud.showInfoWithStatus('未获取到 once');
+      await Progresshud.showInfoWithStatus('未获取到 once');
     }
   }
 
@@ -127,7 +127,7 @@ class _NodeTopicsState extends State<NodeTopics> {
       });
     });
 
-    return new Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
@@ -135,17 +135,13 @@ class _NodeTopicsState extends State<NodeTopics> {
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.nodeName != null
-                  ? widget.nodeName
-                  : (_node == null ? '' : _node.title)),
+              title: Text(widget.nodeName ?? (_node == null ? '' : _node.title)),
               centerTitle: true,
               background: SafeArea(
                 child: Hero(
                   tag: 'node_${widget.nodeId}',
                   child: CachedNetworkImage(
-                    imageUrl: widget.nodeImg != null
-                        ? widget.nodeImg
-                        : (_node != null
+                    imageUrl: widget.nodeImg ?? (_node != null
                             ? ((_node.avatarLarge ==
                                     '/static/img/node_large.png')
                                 ? Strings.nodeDefaultImag
@@ -176,10 +172,10 @@ class _NodeTopicsState extends State<NodeTopics> {
                   // 滑到了最后一个item
                   return _buildLoadText();
                 } else {
-                  return new Center(
+                  return Center(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 40.0),
-                      child: new CupertinoActivityIndicator(),
+                      child: CupertinoActivityIndicator(),
                     ),
                   );
                 }
@@ -187,7 +183,7 @@ class _NodeTopicsState extends State<NodeTopics> {
                 if (index == 0) {
                   return _buildHeader();
                 }
-                return new TopicItemView(items[index - 1], _node.title);
+                return TopicItemView(items[index - 1], _node.title);
               }
             }, childCount: items.length + 2),
           ),
@@ -219,17 +215,17 @@ class _NodeTopicsState extends State<NodeTopics> {
                     _node.header == '&nbsp;'),
                 child: Html(
                   style: {
-                    "html": Style(
+                    'html': Style(
                       padding: EdgeInsets.only(left: 10, right: 10),
                       fontSize: FontSize(20),
                       fontWeight: FontWeight.bold,
                     ),
-                    "a": Style(
+                    'a': Style(
                       color: Theme.of(context).accentColor,
                     )
                   },
 
-                  data: _node.header == null ? '' : _node.header,
+                  data: _node.header ?? '',
                   // TODO Not yet available
                   // customTextAlign: (node) {
                   //   return TextAlign.center;
@@ -310,7 +306,7 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(
+          MaterialPageRoute(
               builder: (context) => TopicDetails(
                     topic.topicId,
                     topicTitle: topic.title,
@@ -321,12 +317,12 @@ class TopicItemView extends StatelessWidget {
                   )),
         );
       },
-      child: new Container(
-        child: new Column(
+      child: Container(
+        child: Column(
           children: <Widget>[
-            new Container(
+            Container(
               padding: const EdgeInsets.all(10.0),
-              child: new Row(
+              child: Row(
                 children: <Widget>[
                   /*// 头像
                   new Container(
@@ -343,30 +339,30 @@ class TopicItemView extends StatelessWidget {
                       ),
                     ),
                   ),*/
-                  new Expanded(
-                    child: new Container(
+                  Expanded(
+                    child: Container(
                         margin: const EdgeInsets.only(right: 20.0),
-                        child: new Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             /// title
-                            new Container(
+                            Container(
                               alignment: Alignment.centerLeft,
-                              child: new Text(
+                              child: Text(
                                 topic.title,
-                                style: Theme.of(context).textTheme.subhead,
+                                style: Theme.of(context).textTheme.subtitle1,
                               ),
                             ),
-                            new Container(
+                            Container(
                               margin: const EdgeInsets.only(top: 4.0),
-                              child: new Row(
+                              child: Row(
                                 children: <Widget>[
-                                  new Text(topic.memberId,
+                                  Text(topic.memberId,
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       style:
                                           Theme.of(context).textTheme.caption),
-                                  new Text(
+                                  Text(
                                       ' • ${topic.characters} • ${topic.clickTimes}',
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
@@ -383,14 +379,14 @@ class TopicItemView extends StatelessWidget {
                     child: Material(
                       color:
                           Provider.of<DisplayModel>(context).materialColor[400],
-                      shape: new StadiumBorder(),
-                      child: new Container(
+                      shape: StadiumBorder(),
+                      child: Container(
                         width: 35.0,
                         height: 20.0,
                         alignment: Alignment.center,
-                        child: new Text(
+                        child: Text(
                           topic.replyCount,
-                          style: new TextStyle(
+                          style: TextStyle(
                               fontSize: 12.0, color: Colors.white),
                         ),
                       ),
@@ -399,7 +395,7 @@ class TopicItemView extends StatelessWidget {
                 ],
               ),
             ),
-            new Divider(
+            Divider(
               height: 6.0,
             )
           ],
@@ -410,11 +406,11 @@ class TopicItemView extends StatelessWidget {
 }
 
 // 外链跳转
-_launchURL(String url) async {
+void _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url,
         statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Progresshud.showErrorWithStatus('Could not launch $url');
+    await Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }

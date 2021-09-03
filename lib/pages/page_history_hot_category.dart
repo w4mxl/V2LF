@@ -26,10 +26,10 @@ class HistoryHotCategory extends StatefulWidget {
 class _HistoryHotCategoryState extends State<HistoryHotCategory>
     with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
-    new Tab(text: "最热"),
-    new Tab(text: "最热"),
-    new Tab(text: "最热"),
-    new Tab(text: "最热"),
+    Tab(text: '最热'),
+    Tab(text: '最热'),
+    Tab(text: '最热'),
+    Tab(text: '最热'),
   ];
 
   Future<AtomFeed> _future;
@@ -76,10 +76,10 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
                     child: Html(
                       data: atomItem.content.replaceFirst('<br />', ''),
                       style: {
-                        "html": Style(
+                        'html': Style(
                           fontSize: FontSize(15),
                         ),
-                        "a": Style(
+                        'a': Style(
                           color: Theme.of(context).accentColor,
                         )
                       },
@@ -98,7 +98,7 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("${snapshot.error}"),
+              child: Text('${snapshot.error}'),
             );
           }
           return Center(
@@ -111,13 +111,13 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
 
   Future<AtomFeed> getFeed() async {
     // Atom feed
-    Utf8Decoder utf8decoder = Utf8Decoder(); // 需要转码一下，不然中文出现乱码
+    var utf8decoder = Utf8Decoder(); // 需要转码一下，不然中文出现乱码
     return get(
-      Uri.parse("https://v2exday.com/allinone.xml"),
+      Uri.parse('https://v2exday.com/allinone.xml'),
     ).then((response) {
       return utf8decoder.convert(response.bodyBytes);
     }).then((bodyString) {
-      AtomFeed feed = new AtomFeed.parse(bodyString);
+      var feed = AtomFeed.parse(bodyString);
       setState(() {
         tabs.clear();
         tabs.add(Tab(
@@ -150,11 +150,11 @@ class _HistoryHotCategoryState extends State<HistoryHotCategory>
 }
 
 // 外链跳转
-_launchURL(String url) async {
+void _launchURL(String url) async {
   if (await canLaunch(url)) {
     await launch(url,
         statusBarBrightness: Platform.isIOS ? Brightness.light : null);
   } else {
-    Progresshud.showErrorWithStatus('Could not launch $url');
+    await Progresshud.showErrorWithStatus('Could not launch $url');
   }
 }

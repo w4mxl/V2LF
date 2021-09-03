@@ -15,8 +15,8 @@ class FollowingPage extends StatefulWidget {
 
 class _FollowingPageState extends State<FollowingPage> with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
-    new Tab(text: "关注的人的最新主题"),
-    new Tab(text: "关注的人"),
+    Tab(text: '关注的人的最新主题'),
+    Tab(text: '关注的人'),
   ];
 
   @override

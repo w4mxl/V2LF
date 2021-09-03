@@ -15,8 +15,8 @@ class FavouritePage extends StatefulWidget {
 
 class _FavouritePageState extends State<FavouritePage> with AutomaticKeepAliveClientMixin {
   final List<Tab> tabs = <Tab>[
-    new Tab(text: "主题收藏"),
-    new Tab(text: "节点收藏"),
+    Tab(text: '主题收藏'),
+    Tab(text: '节点收藏'),
   ];
 
   @override
