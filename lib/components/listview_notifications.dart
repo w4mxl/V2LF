@@ -23,7 +23,7 @@ import 'package:html/dom.dart' as dom;
 // 通知列表页面
 class NotificationsListView extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<NotificationsListView> {
@@ -32,9 +32,9 @@ class TopicListViewState extends State<NotificationsListView> {
 
   bool isLoading = false;
   bool empty = false;
-  List<NotificationItem> items = new List();
+  List<NotificationItem> items = List();
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class TopicListViewState extends State<NotificationsListView> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        if (items.length > 0 && p <= maxPage) {
+        if (items.isNotEmpty && p <= maxPage) {
           getTopics();
         } else {
           print("没有更多...");
@@ -62,7 +62,7 @@ class TopicListViewState extends State<NotificationsListView> {
       List<NotificationItem> newEntries = await DioWeb.getNotifications(p++);
       setState(() {
         isLoading = false;
-        if (newEntries.length > 0) {
+        if (newEntries.isNotEmpty) {
           items.addAll(newEntries);
           maxPage = newEntries[0].maxPage;
         } else {
@@ -74,8 +74,8 @@ class TopicListViewState extends State<NotificationsListView> {
 
   @override
   Widget build(BuildContext context) {
-    if (items.length > 0) {
-      return new RefreshIndicator(
+    if (items.isNotEmpty) {
+      return RefreshIndicator(
           child: Container(
             child: ListView.builder(
                 controller: _scrollController,
@@ -85,7 +85,7 @@ class TopicListViewState extends State<NotificationsListView> {
                     // 滑到了最后一个item
                     return _buildLoadText();
                   } else {
-                    return new TopicItemView(items[index]);
+                    return TopicItemView(items[index]);
                   }
                 }),
           ),
@@ -112,7 +112,7 @@ class TopicListViewState extends State<NotificationsListView> {
       ]);
     }
     // By default, show a loading spinner
-    return new Center(
+    return Center(
       child: Platform.isIOS
           ? CupertinoActivityIndicator()
           : CircularProgressIndicator(),
@@ -152,7 +152,7 @@ class TopicListViewState extends State<NotificationsListView> {
 class TopicItemView extends StatelessWidget {
   final NotificationItem notificationItem;
 
-  TopicItemView(this.notificationItem);
+  const TopicItemView(this.notificationItem);
 
   @override
   Widget build(BuildContext context) {
@@ -160,16 +160,16 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(
-              builder: (context) => new TopicDetails(notificationItem.topicId)),
+          MaterialPageRoute(
+              builder: (context) => TopicDetails(notificationItem.topicId)),
         );
       },
-      child: new Container(
-        child: new Column(
+      child: Container(
+        child: Column(
           children: <Widget>[
-            new Container(
+            Container(
               padding: const EdgeInsets.all(12.0),
-              child: new Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   InkWell(
@@ -210,11 +210,11 @@ class TopicItemView extends StatelessWidget {
                   SizedBox(
                     height: 4,
                   ),
-                  new Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // title
-                      new Container(
+                      Container(
                         alignment: Alignment.centerLeft,
                         child: Html(
                           data: notificationItem.title,
@@ -245,7 +245,7 @@ class TopicItemView extends StatelessWidget {
                       // reply
                       Offstage(
                         offstage: notificationItem.reply.isEmpty,
-                        child: new Container(
+                        child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
                           color: Theme.of(context).hoverColor,
                           child: Html(
@@ -280,7 +280,7 @@ class TopicItemView extends StatelessWidget {
                 ],
               ),
             ),
-            new Divider(
+            Divider(
               height: 6.0,
             )
           ],

@@ -83,7 +83,7 @@ class _SettingPageState extends State<SettingPage> {
                 semanticsLabel: 'logout',
                 style: Theme.of(context)
                     .primaryTextTheme
-                    .title
+                    .headline6
                     .copyWith(fontSize: 18),
               ),
             ),

@@ -63,8 +63,9 @@ class NetworkApi {
         headers: spJinrishiciToken != null ? headers : null);
     var poem = Poem.fromJson(json.decode(response));
     if (poem.status == 'success') {
-      if (spJinrishiciToken == null)
+      if (spJinrishiciToken == null) {
         SpHelper.sp.setString(SP_JINRISHICI_TOKEN, poem.token);
+      }
       return poem;
     }
     return null;

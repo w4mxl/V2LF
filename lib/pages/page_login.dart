@@ -469,7 +469,7 @@ class PasswordField extends StatefulWidget {
   final TextEditingController _pwdController;
   final FocusNode passwordTextFieldNode, captchaTextFieldNode;
 
-  PasswordField(this.fieldKey, this._pwdController, this.passwordTextFieldNode,
+  const PasswordField(this.fieldKey, this._pwdController, this.passwordTextFieldNode,
       this.captchaTextFieldNode);
 
   @override

@@ -25,7 +25,7 @@ class ReorderableListTabs extends StatefulWidget {
 }
 
 class _ReorderableListTabsState extends State<ReorderableListTabs> {
-  List<TabModel> _tabsp = SpHelper.getMainTabs() != null ? SpHelper.getMainTabs() : TABS;
+  final List<TabModel> _tabsp = SpHelper.getMainTabs() ?? TABS;
   List<TabModel> _tabs;
 
   @override
@@ -90,7 +90,7 @@ class _ReorderableListTabsState extends State<ReorderableListTabs> {
           },
           child: Text(
             '保存',
-            style: Theme.of(context).primaryTextTheme.title.copyWith(fontSize: 18),
+            style: Theme.of(context).primaryTextTheme.headline6.copyWith(fontSize: 18),
             semanticsLabel: 'Save',
           ),
         )

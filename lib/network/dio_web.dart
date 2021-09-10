@@ -118,7 +118,7 @@ class DioWeb {
       print('领取每日奖励:$once');
 
       var missionResponse = await dio.get("/mission/daily/redeem?once=" + once);
-      print('领取每日奖励:' + "/mission/daily/redeem?once=" + once);
+      print('领取每日奖励:' "/mission/daily/redeem?once=" + once);
       if (missionResponse.data.contains('每日登录奖励已领取')) {
         print('每日奖励已自动领取');
         Fluttertoast.showToast(
@@ -241,32 +241,32 @@ class DioWeb {
 
     String content = '';
 
-    final String reg4Node =
+    const String reg4Node =
         "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td align=\"right\" width=\"80\"><span class=\"fade\">(.*?)</td></tr></table>";
 
-    final String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
-    final String reg4NodeItem =
+    const String reg4NodeGroup = "<span class=\"fade\">(.*?)</span></td>";
+    const String reg4NodeItem =
         "<a href=\"/go/(.*?)\" style=\"font-size: 14px;\">(.*?)</a>";
     var response = await dio.get('/',
         options:
             buildCacheOptions(Duration(days: 7), maxStale: Duration(days: 10)));
     content = response.data
-      ..replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+      ..replaceAll(RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
-    RegExp exp = new RegExp(reg4Node);
+    RegExp exp = RegExp(reg4Node);
     Iterable<Match> matches = exp.allMatches(content);
 
     for (Match match in matches) {
-      NodeGroup nodeGroup = new NodeGroup();
-      RegExp exp4GroupName = new RegExp(reg4NodeGroup);
+      NodeGroup nodeGroup = NodeGroup();
+      RegExp exp4GroupName = RegExp(reg4NodeGroup);
       Match matchGroup = exp4GroupName.firstMatch(match.group(0));
       nodeGroup.nodeGroupName = matchGroup.group(1);
 
-      RegExp exp4Node = new RegExp(reg4NodeItem);
+      RegExp exp4Node = RegExp(reg4NodeItem);
       Iterable<Match> matchNodes = exp4Node.allMatches(match.group(0));
       for (Match matchNode in matchNodes) {
         NodeItem nodeItem =
-            new NodeItem(matchNode.group(1), matchNode.group(2));
+            NodeItem(matchNode.group(1), matchNode.group(2));
         /*nodeItem.nodeId = matchNode.group(1);
         nodeItem.nodeName = matchNode.group(2);*/
         nodeGroup.nodes.add(nodeItem);
@@ -282,23 +282,23 @@ class DioWeb {
       String tabKey, int p) async {
     String content = '';
 
-    List<NodeTopicItem> topics = new List<NodeTopicItem>();
+    List<NodeTopicItem> topics = List<NodeTopicItem>();
 
     // todo 这里">"花了几乎一个下午摸索出解析到数据，但是还是不完全明白原因
-    final String reg4tag = "<div class=\"cell\">(.*?)</table></div>";
+    const String reg4tag = "<div class=\"cell\">(.*?)</table></div>";
 //    final String reg4tag = "<div class=\"cell\" (.*?)</table></div>";
 
-    final String reg4MidAvatar =
+    const String reg4MidAvatar =
         "<a href=\"/member/(.*?)\"><img src=\"(.*?)\" class=\"avatar\" ";
 
-    final String reg4TRC =
+    const String reg4TRC =
         "<a href=\"/t/(.*?)#reply(.*?)\" class=\"topic-link\">(.*?)</a></span>";
 
-    final String reg4CharactersClickTimes =
+    const String reg4CharactersClickTimes =
         "</strong> &nbsp;•&nbsp; (.*?) &nbsp;•&nbsp; (.*?)</span>";
 
-    final String reg4inner = "<div class=\"inner\">(.*?)</table></div>";
-    final String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
+    const String reg4inner = "<div class=\"inner\">(.*?)</table></div>";
+    const String reg4pages = "<strong class=\"fade\">(.*?)</strong>";
 
     var response = await dio.get('/go/' + tabKey + "?p=" + p.toString());
     var document = parse(response.data);
@@ -321,29 +321,29 @@ class DioWeb {
     }
 
     content =
-        response.data.replaceAll(new RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
+        response.data.replaceAll(RegExp(r"[\r\n]|(?=\s+</?d)\s+"), '');
 
-    RegExp expInner = new RegExp(reg4inner);
+    RegExp expInner = RegExp(reg4inner);
     Iterable<Match> matchesInner = expInner.allMatches(content);
     Match match = matchesInner.first;
     print("当前页/总页数： " +
-        new RegExp(reg4pages).firstMatch(match.group(0)).group(1));
+        RegExp(reg4pages).firstMatch(match.group(0)).group(1));
 
-    RegExp exp = new RegExp(reg4tag);
+    RegExp exp = RegExp(reg4tag);
     Iterable<Match> matches = exp.allMatches(content);
     for (Match match in matches) {
       String regString = match.group(0);
-      NodeTopicItem item = new NodeTopicItem();
-      Match match4MidAvatar = new RegExp(reg4MidAvatar).firstMatch(regString);
+      NodeTopicItem item = NodeTopicItem();
+      Match match4MidAvatar = RegExp(reg4MidAvatar).firstMatch(regString);
       item.memberId = match4MidAvatar.group(1);
       item.avatar = match4MidAvatar.group(2);
-      Match match4TRC = new RegExp(reg4TRC).firstMatch(regString);
+      Match match4TRC = RegExp(reg4TRC).firstMatch(regString);
       item.topicId = match4TRC.group(1);
       item.replyCount = match4TRC.group(2);
       item.title = match4TRC.group(3);
       if (regString.contains("个字符")) {
         Match match4CharactersClickTimes =
-            new RegExp(reg4CharactersClickTimes).firstMatch(regString);
+            RegExp(reg4CharactersClickTimes).firstMatch(regString);
         item.characters = match4CharactersClickTimes.group(1);
         item.clickTimes = match4CharactersClickTimes.group(2);
       }
@@ -384,7 +384,7 @@ class DioWeb {
             document.querySelector('#Wrapper > div > div > div.problem').text;
 
         Fluttertoast.showToast(
-            msg: '$problem',
+            msg: problem,
             timeInSecForIosWeb: 2,
             gravity: ToastGravity.CENTER);
         return false;
@@ -470,7 +470,7 @@ class DioWeb {
   // 获取登录信息
   static Future<LoginFormData> parseLoginForm() async {
     // name password captcha once
-    LoginFormData loginFormData = new LoginFormData();
+    LoginFormData loginFormData = LoginFormData();
     //dio.options.contentType = ContentType.json;
     //dio.options.responseType = ResponseType.JSON;
     var response = await dio.get("/signin");
@@ -508,8 +508,9 @@ class DioWeb {
     dio.options.responseType = ResponseType.bytes;
     response = await dio.get("/_captcha?once=" + loginFormData.once);
     dio.options.responseType = ResponseType.json; // 还原
-    if ((response.data as List<int>).length == 0)
-      throw new Exception('NetworkImage is an empty file');
+    if ((response.data as List<int>).isEmpty) {
+      throw Exception('NetworkImage is an empty file');
+    }
     loginFormData.bytes = Uint8List.fromList(response.data);
     return loginFormData;
   }
@@ -604,7 +605,7 @@ class DioWeb {
   // 获取当前用户信息
   static Future<String> getUserInfo() async {
     var response = await dio.get(Strings.v2exHost);
-    if (response.redirects.length > 0) {
+    if (response.redirects.isNotEmpty) {
       print("wml:" + response.redirects[0].location.path);
       // 需要两步验证
       if (response.redirects[0].location.path == "/2fa") {
@@ -642,7 +643,7 @@ class DioWeb {
 
   // 获取关注的人 [user-agent 要先换到桌面的再还原到 mobile]
   static Future<List<FollowingUser>> getFollowingUsers() async {
-    List<FollowingUser> followingUsers = List<FollowingUser>();
+    List<FollowingUser> followingUsers = <FollowingUser>[];
     try {
       dio.options.headers = {};
       var response = await dio.get("/my/following");
@@ -682,7 +683,7 @@ class DioWeb {
 
   // 获取 v2ex.com 首页右边栏"最热节点"的数据 [user-agent 要先换到桌面的再还原到 mobile]
   static Future<List<NodeItem>> getHotNodes() async {
-    List<NodeItem> listOfHotNodes = List<NodeItem>();
+    List<NodeItem> listOfHotNodes = <NodeItem>[];
     dio.options.headers = {}; // 桌面版请求
     try {
       var response = await dio.get('/');
@@ -719,8 +720,8 @@ class DioWeb {
 
   // 获取「主题收藏」或者 「特别关注」下的topics [xpath 解析的]
   static Future<List<FavTopicItem>> getTopics(String path, int p) async {
-    List<FavTopicItem> topics = new List<FavTopicItem>();
-    var response = await dio.get("/my/$path" + "?p=" + p.toString());
+    List<FavTopicItem> topics = List<FavTopicItem>();
+    var response = await dio.get("/my/$path" "?p=" + p.toString());
     var tree = ETree.fromString(response.data);
 
     //*[@id="Wrapper"]/div/div/div[1]/div/strong
@@ -737,7 +738,7 @@ class DioWeb {
     var aRootNode = tree.xpath("//*[@class='cell item']");
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
-        FavTopicItem favTopicItem = new FavTopicItem();
+        FavTopicItem favTopicItem = FavTopicItem();
 
         favTopicItem.maxPage = int.parse(page);
 
@@ -794,7 +795,7 @@ class DioWeb {
 
   // 获取「节点收藏」 [xpath 解析的]
   static Future<List<FavNode>> getFavNodes() async {
-    List<FavNode> nodes = new List<FavNode>();
+    List<FavNode> nodes = <FavNode>[];
     try {
       var response = await dio.get("/my/nodes");
       var tree = ETree.fromString(response.data);
@@ -802,7 +803,7 @@ class DioWeb {
       var aRootNode = tree.xpath("//*[@class='grid_item']");
       if (aRootNode != null) {
         for (var aNode in aRootNode) {
-          FavNode favNode = new FavNode();
+          FavNode favNode = FavNode();
           // //*[@id="n_195868"]/div/img
           // 这里需要注意，如果解析出来的是 '/static/img/node_large.png' 则拼上前缀 'https://www.v2ex.com'；
           String imgUrl = aNode.xpath("/div/img").first.attributes["src"];
@@ -828,9 +829,9 @@ class DioWeb {
 
   // 获取「通知」下的列表信息
   static Future<List<NotificationItem>> getNotifications(int p) async {
-    List<NotificationItem> notifications = new List<NotificationItem>();
+    List<NotificationItem> notifications = List<NotificationItem>();
     // 调用 dio 之前检查登录时保存的cookie是否带上了
-    var response = await dio.get("/notifications" + "?p=" + p.toString());
+    var response = await dio.get("/notifications" "?p=" + p.toString());
     var document = parse(response.data);
 
     var page = document.querySelector('strong.fade') != null
@@ -841,7 +842,7 @@ class DioWeb {
         .querySelectorAll('div.cell[id]'); // 2019.10.4 发现v2ex网站页面有改动，需要过滤
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
-        NotificationItem item = new NotificationItem();
+        NotificationItem item = NotificationItem();
 
         if (page != null) {
           item.maxPage = int.parse(page.split('/')[1]);
@@ -907,10 +908,10 @@ class DioWeb {
     String currentUserName = SpHelper.sp.getString(SP_USERNAME);
 
     MemberProfileModel profileModel = MemberProfileModel();
-    List<Clip> clips = List(); // 网站、位置、社交媒体id 等
+    List<Clip> clips = []; // 网站、位置、社交媒体id 等
 
-    List<ProfileRecentTopicItem> topicList = List(); // 近期主题
-    List<ProfileRecentReplyItem> replyList = List(); // 近期回复
+    List<ProfileRecentTopicItem> topicList = []; // 近期主题
+    List<ProfileRecentReplyItem> replyList = []; // 近期回复
 
     var response = await dio.get('/member/' + userName);
     var document = parse(response.data);
@@ -988,7 +989,7 @@ class DioWeb {
 
     List<dom.Element> nodes = document.querySelectorAll(
         "#Wrapper > div > div:nth-child(1) > div.widgets > a");
-    if (nodes != null && nodes.length > 0) {
+    if (nodes != null && nodes.isNotEmpty) {
       for (var node in nodes) {
         Clip clip = Clip();
         clip.icon = node.querySelector('img').attributes['src'];
@@ -1138,7 +1139,7 @@ class DioWeb {
   // 获取用户的所有主题列表信息 https://www.v2ex.com/member/w4mxl/topics?p=1
   static Future<List<ProfileRecentTopicItem>> getAllTopics(
       String userName, int p) async {
-    List<ProfileRecentTopicItem> topics = List<ProfileRecentTopicItem>();
+    List<ProfileRecentTopicItem> topics = <ProfileRecentTopicItem>[];
     var response =
         await dio.get("/member/" + userName + "/topics?p=" + p.toString());
     var document = parse(response.data);
@@ -1151,7 +1152,7 @@ class DioWeb {
         document.querySelectorAll("div[class='cell item']");
     if (aRootNode != null) {
       for (var aNode in aRootNode) {
-        ProfileRecentTopicItem item = new ProfileRecentTopicItem();
+        ProfileRecentTopicItem item = ProfileRecentTopicItem();
 
         if (page != null) {
           item.maxPage = int.parse(page.split('/')[1]);
@@ -1201,7 +1202,7 @@ class DioWeb {
   // 获取用户的所有回复列表信息 https://www.v2ex.com/member/w4mxl/replies
   static Future<List<ProfileRecentReplyItem>> getAllReplies(
       String userName, int p) async {
-    List<ProfileRecentReplyItem> replies = List<ProfileRecentReplyItem>();
+    List<ProfileRecentReplyItem> replies = <ProfileRecentReplyItem>[];
     var response =
         await dio.get("/member/" + userName + "/replies?p=" + p.toString());
     var document = parse(response.data);
@@ -1214,7 +1215,7 @@ class DioWeb {
     var replyContentList = document.querySelectorAll('div.reply_content');
 
     for (int i = 0; i < dockAreaList.length; i++) {
-      ProfileRecentReplyItem item = new ProfileRecentReplyItem();
+      ProfileRecentReplyItem item = ProfileRecentReplyItem();
 
       if (page != null) {
         item.maxPage = int.parse(page.split('/')[1]);
@@ -1238,8 +1239,8 @@ class DioWeb {
       String topicId, int p) async {
     print('在请求第$p页面数据');
     TopicDetailModel detailModel = TopicDetailModel();
-    List<TopicSubtleItem> subtleList = List(); // 附言
-    List<ReplyItem> replies = List();
+    List<TopicSubtleItem> subtleList = []; // 附言
+    List<ReplyItem> replies = [];
 
     var response = await dio.get("/t/" + topicId + "?p=" + p.toString(),
         options: buildCacheOptions(Duration(days: 4), forceRefresh: true));
@@ -1309,7 +1310,7 @@ class DioWeb {
     // 附言
     List<dom.Element> appendNodes = document.querySelectorAll(
         "#Wrapper > div > div:nth-child(1) > div[class='subtle']");
-    if (appendNodes != null && appendNodes.length > 0) {
+    if (appendNodes != null && appendNodes.isNotEmpty) {
       for (var node in appendNodes) {
         TopicSubtleItem subtleItem = TopicSubtleItem();
         subtleItem.fade = node
@@ -1382,7 +1383,7 @@ class DioWeb {
           .querySelectorAll("#Wrapper > div > div[class='box'] > div[id]");
       if (rootNode != null) {
         for (var aNode in rootNode) {
-          ReplyItem replyItem = new ReplyItem();
+          ReplyItem replyItem = ReplyItem();
           replyItem.avatar = aNode
               .querySelector('table > tbody > tr > td:nth-child(1) > img')
               .attributes["src"];

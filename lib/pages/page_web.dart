@@ -22,7 +22,7 @@ const UserAgent =
 class WebviewPage extends StatefulWidget {
   final String webUrl;
 
-  WebviewPage(this.webUrl);
+  const WebviewPage(this.webUrl);
 
   @override
   _WebviewPageState createState() => _WebviewPageState();
@@ -73,7 +73,7 @@ class _WebviewPageState extends State<WebviewPage> {
             //{"V2EX_LANG: zhcn,  _ga: GA1.2.1289876692.1572076174,  _gid: GA1.2.1961659963.1572076174,  _gat: 1,
             //    A2: \"2|1:0|10:1572080066|2:A2|56:M2IyZmU2Y2Q3ZWRjMzk0MjczYjk5YzdkY2FkNDZlZTRkNmJiNjgxNg==|c51d1ad4f4d2fcdb0175739e8232027120152f8d82d7467360adabed7f8f807f\""}
             Cookie cookie =
-                new Cookie(m.keys.elementAt(0), m.values.elementAt(0));
+                Cookie(m.keys.elementAt(0), m.values.elementAt(0));
             print("A2 cookie: " + cookie.toString());
             String cookiePath = await Utils.getCookiePath();
             PersistCookieJar cookieJar = PersistCookieJar(

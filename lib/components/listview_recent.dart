@@ -13,15 +13,15 @@ import 'listview_tab_topic.dart';
 
 class ListViewRecentTopics extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<ListViewRecentTopics> with AutomaticKeepAliveClientMixin {
   int p = 1;
   bool isUpLoading = false;
   bool hasError = false;
-  List<TabTopicItem> items = new List();
-  ScrollController _scrollController = ScrollController();
+  List<TabTopicItem> items = [];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class TopicListViewState extends State<ListViewRecentTopics> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (items.length > 0) {
+    if (items.isNotEmpty) {
       return RefreshIndicator(
           child: ListView.builder(
             controller: _scrollController,
@@ -91,7 +91,7 @@ class TopicListViewState extends State<ListViewRecentTopics> with AutomaticKeepA
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(S.of(context).oops),
+          Text(S.of(context).oops),
           RaisedButton.icon(
             onPressed: () {
               Progresshud.show();

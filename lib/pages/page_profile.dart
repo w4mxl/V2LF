@@ -37,7 +37,7 @@ class ProfilePage extends StatefulWidget {
 
   final String heroTag;
 
-  ProfilePage(this.userName, this.avatar, {this.heroTag = 'avatar'});
+  const ProfilePage(this.userName, this.avatar, {this.heroTag = 'avatar'});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -348,13 +348,13 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近主题',
-              style: new TextStyle(fontSize: 20.0),
+              style: TextStyle(fontSize: 20.0),
             ),
           ),
           Visibility(
             visible: _memberProfileModel != null &&
                 _memberProfileModel.topicList != null &&
-                _memberProfileModel.topicList.length > 0,
+                _memberProfileModel.topicList.isNotEmpty,
             child: InkWell(
               child: Text(
                 '查看所有',
@@ -403,7 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         );
-      } else if (_memberProfileModel.topicList.length > 0) {
+      } else if (_memberProfileModel.topicList.isNotEmpty) {
         return Container(
           child: ListView.separated(
             shrinkWrap: true,
@@ -422,7 +422,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         );
-      } else if (_memberProfileModel.topicList?.length == 0) {
+      } else if (_memberProfileModel.topicList.isEmpty) {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -452,12 +452,12 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
               '最近回复',
-              style: new TextStyle(fontSize: 20.0),
+              style: TextStyle(fontSize: 20.0),
             ),
           ),
           Visibility(
             visible: _memberProfileModel != null &&
-                _memberProfileModel.replyList.length > 0,
+                _memberProfileModel.replyList.isNotEmpty,
             child: InkWell(
               child: Text(
                 '查看所有',
@@ -477,7 +477,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildRecentRepliesListView() {
     if (_memberProfileModel != null) {
-      if (_memberProfileModel.replyList.length > 0) {
+      if (_memberProfileModel.replyList.isNotEmpty) {
         return Container(
           child: ListView.separated(
             padding: EdgeInsets.zero,
@@ -531,7 +531,7 @@ class TopicItemView extends StatelessWidget {
   final String userName;
   final String avatar;
 
-  TopicItemView(this.topic, this.userName, this.avatar);
+  const TopicItemView(this.topic, this.userName, this.avatar);
 
   @override
   Widget build(BuildContext context) {
@@ -539,7 +539,7 @@ class TopicItemView extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          new MaterialPageRoute(
+          MaterialPageRoute(
               builder: (context) => TopicDetails(
                     topic.topicId,
                     topicTitle: topic.topicTitle,
@@ -555,27 +555,27 @@ class TopicItemView extends StatelessWidget {
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(12.0),
-              child: new Row(
+              child: Row(
                 children: <Widget>[
-                  new Expanded(
-                    child: new Container(
+                  Expanded(
+                    child: Container(
                         margin: const EdgeInsets.only(right: 8.0),
-                        child: new Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             /// title
                             Container(
                               alignment: Alignment.centerLeft,
-                              child: new Text(
+                              child: Text(
                                 topic.topicTitle,
-                                style: new TextStyle(fontSize: 16.0),
+                                style: TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 5.0),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                child: new Row(
+                                child: Row(
                                   children: <Widget>[
                                     InkWell(
                                       child: Container(
@@ -610,10 +610,10 @@ class TopicItemView extends StatelessWidget {
                                                   ))),
                                     ),
                                     Text(
-                                      '${topic.lastReplyTime}',
+                                      topic.lastReplyTime,
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
-                                      style: new TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12.0,
                                         color: const Color(0xffcccccc),
                                       ),
@@ -629,16 +629,16 @@ class TopicItemView extends StatelessWidget {
                     offstage: topic.replyCount == '0',
                     child: Row(
                       children: <Widget>[
-                        new Icon(
+                        Icon(
                           FontAwesomeIcons.comment,
                           size: 14.0,
                           color: Colors.grey,
                         ),
-                        new Padding(
+                        Padding(
                           padding: const EdgeInsets.only(left: 4.0),
-                          child: new Text(
+                          child: Text(
                             topic.replyCount,
-                            style: new TextStyle(
+                            style: TextStyle(
                                 fontSize: 13.0,
                                 color: Theme.of(context).unselectedWidgetColor),
                           ),
@@ -660,7 +660,7 @@ class TopicItemView extends StatelessWidget {
 class ReplyItemView extends StatelessWidget {
   final ProfileRecentReplyItem reply;
 
-  ReplyItemView(this.reply);
+  const ReplyItemView(this.reply);
 
   @override
   Widget build(BuildContext context) {
@@ -728,7 +728,7 @@ class ReplyItemView extends StatelessWidget {
             alignment: Alignment.bottomRight,
             child: Text(
               reply.replyTime,
-              style: new TextStyle(
+              style: TextStyle(
                 fontSize: 12.0,
                 color: Theme.of(context).unselectedWidgetColor,
               ),

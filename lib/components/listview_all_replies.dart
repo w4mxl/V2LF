@@ -14,10 +14,10 @@ import 'package:flutter_app/pages/page_profile.dart';
 class AllRepliesListView extends StatefulWidget {
   final String userName;
 
-  AllRepliesListView(this.userName);
+  const AllRepliesListView(this.userName);
 
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<AllRepliesListView> {
@@ -26,9 +26,9 @@ class TopicListViewState extends State<AllRepliesListView> {
 
   bool isLoading = false;
   bool empty = false;
-  List<ProfileRecentReplyItem> items = new List();
+  List<ProfileRecentReplyItem> items = [];
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class TopicListViewState extends State<AllRepliesListView> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        if (items.length > 0 && p <= maxPage) {
+        if (items.isNotEmpty && p <= maxPage) {
           getTopics();
         } else {
           print("没有更多...");
@@ -55,7 +55,7 @@ class TopicListViewState extends State<AllRepliesListView> {
       List<ProfileRecentReplyItem> newEntries = await DioWeb.getAllReplies(widget.userName, p++);
       setState(() {
         isLoading = false;
-        if (newEntries.length > 0) {
+        if (newEntries.isNotEmpty) {
           items.addAll(newEntries);
           maxPage = newEntries[0].maxPage;
         } else {
@@ -67,8 +67,8 @@ class TopicListViewState extends State<AllRepliesListView> {
 
   @override
   Widget build(BuildContext context) {
-    if (items.length > 0) {
-      return new RefreshIndicator(
+    if (items.isNotEmpty) {
+      return RefreshIndicator(
           child: Container(
             child: ListView.separated(
               controller: _scrollController,
@@ -110,7 +110,7 @@ class TopicListViewState extends State<AllRepliesListView> {
       ]);
     }
     // By default, show a loading spinner
-    return new Center(
+    return Center(
       child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
   }

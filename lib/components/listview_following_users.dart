@@ -38,7 +38,7 @@ class _FollowingUsersListViewState extends State<FollowingUsersListView> with Au
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.length > 0) {
+          if (snapshot.data.isNotEmpty) {
             return ListView.separated(
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {

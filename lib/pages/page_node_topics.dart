@@ -30,7 +30,7 @@ class NodeTopics extends StatefulWidget {
   final String nodeName;
   final String nodeImg;
 
-  NodeTopics(this.nodeId, {this.nodeName, this.nodeImg});
+  const NodeTopics(this.nodeId, {this.nodeName, this.nodeImg});
 
   @override
   _NodeTopicsState createState() => _NodeTopicsState();
@@ -299,7 +299,7 @@ class TopicItemView extends StatelessWidget {
   final NodeTopicItem topic;
   final String nodeName;
 
-  TopicItemView(this.topic, this.nodeName);
+  const TopicItemView(this.topic, this.nodeName);
 
   @override
   Widget build(BuildContext context) {

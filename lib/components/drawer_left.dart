@@ -52,16 +52,16 @@ class _DrawerLeftState extends State<DrawerLeft> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final TextStyle aboutTextStyle = themeData.textTheme.body2;
+    final TextStyle aboutTextStyle = themeData.textTheme.bodyText1;
     final TextStyle linkStyle =
-        themeData.textTheme.body2.copyWith(color: themeData.accentColor);
+        themeData.textTheme.bodyText1.copyWith(color: themeData.accentColor);
 
     return SizedBox(
-      child: new Drawer(
+      child: Drawer(
         child: SingleChildScrollView(
-          child: new Column(
+          child: Column(
             children: <Widget>[
-              new UserAccountsDrawerHeader(
+              UserAccountsDrawerHeader(
                 accountName: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -206,14 +206,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   ),
                 ),
                 // 随机一句短诗词 poems[Random().nextInt(poems.length - 1)]
-                currentAccountPicture: new GestureDetector(
+                currentAccountPicture: GestureDetector(
                   onTap: () {
                     if (userName.isEmpty) {
                       //未登录
                       var future = Navigator.push(
                           context,
-                          new MaterialPageRoute(
-                              builder: (context) => new LoginPage(),
+                          MaterialPageRoute(
+                              builder: (context) => LoginPage(),
                               fullscreenDialog: true));
                       future.then((value) {
                         // 直接close登录页则value为null；登录成功 value 为 true
@@ -251,30 +251,30 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   ),
                 ),
                 // 这里可以根据一天的不同时间显示不同的background，增加美观
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   color: Provider.of<DisplayModel>(context).materialColor,
-                  image: new DecorationImage(
+                  image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: new NetworkImage(GoogleNowImg.allLocation[
+                      image: NetworkImage(GoogleNowImg.allLocation[
                               GoogleNowImg.getRandomLocationIndex()]
                           [GoogleNowImg.getCurrentTimeIndex()])),
                 ),
                 margin: null,
               ),
               ListTile(
-                leading: new Icon(Icons.whatshot),
-                title: new Text(S.of(context).history),
+                leading: Icon(Icons.whatshot),
+                title: Text(S.of(context).history),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
-                      new MaterialPageRoute(
-                          builder: (context) => new HistoryHotCategory()));
+                      MaterialPageRoute(
+                          builder: (context) => HistoryHotCategory()));
                 },
               ),
               ListTile(
-                leading: new Icon(Icons.history),
-                title: new Text(S.of(context).recentRead),
+                leading: Icon(Icons.history),
+                title: Text(S.of(context).recentRead),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
@@ -284,8 +284,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 },
               ),
               ExpansionTileDrawerNodes(
-                leading: new Icon(Icons.apps),
-                title: new Text(S.of(context).nodes),
+                leading: Icon(Icons.apps),
+                title: Text(S.of(context).nodes),
                 onExpansionChanged: (bool isExpanded) {
                   if (isExpanded && listHotNode == null) {
                     // 获取最热节点
@@ -293,7 +293,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   }
                 },
                 children: <Widget>[
-                  (listHotNode != null && listHotNode.length > 0)
+                  (listHotNode != null && listHotNode.isNotEmpty)
                       ? Wrap(
                           children: listHotNode.map((NodeItem node) {
                             return ActionChip(
@@ -326,8 +326,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 ],
               ),
               ListTile(
-                leading: new Icon(Icons.search),
-                title: new Text(S.of(context).search),
+                leading: Icon(Icons.search),
+                title: Text(S.of(context).search),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   showSearch(
@@ -340,8 +340,8 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ListTile(
                 enabled: userName.isNotEmpty,
                 // 登录后打开
-                leading: new Icon(Icons.notifications),
-                title: new Text(S.of(context).notifications),
+                leading: Icon(Icons.notifications),
+                title: Text(S.of(context).notifications),
                 trailing: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
@@ -353,14 +353,14 @@ class _DrawerLeftState extends State<DrawerLeft> {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
-                      new MaterialPageRoute(
-                          builder: (context) => new NotificationPage()));
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()));
                 },
               ),
               // 自定义的 ExpansionTile
               ExpansionTileDrawerFav(
                 isLogin: userName.isNotEmpty,
-                leading: new Icon(Icons.star),
+                leading: Icon(Icons.star),
                 title: Text(S.of(context).favorites),
                 onExpansionChanged: (bool isExpanded) {
                   if (isExpanded && listFavNode == null) {
@@ -379,7 +379,7 @@ class _DrawerLeftState extends State<DrawerLeft> {
                             ),
                           ],
                         )
-                      : (listFavNode.length > 0)
+                      : (listFavNode.isNotEmpty)
                           ? ListView.separated(
                               padding: EdgeInsets.all(0),
                               separatorBuilder: (context, index) => Divider(
@@ -423,20 +423,20 @@ class _DrawerLeftState extends State<DrawerLeft> {
               ),
               ListTile(
                 enabled: userName.isNotEmpty, // 登录后打开
-                leading: new Icon(Icons.child_care),
-                title: new Text(S.of(context).following),
+                leading: Icon(Icons.child_care),
+                title: Text(S.of(context).following),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
-                      new MaterialPageRoute(
+                      MaterialPageRoute(
                           builder: (context) => FollowingPage()));
                 },
               ),
               ListTile(
                 enabled: userName.isNotEmpty,
-                leading: new Icon(Icons.add),
-                title: new Text(S.of(context).create),
+                leading: Icon(Icons.add),
+                title: Text(S.of(context).create),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   // TODO
@@ -451,23 +451,23 @@ class _DrawerLeftState extends State<DrawerLeft> {
                 height: 0,
               ),
               ListTile(
-                leading: new Icon(Icons.settings),
-                title: new Text(S.of(context).settings),
+                leading: Icon(Icons.settings),
+                title: Text(S.of(context).settings),
                 onTap: () {
                   if (Navigator.canPop(context)) Navigator.pop(context);
                   Navigator.push(
                       context,
-                      new MaterialPageRoute(
-                          builder: (context) => new SettingPage()));
+                      MaterialPageRoute(
+                          builder: (context) => SettingPage()));
                 },
               ),
               AboutListTile(
-                icon: new Icon(Icons.info),
-                child: new Text(S.of(context).about),
+                icon: Icon(Icons.info),
+                child: Text(S.of(context).about),
                 applicationName: "V2LF",
                 applicationVersion: "v2020.9",
                 applicationLegalese: '© 2020 Wml',
-                applicationIcon: new Image.asset(
+                applicationIcon: Image.asset(
                   "assets/images/icon/ic_launcher.png",
                   width: 64.0,
                   height: 64.0,

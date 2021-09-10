@@ -10,7 +10,7 @@ class UserAllTopicsPage extends StatelessWidget {
   final String userName;
   final String avatar;
 
-  UserAllTopicsPage(this.userName, this.avatar);
+  const UserAllTopicsPage(this.userName, this.avatar);
 
   @override
   Widget build(BuildContext context) {

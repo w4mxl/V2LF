@@ -24,6 +24,6 @@ class Member {
 
   @override
   String toString() {
-    return '{"id": $id,"avatar_large": ${avatarLarge != null?'${json.encode(avatarLarge)}':'null'},"avatar_mini": ${avatarMini != null?'${json.encode(avatarMini)}':'null'},"avatar_normal": ${avatarNormal != null?'${json.encode(avatarNormal)}':'null'},"tagline": ${tagline != null?'${json.encode(tagline)}':'null'},"username": ${username != null?'${json.encode(username)}':'null'}}';
+    return '{"id": $id,"avatar_large": ${avatarLarge != null?json.encode(avatarLarge):'null'},"avatar_mini": ${avatarMini != null?json.encode(avatarMini):'null'},"avatar_normal": ${avatarNormal != null?json.encode(avatarNormal):'null'},"tagline": ${tagline != null?json.encode(tagline):'null'},"username": ${username != null?json.encode(username):'null'}}';
   }
 }

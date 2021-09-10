@@ -15,10 +15,10 @@ class AllTopicsListView extends StatefulWidget {
   final String userName;
   final String avatar;
 
-  AllTopicsListView(this.userName,this.avatar);
+  const AllTopicsListView(this.userName,this.avatar);
 
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<AllTopicsListView> {
@@ -27,9 +27,9 @@ class TopicListViewState extends State<AllTopicsListView> {
 
   bool isLoading = false;
   bool empty = false;
-  List<ProfileRecentTopicItem> items = new List();
+  List<ProfileRecentTopicItem> items = [];
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class TopicListViewState extends State<AllTopicsListView> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        if (items.length > 0 && p <= maxPage) {
+        if (items.isNotEmpty && p <= maxPage) {
           getTopics();
         } else {
           print("没有更多...");
@@ -56,7 +56,7 @@ class TopicListViewState extends State<AllTopicsListView> {
       List<ProfileRecentTopicItem> newEntries = await DioWeb.getAllTopics(widget.userName, p++);
       setState(() {
         isLoading = false;
-        if (newEntries.length > 0) {
+        if (newEntries.isNotEmpty) {
           items.addAll(newEntries);
           maxPage = newEntries[0].maxPage;
         } else {
@@ -68,8 +68,8 @@ class TopicListViewState extends State<AllTopicsListView> {
 
   @override
   Widget build(BuildContext context) {
-    if (items.length > 0) {
-      return new RefreshIndicator(
+    if (items.isNotEmpty) {
+      return RefreshIndicator(
           child: Container(
             child: ListView.separated(
               controller: _scrollController,
@@ -111,7 +111,7 @@ class TopicListViewState extends State<AllTopicsListView> {
       ]);
     }
     // By default, show a loading spinner
-    return new Center(
+    return Center(
       child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
     );
   }

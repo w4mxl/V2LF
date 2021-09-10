@@ -3,7 +3,7 @@ class LanguageModel {
   String countryCode;
   bool isSelected;
 
-  LanguageModel(this.languageCode, this.countryCode, {this.isSelected: false});
+  LanguageModel(this.languageCode, this.countryCode, {this.isSelected = false});
 
   LanguageModel.fromJson(Map<String, dynamic> json)
       : languageCode = json['languageCode'],
@@ -18,7 +18,7 @@ class LanguageModel {
 
   @override
   String toString() {
-    StringBuffer sb = new StringBuffer('{');
+    StringBuffer sb = StringBuffer('{');
     sb.write("\"languageCode\":\"$languageCode\"");
     sb.write(",\"countryCode\":\"$countryCode\"");
     sb.write('}');

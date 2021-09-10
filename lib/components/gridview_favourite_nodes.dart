@@ -44,12 +44,12 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
           case ConnectionState.none:
           case ConnectionState.active:
           case ConnectionState.waiting:
-            return new Center(
+            return Center(
               child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
             );
           case ConnectionState.done:
             if (snapshot.hasError) return Center(child: Text('Error: ${snapshot.error}'));
-            if (snapshot.data.length > 0) {
+            if (snapshot.data.isNotEmpty) {
               return GridView.count(
                 crossAxisCount: 3,
                 mainAxisSpacing: 6,
@@ -140,8 +140,8 @@ class _FavouriteNodesGridState extends State<FavouriteNodesGrid> with AutomaticK
       onTap: () {
         var future = Navigator.push(
             context,
-            new MaterialPageRoute(
-                builder: (context) => new NodeTopics(
+            MaterialPageRoute(
+                builder: (context) => NodeTopics(
                       node.nodeId,
                       nodeName: node.nodeName,
                       nodeImg: node.img,

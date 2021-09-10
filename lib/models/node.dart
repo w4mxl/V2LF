@@ -17,38 +17,38 @@ class Node {
   Node({this.avatarLarge, this.name, this.avatarNormal, this.title, this.url, this.footer, this.header, this.titleAlternative, this.avatarMini, this.parentNodeName, this.root, this.topics, this.stars, this.id});
 
   Node.fromJson(Map<String, dynamic> json) {    
-    this.avatarLarge = json['avatar_large'];
-    this.name = json['name'];
-    this.avatarNormal = json['avatar_normal'];
-    this.title = json['title'];
-    this.url = json['url'];
-    this.footer = json['footer'];
-    this.header = json['header'];
-    this.titleAlternative = json['title_alternative'];
-    this.avatarMini = json['avatar_mini'];
-    this.parentNodeName = json['parent_node_name'];
-    this.root = json['root'];
-    this.topics = json['topics'];
-    this.stars = json['stars'];
-    this.id = json['id'];
+    avatarLarge = json['avatar_large'];
+    name = json['name'];
+    avatarNormal = json['avatar_normal'];
+    title = json['title'];
+    url = json['url'];
+    footer = json['footer'];
+    header = json['header'];
+    titleAlternative = json['title_alternative'];
+    avatarMini = json['avatar_mini'];
+    parentNodeName = json['parent_node_name'];
+    root = json['root'];
+    topics = json['topics'];
+    stars = json['stars'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['avatar_large'] = this.avatarLarge;
-    data['name'] = this.name;
-    data['avatar_normal'] = this.avatarNormal;
-    data['title'] = this.title;
-    data['url'] = this.url;
-    data['footer'] = this.footer;
-    data['header'] = this.header;
-    data['title_alternative'] = this.titleAlternative;
-    data['avatar_mini'] = this.avatarMini;
-    data['parent_node_name'] = this.parentNodeName;
-    data['root'] = this.root;
-    data['topics'] = this.topics;
-    data['stars'] = this.stars;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['avatar_large'] = avatarLarge;
+    data['name'] = name;
+    data['avatar_normal'] = avatarNormal;
+    data['title'] = title;
+    data['url'] = url;
+    data['footer'] = footer;
+    data['header'] = header;
+    data['title_alternative'] = titleAlternative;
+    data['avatar_mini'] = avatarMini;
+    data['parent_node_name'] = parentNodeName;
+    data['root'] = root;
+    data['topics'] = topics;
+    data['stars'] = stars;
+    data['id'] = id;
     return data;
   }
 

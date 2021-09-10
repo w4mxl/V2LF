@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 // 关注的人的最新主题列表 listview
 class FollowTopicListView extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new TopicListViewState();
+  State<StatefulWidget> createState() => TopicListViewState();
 }
 
 class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAliveClientMixin {
@@ -25,9 +25,9 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
 
   bool isLoading = false; // 正在请求的过程中多次下拉或上拉会造成多次加载更多的情况，通过这个字段解决
   bool empty = false;
-  List<FavTopicItem> items = new List();
+  List<FavTopicItem> items = [];
 
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         print("加载更多...");
-        if (items.length > 0 && p <= maxPage) {
+        if (items.isNotEmpty && p <= maxPage) {
           getTopics();
         } else {
           print("没有更多...");
@@ -54,7 +54,7 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
       List<FavTopicItem> newEntries = await DioWeb.getTopics('following', p++);
       setState(() {
         isLoading = false;
-        if (newEntries.length > 0) {
+        if (newEntries.isNotEmpty) {
           items.addAll(newEntries);
           maxPage = newEntries[0].maxPage;
         } else {
@@ -67,7 +67,7 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (items.length > 0) {
+    if (items.isNotEmpty) {
       return RefreshIndicator(
           child: Container(
             child: ListView.builder(
@@ -144,7 +144,7 @@ class TopicListViewState extends State<FollowTopicListView> with AutomaticKeepAl
 class TopicItemView extends StatelessWidget {
   final FavTopicItem topic;
 
-  TopicItemView(this.topic);
+  const TopicItemView(this.topic);
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +219,7 @@ class TopicItemView extends StatelessWidget {
                                         ),
                                       ),
                                       Text(topic.memberId, style: Theme.of(context).textTheme.caption),
-                                      Text('${topic.lastReplyTime}',
+                                      Text(topic.lastReplyTime,
                                           textAlign: TextAlign.left, maxLines: 1, style: Theme.of(context).textTheme.caption),
                                       Text(topic.lastReplyMId, style: Theme.of(context).textTheme.caption),
                                     ],

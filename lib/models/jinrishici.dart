@@ -7,17 +7,17 @@ class Poem {
   Poem({this.status, this.token, this.ipAddress, this.data});
 
   Poem.fromJson(Map<String, dynamic> json) {    
-    this.status = json['status'];
-    this.token = json['token'];
-    this.ipAddress = json['ipAddress'];
-    this.data = json['data'] != null ? DataBean.fromJson(json['data']) : null;
+    status = json['status'];
+    token = json['token'];
+    ipAddress = json['ipAddress'];
+    data = json['data'] != null ? DataBean.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['token'] = this.token;
-    data['ipAddress'] = this.ipAddress;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['token'] = token;
+    data['ipAddress'] = ipAddress;
     if (this.data != null) {
       data['data'] = this.data.toJson();
     }
@@ -38,29 +38,29 @@ class DataBean {
   DataBean({this.id, this.content, this.recommendedReason, this.cacheAt, this.popularity, this.origin, this.matchTags});
 
   DataBean.fromJson(Map<String, dynamic> json) {    
-    this.id = json['id'];
-    this.content = json['content'];
-    this.recommendedReason = json['recommendedReason'];
-    this.cacheAt = json['cacheAt'];
-    this.popularity = json['popularity'];
-    this.origin = json['origin'] != null ? OriginBean.fromJson(json['origin']) : null;
+    id = json['id'];
+    content = json['content'];
+    recommendedReason = json['recommendedReason'];
+    cacheAt = json['cacheAt'];
+    popularity = json['popularity'];
+    origin = json['origin'] != null ? OriginBean.fromJson(json['origin']) : null;
 
     List<dynamic> matchTagsList = json['matchTags'];
-    this.matchTags = new List();
-    this.matchTags.addAll(matchTagsList.map((o) => o.toString()));
+    matchTags = List();
+    matchTags.addAll(matchTagsList.map((o) => o.toString()));
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['content'] = this.content;
-    data['recommendedReason'] = this.recommendedReason;
-    data['cacheAt'] = this.cacheAt;
-    data['popularity'] = this.popularity;
-    if (this.origin != null) {
-      data['origin'] = this.origin.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['content'] = content;
+    data['recommendedReason'] = recommendedReason;
+    data['cacheAt'] = cacheAt;
+    data['popularity'] = popularity;
+    if (origin != null) {
+      data['origin'] = origin.toJson();
     }
-    data['matchTags'] = this.matchTags;
+    data['matchTags'] = matchTags;
     return data;
   }
 }
@@ -75,28 +75,28 @@ class OriginBean {
   OriginBean({this.title, this.dynasty, this.author, this.content, this.translate});
 
   OriginBean.fromJson(Map<String, dynamic> json) {    
-    this.title = json['title'];
-    this.dynasty = json['dynasty'];
-    this.author = json['author'];
+    title = json['title'];
+    dynasty = json['dynasty'];
+    author = json['author'];
 
     List<dynamic> contentList = json['content'];
-    this.content = new List();
-    this.content.addAll(contentList.map((o) => o.toString()));
+    content = List();
+    content.addAll(contentList.map((o) => o.toString()));
 
     List<dynamic> translateList = json['translate'];
     if(translateList!=null){
-      this.translate = new List();
-      this.translate.addAll(translateList.map((o) => o.toString()));
+      translate = [];
+      translate.addAll(translateList.map((o) => o.toString()));
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.title;
-    data['dynasty'] = this.dynasty;
-    data['author'] = this.author;
-    data['content'] = this.content;
-    data['translate'] = this.translate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['title'] = title;
+    data['dynasty'] = dynasty;
+    data['author'] = author;
+    data['content'] = content;
+    data['translate'] = translate;
     return data;
   }
 }

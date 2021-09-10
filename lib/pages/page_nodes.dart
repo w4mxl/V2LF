@@ -82,7 +82,7 @@ class NodeGroupWidget extends StatelessWidget {
   final NodeGroup nodeGroup;
   final BuildContext context;
 
-  NodeGroupWidget(this.nodeGroup, this.context);
+  const NodeGroupWidget(this.nodeGroup, this.context);
 
   @override
   Widget build(BuildContext context) {

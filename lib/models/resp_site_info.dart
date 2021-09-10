@@ -25,6 +25,6 @@ class SiteInfoResp {
   String toString() {
     return super.toString() +
         '\n' +
-        '{"description": ${description != null ? '${json.encode(description)}' : 'null'},"domain": ${domain != null ? '${json.encode(domain)}' : 'null'},"slogan": ${slogan != null ? '${json.encode(slogan)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'}}';
+        '{"description": ${description != null ? json.encode(description) : 'null'},"domain": ${domain != null ? json.encode(domain) : 'null'},"slogan": ${slogan != null ? json.encode(slogan) : 'null'},"title": ${title != null ? json.encode(title) : 'null'}}';
   }
 }

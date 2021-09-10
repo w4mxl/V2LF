@@ -8,7 +8,7 @@ class TabModel {
   String key;
   bool checked;
 
-  TabModel(this.title, this.key, {this.checked: true});
+  TabModel(this.title, this.key, {this.checked = true});
 
   TabModel.fromJson(Map<String, dynamic> json)
       : title = json['title'],
@@ -23,7 +23,7 @@ class TabModel {
 
   @override
   String toString() {
-    StringBuffer sb = new StringBuffer('{');
+    StringBuffer sb = StringBuffer('{');
     sb.write("\"title\":\"$title\"");
     sb.write(",\"key\":\"$key\"");
     sb.write(",\"checked\":\"$checked\"");

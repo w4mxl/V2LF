@@ -23,7 +23,7 @@ import 'circle_avatar.dart';
 class TopicListView extends StatefulWidget {
   final String tabKey;
 
-  TopicListView(this.tabKey);
+  const TopicListView(this.tabKey);
 
   @override
   State<StatefulWidget> createState() => TopicListViewState();
@@ -107,7 +107,7 @@ class TopicListViewState extends State<TopicListView>
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return RefreshIndicator(
-                  child: snapshot.data.length > 0
+                  child: snapshot.data.isNotEmpty
                       ? Stack(
                           children: <Widget>[
                             ListView.builder(
@@ -202,7 +202,7 @@ class TopicListViewState extends State<TopicListView>
 class TopicItemView extends StatefulWidget {
   final TabTopicItem topic;
 
-  TopicItemView(this.topic);
+  const TopicItemView(this.topic);
 
   @override
   _TopicItemViewState createState() => _TopicItemViewState();

@@ -49,7 +49,7 @@ class TopicDetails extends StatefulWidget {
   final String avatar;
   final String replyCount;
 
-  TopicDetails(this.topicId,
+  const TopicDetails(this.topicId,
       {this.topicTitle = '',
       this.nodeName = '分享创造',
       this.createdId = 'v2er',
@@ -96,7 +96,7 @@ class BottomSheetOfComment extends StatefulWidget {
   final String initialValue;
   final void Function(String) onValueChange;
 
-  BottomSheetOfComment(this.topicId, this.initialValue, this.onValueChange);
+  const BottomSheetOfComment(this.topicId, this.initialValue, this.onValueChange);
 
   @override
   _BottomSheetOfCommentState createState() => _BottomSheetOfCommentState();
@@ -147,7 +147,7 @@ class _BottomSheetOfCommentState extends State<BottomSheetOfComment> {
                             InputDecoration.collapsed(hintText: "发表公开评论..."),
                         controller: _textController,
                         onChanged: (String text) => setState(() {
-                          _isComposing = text.length > 0;
+                          _isComposing = text.isNotEmpty;
                           widget.onValueChange(text);
                         }),
                         onSubmitted: _onTextMsgSubmitted,
@@ -218,7 +218,7 @@ class TopicDetailView extends StatefulWidget {
   final String avatar;
   final String replyCount;
 
-  TopicDetailView(this.topicId,
+  const TopicDetailView(this.topicId,
       {this.topicTitle,
       this.nodeName,
       this.createdId,
@@ -252,10 +252,10 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   bool isUpLoading = false;
 
   bool isOnlyUp = false; // 只看楼主
-  List<ReplyItem> replyListAll = List(); //只看楼主时保存的当前所有评论
+  List<ReplyItem> replyListAll = []; //只看楼主时保存的当前所有评论
 
   TopicDetailModel _detailModel;
-  List<ReplyItem> replyList = List();
+  List<ReplyItem> replyList = [];
 
   ScrollController _scrollController;
 
@@ -282,7 +282,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         print("滑到底部了，尝试加载更多...");
-        if (replyList.length > 0 && p <= maxPage) {
+        if (replyList.isNotEmpty && p <= maxPage) {
           getData();
         } else {
           print("没有更多...");
@@ -414,7 +414,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
         replyList.clear();
         replyList.addAll(replyListAll);
       });
-    } else if (replyList.length != 0) {
+    } else if (replyList.isNotEmpty) {
       // 只看楼主
       HapticFeedback.heavyImpact(); // 震动反馈
       replyListAll.clear();
@@ -808,9 +808,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             child: Text(
                               _detailModel != null
                                   ? _detailModel.nodeName
-                                  : (widget.nodeName != null
-                                      ? widget.nodeName
-                                      : '分享创造'),
+                                  : (widget.nodeName ?? '分享创造'),
                               textAlign: TextAlign.left,
                               maxLines: 1,
                               style: TextStyle(
@@ -882,7 +880,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
             child: SelectableText(
               _detailModel != null
                   ? _detailModel.topicTitle
-                  : (widget.topicTitle != null ? widget.topicTitle : ''),
+                  : (widget.topicTitle ?? ''),
               style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -928,7 +926,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
           // 附言
           if (_detailModel != null)
             Offstage(
-              offstage: _detailModel.subtleList.length == 0,
+              offstage: _detailModel.subtleList.isEmpty,
               child: Column(
                 children: <Widget>[
                   Column(
@@ -1063,7 +1061,7 @@ class _TopicDetailViewState extends State<TopicDetailView> {
   }
 
   StatelessWidget commentCard(void Function(Action action) select) {
-    return replyList.length == 0
+    return replyList.isEmpty
         ? Container(
             // 无回复
             padding: const EdgeInsets.only(top: 2.0, bottom: 10.0),
@@ -1099,9 +1097,9 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                         var document = parse(replyContentRendered);
                         List<dom.Element> aRootNode =
                             document.querySelectorAll('a');
-                        if (aRootNode.length > 0) {
+                        if (aRootNode.isNotEmpty) {
                           // 评论中 @ 到的用户
-                          List<String> userNames = List();
+                          List<String> userNames = [];
                           for (var aNode in aRootNode) {
                             if (aNode.attributes['href']
                                 .startsWith('/member/')) {
@@ -1109,13 +1107,13 @@ class _TopicDetailViewState extends State<TopicDetailView> {
                             }
                           }
                           print("wml::${userNames.length}");
-                          if (userNames.length > 0) {
+                          if (userNames.isNotEmpty) {
                             // 罗列出要在 BottomSheet 中展示的列表数据
                             // 过滤掉评论中自己@自己的情况
                             if (!userNames.contains(reply.userName)) {
                               userNames.add(reply.userName); // 加上当前评论用户
                             }
-                            List<ReplyItem> listToShow = List();
+                            List<ReplyItem> listToShow = [];
                             var list = replyList.sublist(0, index + 1);
                             for (var item in list) {
                               for (var userName in userNames) {

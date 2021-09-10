@@ -51,7 +51,7 @@ class SpHelper {
   }
 
   /// get object
-  static T getObject<T>(String key, T f(Map v), {T defValue}) {
+  static T getObject<T>(String key, T Function(Map v) f, {T defValue}) {
     String _data = sp.getString(key);
     Map map = (isEmpty(_data)) ? null : json.decode(_data);
     return map == null ? defValue : f(map);
@@ -94,9 +94,7 @@ class SpHelper {
 
   static String getFontFamily() {
     var _fontFamily = sp.getString(SP_FONT_FAMILY);
-    if (_fontFamily == null) {
-      _fontFamily = 'Whitney';
-    }
+    _fontFamily ??= 'Whitney';
     return _fontFamily;
   }
 

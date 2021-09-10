@@ -10,7 +10,7 @@ class Sov2ex {
   List<HitsListBean> hits;
 
   static Sov2ex fromMap(Map<String, dynamic> map) {
-    Sov2ex sov2ex = new Sov2ex();
+    Sov2ex sov2ex = Sov2ex();
     sov2ex.timed_out = map['timed_out'];
     sov2ex.took = map['took'];
     sov2ex.total = map['total'];
@@ -19,7 +19,7 @@ class Sov2ex {
   }
 
   static List<Sov2ex> fromMapList(dynamic mapList) {
-    List<Sov2ex> list = new List(mapList.length);
+    List<Sov2ex> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
       list[i] = fromMap(mapList[i]);
     }
@@ -36,7 +36,7 @@ class HitsListBean {
   HighlightBean highlight;
 
   static HitsListBean fromMap(Map<String, dynamic> map) {
-    HitsListBean hitsListBean = new HitsListBean();
+    HitsListBean hitsListBean = HitsListBean();
     hitsListBean.index = map['_index'];
     hitsListBean.type = map['_type'];
     hitsListBean.id = map['_id'];
@@ -47,7 +47,7 @@ class HitsListBean {
   }
 
   static List<HitsListBean> fromMapList(dynamic mapList) {
-    List<HitsListBean> list = new List(mapList.length);
+    List<HitsListBean> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
       list[i] = fromMap(mapList[i]);
     }
@@ -65,7 +65,7 @@ class SourceBean {
   int id;
 
   static SourceBean fromMap(Map<String, dynamic> map) {
-    SourceBean _sourceBean = new SourceBean();
+    SourceBean _sourceBean = SourceBean();
     _sourceBean.created = map['created'];
     _sourceBean.member = map['member'];
     _sourceBean.title = map['title'];
@@ -77,7 +77,7 @@ class SourceBean {
   }
 
   static List<SourceBean> fromMapList(dynamic mapList) {
-    List<SourceBean> list = new List(mapList.length);
+    List<SourceBean> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
       list[i] = fromMap(mapList[i]);
     }
@@ -92,29 +92,29 @@ class HighlightBean {
   List<String> title;
 
   static HighlightBean fromMap(Map<String, dynamic> map) {
-    HighlightBean highlightBean = new HighlightBean();
+    HighlightBean highlightBean = HighlightBean();
 
     if (map['content'] != null) {
       List<dynamic> dynamicList0 = map['content'];
-      highlightBean.content = new List();
+      highlightBean.content = List();
       highlightBean.content.addAll(dynamicList0.map((o) => o.toString()));
     }
 
     if (map['postscript_list.content'] != null) {
       List<dynamic> dynamicList1 = map['postscript_list.content'];
-      highlightBean.postscript_list = new List();
+      highlightBean.postscript_list = List();
       highlightBean.postscript_list.addAll(dynamicList1.map((o) => o.toString()));
     }
 
     if (map['reply_list.content'] != null) {
       List<dynamic> dynamicList2 = map['reply_list.content'];
-      highlightBean.reply_list = new List();
+      highlightBean.reply_list = [];
       highlightBean.reply_list.addAll(dynamicList2.map((o) => o.toString()));
     }
 
     if (map['title'] != null) {
       List<dynamic> dynamicList3 = map['title'];
-      highlightBean.title = new List();
+      highlightBean.title = List();
       highlightBean.title.addAll(dynamicList3.map((o) => o.toString()));
     }
 
@@ -122,7 +122,7 @@ class HighlightBean {
   }
 
   static List<HighlightBean> fromMapList(dynamic mapList) {
-    List<HighlightBean> list = new List(mapList.length);
+    List<HighlightBean> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
       list[i] = fromMap(mapList[i]);
     }

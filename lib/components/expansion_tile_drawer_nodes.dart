@@ -143,8 +143,9 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes>
       }
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
+    if (widget.onExpansionChanged != null) {
       widget.onExpansionChanged(_isExpanded);
+    }
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -169,7 +170,7 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes>
                 // 跳转到节点组页面
                 if (Navigator.canPop(context)) Navigator.pop(context);
                 Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => NodesPage()));
+                    MaterialPageRoute(builder: (context) => NodesPage()));
               },
               leading: widget.leading,
               title: widget.title,
@@ -201,14 +202,14 @@ class _ExpansionTileDrawerNodesState extends State<ExpansionTileDrawerNodes>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subhead.color
+      ..begin = theme.textTheme.subtitle1.color
       ..end = theme.accentColor;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
       ..end = theme.accentColor;
-    _backgroundColorTween..end = widget.backgroundColor;
+    _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

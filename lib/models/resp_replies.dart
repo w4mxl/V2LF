@@ -12,7 +12,7 @@ class RepliesResp {
     list = [];
 
     for (var listItem in jsonRes) {
-      list.add(new Reply.fromJson(listItem));
+      list.add(Reply.fromJson(listItem));
     }
   }
 
@@ -59,11 +59,11 @@ class Reply {
     lastReplyBy = jsonRes['last_reply_by'];
     title = jsonRes['title'];
     url = jsonRes['url'];
-    member = new Member.fromJson(jsonRes['member']);
+    member = Member.fromJson(jsonRes['member']);
   }
 
   @override
   String toString() {
-    return '{"created": $created,"id": $id,"last_modified": $lastModified,"last_touched": $lastTouched,"replies": $replies,"content": ${content != null ? '${json.encode(content)}' : 'null'},"content_rendered": ${contentRendered != null ? '${json.encode(contentRendered)}' : 'null'},"last_reply_by": ${lastReplyBy != null ? '${json.encode(lastReplyBy)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'},"url": ${url != null ? '${json.encode(url)}' : 'null'},"member": $member}';
+    return '{"created": $created,"id": $id,"last_modified": $lastModified,"last_touched": $lastTouched,"replies": $replies,"content": ${content != null ? json.encode(content) : 'null'},"content_rendered": ${contentRendered != null ? json.encode(contentRendered) : 'null'},"last_reply_by": ${lastReplyBy != null ? json.encode(lastReplyBy) : 'null'},"title": ${title != null ? json.encode(title) : 'null'},"url": ${url != null ? json.encode(url) : 'null'},"member": $member}';
   }
 }

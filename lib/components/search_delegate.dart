@@ -23,9 +23,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchSov2exDelegate extends SearchDelegate<String> {
   final List<String> _history =
-      SpHelper.sp.getStringList(SP_SEARCH_HISTORY) != null
-          ? SpHelper.sp.getStringList(SP_SEARCH_HISTORY)
-          : []; // ['v2er', 'AirPods']
+      SpHelper.sp.getStringList(SP_SEARCH_HISTORY) ?? []; // ['v2er', 'AirPods']
 
   String _sortSelected = '权重';
   final _sorts = ['权重', '发帖时间']; // sumup（权重）, created（发帖时间）
@@ -163,12 +161,12 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
   }
 
   FutureBuilder<Sov2ex> buildSearchFutureBuilder(String q) {
-    return new FutureBuilder<Sov2ex>(
+    return FutureBuilder<Sov2ex>(
       future: _future,
       builder: (context, AsyncSnapshot<Sov2ex> async) {
         if (async.connectionState == ConnectionState.active ||
             async.connectionState == ConnectionState.waiting) {
-          return new Center(
+          return Center(
             child: Platform.isIOS
                 ? CupertinoActivityIndicator()
                 : CircularProgressIndicator(),
@@ -177,8 +175,8 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
 
         if (async.connectionState == ConnectionState.done) {
           if (async.hasError) {
-            return new Center(
-              child: new Text('${async.error}'),
+            return Center(
+              child: Text('${async.error}'),
             );
           } else if (async.hasData) {
             Sov2ex sov2ex = async.data;
@@ -192,7 +190,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
 
   Future<Sov2ex> getSov2exData(String q) async {
     var dio = Dio();
-    dio.interceptors..add(LogInterceptor());
+    dio.interceptors.add(LogInterceptor());
     try {
       lastFiter = _sortSelected == '发帖时间'
           ? (_sortSelectedCreated == '升序'
@@ -218,7 +216,7 @@ class SearchSov2exDelegate extends SearchDelegate<String> {
 class Sov2exResultListView extends StatelessWidget {
   final List<HitsListBean> hits;
 
-  Sov2exResultListView(this.hits);
+  const Sov2exResultListView(this.hits);
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +233,7 @@ class Sov2exResultListView extends StatelessWidget {
 class Sov2exResultItem extends StatelessWidget {
   final HitsListBean hitsListBean;
 
-  Sov2exResultItem(this.hitsListBean);
+  const Sov2exResultItem(this.hitsListBean);
 
   @override
   Widget build(BuildContext context) {

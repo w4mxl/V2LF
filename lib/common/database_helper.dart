@@ -15,20 +15,20 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
-  static final _databaseName = "MyReadHistory.db";
-  static final _databaseVersion = 2;
+  static const _databaseName = "MyReadHistory.db";
+  static const _databaseVersion = 2;
 
-  static final table = 'recent_read_table';
+  static const table = 'recent_read_table';
 
-  static final columnTopicId = 'topicId';
+  static const columnTopicId = 'topicId';
   //static final columnReadStatus = 'readStatus';
-  static final columnMemberId = 'memberId';
+  static const columnMemberId = 'memberId';
 
-  static final columnAvatar = 'avatar';
-  static final columnTopicContent = 'topicContent';
+  static const columnAvatar = 'avatar';
+  static const columnTopicContent = 'topicContent';
   //static final columnReplyCount = 'replyCount';
-  static final columnNodeId = 'nodeId';
-  static final columnNodeName = 'nodeName';
+  static const columnNodeId = 'nodeId';
+  static const columnNodeName = 'nodeName';
   //static final columnLastReplyMId = 'lastReplyMId';
   //static final columnLastReplyTime = 'lastReplyTime';
 
@@ -108,7 +108,7 @@ class DatabaseHelper {
   Future<bool> queryTopic(String topicId) async {
     Database db = await instance.database;
     List<Map<String, dynamic>> result = await db.query(table, where: '$columnTopicId = ?', whereArgs: [topicId]);
-    return result.length > 0;
+    return result.isNotEmpty;
   }
 
   // All of the rows are returned as a list of maps, where each map is
@@ -121,7 +121,7 @@ class DatabaseHelper {
   // 获取近期已读列表
   Future<List<RecentReadTopicItem>> getRecentReadTopics() async {
     var mapList = await queryAllRows();
-    List<RecentReadTopicItem> topicList = List<RecentReadTopicItem>();
+    List<RecentReadTopicItem> topicList = <RecentReadTopicItem>[];
     mapList.forEach((map) => topicList.insert(0, RecentReadTopicItem.fromMap(map)));
     print("当前数据库共有${topicList.length}条记录");
     return topicList;

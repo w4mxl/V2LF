@@ -18,7 +18,7 @@ class TimeBase {
   static String getStandardDate(int timestamp) {
     String temp = "";
     try {
-      int now = (new DateTime.now().millisecondsSinceEpoch ~/ 1000);
+      int now = (DateTime.now().millisecondsSinceEpoch ~/ 1000);
       int diff = now - timestamp;
       int months = (diff ~/ (60 * 60 * 24 * 30));
       int days = (diff ~/ (60 * 60 * 24));

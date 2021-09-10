@@ -73,10 +73,10 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
           future: topicListFuture,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              hasData = snapshot.data.length > 0;
+              hasData = snapshot.data.isNotEmpty;
 
-              return snapshot.data.length > 0
-                  ? new Container(
+              return snapshot.data.isNotEmpty
+                  ? Container(
                       child: ListView.builder(
                           itemBuilder: (context, index) => TopicItemView(snapshot.data[index]), itemCount: snapshot.data.length))
                   : Center(
@@ -99,7 +99,7 @@ class _RecentReadTopicsPageState extends State<RecentReadTopicsPage> {
 class TopicItemView extends StatefulWidget {
   final RecentReadTopicItem topic;
 
-  TopicItemView(this.topic);
+  const TopicItemView(this.topic);
 
   @override
   _TopicItemViewState createState() => _TopicItemViewState();
@@ -122,12 +122,12 @@ class _TopicItemViewState extends State<TopicItemView> {
                   )),
         );
       },
-      child: new Container(
+      child: Container(
         padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text(
+            Text(
               widget.topic.topicContent,
               // 区分：已读 or 未读 todo
               style: TextStyle(
@@ -158,7 +158,7 @@ class _TopicItemViewState extends State<TopicItemView> {
                           widget.topic.memberId,
                           textAlign: TextAlign.left,
                           maxLines: 1,
-                          style: new TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
+                          style: TextStyle(fontSize: 13.0, color: Theme.of(context).unselectedWidgetColor),
                         ),
                         SizedBox(
                           width: 6,
@@ -169,9 +169,9 @@ class _TopicItemViewState extends State<TopicItemView> {
                             border: Border.all(color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: new Text(
+                          child: Text(
                             widget.topic.nodeName,
-                            style: new TextStyle(
+                            style: TextStyle(
                               fontSize: 12.0,
                               color: Theme.of(context).disabledColor,
                             ),

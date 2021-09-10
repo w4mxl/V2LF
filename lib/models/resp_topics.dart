@@ -13,7 +13,7 @@ class TopicsResp {
     list = [];
 
     for (var listItem in jsonRes) {
-      list.add(new Topic.fromJson(listItem));
+      list.add(Topic.fromJson(listItem));
     }
   }
 
@@ -59,12 +59,12 @@ class Topic {
     contentRendered = jsonRes['content_rendered'];
     title = jsonRes['title'];
     url = jsonRes['url'];
-    member = new Member.fromJson(jsonRes['member']);
-    node = new Node.fromJson(jsonRes['node']);
+    member = Member.fromJson(jsonRes['member']);
+    node = Node.fromJson(jsonRes['node']);
   }
 
   @override
   String toString() {
-    return '{"created": $created,"id": $id,"last_modified": $lastModified,"last_touched": $lastTouched,"replies": $replies,"content": ${content != null ? '${json.encode(content)}' : 'null'},"content_rendered": ${contentRendered != null ? '${json.encode(contentRendered)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'},"url": ${url != null ? '${json.encode(url)}' : 'null'},"member": $member,"node": $node}';
+    return '{"created": $created,"id": $id,"last_modified": $lastModified,"last_touched": $lastTouched,"replies": $replies,"content": ${content != null ? json.encode(content) : 'null'},"content_rendered": ${contentRendered != null ? json.encode(contentRendered) : 'null'},"title": ${title != null ? json.encode(title) : 'null'},"url": ${url != null ? json.encode(url) : 'null'},"member": $member,"node": $node}';
   }
 }

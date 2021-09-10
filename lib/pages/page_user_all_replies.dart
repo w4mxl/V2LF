@@ -9,7 +9,7 @@ import 'package:flutter_app/components/listview_all_replies.dart';
 class UserAllRepliesPage extends StatelessWidget {
   final String userName;
 
-  UserAllRepliesPage(this.userName);
+  const UserAllRepliesPage(this.userName);
 
   @override
   Widget build(BuildContext context) {

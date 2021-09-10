@@ -80,19 +80,19 @@ class SearchNodeDelegate extends SearchDelegate<NodeItem> {
   }
 
   FutureBuilder<List<NodeItem>> buildSearchFutureBuilder(String q) {
-    return new FutureBuilder<List<NodeItem>>(
+    return FutureBuilder<List<NodeItem>>(
       future: _future,
       builder: (context, AsyncSnapshot<List<NodeItem>> async) {
         if (async.connectionState == ConnectionState.active || async.connectionState == ConnectionState.waiting) {
-          return new Center(
+          return Center(
             child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
           );
         }
 
         if (async.connectionState == ConnectionState.done) {
           if (async.hasError) {
-            return new Center(
-              child: new Text('${async.error}'),
+            return Center(
+              child: Text('${async.error}'),
             );
           } else if (async.hasData) {
             List<NodeItem> allNodes = async.data;

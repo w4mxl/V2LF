@@ -20,17 +20,18 @@ class BubbleTabIndicator extends Decoration {
   final double indicatorHeight;
   final Color indicatorColor;
   final double indicatorRadius;
+  @override
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry insets;
   final TabBarIndicatorSize tabBarIndicatorSize;
 
   const BubbleTabIndicator({
-    this.indicatorHeight: 30.0,
-    this.indicatorColor: Colors.greenAccent,
-    this.indicatorRadius: 100.0,
+    this.indicatorHeight = 30.0,
+    this.indicatorColor = Colors.greenAccent,
+    this.indicatorRadius = 100.0,
     this.tabBarIndicatorSize = TabBarIndicatorSize.tab,
-    this.padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-    this.insets: const EdgeInsets.symmetric(horizontal: 5.0),
+    this.padding = const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+    this.insets = const EdgeInsets.symmetric(horizontal: 5.0),
   })  : assert(indicatorHeight != null),
         assert(indicatorColor != null),
         assert(indicatorRadius != null),
@@ -40,7 +41,7 @@ class BubbleTabIndicator extends Decoration {
   @override
   Decoration lerpFrom(Decoration a, double t) {
     if (a is BubbleTabIndicator) {
-      return new BubbleTabIndicator(
+      return BubbleTabIndicator(
         padding: EdgeInsetsGeometry.lerp(a.padding, padding, t),
         insets: EdgeInsetsGeometry.lerp(a.insets, insets, t),
       );
@@ -51,7 +52,7 @@ class BubbleTabIndicator extends Decoration {
   @override
   Decoration lerpTo(Decoration b, double t) {
     if (b is BubbleTabIndicator) {
-      return new BubbleTabIndicator(
+      return BubbleTabIndicator(
         padding: EdgeInsetsGeometry.lerp(padding, b.padding, t),
         insets: EdgeInsetsGeometry.lerp(insets, b.insets, t),
       );
@@ -61,7 +62,7 @@ class BubbleTabIndicator extends Decoration {
 
   @override
   _BubblePainter createBoxPainter([VoidCallback onChanged]) {
-    return new _BubblePainter(this, onChanged);
+    return _BubblePainter(this, onChanged);
   }
 }
 
@@ -89,7 +90,7 @@ class _BubblePainter extends BoxPainter {
       indicator = insets.resolve(textDirection).deflateRect(rect);
     }
 
-    return new Rect.fromLTWH(
+    return Rect.fromLTWH(
       indicator.left,
       indicator.top,
       indicator.width,

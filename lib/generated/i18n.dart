@@ -206,7 +206,7 @@ class $zh_CN extends S {
   @override
   String toastLoginSuccess(String name) => "欢迎回来，$name!";
   @override
-  String loadingPage(String num) => "正在加载第${num}页...";
+  String loadingPage(String num) => "正在加载第$num页...";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
